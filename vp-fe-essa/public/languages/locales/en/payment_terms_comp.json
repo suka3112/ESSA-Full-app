@@ -1,0 +1,40 @@
+{
+  "invoicePaymentTerms": {
+    "text": "Invoice Payment Term",
+    "tooltip": "Select payment term",
+    "error": "Invoice Payment Term is required"
+  },
+  "otherPaymentTerms": {
+    "text": "If Other Payment Terms",
+    "tooltip": "if other payment terms",
+    "placeHolder": "Select other payment terms",
+    "error": "Please specify the other payment term"
+  },
+  "creditPaymentTerms": {
+    "text": "Credit Note Payment Terms",
+    "tooltip": "Select Credit Note Payment Terms",
+    "error": "Credit Note Payment Term is required"
+  },
+  "incoterms": {
+    "text": "Incoterms",
+    "tooltip": "Select Incoterms",
+    "error": "Incoterms is required"
+  },
+  "incotermsLocation": {
+    "text": "Incoterms Location",
+    "tooltip": "Enter Incoterms Location",
+    "error": "Incoterm Location is required"
+  },
+  "reasonForShorterPayment": {
+    "text": "Reason for Shorter Payment",
+    "tooltip": "Reason for the shorter payments",
+    "error": "Reason required if term is shorter"
+  },
+  "uploadAttachment": {
+    "text": "Upload Attachment",
+    "tooltip": "Please attach confirmation received from daikin for other payment terms",
+    "error": "Payment files are required"
+  },
+  "payment_terms": "Payment Terms",
+  "specifyOtherPaymentTerm": "Specify other payment term"
+}

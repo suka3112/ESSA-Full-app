@@ -1,0 +1,10 @@
+export const GET_ROLE_DROPDOWN = '/users/rolesDropdown'
+export const GET_DEPARTMENT_DROPDOWN = '/users/dropdowns'
+export const GET_DESIGNATION_DROPDOWN = '/users/dropdowns'
+export const GET_ENTITY_DROPDOWN = '/users/allEntityDropdown'
+export const ADD_USER_MANAGEMENT = '/employee'
+export const GET_USER_MANAGEMENT = '/employee'
+export const DELETE_USER_MANAGEMENT = '/employee'
+export const EDIT_USER_MANAGEMENT = '/employee'
+export const EXPORT_USER = '/employee/export'
+

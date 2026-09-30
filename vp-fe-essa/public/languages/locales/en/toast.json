@@ -1,0 +1,31 @@
+{
+  "successTitle": "Success.",
+  "errorTitle": "Error.",
+  "error": "error",
+  "selectAtLeastOneRow": "Please select at least one row.",
+  "fileDeleted": "File deleted successfully.",
+  "fileDeleteFailed": "Failed to delete file. Please try again.",
+  "attachTypeAndFileRequired": "Attachment Type and File are required.",
+  "onlyTwoFilesPerType": "Only 2 files are allowed per attachment type{{type}}.",
+  "duplicateFileExists": "A file with the same name and type already exists.",
+  "selectDateRangeBeforeSending": "Please select a date range before sending the report.",
+  "fileUploadFailed": "File upload failed.",
+  "applicationSubmissionFailed" : "Application submission failed",
+  "failedToFetchTrackUpdates": "Failed to fetch track updates",
+  "failedToAddExtension": "Failed to add extension",
+  "applicationRejected": "Application Rejected.",
+  "applicationApproved": "Approved Successfully.",
+  "applicationApprovedSuccess": "Application Approved Successfully.",
+  "applicationIsRejected": "Application is Rejected.",
+  "onlyTwoFilesAllowed": "Only 2 files are allowed",
+  "noDataToExport": "No data to export",
+  "updatesRejected": "Updates Rejected",
+  "extensionRejected": "Extension Rejected",
+  "bulkRejected": "Invoices Rejected",
+  "bulkApproved": "Invoices Approved",
+  "onlyPDFFilesAllowed": "Only PDF files are allowed for Invoice attachments",
+  "invoiceNoLessThan17Char": "Invoice number must be less than 17 characters.",
+  "onlyPDFFilesAllowedCreditNote": "Only PDF files are allowed for Credit Note attachments"
+}
+
+

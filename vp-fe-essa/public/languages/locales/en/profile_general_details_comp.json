@@ -1,0 +1,95 @@
+{
+  "vendorName" : {
+    "text": "Vendor Name",
+    "tooltip": "Enter your business name",
+    "error": "Vendor Name is required"
+  },
+  "diakinEntityName": {
+    "text": "Daikin Entity Name",
+    "tooltip": "Display Daikin Entity name",
+    "error": ""
+  },
+  "diakinContactName": {
+    "text": "Daikin Contact Name",
+    "tooltip": "Display Daikin contact name",
+    "error": ""
+  },
+  "industrytype": {
+    "text": "Industry Type",
+    "tooltip": "Select type of industry",
+    "error": "Industry Type is required"
+  },
+  "industryKey": {
+    "text": "Industry Key",
+    "tooltip": "Select industry key",
+    "error": "Industry Key is required"
+  },
+  "streetHouseNo": {
+    "text": "Street/House No.",
+    "tooltip": "Enter your street or house number",
+    "error": "Address is required"
+  },
+  "postalCode": {
+    "text": "Postal Code",
+    "tooltip": "Enter postal code and city",
+    "error": "Postal Code is required"
+  },
+  "city": {
+    "text": "City",
+    "tooltip": "Enter City of Operation",
+    "error": "City is required"
+  },
+  "country": {
+    "text": "Country",
+    "tooltip": "Select the country of operation",
+    "error": "Country is required"
+  },
+  "region": {
+    "text": "Region",
+    "tooltip": "Select the region of operation",
+    "error": "Region is required"
+  },
+  "phoneNumber": {
+    "text": "Phone No.",
+    "tooltip": "Enter phone Number",
+    "error": "PhoneNumber is required"
+  },
+  "fax": {
+    "text": "Fax",
+    "tooltip": "Enter Fax Number",
+    "error": "Fax Number is required"
+  },
+  "email_primary": {
+    "text": "E-mail (Primary)",
+    "tooltip": "Enter primary email address",
+    "error": "Valid email required"
+  },
+  "whtApplicable": {
+    "text": "WHT Applicable",
+    "tooltip": "Is WHT applicable?",
+    "error": "WHT selection is required"
+  },
+  "whtRate": {
+    "text": "WHT Rate (If Yes)",
+    "tooltip": "Specify WHT rate",
+    "error": "WHT Rate is required if applicable"
+  },
+  "taxableBasis": {
+    "text": "Taxability Basis (WHT)",
+    "tooltip": "Select taxability basis",
+    "error": "Taxability Basis is required"
+  },
+  "vendorCode": {
+    "text": "Vendor Code",
+    "tooltip": "Vendor code - non editable",
+    "error": ""
+  },
+  "abcIndicator": {
+    "text": "ABC Indicator",
+    "tooltip": "",
+    "error": ""
+  },
+    "noteWithLink": "<1>Note:</1> Please <3>Contact Daikin</3> business to make any changes on Critical Fields",
+      "profileDeletedSuccess": "Profile picture deleted successfully."
+
+}

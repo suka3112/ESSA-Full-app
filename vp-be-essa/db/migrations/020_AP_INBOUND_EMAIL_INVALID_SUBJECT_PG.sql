@@ -1,0 +1,17 @@
+-- Migration 020 (Postgres): allow INVALID_SUBJECT on inbound email status
+
+ALTER TABLE "AP_INBOUND_EMAIL"
+  DROP CONSTRAINT IF EXISTS "CK_AP_INBOUND_EMAIL_Status";
+
+ALTER TABLE "AP_INBOUND_EMAIL"
+  ADD CONSTRAINT "CK_AP_INBOUND_EMAIL_Status" CHECK (
+    "Status" IN (
+      'PENDING',
+      'PROCESSED',
+      'NO_DOCUMENT',
+      'FAILED',
+      'IGNORED',
+      'VENDOR_UNMATCHED',
+      'INVALID_SUBJECT'
+    )
+  );

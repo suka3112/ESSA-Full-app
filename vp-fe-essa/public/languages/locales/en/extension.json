@@ -1,0 +1,26 @@
+{
+  "selectEntity": {
+    "text": "Select Entity",
+    "tooltip": "Select the entity to extend vendor registration",
+    "error": "Entity selection is required"
+  },
+  "crPerson": {
+    "text": "CR Person",
+    "tooltip": "Choose the CR person for the entity",
+    "error": "CR Person is required"
+  },
+  "reason": {
+    "text": "Reason for Extension (Optional)",
+    "tooltip": "Enter reason for requesting extension",
+    "error": "Invalid justification"
+  },
+  "submit": "Submit",
+  "userDetails": "User Details",
+  "extensionDetails": "Extension Details",
+  "addNewExtension": "Add New Extension",
+  "submitted": "Submitted",
+  "approved": "Approved",
+  "underReview": "Under review",
+  "rejected": "Rejected",
+  "requestSubmitted": "Request Submitted"
+}

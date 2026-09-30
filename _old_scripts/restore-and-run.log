@@ -1,0 +1,65 @@
+===================================================
+ ESSA – restore DB + start app   (Wed Sep 16 11:06:57 IST 2026)
+===================================================
+>>> waiting for postgres
+>>> databases currently in essa-pg:
+    postgres
+    vendor_portal
+>>> recreating database vendor_portal
+DROP DATABASE
+CREATE DATABASE
+>>> restoring /Users/suka_3112/Documents/Avensys AI/ESSA/Full App/DB/essa_backup_1609.sql (pg_dump custom format)
+>>> tables restored:
+    public tables: 89
+>>> seeding ESSA login users (ap.team@essa.com / Essa@2026)
+ConnectionError [SequelizeConnectionError]: database "vendor_portal" does not exist
+    at Client._handleErrorWhileConnecting (/Users/suka_3112/Documents/Avensys AI/ESSA/Full App/vp-be-essa/node_modules/pg/lib/client.js:408:19)
+    at Client._handleErrorMessage (/Users/suka_3112/Documents/Avensys AI/ESSA/Full App/vp-be-essa/node_modules/pg/lib/client.js:428:19)
+  parent: error: database "vendor_portal" does not exist
+      at parseErrorMessage (/Users/suka_3112/Documents/Avensys AI/ESSA/Full App/vp-be-essa/node_modules/pg-protocol/src/parser.ts:395:9)
+  original: error: database "vendor_portal" does not exist
+      at parseErrorMessage (/Users/suka_3112/Documents/Avensys AI/ESSA/Full App/vp-be-essa/node_modules/pg-protocol/src/parser.ts:395:9)
+    (seed reported errors — login may still work if users came from the backup)
+>>> users now in DB:
+    emp1@xyz.com
+    emp4@xyz.com
+    mdmalathi321@gmail.com
+    employee1@gmail.com
+    employee1@gmail.com
+    sample1@mailinator.com
+    sample2@mailinator.com
+    employee1@gmail.com
+    sample1@mailinator.com
+    henry@mailinator.com
+    prasannanatarajan23@gmail.com
+    prasannanatarajan93@gmail.com
+>>> starting the app
+===================================================
+ ESSA – fixing port conflicts, then starting app
+===================================================
+
+>>> Port 8095 is held by:
+    (nothing)
+
+>>> Port 9080 is held by:
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    61050 suka_3112   19u  IPv4 0x6ab1b664a9af2ac8      0t0  TCP *:9080 (LISTEN)
+
+>>> Port 9081 is held by:
+    (nothing)
+>>> Killing /usr/local/bin/node (pid 61050) on port 9080
+
+ Log saved to: /Users/suka_3112/Documents/Avensys AI/ESSA/Full App/restore-and-run.log
+Press Enter to close this window...
+✅ Ports 8095 and 9080 are free.
+>>> Starting backend (port 8095) in a new Terminal window...
+>>> Starting frontend (port 9080) in a new Terminal window...
+>>> Waiting for backend........................................
+>>> CORS check (must echo localhost:9080, NOT 7000):
+    (backend not answering yet — check its Terminal window)
+
+===================================================
+ Backend  -> http://localhost:8095
+ Frontend -> http://localhost:9080/auth/login   (opens shortly)
+ Login    -> ap.team@essa.com / Essa@2026  (Sign in with password)
+===================================================

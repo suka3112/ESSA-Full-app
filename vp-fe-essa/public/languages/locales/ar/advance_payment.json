@@ -1,0 +1,143 @@
+{
+  "displaySection": {
+    "text": "عرض الفئة",
+    "tooltip": "عرض جميع طلبات الدفع المسبق المقدمة",
+    "error": "لا توجد دفعات مقدمة"
+  },
+  "createNewAdvancePayment": {
+    "text": "إنشاء دفعة مقدمة جديدة",
+    "tooltip": "إنشاء طلب دفعة مقدمة جديدة",
+    "error": "فشل الإنشاء، يرجى المحاولة مرة أخرى"
+  },
+  "typeOfInvoice": {
+    "text": "نوع الفاتورة",
+    "tooltip": "اختر طلب شراء / من دون طلب شراء",
+    "error": "الاختيار مطلوب"
+  },
+  "poBasedInvoiceLineItem": {
+    "text": "رقم الطلب بناءً على طلب الشراء",
+    "tooltip": "اختر الفاتورة لطلب الدفعة المقدمة",
+    "error": "الاختيار مطلوب"
+  },
+  "nonPoBasedInvoiceLineItem": {
+    "text": "فاتورة غير مبنية على أمر شراء",
+    "tooltip": "اختر الفاتورة لطلب الدفعة المقدمة",
+    "error": "الاختيار مطلوب"
+  },
+  "valueOfAdvancePayment": {
+    "text": "المبلغ",
+    "tooltip": "أدخل المبلغ المطلوب للدفعة المقدمة",
+    "error": "قيمة الدفع المقدّم مطلوبة",
+    "placeholder": "أدخل المبلغ"
+  },
+  "supportingDocuments": {
+    "text": "المستندات الداعمة",
+    "tooltip": "إرفاق المستندات الداعمة المطلوبة إذا كان المبلغ يتجاوز 25,000 يورو",
+    "error": "مستند مطلوب للمبالغ التي تتجاوز 25,000 يورو"
+  },
+  "costResponsible": {
+    "text": "المسؤول عن التكلفة (CR)",
+    "tooltip": "اختر الشخص المسؤول عن التكاليف",
+    "error": "مطلوب اختيار CR"
+  },
+  "submitForReview": {
+    "text": "إرسال للمراجعة",
+    "tooltip": "تقديم طلب الدفع المسبق للمراجعة",
+    "error": "فشل في  التقديم"
+  },
+  "viewStatus": {
+    "text": "عرض الحالة",
+    "tooltip": "عرض الحالة الحالية للطلب",
+    "error": "خطأ في عرض الحالة"
+  },
+  "sortAndFilter": {
+    "text": "الفرز والتصنيف",
+    "tooltip": "",
+    "error": "خطأ في الاختيار"
+  },
+  "saveProgress": {
+    "text": "حفظ التغيرات",
+    "tooltip": "حفظ التغييرات لإكمالها لاحقًا",
+    "error": "خطأ في عملية الحفظ"
+  },
+  "paymentStatus": {
+    "text": "حالة السداد",
+    "tooltip": "حالة السداد",
+    "error": ""
+  },
+  "referenceDocumentNumber": {
+    "text": "رقم المستند المرجعي",
+    "tooltip": "رقم المستند المرجعي",
+    "error": ""
+  },
+  "paymentAdvice": {
+    "text": "إشعار الدفع",
+    "tooltip": "رابط إلى  إشعار الدفع",
+    "error": ""
+  },
+  "attachmentType": {
+    "text": "نوع المرفق",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "currency":{
+    "text": "العملة",
+    "tooltip": "اختيار العملة للمبلغ الخاص بإشعار الدائن",
+    "error": ""
+  },
+  "searchAdvancePaymentNo": "البحث عن رقم الدفعة المقدمة",
+  "vendorName": "اسم المورد",
+  "vendorCode": "رمز المورد",
+  "submissionDate": "تاريخ الإرسال",
+  "invoiceFileUpload": "رفع ملف الفاتورة",
+  "searchForInvoiceNo": "البحث عن رقم الفاتورة",
+  "selectDate": "اختر التاريخ",
+  "status": "الحالة",
+  "next": "التالي",
+  "save": "حفظ",
+  "createAdvancePaymentRequest": "إنشاء طلب دفعة مقدّمة",
+  "invoiceType": "نوع الفاتورة",
+  "createAdvancePayment": "إنشاء دفعة مقدّمة",
+  "enterValue": "أدخل القيمة",
+  "enterCostResponsible": "اختر المسؤول عن التكلفة",
+  "advancePaymentValue": "المبلغ",
+  "advancePaymentReview": "مراجعة الدفعة المقدمة",
+  "advancePaymentRequest": "طلب دفعة مقدمة",
+  "select": "اختر",
+    "companyCode":"رمز الشركة",
+  "companyName":"اسم الشركة",
+  "searchAdvancePaymentNoforVendor": "البحث عن رقم الدفعة المقدمة",
+  "ProformaInvoiceNo": "رقم الفاتورة الأولية",
+  "AdvancePaymentNo": "رقم الدفعة المقدمة",
+  "Details": "تفاصيل",
+  "edit": "تعديل",
+  "Awaitingapproval": "في انتظار الموافقة",
+  "SNo": "رقم تسلسلي",
+  "AttachmentType": " نوع المرفق",
+  "DocumentName": "اسم المستند",
+  "AreYouSureYouWantToApproveTheAdvancePayment": "هل أنت متأكد أنك تريد الانتقال إلى انتظار الموافقة؟",
+  "RejectionPurpose": "غرض الرفض",
+  "Reason": "سبب",
+  "ReasonOfRejection": "سبب الرفض",
+  "ReasonOfRejectionRrequired": "يجب ذكر سبب الرفض",
+  "SelectTypeOfInvoce": "حدد نوع الفاتورة",
+  "ProformaInvoiceNoIsRequired": "رقم الفاتورة الأولية مطلوب",
+  "EnterProformaInvoice": "أدخل الفاتورة النموذجية.",
+  "upload": "تحميل ",
+  "action": "فعل",
+  "editAdvancePayment": "تعديل الدفعة المقدمة",
+  "attachmentTypeRequired": "نوع المرفق مطلوب",
+  "fileUploadRequired": "مطلوب تحميل الملف",
+  "advancePaymentSubmittedSuccessfully": "تم تقديم الدفعة المقدمة بنجاح",
+  "failedToUploadFile": "فشل في رفع الملف",
+  "failedToLoadPaymentDetails": "فشل في تحميل تفاصيل الدفع",
+  "exportStartedSuccessfully": "تم بدء التصدير بنجاح",
+  "failedToExportAdvancePayments": "فشل في تصدير الدفعات المقدمة",
+  "failedToSendEmailReport": "فشل في إرسال تقرير البريد الإلكتروني",
+  "advancePaymentApprovedSuccessfully": "تمت الموافقة على الدفعة المقدمة بنجاح",
+  "advancePaymentRejected": "تم رفض الدفعة المقدمة",
+  "POBasedNo": "رقم مستند على أمر الشراء",
+  "advancePaymentPDFTitle": "قائمة الدفع المسبق",
+  "proforma_invoice": "الفاتورة الأولية",
+  "invalidAmountFormat": "تنسيق المبلغ غير صالح"
+}

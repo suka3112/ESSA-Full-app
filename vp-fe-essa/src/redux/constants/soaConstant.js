@@ -1,0 +1,2 @@
+export const SET_SOA_LIST = 'SET_SOA_LIST'
+export const SET_SOA_HISTORY = 'SET_SOA_HISTORY'

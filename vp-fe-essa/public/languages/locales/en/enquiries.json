@@ -1,0 +1,129 @@
+{
+  "createInquiry": {
+    "text": "Create Enquiry",
+    "tooltip": "",
+    "error": ""
+  },
+  "inquiryType": {
+    "text": "Enquiry Type",
+    "tooltip": "Select the nature of enquiry",
+    "error": "Enquiry type not selected",
+    "default": "General"
+  },
+  "assignedContactPerson": {
+    "text": "Assigned Contact Person",
+    "tooltip": "Assigned contact for this inquiry",
+    "error": "No contact selected",
+    "default": "Auto-populated based on inquiry type"
+  },
+  "inquiryDescription": {
+    "text": "Enquiry Description",
+    "tooltip": "Enter Description of the enquiry",
+    "error": "Enquiry description is required"
+  },
+  "attachmentType": {
+    "text": "Attachment Type",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "uploadSupportingDoc": {
+    "text": "Upload Supporting Doc",
+    "tooltip": "Upload supporting document",
+    "error": ""
+  },
+  "inquirySubmissionDate": {
+    "text": "Enquiry Submission Date",
+    "tooltip": "Enquiry submission date",
+    "error": "Date format error",
+    "default": "Auto-filled with submission timestamp"
+  },
+  "submit": {
+    "text": "Submit",
+    "tooltip": "",
+    "error": "",
+    "default": "It will submit the enquiry"
+  },
+  "viewInquiryHistory": {
+    "text": "View Enquiry History",
+    "tooltip": "View full history of the Enquiry",
+    "error": "Error retrieving history",
+    "default": "Link based on Enquiry record"
+  },
+  "inquiryStatus": {
+    "text": "Enquiry Status",
+    "tooltip": "Current status of enquiry",
+    "error": "Status update error",
+    "default": "Default from previous status"
+  },
+  "requestForUpdate": {
+    "text": "Request for Update",
+    "tooltip": "Request to update Enquiry details",
+    "error": "Update request error"
+  },
+  "followUpRequest": {
+    "text": "Follow-Up Request",
+    "tooltip": "Request follow-up for this Enquiry",
+    "error": "Follow-up request error"
+  },
+  "downloadInquiryReport": {
+    "text": "Download Inquiry Report",
+    "tooltip": "Download inquiry report",
+    "error": "Download failed"
+  },
+  "emailReport": {
+    "text": "Email Report",
+    "tooltip": "Email inquiry report",
+    "error": "Email send failed"
+  },
+  "responseFromDaikin": {
+    "text": "Response (from Daikin)",
+    "tooltip": "Displays the Response from Daikin",
+    "error": ""
+  },
+  "subject": {
+    "text": "Subject",
+    "tooltip": "Enter subject",
+    "error": "Subject is required"
+  },
+  "date": "Date",
+  "selectDate": "Select Date",
+  "sendReport": "Send Report",
+  "enquiries": "Enquiries",
+  "searchEnquiryIdAndSubject": "Search Enquiry Id and Subject",
+  "searchEnquiryIdAndSubjectVendorName":"Search Enquiry Id, Vendor Name and Subject",
+  "status": "Status",
+  "createEnquiries": "Create Enquiries",
+  "writeHere": "Write here",
+  "selectNatureOfEnquiry": "Select the nature of Enquiry",
+  "subjectRequired": "Subject is required",
+  "enquiryDescriptionRequired": "Enquiry Description is required",
+  "followUp": "Follow-UP",
+  "followUpSent": "Follow up sent",
+  "resolvedDate": "Resolved Date",
+  "supportingFile": "Supporting File",
+  "enquiryDescription": "Enquiry Description",
+  "response": "Response",
+  "updatedSuccessfully": "Updated Successfully",
+  "enquiryUpdatedSuccessfully": "Enquiry updated successfully.",
+  "createdSuccessfully": "Created Successfully",
+  "newEnquiryCreatedSuccessfully": "New Enquiry created successfully.",
+  "assignedPerson": "Assigned Person",
+  "enquiryID": "Enquiry ID",
+  "resolved": "Resolved",
+  "failedToLoadDetails": "Failed to load enquiry details",
+  "responseSentSuccesfully": "Response sent successfully",
+  "failedToSendResponse": "Failed to send response",
+  "enquiryStatusUpdatedSuccess": "Enquiry status updated successfully",
+  "failedToUpdateStatus": "Failed to update enquiry status",
+  "noResponseFound": "No responses found",
+  "submittedSuccessfully": "Enquiry submitted successfully!",
+  "writeLessNoOfCharacters": "Please write less than 2000 characters",
+  "select": "Select",
+  "comments": "Comments",
+  "message": "Message",
+  "enquiryStatus": "Enquiry Status",
+  "selectStatus" : "Select Status",
+  "searchEnquiryId": "Search Enquire ID",
+  "email": "Email",
+  "bankData": "Bank Data"
+}

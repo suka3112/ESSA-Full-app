@@ -1,0 +1,92 @@
+{
+  "goodsReceiptNumber": {
+    "text": "Goods Receipt Number (Header)",
+    "tooltip": "Unique GR number for tracking",
+    "error": ""
+  },
+  "companyCode": {
+    "text": "Company Code",
+    "tooltip": "",
+    "error": ""
+  },
+  "fiscalYear": {
+    "text": "Fiscal Year",
+    "tooltip": "",
+    "error": ""
+  },
+  "receiptDatePostingDate": {
+    "text": "Receipt Date / Posting Date (Header)",
+    "tooltip": "Date when the goods were received",
+    "error": ""
+  },
+  "purchaseOrderNumber": {
+    "text": "Purchase Order Number (Header)",
+    "tooltip": "Associated purchase order number",
+    "error": ""
+  },
+  "quantityReceived": {
+    "text": "Quantity Received (Header)",
+    "tooltip": "Quantity of items received",
+    "error": ""
+  },
+  "remarks": {
+    "text": "Remarks (Header) (Optional)",
+    "tooltip": "Any remarks from SAP",
+    "error": ""
+  },
+  "materialCode": {
+    "text": "Material Code (Line items)",
+    "tooltip": "",
+    "error": ""
+  },
+  "materialDescription": {
+    "text": "Material Description (Line items)",
+    "tooltip": "",
+    "error": ""
+  },
+  "uom": {
+    "text": "UOM (Unit of Measure) (Line items)",
+    "tooltip": "Unit of measure per line item",
+    "error": "UOM required"
+  },
+  "lineItemNumber": {
+    "text": "Line Item Number (Line items)",
+    "tooltip": "Line item number to track",
+    "error": ""
+  },
+  "poLineItemNumber": {
+    "text": "PO Line Item Number (Line items)",
+    "tooltip": "PO line Item number per line item",
+    "error": ""
+  },
+  "poNumber": {
+    "text": "PO No. (Line items)",
+    "tooltip": "PO number per line item in GR",
+    "error": ""
+  },
+  "grValue": {
+    "text": "GR Amount",
+    "tooltip": "",
+    "error": "#N/A"
+  },
+  "grQuantity": {
+    "text": "GR Quantity (Line items)",
+    "tooltip": "GR quantity per line item",
+    "error": ""
+  },
+  "viewLineItemDetails": {
+    "text": "View Line Item Details (Hyperlink)",
+    "tooltip": "View line item and document details",
+    "error": ""
+  },
+  "downloadGoodsReceiptReport": {
+    "text": "Download Goods Receipt Report (Button)",
+    "tooltip": "Download goods receipt report",
+    "error": ""
+  },
+  "sortAndFilter": {
+    "text": "Sort and Filter (Filter Options)",
+    "tooltip": "Filter and sort goods receipts",
+    "error": ""
+  }
+}

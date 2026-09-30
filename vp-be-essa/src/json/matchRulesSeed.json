@@ -1,0 +1,2720 @@
+[
+  {
+    "ruleKey": "1.01",
+    "dataPoint": "Vendor name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "#1 Vendor name",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": "#52 Seller name & NPWP"
+      },
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": "#25 Vendor code & name"
+      },
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": "vendor_name (LFA1)"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Same name after normalising case, spacing and legal suffix (PT, CV, Tbk).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "Invoice vendor name must match the Faktur Pajak vendor and the SAP vendor master.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "VENDOR_PO_INVOICE",
+    "serverSide": false,
+    "refs": "#1 · #25 · #52",
+    "displayOrder": 1
+  },
+  {
+    "ruleKey": "1.02",
+    "dataPoint": "Vendor bank account",
+    "dataKey": "bank_account",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": "bank_account (LFBK)"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Account number equals the account on file in SAP (LFBK), ignoring spaces and dashes.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "SAP would still allow posting — the platform must stop it. Vendor master is enough; no payment-history lookup. (Replaces 1.33 “bank account changed since last payment”.)",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "BANK_VENDOR_MASTER",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 2
+  },
+  {
+    "ruleKey": "1.04",
+    "dataPoint": "PO number",
+    "dataKey": "po_number",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#7 PO number",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#7 PO number"
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": "#41 PO number & line item"
+      },
+      {
+        "doc": "BAST",
+        "requirement": "IF_PRESENT",
+        "field": "#41 PO number & line item"
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "IF_PRESENT",
+        "field": "#7 PO number"
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "IF_PRESENT",
+        "field": "#41 PO number & line item"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "PO exists and is open in PO master; every document cites the same PO. Single PO per invoice (Q-029).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": "PO_NUMBER_MASTER",
+    "serverSide": false,
+    "refs": "#7 · #41",
+    "displayOrder": 3
+  },
+  {
+    "ruleKey": "1.05",
+    "dataPoint": "Invoice number on Faktur Pajak",
+    "dataKey": "invoice_number",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "#5 Invoice number",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": "#56 Referenced invoice number"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Case / space insensitive.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#5 · #56",
+    "displayOrder": 4
+  },
+  {
+    "ruleKey": "1.11",
+    "dataPoint": "ESSA legal entity & NPWP",
+    "dataKey": "company_name",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#24 ESSA legal entity",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#19 ESSA legal entity name & NPWP"
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": "#53 Buyer name & NPWP"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": "#24 ESSA legal entity"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Entity code + NPWP match.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#19 · #24 · #53",
+    "displayOrder": 5
+  },
+  {
+    "ruleKey": "1.12",
+    "dataPoint": "Vendor NPWP",
+    "dataKey": "npwp",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "#52 Seller NPWP",
+    "targets": [
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": "vendor_npwp"
+      },
+      {
+        "doc": "INVOICE",
+        "requirement": "IF_PRESENT",
+        "field": "#3 Vendor NPWP"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Digits only, zero difference.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "NPWP is only guaranteed on the Faktur Pajak, so the Faktur Pajak is the anchor. No portal check needed.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#3 · #52",
+    "displayOrder": 6
+  },
+  {
+    "ruleKey": "1.15",
+    "dataPoint": "Faktur Pajak vendor name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "#52 Seller name",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#1 Vendor name"
+      },
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": "vendor_name"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Seller name on the Faktur Pajak matches the invoice vendor and vendor master.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 7
+  },
+  {
+    "ruleKey": "1.26",
+    "dataPoint": "Currency",
+    "dataKey": "currency",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#8 Currency",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#8 Currency"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "ISO code.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#8",
+    "displayOrder": 8
+  },
+  {
+    "ruleKey": "1.07",
+    "dataPoint": "Payment terms",
+    "dataKey": "payment_terms",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#18 Payment terms",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#18 Payment terms"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": "#18 Payment terms"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Map invoice text to the SAP baseline code (DAIM…DZ20).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#18",
+    "displayOrder": 9
+  },
+  {
+    "ruleKey": "1.06",
+    "dataPoint": "Unit rate",
+    "dataKey": "unit_rate",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "#12 Unit rate",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": "#12 Unit rate"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": "Unit rates"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Invoice unit rate equals the PO net price. When a pack size is shown, the rate applies to quantity × pack size.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Lines with a quantity and a rate. Lump-sum lines with neither go straight to exception."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "Example: 240 packs × 25 kg × IDR 14,000 = IDR 84,000,000 (Ecolab). Quantity 1 means the amount is the unit rate.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "RATE_VALIDATION",
+    "serverSide": false,
+    "refs": "#12",
+    "displayOrder": 10
+  },
+  {
+    "ruleKey": "1.09",
+    "dataPoint": "Item description",
+    "dataKey": "item_description",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      },
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": 65,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "AI judges the invoice line describes the PO line — any words from the PO description may appear. Treat 60–70% as a match.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "Vendor and ESSA naming differ (“NALCO 7408” vs “Chemical industrial sodium metabisulfite”). Fewer than 5% of invoices should fall to exception. The GRN check picks the right line when two lines share price and quantity.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 11
+  },
+  {
+    "ruleKey": "1.29",
+    "dataPoint": "Withholding tax type & rate",
+    "dataKey": "wht_code",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": "WHT code + SKB"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "WHT code on the PO maps (via the WHT matrix) to the vendor-master WHT setting.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "CONFIRM",
+    "businessNote": "The PO is the anchor, not the invoice. Contract marked optional — to be confirmed.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "Nitish Sharma",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 12
+  },
+  {
+    "ruleKey": "1.03",
+    "dataPoint": "Invoice date",
+    "dataKey": "invoice_date",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Invoice date equals the Faktur Pajak date.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 13
+  },
+  {
+    "ruleKey": "1.14",
+    "dataPoint": "Faktur Pajak date",
+    "dataKey": "fp_date",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Faktur Pajak date equals the invoice date. Not checked on the portal.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 14
+  },
+  {
+    "ruleKey": "1.10",
+    "dataPoint": "Quantity",
+    "dataKey": "quantity",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "#10 Quantity",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      },
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Invoice quantity equals the received quantity (GRN for goods, SES for services) and is within PO open quantity.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": "QTY_RECONCILIATION",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 15
+  },
+  {
+    "ruleKey": "1.08",
+    "dataPoint": "Invoice amount",
+    "dataKey": "invoice_amount",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Quantity × unit rate equals the invoice amount and does not exceed the PO open value (0% tolerance).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "Vendor master does not hold invoice amounts — removed from the vendor master column.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "PO_VALUE_ZERO_TOLERANCE",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 16
+  },
+  {
+    "ruleKey": "1.13",
+    "dataPoint": "Faktur Pajak value",
+    "dataKey": "fp_value",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "#15 PPN amount",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#15 PPN amount"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "2 decimals, no tolerance (Q-035).",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Vendor is PKP."
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "Validated against the invoice only — the portal is not needed for the value.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "TAX_INVOICE_MATCH",
+    "serverSide": false,
+    "refs": "#15",
+    "displayOrder": 17
+  },
+  {
+    "ruleKey": "1.28",
+    "dataPoint": "DPP (tax base)",
+    "dataKey": "dpp",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "#14 Sub-total (DPP)",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": "#54 DPP (tax base)"
+      },
+      {
+        "doc": "CORETAX",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "2 decimals, no tolerance (Q-035). DPP × PPN rate must equal the Faktur Pajak PPN.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Vendor is PKP."
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#14 · #54",
+    "displayOrder": 18
+  },
+  {
+    "ruleKey": "1.20",
+    "dataPoint": "Liquidated damages",
+    "dataKey": "calc_amount",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BAST",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Delay = actual completion or delivery date − baseline date; penalty from the LD matrix.",
+    "runCondition": {
+      "type": "PO_CLAUSE",
+      "text": "Only when the PO has an LD clause. If the PO says “refer to contract”, the contract is read instead."
+    },
+    "onFail": "CALCULATE",
+    "status": "ACTIVE",
+    "businessNote": "LD must be validated by the AP user before the invoice is parked.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "LATE_DELIVERY_LD",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 19
+  },
+  {
+    "ruleKey": "1.21",
+    "dataPoint": "Retention",
+    "dataKey": "calc_amount",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Retention % from the PO is held on every invoice until the defect liability period ends.",
+    "runCondition": {
+      "type": "PO_CLAUSE",
+      "text": "Only when the PO has a retention clause."
+    },
+    "onFail": "CALCULATE",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "ADVANCE_RETENTION",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 20
+  },
+  {
+    "ruleKey": "1.22",
+    "dataPoint": "Advance recovery",
+    "dataKey": "calc_amount",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Recovery is spread equally across milestones and the invoice shows the deduction.",
+    "runCondition": {
+      "type": "PO_CLAUSE",
+      "text": "Only when the PO has an advance-recovery clause."
+    },
+    "onFail": "CALCULATE",
+    "status": "ACTIVE",
+    "businessNote": "If the vendor did not deduct it, calculate the amount and raise an exception.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "ADVANCE_RETENTION",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 21
+  },
+  {
+    "ruleKey": "1.27",
+    "dataPoint": "Exchange rate applied",
+    "dataKey": "calc_amount",
+    "ruleType": "TOLERANCE",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": 1,
+      "toleranceAmount": null,
+      "combine": "PCT",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Rate within 1% of the BI middle rate for the posting date (placeholder tolerance).",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Invoice currency is not IDR."
+    },
+    "onFail": "REVIEW",
+    "status": "CONFIRM",
+    "businessNote": "Exchange rate appears on the invoice only, not on the Faktur Pajak.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "Nitish Sharma",
+    "linkedCheck": null,
+    "serverSide": true,
+    "refs": "",
+    "displayOrder": 22
+  },
+  {
+    "ruleKey": "1.30",
+    "dataPoint": "Baseline & due date",
+    "dataKey": "calc_amount",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Due date from the payment-terms matrix, e.g. GRN date + 30 days.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REPORT",
+    "status": "ACTIVE",
+    "businessNote": "Even if the baseline date is not reached, the invoice is processed and sent to SAP. Used for due / overdue reports.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 23
+  },
+  {
+    "ruleKey": "1.32",
+    "dataPoint": "PO remaining balance",
+    "dataKey": "calc_amount",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Remaining PO quantity and value after this invoice; reported for long-term POs.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REPORT",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 24
+  },
+  {
+    "ruleKey": "1.17",
+    "dataPoint": "Faktur Pajak authenticity",
+    "dataKey": "fp_number",
+    "ruleType": "AUTHENTICITY",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CORETAX",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Barcode / QR lookup on Coretax returns the same Faktur Pajak number, vendor name and NPWP.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "CONFIRM",
+    "businessNote": "Done manually today by scanning the barcode into the SAP draft invoice. Confirm the portal integration is in the original scope.",
+    "noteBy": "Vishweshwar · 25 Sep 2026",
+    "confirmWith": "Pranay Patadiya",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 25
+  },
+  {
+    "ruleKey": "1.18",
+    "dataPoint": "Negative vendor list",
+    "dataKey": "vendor_status",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "VENDOR_MASTER",
+    "sourceField": "",
+    "targets": [],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Vendor must not carry the negative-list / block indicator in vendor master.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 26
+  },
+  {
+    "ruleKey": "1.19",
+    "dataPoint": "Vendor debit balance",
+    "dataKey": "debit_balance",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "VENDOR_MASTER",
+    "sourceField": "",
+    "targets": [],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Open debit balance in the vendor ledger (FBL1N) greater than 0 raises an exception.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "Advances, deposits, or VAT to recover from a negative-list vendor.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": true,
+    "refs": "",
+    "displayOrder": 27
+  },
+  {
+    "ruleKey": "1.24",
+    "dataPoint": "Duplicate invoice",
+    "dataKey": "invoice_number",
+    "ruleType": "UNIQUENESS",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE_HISTORY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": [
+        "vendor_name",
+        "invoice_number",
+        "invoice_amount",
+        "invoice_date"
+      ]
+    },
+    "criteriaText": "Vendor + invoice number + amount + date must not exist among posted invoices.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 28
+  },
+  {
+    "ruleKey": "1.25",
+    "dataPoint": "Duplicate Faktur Pajak",
+    "dataKey": "fp_number",
+    "ruleType": "UNIQUENESS",
+    "group": null,
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE_HISTORY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": [
+        "fp_number"
+      ]
+    },
+    "criteriaText": "Faktur Pajak number is not already booked in SAP (also covers 1.16 FP number uniqueness).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 29
+  },
+  {
+    "ruleKey": "1.23",
+    "dataPoint": "Percentage completion",
+    "dataKey": "percent_complete",
+    "ruleType": "TOLERANCE",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER",
+      "CATERING",
+      "CIVIL",
+      "HOUSEKEEPING",
+      "RENTAL_EQUIPMENT",
+      "CONSULTANT_TIME",
+      "CONSULTANT_MILESTONE",
+      "MEDICAL",
+      "SURVEILLANCE"
+    ],
+    "disabledCategories": [],
+    "source": "BAST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "STEPWISE",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": 5,
+      "toleranceAmount": 200000,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Step 1: BAST vs service entry sheet. Step 2: service entry sheet vs invoice. Within 5% or IDR 200,000.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Only when the PO is progress-billed."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "“Validation is BAST vs service entry sheet, then service entry sheet vs invoice. If it is within the tolerance we can create the park document.”",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": "SES_DEVIATION",
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 30
+  },
+  {
+    "ruleKey": "1.31",
+    "dataPoint": "Date sequence",
+    "dataKey": "service_period",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER",
+      "CATERING",
+      "CIVIL",
+      "HOUSEKEEPING",
+      "RENTAL_EQUIPMENT",
+      "CONSULTANT_TIME",
+      "CONSULTANT_MILESTONE",
+      "MEDICAL",
+      "SURVEILLANCE"
+    ],
+    "disabledCategories": [],
+    "source": "BAST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "STEPWISE",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Service period ≤ SES date ≤ invoice date, and the Faktur Pajak is within its 3-month validity.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "Needed to make sure the Faktur Pajak has not expired (valid 3 months from the month issued).",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": true,
+    "refs": "",
+    "displayOrder": 31
+  },
+  {
+    "ruleKey": "S.01",
+    "dataPoint": "BAST management approval",
+    "dataKey": "calc_amount",
+    "ruleType": "AUTHENTICITY",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER",
+      "CATERING",
+      "CIVIL",
+      "HOUSEKEEPING",
+      "RENTAL_EQUIPMENT",
+      "CONSULTANT_TIME",
+      "CONSULTANT_MILESTONE",
+      "MEDICAL",
+      "SURVEILLANCE"
+    ],
+    "disabledCategories": [],
+    "source": "BAST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "DOA_APPROVAL",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Management / functional approval of the BAST is received (per DOA).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "APPROVAL",
+    "status": "ACTIVE",
+    "businessNote": "BAST is sent through Teams for approval via Avensys; we validate the approvals are received.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 32
+  },
+  {
+    "ruleKey": "2.02",
+    "dataPoint": "Airway / shipping bill date",
+    "dataKey": "invoice_date",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "AIRWAY_BILL",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Dates on the airway bill and shipping bill match.",
+    "runCondition": {
+      "type": "DOC_PRESENT",
+      "text": "Imported material only."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 33
+  },
+  {
+    "ruleKey": "2.03",
+    "dataPoint": "Airway / shipping bill name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "AIRWAY_BILL",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Shipper / consignee name matches the invoice and PO.",
+    "runCondition": {
+      "type": "DOC_PRESENT",
+      "text": "Imported material only."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 34
+  },
+  {
+    "ruleKey": "2.04",
+    "dataPoint": "Bank guarantee expiry",
+    "dataKey": "bank_guarantee",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_GUARANTEE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Guarantee is valid until at least the date the PO requires.",
+    "runCondition": {
+      "type": "PO_CLAUSE",
+      "text": "When the PO requires a guarantee."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "Bank guarantee is required, not optional — exact match.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 35
+  },
+  {
+    "ruleKey": "2.05",
+    "dataPoint": "Bank guarantee amount",
+    "dataKey": "bank_guarantee",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_GUARANTEE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Guarantee amount equals the amount the PO requires.",
+    "runCondition": {
+      "type": "PO_CLAUSE",
+      "text": "When the PO requires a guarantee."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 36
+  },
+  {
+    "ruleKey": "3.06",
+    "dataPoint": "SES ↔ BAST reference",
+    "dataKey": "ses_reference",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "GRN_SES",
+    "sourceField": "#209 SES number (FMXDOCNR)",
+    "targets": [
+      {
+        "doc": "BAST",
+        "requirement": "REQUIRED",
+        "field": "#178 SES reference"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "BAST must cite the SES used.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#178 · #209 · #218",
+    "displayOrder": 37
+  },
+  {
+    "ruleKey": "3.07",
+    "dataPoint": "Unit of measure",
+    "dataKey": "uom",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#11 UoM",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#11 UoM"
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": "#11 UoM"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "UoM synonym table (MD / man-day / HARI).",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#11",
+    "displayOrder": 38
+  },
+  {
+    "ruleKey": "3.02",
+    "dataPoint": "Unit rate per manpower category",
+    "dataKey": "unit_rate",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#12 Unit rate",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#12 Unit rate"
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": "#12 Unit rate"
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#201 Unit rate per category (PO rate)"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "EXTRACT",
+        "field": "#164 Unit rates per category"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "0% — per category line.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Per manpower category line."
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": "RATE_VALIDATION",
+    "serverSide": false,
+    "refs": "#12 · #164 · #201",
+    "displayOrder": 39
+  },
+  {
+    "ruleKey": "3.08",
+    "dataPoint": "Derived rate vs PO rate",
+    "dataKey": "unit_rate",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "#12 Unit rate",
+    "targets": [
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#207 Derived unit rate (amount ÷ qty)"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Recompute amount ÷ qty, 0% variance.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Per manpower category line."
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#207 · #208",
+    "displayOrder": 40
+  },
+  {
+    "ruleKey": "3.09",
+    "dataPoint": "Service period",
+    "dataKey": "service_period",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "GRN_SES",
+    "sourceField": "#211 Service period",
+    "targets": [
+      {
+        "doc": "BAST",
+        "requirement": "REQUIRED",
+        "field": "#171 Service period"
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": "#181 Timesheet period"
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#196 Summary period"
+      },
+      {
+        "doc": "OVERTIME_APPROVAL",
+        "requirement": "IF_PRESENT",
+        "field": "#220 Period covered"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Same billing month; OT period within it.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#171 · #181 · #196 · #211 · #220",
+    "displayOrder": 41
+  },
+  {
+    "ruleKey": "3.01",
+    "dataPoint": "Man-days per category",
+    "dataKey": "man_days",
+    "ruleType": "CALCULATION",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "TIMESHEET",
+    "sourceField": "#191 Total working days (Σ by #184)",
+    "targets": [
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#199 Total man-days"
+      },
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#10 Quantity"
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "EXTRACT",
+        "field": "#163 Manpower categories & headcount"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Σ timesheet = summary = invoice qty, 0%.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Per manpower category line."
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": "QTY_RECONCILIATION",
+    "serverSide": false,
+    "refs": "#10 · #191 · #199",
+    "displayOrder": 42
+  },
+  {
+    "ruleKey": "3.03",
+    "dataPoint": "Overtime hours per worker",
+    "dataKey": "overtime_hours",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "OVERTIME_APPROVAL",
+    "sourceField": "#222 OT hours approved per worker",
+    "targets": [
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": "#193 Total overtime hours"
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#203 Overtime hours & OT rate"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Zero tolerance (Q-053).",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Invoice claims OT hours > 0."
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#193 · #203 · #222",
+    "displayOrder": 43
+  },
+  {
+    "ruleKey": "3.10",
+    "dataPoint": "Worker name & ID",
+    "dataKey": "worker_id",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "TIMESHEET",
+    "sourceField": "#182 / #183 Worker name, ID",
+    "targets": [
+      {
+        "doc": "OVERTIME_APPROVAL",
+        "requirement": "REQUIRED",
+        "field": "#221 Worker name & ID"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "ID exact; name fuzzy as tiebreak.",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Invoice claims OT hours > 0."
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#182 · #183 · #221",
+    "displayOrder": 44
+  },
+  {
+    "ruleKey": "3.11",
+    "dataPoint": "Manpower category",
+    "dataKey": "manpower_category",
+    "ruleType": "LOGICAL",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "CONTRACT",
+    "sourceField": "#163 Manpower categories",
+    "targets": [
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": "#184 Designation / category"
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#197 Manpower category"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Mapped to the contract category list.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "#163 · #184 · #197",
+    "displayOrder": 45
+  },
+  {
+    "ruleKey": "3.12",
+    "dataPoint": "Claim value vs SES",
+    "dataKey": "claim_value",
+    "ruleType": "TOLERANCE",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "GRN_SES",
+    "sourceField": "#214 SES value",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": "#14 Sub-total (DPP)"
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": "#206 Total claim amount"
+      },
+      {
+        "doc": "BAST",
+        "requirement": "REQUIRED",
+        "field": "#177 Certified value"
+      },
+      {
+        "doc": "PO",
+        "requirement": "EXTRACT",
+        "field": "#30 Total PO value"
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": 2,
+      "toleranceAmount": 100000,
+      "combine": "LOWER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "2% or IDR 100,000, whichever is lower.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "N-Way design (Sabrina)",
+    "confirmWith": "",
+    "linkedCheck": "SES_DEVIATION",
+    "serverSide": false,
+    "refs": "#14 · #177 · #206 · #214",
+    "displayOrder": 46
+  },
+  {
+    "ruleKey": "3.05",
+    "dataPoint": "Attendance (Face ID)",
+    "dataKey": "man_days",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "FACE_ID",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Days billed match biometric Face ID attendance.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "Moved from Common — biometric attendance applies to manpower invoices only.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 47
+  },
+  {
+    "ruleKey": "4.01",
+    "dataPoint": "Daily POB count",
+    "dataKey": "quantity",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MEAL_ATTENDANCE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FACE_ID",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Persons on board billed equal the meal attendance and Face ID count.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 48
+  },
+  {
+    "ruleKey": "4.04",
+    "dataPoint": "Back-charge quantity",
+    "dataKey": "quantity",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BACK_CHARGE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Snack, special-lunch and special-dinner back-charges equal the recap sheet.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 49
+  },
+  {
+    "ruleKey": "7.01",
+    "dataPoint": "Quantity — BOQ",
+    "dataKey": "quantity",
+    "ruleType": "TOLERANCE",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "CIVIL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOQ",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "INSPECTION_REPORT",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": 5,
+      "toleranceAmount": 200000,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Measured quantity within 5% or IDR 200,000 of the BOQ.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "BOQ applies to civil contracts only — moved from Common.",
+    "noteBy": "Nitish Sharma · 25 Sep 2026",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 50
+  },
+  {
+    "ruleKey": "7.03",
+    "dataPoint": "SIUJK expiry date",
+    "dataKey": "invoice_date",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "CIVIL"
+    ],
+    "disabledCategories": [],
+    "source": "SIUJK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Construction permit is valid on the invoice date.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 51
+  },
+  {
+    "ruleKey": "9.01",
+    "dataPoint": "Trip / request ID",
+    "dataKey": "invoice_number",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL",
+      "HOTEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Name + travel date + airline + route + amount + VAT resolve one HCIS clearing entry; zero tolerance on amount.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 52
+  },
+  {
+    "ruleKey": "9.07",
+    "dataPoint": "HCIS ledger amount",
+    "dataKey": "invoice_amount",
+    "ruleType": "EXACT",
+    "group": null,
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL",
+      "HOTEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "Invoice amount equals the HCIS clearing amount.",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "ACTIVE",
+    "businessNote": "",
+    "noteBy": "",
+    "confirmWith": "",
+    "linkedCheck": null,
+    "serverSide": false,
+    "refs": "",
+    "displayOrder": 53
+  }
+]

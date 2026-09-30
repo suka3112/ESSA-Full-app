@@ -1,0 +1,155 @@
+{
+  "status": 200,
+  "message": "Document extracted and classified successfully",
+  "data": {
+    "documents": [
+      {
+        "documentType": "invoice",
+        "documentTypeLabel": "Invoice",
+        "fileName": "290518 Wisata Kawan_Invoice - nopo_match.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "Invoice",
+        "invoicePages": [1],
+        "header": {
+          "invoiceNumber": "INV/TD/000591/2026",
+          "invoiceDate": "27-Feb-2026",
+          "dueDate": "14-Mar-2026",
+          "vendorName": "PT Wisata Kawan Abadi",
+          "vendorAddress": "Ruko Riviera Plaza Blok RB 07 No. 15A",
+          "vendorTaxId": null,
+          "buyerName": "PT PANCA AMARA UTAMA",
+          "poNumber": null,
+          "serviceName": "Ticket Domestic",
+          "currency": "IDR",
+          "manhourUnitRate": null,
+          "subtotal": "3110000",
+          "taxAmount": "34210",
+          "totalAmount": "3144210",
+          "grandTotal": "3144210",
+          "paymentTerms": "Invoice payment due by 14-Mar-2026",
+          "bankName": "Bank BCA",
+          "bankBranch": null,
+          "bankAccount": "6970747999",
+          "accountHolder": "PT Wisata Kawan Abadi",
+          "invoiceWorkflow": "NON_PO",
+          "requestId": "TR-2026-00482",
+          "passengerName": "Fitri Ra",
+          "ticketClass": "Economy",
+          "routeFrom": "Luwuk",
+          "routeTo": "Jakarta",
+          "confirmNo": "AWBWRB",
+          "ticketNo": "2134556468",
+          "airline": "Batik Air",
+          "flightNo": "ID 6295",
+          "routeCodeFrom": "LUW",
+          "routeCodeTo": "CGK"
+        },
+        "lineItems": [
+          {
+            "description": "Ticket Domestic",
+            "quantity": "1",
+            "unit": "TKT",
+            "unitPrice": "3110000",
+            "amount": "3,110,000.00",
+            "passengerName": "Fitri Ra",
+            "ticketClass": "Economy",
+            "departure": "Luwuk",
+            "arrival": "Jakarta",
+            "from": "Luwuk",
+            "to": "Jakarta",
+            "confirmNo": "AWBWRB",
+            "confirm_no": "AWBWRB",
+            "ticketNo": "2134556468",
+            "ticket_no": "2134556468",
+            "airline": "Batik Air",
+            "flightNo": "ID 6295",
+            "flight": "ID 6295",
+            "routing": "LUW-CGK",
+            "route": "LUW-CGK",
+            "role": null
+          }
+        ],
+        "fields": [],
+        "documentId": 10201,
+        "validation": {
+          "poNumber": null,
+          "sesNo": null,
+          "matched": true,
+          "overallStatus": "PASS",
+          "summary": {
+            "total": 4,
+            "passed": 4,
+            "warnings": 0,
+            "failed": 0,
+            "blocked": 0,
+            "skipped": 0
+          },
+          "results": [
+            {
+              "sequence": 1,
+              "ruleCode": "HCIS_REQUEST_MATCH",
+              "ruleName": "Request ID Match",
+              "severity": "PASS",
+              "expectedValue": "Fitri Ra · 27-Feb-2026 · Batik Air · LUW-CGK · IDR 3,144,210",
+              "actualValue": "Fitri Ra · Batik Air · LUW-CGK · matched",
+              "variance": null,
+              "message": "All cleared fields match the HCIS Clearing Journal for this request.",
+              "sourceTable": "HCIS_CLEARING_JOURNAL",
+              "sourceRecordId": "TR-2026-00482",
+              "details": [
+                { "label": "Traveler", "value": "Fitri Ra", "status": "PASS" },
+                { "label": "Route", "value": "LUW → CGK", "status": "PASS" },
+                { "label": "Amount", "value": "IDR 3,144,210", "status": "PASS" }
+              ]
+            },
+            {
+              "sequence": 2,
+              "ruleCode": "BANK_VENDOR_MASTER",
+              "ruleName": "Bank Details vs Vendor Master",
+              "severity": "PASS",
+              "expectedValue": "BCA 6970747999 — PT Wisata Kawan Abadi",
+              "actualValue": "BCA 6970747999 — PT Wisata Kawan Abadi",
+              "variance": null,
+              "message": "Invoice bank details match the vendor master record.",
+              "sourceTable": "VENDOR_BANK",
+              "sourceRecordId": "WKA0000001",
+              "details": null
+            },
+            {
+              "sequence": 3,
+              "ruleCode": "NON_PKP_VENDOR",
+              "ruleName": "Non-PKP Vendor Check",
+              "severity": "PASS",
+              "expectedValue": "PT Wisata Kawan Abadi — non-PKP",
+              "actualValue": "PT Wisata Kawan Abadi — invoice dated within 1 year",
+              "variance": null,
+              "message": "Vendor name matches and invoice date is within the one-year issuance window.",
+              "sourceTable": "VENDOR",
+              "sourceRecordId": "WKA0000001",
+              "details": null
+            },
+            {
+              "sequence": 4,
+              "ruleCode": "ADVANCE_RETENTION",
+              "ruleName": "Advance & Retention",
+              "severity": "PASS",
+              "expectedValue": "No advance / retention applicable",
+              "actualValue": "No advance / retention applicable",
+              "variance": null,
+              "message": "Advance recovery and retention rules evaluated — nothing to withhold for this invoice.",
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "details": null
+            }
+          ],
+          "ld_pct": 0,
+          "ld_amount": 0,
+          "advance_recovery": 0,
+          "retention_held": 0,
+          "net_payable": 3144210
+        }
+      }
+    ]
+  }
+}

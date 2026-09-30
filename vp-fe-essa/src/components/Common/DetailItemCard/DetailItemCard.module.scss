@@ -1,0 +1,51 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.cardLabel {
+    font-size: 1rem;
+    // width: 50% !important;
+    margin-bottom: 0px;
+    display: block;
+    padding-right: 10px;
+    color: #344054 !important;
+    font-weight: 500;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    // word-wrap: break-word;
+    // word-break: break-all;
+}
+@media (min-width: 1025px) {
+  .cardValue{
+    min-width: 150px !important;
+  }
+}
+@media (min-width:1400px){
+  .cardLabel{
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .cardLabel {
+    width: 150% !important;
+    margin-bottom: 5px;
+  }
+}
+
+.cardValue {
+    // @include fontCustomStyle(1rem, 600, black, 20px);
+    font-size: 1rem;
+    font-weight: 600;
+    // width: 50% !important ;
+    color: #000;
+    // margin-bottom: 0px;
+    display: inline-block; /* or block / inline-block / inline-flex */
+  max-width: 100%;       /* ensure it can be constrained by parent */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+    // word-wrap: break-word;
+    // word-break: break-all;
+}

@@ -1,0 +1,17 @@
+PORT=9080
+
+# staging — ESSA uses vp-be-essa only (no Auto-Dx)
+REACT_APP_DEFAULT_API_BASE_URL=http://20.49.9.124:8090/vendor-portal
+REACT_APP_AUTH_API_BASE_URL= http://20.49.9.124:8090/vendor-portal
+REACT_APP_SOA_API_BASE_URL=http://20.49.9.124:8090/vendor-portal
+# Set true when vp-be-essa /essa/* routes are implemented
+REACT_APP_ESSA_USE_BACKEND=true
+
+REACT_APP_OCR_PDF_IP=20.49.9.124
+
+# For Essa
+REACT_APP_BRAND=essa
+REACT_APP_SSO_PROVIDER=entra
+
+# For Avensys
+# REACT_APP_BRAND=avensys

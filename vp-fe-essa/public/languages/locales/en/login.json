@@ -1,0 +1,68 @@
+{
+  "email": {
+    "text": "Email",
+    "tooltip": "Enter Email",
+    "error": "Email is required",
+    "validation": "Invalid email address"
+  },
+  "password": {
+    "text": "Password",
+    "tooltip": "Enter Password",
+    "error": "Password is required"
+  },
+  "referenceNumber": {
+    "text": "Reference Number",
+    "tooltip": "Enter Your Reference Number",
+    "error": "Reference number is required"
+  },
+  "companyName": {
+    "text": "Company Name",
+    "tooltip": "Enter Your Company Name",
+    "error": "Company Name is required"
+  },
+  "tradeLicenceNumber": {
+    "text": "Trade Licence Number",
+    "tooltip": "Enter Trade Licence Number",
+    "error": "Trade License number is required"
+  },
+  "forget_pwd": "Forgot Password",
+  "submit": "Submit",
+  "track_my_application": "Track My Application",
+  "signin": "Sign In",
+  "signin_sso": "Sign in with Microsoft",
+  "or": "or",
+  "trackYourApplication": "Track Your Application",
+  "remember_me": "Remember Me",
+  "vendor_authentication": "Vendor Authentication",
+  "admin_authentication": "Admin Authentication",
+  "business_authentication": "Business Authentication",
+  "finance_authentication": "Finance Authentication",
+  "daikin_brand_statement": "Daikin is a leading Air conditioning (AC) brand",
+  "daikin_brand_big_statement": "Daikin is the global leader in developing and manufacturing Air Conditioning,\nHeating, Ventilation (HVAC) and Refrigerant solutions for\nResidential, Commercial and Industrial applications.",
+  "brand_pitch": "{{brandName}} is a leading Air conditioning (AC) brand",
+  "brand_statement": "{{brandName}} is the global leader in developing and manufacturing Air Conditioning,\nHeating, Ventilation (HVAC) and Refrigerant solutions for\nResidential, Commercial and Industrial applications.",
+  "emailIncorrect": "The Email is Incorrect",
+  "yourApplicationStatus": "Your application status",
+  "yourApplicationHasBeenSubmittedSuccessfully": "Your application has been Submitted Successfully",
+  "applicationSubmittedSuccessfully": "Application Submitted Successfully",
+  "reviewInProgress": "Review In Progress",
+  "awaitingForApproval": "Awaiting For Approval",
+  "onceApprovedNotificationSentToEmail": "Once approved, a notification will be sent to your registered email ID.",
+  "applicationCannotBeEditedUnderReview": "The application cannot be edited once it is under review.",
+  "editYourApplication": "Edit Your Application",
+  "goBack": "Go Back",
+  "receiveCredentialsOnceApproved": "You will receive your credentials through your registered Email id once approved",
+  "congratulationsApplicationApproved": "Congratulations! Your Application is approved.",
+  "credentialsSentToEmail": "The Credentials has been sent to your Email, Please follow the link on your Email to login",
+  "viewYourApplication": "View Your Application",
+  "congratulations": "Congratulations!",
+  "yourApplicationApproved": "Your application has been",
+  "credentialsSentToRegisteredEmail": "Your credentials have been sent to your registered Email address.",
+  "applicationReferenceNo": "Application Reference No.",
+  "youWillBeNotifiedViaEmailOnceYourApplicationHasBeen": "You will be notified via Email once your application has been",
+  "areYouSureYouWantToSubmitYourApplication": "Are you sure you want to submit your application?",
+  "formSubmitSuccessfully": "Form Submitted Successfully",
+  "yourApplicationHasBeenSavedButIsNotYetSubmitted": "Your application has been save, but is not yet submitted",
+  "passwordResetEmailSent": "The password reset Email has been sent to your inbox.",
+  "clickBelowToResetPassword": "Please click below to reset your password."
+}

@@ -1,0 +1,1 @@
+export const SET_DASHBOARD_DATA = 'GET_DASBOARD_DATA';

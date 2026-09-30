@@ -1,0 +1,354 @@
+{
+  "confidenceThreshold": 0.7,
+  "lowConfidenceAction": "manual_review",
+  "invoiceTypes": [
+    {
+      "invoiceTypeId": "MANPOWER_SERVICES",
+      "name": "Manpower Services",
+      "category": "PO",
+      "poSeries": [
+        "4203"
+      ],
+      "contentSignals": "Manpower supply, welding/fabrication activity, headcount-based billing, manpower roles referenced (Welder, Fitter, Helper), manhour/timesheet language.",
+      "documents": [
+        {
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Commercial invoice with Inv No, Date, Payment Terms, totals (Total Amount, VAT, Grand Total), bank details, service/activity name, manpower roles"
+        },
+        {
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Tax Invoice (VAT)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Indonesian Faktur Pajak or formal VAT/tax invoice with Tax Invoice Number, Date, VAT/PPN amount"
+        },
+        {
+          "categoryId": "berita_acara",
+          "categoryLabel": "Work Progress Certificate (Berita Acara)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Work progress / Berita Acara with PO Number, period dates, manhour % completion, approval blocks (Prepared, Reviewed, Acknowledged, Approved), service name, manpower roles and names"
+        },
+        {
+          "categoryId": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour (Monthly Man-days Summary)",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "Manhour summary table with Regular Manhour, Overtime Manhour, roles, and worker names"
+        },
+        {
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "Daily time sheet with Date, IN/OUT times, Sign Workers, Daily Activity, Approved by, work-order rows. A PO reference number in the header does NOT make this a purchase order"
+        },
+        {
+          "categoryId": "daily_attendance",
+          "categoryLabel": "Daily Attendance (biometrics)",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "Biometric attendance log (face/finger) with Date, Username, Event (check-in/out, authentication)"
+        },
+        {
+          "categoryId": "purchase_order",
+          "categoryLabel": "PO",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Formal SAP purchase order form with PURCHASE ORDER title, PO Number box, PO Date, Vendor Code, Requisition No, line-item pricing — NOT a daily time sheet even if a PO number appears elsewhere"
+        },
+        {
+          "categoryId": "purchase_order_appendix",
+          "categoryLabel": "PO Appendix",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "PO appendix or rate schedule with PO header, unit price, quantity, manpower role per line"
+        }
+      ]
+    },
+    {
+      "invoiceTypeId": "CIVIL_CONTRACTOR",
+      "name": "Civil Contractor",
+      "category": "PO",
+      "poSeries": [
+        "4203"
+      ],
+      "contentSignals": "Construction/civil work scope, work progress by construction stage (e.g. Infrastructure, Sport Hall, Shared Block), references to Sertifikat Badan Usaha or Izin Usaha Jasa Konstruksi.",
+      "documents": [
+        {
+          "categoryId": "transmittal",
+          "categoryLabel": "Transmittal",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Cover page titled TRANSMITTAL NOTE listing enclosed documents (Inv No, Progress N). Sender/To/Attention/From, document table with Remarks (Original). Not an invoice."
+        },
+        {
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Commercial invoice with Inv No, Date, Payment Terms, totals (Total Amount, VAT, Grand Total), bank details, service/activity name, manpower roles"
+        },
+        {
+          "categoryId": "notice_letter",
+          "categoryLabel": "Notice Letter",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "RECEIPT / Kwitansi-style page with Received From and amount in words, OR Notice of Total Value for a Progress Claim with Payment Details. Not the commercial invoice."
+        },
+        {
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Tax Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Indonesian Faktur Pajak or formal VAT/tax invoice with Tax Invoice Number, Date, VAT/PPN amount"
+        },
+        {
+          "categoryId": "berita_acara",
+          "categoryLabel": "Work Progress Certificate (Berita Acara)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Work progress / Berita Acara with PO Number, period dates, manhour % completion, approval blocks (Prepared, Reviewed, Acknowledged, Approved), service name, manpower roles and names"
+        },
+        {
+          "categoryId": "monthly_progress_report",
+          "categoryLabel": "Monthly Progress Report",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Landscape MONTHLY PROGRESS REPORT spreadsheet: PO Line No, Description, WBS No, Weight Factor, Previous/Current/Cumulative %. Not a Berita Acara."
+        },
+        {
+          "categoryId": "sertifikat_badan_usaha",
+          "categoryLabel": "Sertifikat Badan Usaha",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "Indonesian Sertifikat Badan Usaha (SBU) Konstruksi / PB-UMKU with Garuda emblem, NIB, KBLI. Not IUJK."
+        },
+        {
+          "categoryId": "izin_usaha_jasa_konstruksi",
+          "categoryLabel": "Izin Usaha Jasa Konstruksi",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Izin Usaha Jasa Konstruksi Nasional with Nomor IUJK, Nama Perusahaan, NPWP. Not SBU."
+        },
+        {
+          "categoryId": "purchase_order",
+          "categoryLabel": "PO",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Formal SAP purchase order form with PURCHASE ORDER title, PO Number box, PO Date, Vendor Code, Requisition No, line-item pricing — NOT a daily time sheet even if a PO number appears elsewhere"
+        },
+        {
+          "categoryId": "purchase_order_appendix",
+          "categoryLabel": "PO Appendix",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "PO appendix or rate schedule with PO header, unit price, quantity, manpower role per line"
+        }
+      ]
+    },
+    {
+      "invoiceTypeId": "MATERIAL_IMPORT",
+      "name": "Material Import",
+      "category": "PO",
+      "poSeries": [
+        "4201",
+        "4202"
+      ],
+      "contentSignals": "",
+      "documents": [
+        {
+          "categoryId": "purchase_order",
+          "categoryLabel": "PO",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Formal SAP purchase order form with PURCHASE ORDER title, PO Number box, PO Date, Vendor Code, Requisition No, line-item pricing — NOT a daily time sheet even if a PO number appears elsewhere"
+        },
+        {
+          "categoryId": "purchase_order_appendix",
+          "categoryLabel": "PO Appendix",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "PO appendix or rate schedule with PO header, unit price, quantity, manpower role per line"
+        },
+        {
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Commercial invoice with Inv No, Date, Payment Terms, totals (Total Amount, VAT, Grand Total), bank details, service/activity name, manpower roles"
+        },
+        {
+          "categoryId": "logistics_invoice",
+          "categoryLabel": "Logistics Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "commercial_invoice",
+          "categoryLabel": "Commercial Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "packing_slip",
+          "categoryLabel": "Packing Slip",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "email_notification",
+          "categoryLabel": "Email Notification",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "bill_of_lading_awb",
+          "categoryLabel": "Bill of Lading / AWB",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "packing_list",
+          "categoryLabel": "Packing List",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        }
+      ]
+    },
+    {
+      "invoiceTypeId": "CAMP_SERVICE_AND_CATERING",
+      "name": "Camp Service and Catering",
+      "category": "PO",
+      "poSeries": [
+        "4203"
+      ],
+      "contentSignals": "Catering/meal service language, meal counts by type (breakfast, lunch, dinner, supper), attendance/headcount at a camp or site facility.",
+      "documents": [
+        {
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Commercial invoice with Inv No, Date, Payment Terms, totals (Total Amount, VAT, Grand Total), bank details, service/activity name, manpower roles"
+        },
+        {
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Tax Invoice (VAT)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Indonesian Faktur Pajak or formal VAT/tax invoice with Tax Invoice Number, Date, VAT/PPN amount"
+        },
+        {
+          "categoryId": "berita_acara",
+          "categoryLabel": "Work Progress Certificate (Berita Acara)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Work progress / Berita Acara with PO Number, period dates, manhour % completion, approval blocks (Prepared, Reviewed, Acknowledged, Approved), service name, manpower roles and names"
+        },
+        {
+          "categoryId": "proforma_invoice",
+          "categoryLabel": "Proforma Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "attendance_statistics_table",
+          "categoryLabel": "Attendance Statistics Table",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "monthly_meal_summary",
+          "categoryLabel": "Monthly Meal Summary (PoB Report)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "purchase_order",
+          "categoryLabel": "PO",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Formal SAP purchase order form with PURCHASE ORDER title, PO Number box, PO Date, Vendor Code, Requisition No, line-item pricing — NOT a daily time sheet even if a PO number appears elsewhere"
+        },
+        {
+          "categoryId": "purchase_order_appendix",
+          "categoryLabel": "PO Appendix",
+          "enabled": true,
+          "splitBehavior": "scattered",
+          "classificationHints": "PO appendix or rate schedule with PO header, unit price, quantity, manpower role per line"
+        }
+      ]
+    },
+    {
+      "invoiceTypeId": "NON_PO",
+      "name": "Non-PO",
+      "category": "Non-PO",
+      "poSeries": [],
+      "contentSignals": "",
+      "documents": [
+        {
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Commercial invoice with Inv No, Date, Payment Terms, totals (Total Amount, VAT, Grand Total), bank details, service/activity name, manpower roles"
+        },
+        {
+          "categoryId": "listing_invoices",
+          "categoryLabel": "Listing Invoices (If any)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Tax Invoice",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Indonesian Faktur Pajak or formal VAT/tax invoice with Tax Invoice Number, Date, VAT/PPN amount"
+        },
+        {
+          "categoryId": "underlying_contract",
+          "categoryLabel": "Underlying Contract",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "guarantee_letter",
+          "categoryLabel": "Guarantee Letter (If any)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "room_reservation_form",
+          "categoryLabel": "Room Reservation Form (If any)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": ""
+        },
+        {
+          "categoryId": "berita_acara",
+          "categoryLabel": "Work Progress Certificate (Berita Acara)",
+          "enabled": true,
+          "splitBehavior": "contiguous",
+          "classificationHints": "Work progress / Berita Acara with PO Number, period dates, manhour % completion, approval blocks (Prepared, Reviewed, Acknowledged, Approved), service name, manpower roles and names"
+        }
+      ]
+    }
+  ]
+}

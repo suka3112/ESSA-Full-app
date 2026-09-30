@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Vendor Registration</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f4f4" style="padding: 20px 0;">
+    <tr>
+      <td align="center" valign="top">
+        <table width="600" cellpadding="0" cellspacing="0" border="0"
+          style="background-color: #ffffff; border-collapse: collapse; border-radius: 8px;">
+          
+          <!-- Header -->
+          <tr>
+            <td align="center" style="padding: 30px 0 20px 0;">
+              <img src="https://res.cloudinary.com/dvdgpxne8/image/upload/v1747829491/uploads/uploads/logo3-1747829489894.png.png"
+                alt="Daikin Logo" width="200" height="43" style="display: block;" />
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td align="center" style="padding: 20px 40px 30px 40px; color: #333333;">
+              <p style="margin: 0; font-size: 18px; color: #1f6ea9;">Dear <strong>{{vendorName}}</strong></p>
+              <table width="50" align="center" border="0" cellpadding="0" cellspacing="0" style="margin-top:10px;">
+                <tr>
+                  <td style="border-bottom: 2px solid #1f6ea9; line-height:1px;">&nbsp;</td>
+                </tr>
+              </table>
+              
+              <p style="font-size: 20px; font-weight: 600; color: #585858; margin: 25px 0 15px 0;">
+                Please click on the button below to get registered
+              </p>
+
+              <!-- Button -->
+              <table border="0" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                  <td align="center" bgcolor="#149ce0"
+                    style="border-radius: 5px; padding: 12px 20px; font-size: 16px; font-weight: bold;">
+                    <a href="{{registrationLink}}" target="_blank"
+                      style="color: #ffffff; text-decoration: none; display: inline-block; width: 320px;">Register Now</a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin: 25px 0 5px; font-size: 16px;">Enter this OTP</p>
+              <p style="font-size: 26px; font-weight: bold; letter-spacing: 6px; color: #333333; margin: 10px 0;">
+                {{otp}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding: 20px 0; background-color: #ffffff;">
+              <p style="font-size: 14px; color: #000000; margin: 0;">
+                Copyright © Daikin. All Rights Reserved |
+                <a href="https://www.daikinmea.com" style="color: #000000; text-decoration: none;">www.daikinmea.com</a>
+              </p>
+
+              <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-top: 10px;">
+                <tr>
+                  <td style="padding: 0 5px;">
+                    <a href="{{facebook}}"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                        alt="Facebook" width="20" height="20" style="display: block;" /></a>
+                  </td>
+                  <td style="padding: 0 5px;">
+                    <a href="{{twitter}}"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+                        alt="Twitter" width="20" height="20" style="display: block;" /></a>
+                  </td>
+                  <td style="padding: 0 5px;">
+                    <a href="{{linkedIn}}"><img src="https://cdn-icons-png.flaticon.com/512/733/733561.png"
+                        alt="LinkedIn" width="20" height="20" style="display: block;" /></a>
+                  </td>
+                  <td style="padding: 0 5px;">
+                    <a href="{{youtube}}"><img src="https://cdn-icons-png.flaticon.com/512/733/733646.png"
+                        alt="YouTube" width="20" height="20" style="display: block;" /></a>
+                  </td>
+                  <td style="padding: 0 5px;">
+                    <a href="{{instagram}}"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png"
+                        alt="Instagram" width="20" height="20" style="display: block;" /></a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

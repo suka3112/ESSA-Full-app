@@ -1,0 +1,62 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.applicationText {
+  @include fontCustomStyle(24px, 400, #2A2A2A, 28px);
+}
+
+.submittedText {
+  @include fontCustomStyle(24px, 700, #1F6EA9, 28px);
+
+}
+
+.status-text {
+  text-align: center;
+  margin-top: 20px;
+
+  p {
+    @include fontCustomStyle(16px, 400, #1a1a1a, 28px);
+    padding-bottom: 10px;
+  }
+
+  span {
+    @include fontCustomStyle(12px, 400, #1a1a1a, 28px);
+    //  padding-top: 10px;
+  }
+}
+
+.success-message {
+  text-align: center;
+
+  h2 {
+    @include fontCustomStyle(42px, 400, #1d71ac, 28px);
+  }
+
+  p:first-of-type {
+    @include fontCustomStyle(24px, 400, #3d3d3d, 28px);
+  }
+
+  p:last-of-type {
+    @include fontCustomStyle(16px, 400, #3d3d3d, 24px);
+  }
+}
+
+.MuiStepLabel-label {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+  color: var(--brand-primary-color, $primary-color) !important;
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+  color: var(--brand-primary-color, $primary-color) !important;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+// .css-1d2dfji-MuiStepIcon-text{
+//   display: none !important;
+// }

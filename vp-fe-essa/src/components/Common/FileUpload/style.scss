@@ -1,0 +1,95 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.ok_button {
+  background-color: #016aa2;
+  color: white !important;
+}
+
+.modalTitle h5 {
+  @include fontCustomStyle(20px, 700, #72bf44);
+}
+
+.uploadNewBtn {
+  img {
+    width: 20px;
+    height: 20px;
+  }
+
+  svg {
+    fill: white;
+    color: white;
+  }
+}
+
+.fileUpload {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  width: 90%;
+  margin: 1rem auto auto auto;
+  border: 1px dashed #929398;
+  border-radius: 6px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  p{
+    font-size: 1.25rem;
+  }
+   img{
+       margin-top: 20px;
+  }
+}
+
+.select-file-button {
+  width: 200px !important;
+   margin-bottom: 20px;
+}
+
+.upload-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  background: #fdfdfd;
+  border: 1px solid #929398;
+  border-radius: 6px;
+  height: 45px;
+  &:focus-within {
+    border: 1.5px solid #1565c0;
+    box-shadow: 0px 1px 4px 0px #82d5ff80;
+  }
+}
+
+.upload-button {
+  background-color: #d9ecff;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: var(--brand-primary-color, $primary-color) !important;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+}
+
+.upload-button:hover {
+  background-color: var(--brand-primary-color, $primary-color);
+  color: white !important;
+}
+
+.file-name {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: #333;
+  text-align: start;
+}
+
+//file drag and drop styles
+.fileUpload.drag-over {
+  border: 2px dashed #4a90e2;
+  background-color: #f0f8ff;
+  transition: background-color 0.2s ease-in-out;
+}

@@ -1,0 +1,143 @@
+{
+  "displaySection": {
+    "text": "Display Section",
+    "tooltip": "View all submitted advance payment requests",
+    "error": "No advance payments found"
+  },
+  "createNewAdvancePayment": {
+    "text": "Create New Advance Payment",
+    "tooltip": "Create a new advance payment request",
+    "error": "Creation failed, please try again"
+  },
+  "typeOfInvoice": {
+    "text": "Type of Invoice",
+    "tooltip": "Select PO/ Non PO",
+    "error": "Selection is required"
+  },
+  "poBasedInvoiceLineItem": {
+    "text": "PO No. ",
+    "tooltip": "Select invoice to request advance",
+    "error": "Selection is required"
+  },
+  "nonPoBasedInvoiceLineItem": {
+    "text": "Non PO Invoice ",
+    "tooltip": "Select invoice to request advance",
+    "error": "Selection is required"
+  },
+  "valueOfAdvancePayment": {
+    "text": "Amount",
+    "tooltip": "Enter the requested advance payment amount",
+    "error": "Advance payment value is required",
+    "placeholder": "Enter Amount"
+  },
+  "supportingDocuments": {
+    "text": "Supporting Documents",
+    "tooltip": "Attach required supporting documents if amount exceeds 25,000 EUR",
+    "error": "Document required for amounts above 25,000 EUR"
+  },
+  "costResponsible": {
+    "text": "Cost Responsible",
+    "tooltip": "Select the cost responsible person",
+    "error": "CR selection is required"
+  },
+  "submitForReview": {
+    "text": "Submit for Review",
+    "tooltip": "Submit the advance payment request for review",
+    "error": "Submission failed"
+  },
+  "viewStatus": {
+    "text": "View Status",
+    "tooltip": "View current status of the request",
+    "error": "Status view error"
+  },
+  "sortAndFilter": {
+    "text": "Sort and Filter",
+    "tooltip": "",
+    "error": "Selection error"
+  },
+  "saveProgress": {
+    "text": "Save Progress",
+    "tooltip": "Save changes for later completion",
+    "error": "Save action error"
+  },
+  "paymentStatus": {
+    "text": "Payment Status",
+    "tooltip": "Status of the payment",
+    "error": ""
+  },
+  "referenceDocumentNumber": {
+    "text": "Reference Document No.",
+    "tooltip": "Document reference no.",
+    "error": ""
+  },
+  "paymentAdvice": {
+    "text": "Payment Advice",
+    "tooltip": "Hyperlink to payment advice",
+    "error": ""
+  },
+  "attachmentType": {
+    "text": "Attachment Type",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "fileUpload": {
+    "text": "File Upload",
+    "tooltip": "Upload the invoice file",
+    "error": "Please attach the invoice"
+  },
+  "currency": {
+    "text": "Currency",
+    "tooltip": "Select currency for the credit note amount",
+    "error": "Currency is required"
+  },
+  "submissionDate": "Submission Date",
+  "searchAdvancePaymentNoforVendor": "Search Advance Payment No.",
+  "vendorName": "Vendor Name",
+  "vendorCode": "Vendor Code",
+  "invoiceFileUpload": "Invoice File upload",
+  "searchForInvoiceNo": "Search for Invoice No.",
+  "selectDate": "Select Date",
+  "status": "Status",
+  "next": "Next",
+  "save": "Save",
+  "createAdvancePaymentRequest": "Create Advance Payment Request",
+  "invoiceType": "Invoice Type",
+  "createAdvancePayment": "Create Advance Payment",
+  "enterValue": "Enter value",
+  "enterCostResponsible": "Select Cost Responsible",
+  "advancePaymentValue": "Amount",
+  "advancePaymentReview": "Advance Payment Review",
+  "advancePaymentRequest": "Advance Payment Request",
+  "select": "Select",
+  "companyCode":"Company Code",
+  "companyName":"Company Name",
+  "searchAdvancePaymentNo": "Search Advance Payment No. and Vendor Name/Code",
+  "ProformaInvoiceNo": "Proforma Invoice No.",
+  "AdvancePaymentNo": "Advance Payment No.",
+  "Details": "Details",
+  "edit": "Edit",
+  "Awaitingapproval": "Awaiting Approval",
+  "SNo": "S.No",
+  "AttachmentType": "Attachment Type",
+  "DocumentName": "Document Name",
+  "AreYouSureYouWantToApproveTheAdvancePayment": "Are you sure you want to move this to Under Review?",
+  "RejectionPurpose": "Rejection Purpose",
+  "Reason": "Reason",
+  "ReasonOfRejection": "Reason of Rejection",
+  "ReasonOfRejectionRrequired": "Reason of Rejection is required",
+  "SelectTypeOfInvoce": "Select type of invoice",
+  "ProformaInvoiceNoIsRequired": "Proforma Invoice No is required",
+  "EnterProformaInvoice": "Enter Proforma Invoice.",
+  "upload": "Upload",
+  "action": "Action",
+  "editAdvancePayment": "Edit Advance Payment",
+  "attachmentTypeRequired": "Attachment Type is required",
+  "fileUploadRequired": "File upload is required",
+  "advancePaymentSubmittedSuccessfully": "Advance payment submitted successfully",
+  "failedToUploadFile": "Failed to upload file",
+  "failedToLoadPaymentDetails": "Failed to load payment details",
+  "POBasedNo": "PO Based No.",
+  "advancePaymentPDFTitle": "Advance_Payment_List",
+  "proforma_invoice": "Proforma Invoice",
+  "invalidAmountFormat": "Invalid amount format"
+}

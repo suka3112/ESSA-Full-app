@@ -1,0 +1,108 @@
+{
+  "hyperlinkToSections": {
+    "text": "رابط مباشر للأقسام",
+    "tooltip": "انقر للتنقل إلى الأقسام المرتبطة",
+    "error": "الرابط غير متاح"
+  },
+  "invoiceAccDocumentNumber": {
+    "text": "رقم مستند فاتورة الحساب",
+    "tooltip": "رقم مستند المحاسبة للفاتورة في SAP",
+    "error": ""
+  },
+  "sapInvoiceNumber": {
+    "text": "رقم فاتورة SAP",
+    "tooltip": "رقم الفاتورة في SAP",
+    "error": ""
+  },
+  "vendorInvoiceNumber": {
+    "text": "رقم فاتورة المورد",
+    "tooltip": "رقم الفاتورة الذي أدخله المورد",
+    "error": ""
+  },
+  "creationDate": {
+    "text": "تاريخ الإنشاء",
+    "tooltip": "تاريخ تقديم الفاتورة",
+    "error": ""
+  },
+  "invoiceDate": {
+    "text": "تاريخ الفاتورة",
+    "tooltip": "تاريخ إصدار الفاتورة",
+    "error": ""
+  },
+  "invoicePostingDate": {
+    "text": "تاريخ تسجيل الفاتورة",
+    "tooltip": "",
+    "error": ""
+  },
+  "currency": {
+    "text": "العملة",
+    "tooltip": "عملة الفاتورة",
+    "error": ""
+  },
+  "taxRate": {
+    "text": "معدل الضريبة",
+    "tooltip": "",
+    "error": ""
+  },
+  "taxValue": {
+    "text": "قيمة الضريبة",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceValue": {
+    "text": "قيمة الفاتورة",
+    "tooltip": "إجمالي قيمة الفاتورة",
+    "error": ""
+  },
+  "irLineNumber": {
+    "text": "رقم سطر IR",
+    "tooltip": "رقم السطر في الفاتورة IR",
+    "error": ""
+  },
+  "poLineItemNumber": {
+    "text": "رقم سطر أمر الشراء",
+    "tooltip": "رقم البند في طلب الشراء",
+    "error": ""
+  },
+  "poNumber": {
+    "text": "رقم أمر الشراء",
+    "tooltip": "رقم أمر الشراء لكل سطر",
+    "error": ""
+  },
+  "irQuantity": {
+    "text": "كمية INV",
+    "tooltip": "كمية INV لكل سطر",
+    "error": ""
+  },
+  "uom": {
+    "text": "وحدة القياس (UOM)",
+    "tooltip": "وحدة القياس لكل سطر",
+    "error": ""
+  },
+  "materialCode": {
+    "text": "رمز المادة",
+    "tooltip": "رمز المادة لكل سطر",
+    "error": ""
+  },
+  "materialDescription": {
+    "text": "وصف المادة",
+    "tooltip": "وصف المادة لكل سطر",
+    "error": ""
+  },
+  "lineItemValue": {
+    "text": "قيمة السطر",
+    "tooltip": "السعر لكل سطر",
+    "error": ""
+  },
+  "invoiceDueDate": {
+    "text": "تاريخ استحقاق الفاتورة",
+    "tooltip": "تاريخ استحقاق الفاتورة",
+    "error": ""
+  },
+  "pendingInvoiceSearch":"ابحث عن رقم الفاتورة ورقم المرجع",
+  "POBasedPDFTitle": "قائمة الفواتير القائمة على أمر الشراء",
+  "pendingInvoicesReport":"الفواتير المستحقة - تقرير",
+  "delete": "حذف",
+  "confirmDeleteMessage": "هل أنت متأكد أنك تريد حذف مسودات الفواتير المحددة؟",
+  "bulkDeleteSuccessfully": "تم حذف المسودات بنجاح"
+}

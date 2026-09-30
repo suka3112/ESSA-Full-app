@@ -1,0 +1,254 @@
+{
+  "status": 200,
+  "message": "Document extracted and classified successfully",
+  "data": {
+    "documents": [
+      {
+        "documentType": "invoice",
+        "documentTypeLabel": "A. Invoice",
+        "fileName": "290518 Wisata Kawan_Invoice.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "Invoice",
+        "invoicePages": [1],
+        "header": {
+          "invoiceNumber": "INV/TD/000591/2026",
+          "invoiceDate": "27-Feb-2026",
+          "dueDate": "14-Mar-2026",
+          "vendorName": "PT Wisata Kawan Abadi All Year - 2025",
+          "vendorAddress": "Ruko Riviera Plaza Blok RB 07 No. 15A",
+          "vendorTaxId": "NPWP :",
+          "buyerName": "1100.00010 PT PANCA AMARA UTAMA",
+          "poNumber": null,
+          "serviceName": "Ticket Domestic",
+          "currency": "IDR",
+          "manhourUnitRate": null,
+          "subtotal": "3110000",
+          "taxAmount": "34210",
+          "totalAmount": "3144210",
+          "grandTotal": "3144210",
+          "paymentTerms": "Invoice payment due by 14-Mar-2026",
+          "bankName": "PT Wisata Kawan Abadi Bank BCA",
+          "bankBranch": null,
+          "bankAccount": "6970747999",
+          "accountHolder": "PT Wisata Kawan Abadi",
+          "invoiceWorkflow": "NON_PO"
+        },
+        "lineItems": [
+          {
+            "description": "Ticket Domestic",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "3,110,000.00",
+            "role": null
+          }
+        ],
+        "fields": [],
+        "documentId": 10165,
+        "validation": {
+          "poNumber": null,
+          "sesNo": null,
+          "matched": false,
+          "overallStatus": "FAIL",
+          "summary": {
+            "total": 12,
+            "passed": 0,
+            "warnings": 0,
+            "failed": 12,
+            "blocked": 0,
+            "skipped": 0
+          },
+          "results": [
+            {
+              "expectedValue": "Invoice, Tax Invoice (Faktur Pajak), Berita Acara, Summary Calculation Manhour, Daily Timesheet, Daily Attendance, Service Entry Sheet (SES)",
+              "actualValue": "Invoice",
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "details": [
+                {
+                  "label": "Invoice",
+                  "value": "Present",
+                  "status": "PASS"
+                },
+                {
+                  "label": "Tax Invoice (Faktur Pajak)",
+                  "value": "Missing",
+                  "status": "FAIL"
+                },
+                {
+                  "label": "Berita Acara",
+                  "value": "Missing",
+                  "status": "FAIL"
+                },
+                {
+                  "label": "Summary Calculation Manhour",
+                  "value": "Missing",
+                  "status": "FAIL"
+                },
+                {
+                  "label": "Daily Timesheet",
+                  "value": "Missing",
+                  "status": "FAIL"
+                },
+                {
+                  "label": "Daily Attendance",
+                  "value": "Missing",
+                  "status": "FAIL"
+                },
+                {
+                  "label": "Service Entry Sheet (SES)",
+                  "value": "Missing",
+                  "status": "FAIL"
+                }
+              ],
+              "sequence": 1,
+              "ruleCode": "DOC_COMPLETENESS",
+              "ruleName": "Document completeness",
+              "severity": "FAIL",
+              "message": "Missing: Tax Invoice (Faktur Pajak), Berita Acara, Summary Calculation Manhour, Daily Timesheet, Daily Attendance, Service Entry Sheet (SES)"
+            },
+            {
+              "expectedValue": "Valid PO number on invoice",
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 2,
+              "ruleCode": "PO_NUMBER_MASTER",
+              "ruleName": "PO number → PO Master",
+              "severity": "FAIL",
+              "message": "No PO number was extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 3,
+              "ruleCode": "VENDOR_PO_INVOICE",
+              "ruleName": "Vendor name: PO → Invoice",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 4,
+              "ruleCode": "BANK_VENDOR_MASTER",
+              "ruleName": "Bank details → Vendor Master",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 5,
+              "ruleCode": "NON_PKP_VENDOR",
+              "ruleName": "Non-PKP vendor check",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 6,
+              "ruleCode": "TAX_INVOICE_MATCH",
+              "ruleName": "Vendor + VAT vs Tax Invoice",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 7,
+              "ruleCode": "QTY_RECONCILIATION",
+              "ruleName": "Quantity reconciliation",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 8,
+              "ruleCode": "RATE_VALIDATION",
+              "ruleName": "Rate validation",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 9,
+              "ruleCode": "LATE_DELIVERY_LD",
+              "ruleName": "Late delivery / LD",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 10,
+              "ruleCode": "PO_VALUE_ZERO_TOLERANCE",
+              "ruleName": "Total PO value (0% tolerance)",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 11,
+              "ruleCode": "SES_DEVIATION",
+              "ruleName": "SES vs invoice deviation",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            },
+            {
+              "expectedValue": null,
+              "actualValue": null,
+              "sourceTable": null,
+              "sourceRecordId": null,
+              "variance": null,
+              "sequence": 12,
+              "ruleCode": "ADVANCE_RETENTION",
+              "ruleName": "Advance recovery & retention",
+              "severity": "FAIL",
+              "message": "Cannot validate — PO number was not extracted from the invoice."
+            }
+          ],
+          "ld_pct": 0,
+          "ld_amount": 0,
+          "advance_recovery": 0,
+          "retention_held": 0,
+          "net_payable": 3144210
+        }
+      }
+    ]
+  }
+}

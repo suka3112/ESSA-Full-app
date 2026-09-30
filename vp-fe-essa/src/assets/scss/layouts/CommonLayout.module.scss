@@ -1,0 +1,258 @@
+@import '../abstracts/abstracts.scss';
+
+.vendorLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f7fa !important;
+  max-width: 100vw;
+
+  .sideBar {
+    width: 236px;
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: width 300ms ease-out;
+
+    &.closed {
+      width: 0;
+    }
+
+    @media screen and (max-width: 850px) {
+      position: fixed;
+      z-index: 6;
+      width: 236px;
+      transition: left 300ms ease-out;
+
+      &.open {
+        left: 0;
+      }
+
+      &.closed {
+        left: -236px;
+        width: 236px;
+      }
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    transition: opacity 300ms ease-out;
+    display: none;
+
+    @media screen and (max-width: 850px) {
+      &.show {
+        display: block;
+      }
+    }
+
+  }
+
+  .mainContent {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: 100vh;
+    position: relative;
+    min-width: 0;
+    width: auto;
+  }
+
+  .breadcrumbBar {
+    flex-shrink: 0;
+    padding: 8px 16px 0;
+    background: #f5f7fa;
+  }
+
+  .pageContent:has(:global(.page-header .breadcrumb)) .breadcrumbBar {
+    display: none;
+  }
+
+  .pageContent:has(:global(.inbound-email-page)) {
+    overflow: hidden;
+  }
+
+  .breadcrumbList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pageContent {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .footer_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: #fff;
+    width: 100%;
+    margin-top: auto;
+    height: 60px;
+    border-top: 0.5px solid #929398;
+  }
+
+  .footer_right_content {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--brand-primary-color, $primary-color);
+    display: flex;
+    gap: 15px;
+  }
+
+  .footer_left_content {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--brand-primary-color, $primary-color);
+    display: flex;
+  }
+
+  .vl {
+    border-left: 3px solid var(--brand-primary-color, $primary-color);
+    height: 25px;
+  }
+}
+
+:global {
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    font-family:
+      'Segoe UI',
+      'Segoe UI Variable Text',
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
+
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 0;
+
+    color: #4b5563;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .breadcrumb-item+.breadcrumb-item::before {
+    content: none;
+    display: none;
+    padding: 0;
+  }
+
+  .breadcrumb-link {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  .breadcrumb-link:hover {
+    color: #247e3a !important;
+    text-decoration: underline !important;
+  }
+
+  .breadcrumb-separator {
+    width: 12px;
+    height: 12px;
+
+    color: #6b7280;
+  }
+
+  .breadcrumb-current {
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .page-header {
+    margin-bottom: 8px;
+  }
+
+  .page-header-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 2px;
+  }
+
+  .page-header-title {
+    margin: 0;
+
+    font-family:
+      'Segoe UI',
+      'Segoe UI Variable Text',
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
+
+    font-size: 20px;
+    line-height: 28px;
+
+    font-weight: 600;
+
+    color: #1f2937;
+  }
+
+  .page-header-description {
+    max-width: 48rem;
+
+    margin-top: 2px;
+    margin-bottom: 0;
+
+    font-family:
+      'Segoe UI',
+      'Segoe UI Variable Text',
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
+
+    font-size: 12px;
+    line-height: 16px;
+
+    color: #4b5563;
+  }
+
+  .page-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    gap: 8px;
+  }
+}

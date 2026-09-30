@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enquiry Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    .content {
+      text-align: left;
+      font-size: 18px;
+      color: #333333;
+      line-height: 1.6;
+      padding-bottom: 20px; /* same as header-bottom spacing */
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #000000;
+      margin-top: 0; /* removed excess gap */
+    }
+    .footer a {
+      color: #000000;
+      text-decoration: none;
+    }
+    .social-icons {
+      margin-top: 10px;
+    }
+    .social-icons img {
+      width: 20px;
+      height: 20px;
+      margin: 0 5px;
+      border: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <img
+        src="https://res.cloudinary.com/dvdgpxne8/image/upload/v1747829491/uploads/uploads/logo3-1747829489894.png.png"
+        alt="Daikin Logo"
+      />
+    </div>
+
+    <div class="content">
+      <p>Dear <strong>{{USER_NAME}}</strong>,</p>
+      <p>
+        Your enquiry report for the selected date range is attached to this
+        email.
+      </p>
+      <p>If you have any questions, please contact us.</p>
+    </div>
+
+    <div class="footer">
+      <p style="margin: 0;">
+        Copyright © Daikin. All Rights Reserved |
+        <a href="https://www.daikinmea.com" target="_blank">www.daikinmea.com</a>
+      </p>
+      <div class="social-icons">
+        <a href="{{FACEBOOK}}" target="_blank" rel="noopener noreferrer"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
+        <a href="{{TWITTER}}" target="_blank" rel="noopener noreferrer"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"></a>
+        <a href="{{LINKEDIN}}" target="_blank" rel="noopener noreferrer"><img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn"></a>
+        <a href="{{YOUTUBE}}" target="_blank" rel="noopener noreferrer"><img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" alt="YouTube"></a>
+        <a href="{{INSTAGRAM}}" target="_blank" rel="noopener noreferrer"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram"></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enquiry Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    .content {
+      text-align: left;
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <img src="https://res.cloudinary.com/dvdgpxne8/image/upload/v1747829491/uploads/uploads/logo3-1747829489894.png.png" alt="Daikin Logo">
+    </div>
+    <div class="content">
+      <p>Dear <strong>{{USER_NAME}}</strong>,</p>
+      <p>Your enquiry report for the selected date range is attached to this email.</p>
+      <p>If you have any questions, please contact us.</p>
+    </div>
+    <div class="footer">
+      <div style="margin-top: 30px; font-size: 14px; color: #000000; text-align: center;">
+        Copyright © Daikin. All Rights Reserved |
+        <a href="https://www.daikinmea.com" style="color: #000000;">www.daikinmea.com</a>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <a href="{{FACEBOOK}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{TWITTER}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{LINKEDIN}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{YOUTUBE}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" alt="YouTube" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{INSTAGRAM}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram" width="20" height="20"
+            style="border: none;" />
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html> -->
+

@@ -1,0 +1,30 @@
+// @use 'sass:math';
+
+$default_font_size: 16px;
+
+@function toRem($size) {
+    $remSize: math.div($size, $default_font_size);
+    @return #{$remSize}rem;
+}
+
+/* FONT SIZE  */
+$fs: 38;
+
+@while $fs >8 {
+    .fs-#{$fs} {
+        font-size: $fs * 1px;
+    }
+
+    $fs: $fs - 1
+}
+
+/* FONT WEIGHT */
+$fw: 100;
+
+@while $fw >400 {
+    .fw-#{$fw} {
+        font-weight: $fw;
+    }
+
+    $fw: $fw - 100
+}

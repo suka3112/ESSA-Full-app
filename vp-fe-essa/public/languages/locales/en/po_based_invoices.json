@@ -1,0 +1,166 @@
+{
+  "createNewInvoice": {
+    "text": "Create New Invoice",
+    "tooltip": "Create a new invoice for PO",
+    "error": "Action failed"
+  },
+  "poSelection": {
+    "text": "Selected PO No.",
+    "tooltip": "Select line items for invoice creation",
+    "error": "PO line item selection is required"
+  },
+  "vendor_invoice_number": {
+    "text": "Invoice No.",
+    "tooltip": "Reference number of the Invoice",
+    "error": "Vendor Invoice Reference No is required"
+  },
+  "submittedDate": {
+    "text": "Submitted Date",
+    "tooltip": "Date when the invoice was submitted",
+    "error": ""
+  },
+  "invoice_date": {
+    "text": "Invoice Date",
+    "tooltip": "Date when the invoice was issued",
+    "error": "Pick current or past date only"
+  },
+  "currency": {
+    "text": "Currency",
+    "tooltip": "Invoice currency",
+    "error": ""
+  },
+  "tax_percentage": {
+    "text": "Tax Percentage",
+    "tooltip": "Select the applicable tax rate",
+    "error": "Tax Percentage selection is required"
+  },
+  "tax_amount": {
+    "text": "Total Tax Amount",
+    "tooltip": "Enter applicable taxes for invoice",
+    "error": "Invalid tax amount"
+  },
+  "paymentTerms": {
+    "text": "Payment Terms",
+    "tooltip": "Agreed payment terms mentioned on PO",
+    "error": ""
+  },
+  "selectedPOList": {
+    "text": "PO No",
+    "tooltip": "Have a link to PO detailed page",
+    "error": ""
+  },
+  "attachment_type": {
+    "text": "Attachment Type",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "invoiceFileUpload": {
+    "text": "File Upload",
+    "tooltip": "Upload the invoice file",
+    "error": "Please attach the invoice"
+  },
+  "invoiceSubmission": {
+    "text": "Invoice Submission",
+    "tooltip": "Submit invoice for processing",
+    "error": "Submission failed"
+  },
+  "lineItemNumber": {
+    "text": "Line No.",
+    "tooltip": "",
+    "error": ""
+  },
+  "materialCode": {
+    "text": "Material",
+    "tooltip": "Material code for every line item",
+    "error": ""
+  },
+  "materialDescription": {
+    "text": "Material Description",
+    "tooltip": "Description about material for every line item",
+    "error": ""
+  },
+  "uom": {
+    "text": "UOM ",
+    "tooltip": "Unit of measure for every line item",
+    "error": ""
+  },
+  "poQuantity": {
+    "text": "PO Qty",
+    "tooltip": "PO quantity for every line item",
+    "error": ""
+  },
+  "grQuantity": {
+    "text": "GR Qty ",
+    "tooltip": "GR quantity for every line item",
+    "error": ""
+  },
+  "irQuantity": {
+    "text": "Inv Qty",
+    "tooltip": "Invoice quantity for every line item",
+    "error": ""
+  },
+  "lineItemValue": {
+    "text": "Amount",
+    "tooltip": "Price per line item",
+    "error": ""
+  },
+  "taxLineItem": {
+    "text": "Tax Amount",
+    "tooltip": "Calculated based on line item price and tax percentage selected",
+    "error": ""
+  },
+  "totalTaxAmountCalc": {
+    "text": "Total Tax Amount",
+    "tooltip": "System calculates based on the above line items",
+    "error": ""
+  },
+  "totalNetValue": {
+    "text": "Total Net Value (Excl. Tax)",
+    "tooltip": "System calculates based on the above line items",
+    "error": ""
+  },
+  "saveProgress": {
+    "text": "Save Progress",
+    "tooltip": "Save changes for later completion",
+    "error": "Save action error"
+  },
+   "invoicePostingDate": {
+    "text": "Posting Date",
+    "tooltip": "",
+    "error": ""
+  },
+
+  "POInvoiceVendorName" : {
+      "text": "Vendor Name",
+    "tooltip": "Vendor Name as per vendor code selected",
+    "error": "Vendor Name is required"
+   },
+    "POInvoiceVendorCode" :{
+       "text": "Vendor Code",
+       "tooltip": "Select Vendor Code",
+        "error": "Vendor Code is required "
+   },
+
+  "remarks": "Remarks",
+  "poLineItemNo": "Line No.",
+  "poNo": "PO No.",
+  "paymentAdvice": "Payment Advice",
+  "documentName": "Document Name",
+  "invoiceValue" : "Invoice Value",
+  "amount" : "Amount",
+  "date" : "Date",
+  "status" : "Status",
+  "searchForInvoiceNo" : "Search for Invoice No.",
+  "searchInvoiceVendorNo": "Search Invoice No, Vendor Name/Code",
+  "next" : "Next",
+  "save" : "Save",
+  "upload": "Upload",
+  "uploading": "Uploading...",
+  "deleteConfirmation": "Are you sure you want to delete this file?",
+  "enterQuantity": "Enter Quantity",
+  "taxAmountExceeds": "Tax amount should not exceed {{taxPercentage}}% of invoice amount ({{roundedMaxTax}})",
+  "invalidTaxCalculation": "Invalid tax calculation",
+  "taxAmtRequired": "Tax Amount is required",
+  "qtyRangeValidate": "Must be greater than 0 and less than or equal to GR Quantity ({{grQty}})",
+  "searchForInvoiceSource": "Search for the Invoice No. and Reference No."
+}

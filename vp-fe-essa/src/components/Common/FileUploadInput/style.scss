@@ -1,0 +1,59 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  position: relative;
+  // height: 45px;
+}
+
+.file-label {
+  @include fontCustomStyle(1rem, 500, #344054, 12px);
+  display: flex;
+  gap: 3px;
+}
+s .required {
+  color: red;
+}
+
+// .tooltip {
+//   margin-left: 4px;
+//   font-size: 0.75rem;
+//   color: #999;
+//   cursor: help;
+// }
+
+.upload-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  background: #fdfdfd;
+  border: 1px solid #929398;
+  border-radius: 6px;
+  height: 45px;
+}
+
+.upload-button {
+  background-color: #e0e0e0;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 0.75rem !important;
+  color: #555;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+}
+
+.upload-button:hover {
+  background-color: #d6d6d6;
+}
+
+.file-name {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 0.875rem !important;
+  color: #808080;
+  text-align: start;
+}

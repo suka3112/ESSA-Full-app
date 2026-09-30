@@ -1,0 +1,9 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.ok_button {
+  background-color: #016aa2;
+  color: white !important;
+}
+.modalTitle h5 {
+  @include fontCustomStyle(20px, 700, #72bf44);
+}

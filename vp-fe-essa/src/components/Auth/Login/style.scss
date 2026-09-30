@@ -1,0 +1,473 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.input-error {
+  border: 1px solid #d50000 !important;
+}
+
+.login-title {
+  @include fontCustomStyle(24px, 600, #2a2a2a, 28px);
+  margin-bottom: 1rem;
+}
+
+.passwordInputContainer {
+  position: relative;
+
+  .field-icon {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    width: fit-content;
+  }
+}
+
+.field-icon {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  width: fit-content;
+  top: -34px;
+  left: calc(100% - 32px);
+  color: #4d4d4d;
+
+  [dir="rtl"] & {
+    padding-left: 10px;
+  }
+
+  [dir="rtl"] & {
+    padding-right: 10px;
+  }
+}
+
+.errToDisplay {
+  position: relative;
+  top: -20px;
+}
+
+.custom-error-class {
+  // position: absolute;
+  // bottom: 0;
+  color: #d50000;
+  font-size: 11px;
+}
+
+.login-container {
+  // box-shadow: 0px 2px 9.3px 0px #000e241f;
+  border: 1px solid rgb(152, 162, 179);
+  padding: 32px;
+  border-radius: 20px;
+  top: 16%;
+  //FIX
+  opacity: 1;
+  background-color: #fff;
+  position: absolute;
+  min-width: 100%;
+
+  // margin-bottom: 50px;
+  .forgotPasswordContainer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .login-button {
+    width: 100%;
+  }
+
+  // Official Microsoft Entra "Sign in with Microsoft" light theme
+  // https://learn.microsoft.com/entra/identity-platform/howto-add-branding-in-apps
+  .ms-signin-button {
+    width: 100%;
+    height: 41px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    direction: ltr;
+    background: #ffffff;
+    border: 1px solid #8c8c8c;
+    border-radius: 0;
+    color: #5e5e5e;
+    font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+    cursor: pointer;
+    padding: 0 12px;
+    box-sizing: border-box;
+
+    &__logo {
+      width: 21px;
+      height: 21px;
+      flex-shrink: 0;
+    }
+
+    &__label {
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    &:hover:not(:disabled) {
+      background: #f3f3f3;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .ms-redirecting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    padding: 8px 0;
+    width: 100%;
+
+    &__status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4d4d4d;
+    }
+
+    &__spinner {
+      color: var(--brand-primary-color, #3d9b35);
+      animation: ms-redirect-spin 0.8s linear infinite;
+    }
+
+    &__hint {
+      max-width: 280px;
+      margin: 0;
+      font-family: inherit;
+      font-size: 11px;
+      line-height: 1.5;
+      color: #98a2b3;
+    }
+  }
+
+  @keyframes ms-redirect-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .sso-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    color: #98a2b3;
+    font-size: 12px;
+    font-family: inherit;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #e5e5e5;
+    }
+  }
+
+  .divider {
+    color: #e5e5e5;
+    margin: 1rem 0px;
+    width: 100%;
+    height: 2px;
+  }
+
+  .forgot-text {
+    //   margin-left: 360px;
+    @include fontCustomStyle(12px, 400, #007aff, 20px);
+    font-size: 13px !important;
+    font-family: inherit !important;
+  }
+
+  .remember-me-text {
+    @include fontCustomStyle(12px, 400, #1a1a1a, 20px);
+    font-family: inherit !important;
+    font-size: 13px !important;
+  }
+}
+
+@media screen and (min-height: 720px) and (max-height: 767px) {
+  .login-container {
+    top: 16%;
+  }
+
+  .progress-container {
+    top: 11% !important;
+  }
+
+  .reset-password-container {
+    top: 5.5% !important;
+  }
+
+  .reset-new-password {
+    top: 21% !important;
+  }
+
+  .track-container {
+    top: 9% !important;
+  }
+
+  .forgot-password-container {
+    top: 23% !important;
+  }
+}
+
+@media screen and (min-height: 768px) and (max-height: 800px) {
+  .login-container {
+    top: 16%;
+  }
+
+  .reset-container {
+    top: 6% !important;
+  }
+
+  .reset-password-container {
+    top: 6% !important;
+  }
+
+  .reset-new-password {
+    top: 21% !important;
+  }
+
+  .track-container {
+    top: 14% !important;
+  }
+
+  .forgot-password-container {
+    top: 22% !important;
+  }
+}
+
+@media screen and (min-height: 801px) and (max-height: 870px) {
+  .login-container {
+    top: 20%;
+  }
+
+  .reset-password-container {
+    top: 13% !important;
+  }
+
+  .reset-new-password {
+    top: 21% !important;
+  }
+
+  .reset-container {
+    top: 8% !important;
+  }
+
+  .track-container {
+    top: 15% !important;
+  }
+
+  .progress-container {
+    top: 18% !important;
+  }
+
+  .forgot-password-container {
+    top: 22% !important;
+  }
+
+}
+
+@media screen and (min-height: 871px) and (max-height: 900px) {
+  .login-container {
+    top: 20% !important;
+  }
+
+  .reset-password-container {
+    top: 15% !important;
+  }
+
+  .reset-new-password {
+    top: 22% !important;
+  }
+
+  .reset-container {
+    top: 10% !important;
+  }
+
+  .track-container {
+    top: 16% !important;
+  }
+
+  .progress-container {
+    top: 17% !important;
+  }
+
+  .forgot-password-container {
+    top: 22% !important;
+  }
+}
+
+@media screen and (min-height: 901px) {
+  .login-container {
+    top: 21%;
+  }
+
+  .reset-container {
+    top: 17% !important;
+  }
+
+  .reset-password-container {
+    top: 19% !important;
+  }
+
+  .reset-new-password {
+    top: 22% !important;
+  }
+
+  .track-container {
+    top: 20% !important;
+  }
+
+  .forgot-password-container {
+    top: 24% !important;
+  }
+}
+
+
+
+.login-container.login-container--entra {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  tab-size: 4;
+  font-family: Segoe UI, Segoe UI Variable Text, Inter, -apple-system,
+    BlinkMacSystemFont, Roboto, Helvetica Neue, Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  color: rgb(31 41 55);
+  -webkit-font-smoothing: antialiased;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  box-sizing: border-box;
+  position: relative;
+  top: auto !important;
+  width: 100%;
+  max-width: 28rem;
+  min-width: 0;
+  border-radius: 0.75rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(229 231 235);
+  background-color: rgb(255 255 255);
+  padding: 2rem;
+  box-shadow: 0 4px 16px -2px rgb(16 24 40 / 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .login-entra-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2rem;
+
+    &__logo {
+      width: 7.5rem;
+      height: auto;
+    }
+
+    &__subtitle {
+      margin: 0.5rem 0 0;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+    }
+  }
+
+  .ms-signin-button,
+  .ms-redirecting__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    align-self: center;
+    width: auto;
+    box-sizing: border-box;
+    min-height: 2.75rem;
+    height: auto;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(229 231 235);
+    background: #fff;
+    padding: 0.625rem 1rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: rgb(75 85 99);
+  }
+
+  .ms-signin-button {
+    font-weight: 600;
+    color: rgb(31 41 55);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: rgb(249 250 251);
+    }
+  }
+
+  .ms-redirecting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    width: 100%;
+    padding: 0;
+
+    &__status {
+      font-weight: 500;
+      color: rgb(75 85 99);
+    }
+
+    &__spinner {
+      color: var(--brand-primary-color, #2c9842);
+      animation: ms-redirect-spin 0.8s linear infinite;
+    }
+
+    &__hint {
+      max-width: 20rem;
+      margin: 0;
+      font-size: 0.6875rem;
+      line-height: 1.5;
+      color: rgb(156 163 175);
+    }
+  }
+
+  .login-entra-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    width: 100%;
+    margin: 2rem 0 0;
+    padding-top: 0;
+    border-top: none;
+    font-size: 0.625rem;
+    line-height: 1.4;
+    color: rgb(156 163 175);
+    text-align: center;
+  }
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}

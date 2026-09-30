@@ -1,0 +1,129 @@
+{
+  "displaySection": {
+    "text": "عرض الفئة",
+    "tooltip": "عرض كافة إشعارات الدائن المُرسلة",
+    "error": "لم يتم العثور على إشعارات دائن"
+  },
+  "status": {
+    "text": "مؤشر الحالة",
+    "tooltip": "التحقق من حالة كل إشعار دائن",
+    "error": "خطأ في عرض الحالة"
+  },
+  "createNewCreditNote": {
+    "text": "إنشاء إشعار دائن جديد",
+    "tooltip": "إنشاء إشعار دائن جديد",
+    "error": "تعذر الإنشاء، يرجى المحاولة مرة أخرى"
+  },
+  "creditNoteReference": {
+    "text": "مرجع إشعار الدائن",
+    "tooltip": "إدخال مرجع فريد لإشعار الدائن",
+    "error": "يجب إدخال مرجع مذكرة الائتمان"
+  },
+  "invoiceSelection": {
+    "text": "اختيار الفاتورة",
+    "tooltip": "اختيار الفاتورة المرتبطة بإشعار الدائن",
+    "error": "يجب اختيار الفاتورة"
+  },
+  "poBasedInvoiceHeader": {
+    "text": "فاتورة مستندة إلى أمر الشراء (الرأسية)",
+    "tooltip": "اختيار الفاتورة المرتبطة بإشعار الدائن",
+    "error": "الاختيار مطلوب"
+  },
+  "nonPoBasedInvoiceHeader": {
+    "text": "فاتورة غير مستندة إلى أمر الشراء (الرأسية)",
+    "tooltip": "اختيار الفاتورة المرتبطة بإشعار الدائن",
+    "error": "الاختيار مطلوب"
+  },
+  "submissionDate": {
+    "text": "تاريخ الإرسال",
+    "tooltip": "",
+    "error": ""
+  },
+  "creditNoteAmount": {
+    "text": "مبلغ إشعار الدائن",
+    "tooltip": "أدخل المبلغ الإجمالي لمذكرة الائتمان",
+    "error": "يجب إدخال المبلغ ويجب أن يكون إيجابيًا"
+  },
+  "currency": {
+    "text": "العملة",
+    "placeholder": "اختر العملة",
+    "tooltip": "اختيار العملة للمبلغ الخاص بإشعار الدائن",
+    "error": "العملة مطلوبة"
+  },
+  "attachmentType": {
+    "text": "نوع المرفق",
+    "tooltip": "اختيار نوع المستند",
+    "error": ""
+  },
+  "supportingDocuments": {
+    "text": "المستندات الداعمة",
+    "tooltip": "إرفاق أي مستندات داعمة ذات صلة",
+    "error": "تعذر رفع المستند"
+  },
+  "saveProgress": {
+    "text": "حفظ التقدم",
+    "tooltip": "حفظ التغييرات لإكمالها لاحقًا",
+    "error": "خطأ في عملية الحفظ"
+  },
+  "submit": {
+    "text": "إرسال",
+    "tooltip": "تقديم طلب مراجعة إشعار الدائن",
+    "error": "فشل في تقديم الطلب"
+  },
+  "sortAndFilter": {
+    "text": "فرز وتصنيف",
+    "tooltip": "",
+    "error": "خطأ في الاختيار"
+  },
+  "selectDate": "اختر التاريخ",
+  "creditNotePreview": "معاينة إشعار الدائن",
+  "creditNoteList": "قائمة إشعارات الدائن",
+  "searchCreditNoteNo": "ابحث عن رقم إشعار الدائن",
+  "searchCreditNote": "ابحث عن رقم إشعار الدائن، اسم/رمز المورد",
+  "creditNoteNo": "رقم إشعار الدائن",
+  "createCreditNote": "إنشاء إشعار دائن",
+  "enterCreditNoteRef": "أدخل رقم مرجع إشعار الدائن",
+  "enterAmount": "أدخل المبلغ",
+  "upload": "رفع",
+  "requestForCreditNote": "طلب إشعار دائن",
+  "sendRequest": "إرسال الطلب",
+  "selectVendors": {
+    "text": "اختر الموردين",
+    "error": "اختيار الموردين مطلوب"
+  },
+  "selectInvoice": {
+    "text": "اختر الفاتورة",
+    "error": "اختيار الفاتورة مطلوب"
+  },
+     "invoiceNum": "رقم الفاتورة",
+      "invoiceText":"فاتورة",
+  "creditNoteText": "إشعار دائن",
+  "invoiceProcessing": "معالجة الفاتورة",
+  "home": "الرئيسية",
+  "srNo": "رقم س.ر.",
+  "createCreditNoteText": "إنشاء إشعار دائن",
+  "editCreditNoteText": "تحرير إشعار دائن",
+  "emailReport": "إرسال تقرير عبر البريد الإلكتروني",
+  "downloadReport": "تنزيل التقرير",
+  "help": "مساعدة",
+  "selectInvoiceType": "اختر نوع الفاتورة",
+  "selectInvoiceTooltip": "اختيار الفاتورة المرتبطة بإشعار الدائن",
+  "savedSuccessfully": "تم حفظ إشعار الائتمان بنجاح",
+  "createdSuccessfully": "تم إنشاء مذكرة الائتمان بنجاح",
+  "updatedSuccessfully": "تم تحديث مذكرة الائتمان بنجاح",
+  "failedToCreateCreditNote": "فشل في إنشاء إشعار الدائن",
+  "failedToUpdateCreditNote": "فشل في تحديث إشعار الدائن",
+  "pleaseUploadSelectedFile": "يرجى رفع الملف المحدد قبل المتابعة",
+  "failedToLoadCreditNoteDetails": "فشل في تحميل تفاصيل إشعار الدائن",
+  "failedToExportCreditNote": "فشل في تصدير إشعار الدائن",
+  "failedToEmailReport": "فشل في إرسال التقرير عبر البريد الإلكتروني",
+  "creditNoteReportEmailedSuccessfully": "تم إرسال تقرير إشعار الدائن بنجاح",
+  "creditNotesPDFTitle": "قائمة ملاحظات الائتمان",
+  "credit_note": "إشعار دائن",
+  "selectVendorCode": "حدد رمز البائع",
+  "noItemsToBeAdded": "لم تتم إضافة أي بنود إلى مذكرة الائتمان هذه",
+  "noLineItemsFound": "لم يتم العثور على أي عناصر",
+  "creditNoteNotFound": "لم يتم العثور على مذكرة الائتمان",
+  "zeroError": "يجب أن يكون المبلغ الإجمالي لمذكرة الائتمان أكبر من 0"
+
+}

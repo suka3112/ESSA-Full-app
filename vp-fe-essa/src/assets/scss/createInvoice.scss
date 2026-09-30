@@ -1,0 +1,59 @@
+.labelWidth{
+width: clamp(150px,15rem,250px);
+}
+@media screen and (min-width:1024px) and (max-width: 1160px) {
+  .labelWidth{
+    width: 160px;
+    white-space: nowrap;
+  } 
+    
+}
+.formGroup{
+    display: flex;
+    align-items: center;
+    min-height: clamp(60px,4.5vh,70px);
+}
+.formInput{
+    width: 20vw!important;
+    height: 45px !important
+}
+@media screen and (min-width:1024px) and (max-width: 1123px) {
+    .formInput{
+        width: 150px !important;
+    }
+}
+@media screen and (min-width:1124px) and (max-width: 1200px) {
+    .formInput{
+        width: 180px !important;
+    }
+}
+@media screen and (min-width:1201px) and (max-width: 1300px) {
+    .formInput{
+        width: 200px !important;
+    }
+}
+
+.uploadBtnStyle{
+    margin-left: 1.5rem !important;
+}
+
+.uploadedFileName {
+  white-space: nowrap;      
+  overflow: hidden;          
+  text-overflow: ellipsis;   
+//   font-size: 0.875rem;       
+//   cursor: pointer;           
+  max-width: calc(20vw - 1.5rem); // default width minus upload button margin
+}
+
+/* Responsive adjustments based on formInput widths */
+@media screen and (min-width:1024px) and (max-width: 1123px) {
+  .uploadedFileName { max-width: calc(150px - 1.5rem); }
+}
+@media screen and (min-width:1124px) and (max-width: 1200px) {
+  .uploadedFileName { max-width: calc(180px - 1.5rem); }
+}
+@media screen and (min-width:1201px) and (max-width: 1300px) {
+  .uploadedFileName { max-width: calc(200px - 1.5rem); }
+}
+

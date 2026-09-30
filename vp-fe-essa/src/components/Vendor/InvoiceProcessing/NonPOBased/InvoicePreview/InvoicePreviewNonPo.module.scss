@@ -1,0 +1,113 @@
+@import '../../../../../assets/scss/abstracts/abstracts.scss';
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+
+  .title {
+    @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+  }
+
+  .dateContainer {
+    display: flex;
+    gap: 8px;
+    align-items: end;
+
+    .previewButtons {
+      width: 150px !important;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.userInputContainerOuter {
+  background-color: #f6f2f2;
+  border-radius: 8px;
+  .userInputContainer{
+    background-color: #ffffff;
+    border: 1px solid rgb(152, 162, 179);
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+  }
+  .separator {
+    border-left: 1px solid rgb(152, 162, 179);
+    height: 100%;
+  }
+}
+
+.verticalDivider {
+  padding-inline-end: 10px;
+  border-inline-end: 1px solid #929398;
+}
+
+.attachmentContainer {
+  // box-shadow: 0px 0px 4px 0px #00000040;
+  border: 1px solid rgb(152, 162, 179);
+  border-radius: 10px;
+  background-color: #fff;
+
+  .attachmentRow {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr;
+    align-items: center;
+    padding: 3px 0;
+
+    label {
+      padding: 4px 0;
+      font-size: 1rem;
+    }
+  }
+
+  .header {
+    font-weight: 600;
+    label{
+      @include fontCustomStyle(1rem, 600 !important, black !important, 16px);
+    }
+  }
+
+  .docLink {
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 919px) {
+  .userInputContainer {
+    padding: 30px;
+  }
+}
+
+.savedPill {
+  border: 1px solid #067647;
+  border-radius: 12px;
+  background-color: #ECFDF3;
+  color: #067647;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  font-weight: 600;
+}
+
+.creditNoteLabel {
+  color: #344054;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.creditNoteDetail {
+  font-weight: 600;
+  font-size: 1rem;
+  color: black;
+}
+.columnContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

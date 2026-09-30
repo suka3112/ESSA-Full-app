@@ -1,0 +1,121 @@
+/**
+ * BrandSwitcher Styles
+ */
+
+.brand-switcher {
+  position: relative;
+  display: inline-block;
+  z-index: 1000;
+
+  .brand-switcher-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .brand-switcher-label {
+      text-transform: capitalize;
+    }
+
+    .brand-switcher-arrow {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+
+      &.open {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .brand-switcher-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 150px;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    animation: slideDown 0.2s ease;
+
+    .brand-switcher-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 16px;
+      background-color: transparent;
+      border: none;
+      text-align: left;
+      font-size: 14px;
+      color: #374151;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background-color: #f3f4f6;
+      }
+
+      &.active {
+        background-color: #eff6ff;
+        color: #2563eb;
+        font-weight: 600;
+      }
+
+      .checkmark {
+        margin-left: 8px;
+        color: #2563eb;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .brand-switcher {
+    .brand-switcher-toggle {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .brand-switcher-dropdown {
+      min-width: 120px;
+
+      .brand-switcher-option {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "vp-ocr-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vendored ESSA OCR classify/split/extract pipeline (ESM). Called in-process by vp-be-essa.",
+  "type": "module",
+  "main": "src/pipeline/extractPipeline.js",
+  "engines": {
+    "node": ">=18"
+  }
+}

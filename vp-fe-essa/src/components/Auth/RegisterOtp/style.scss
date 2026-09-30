@@ -1,0 +1,45 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.totp-form {
+  .title {
+    color: black;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .QR-Code-Message {
+    background-color: var(--brand-primary-color, $primary-color);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .otp-input.inputBox:focus {
+    border: 1.5px solid #005d8b !important;
+    /* Blue border on focus */
+    outline: none !important;
+    box-shadow: 0px 1px 4px 0px #82d5ff80;
+  }
+}
+.register-otp-container{
+  margin-top: 15rem !important;
+}
+@media screen and (min-height: 901px) {
+  .register-otp-container{
+  margin-top: 18rem !important;
+}
+}
+@media screen and (min-height: 720px) and (max-height: 767px) {
+  .register-otp-container{
+  margin-top: 13rem !important;
+}
+}

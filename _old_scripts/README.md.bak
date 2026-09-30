@@ -1,0 +1,67 @@
+# ESSA — Full App (local setup)
+
+## ⚠️ Which URL to open
+
+Open the **frontend**: **http://localhost:9080**
+Do **not** open `http://localhost:8090/vendor-portal/...` — that's the backend API + Entra SSO endpoint and will render a blank page in a browser.
+
+## Ports & database this build actually uses
+
+| | Value |
+|---|---|
+| Frontend URL | **http://localhost:9080** |
+| Backend URL | http://localhost:8090 |
+| API base path | `/vendor-portal` |
+| Database | **PostgreSQL** (host=localhost, port=5432, user=postgres, pwd=root, db=vendor_portal) |
+| Auth | Entra (Microsoft) SSO — configured in `vp-be-essa/.env.dev` |
+
+The frontend port and API URL are set in `vp-fe-essa/.env`.
+The backend port + DB + all secrets are in `vp-be-essa/.env.dev` (committed in the repo).
+
+## First‑time setup
+
+1. Make scripts runnable (once):
+   ```bash
+   chmod +x *.command
+   ```
+
+2. **Delete the placeholder `_to_delete/`** in Finder (two empty half-clones from the sandbox).
+
+3. Pull code — double‑click **`github-pull.command`**
+   → clones `vp-fe-essa` + `vp-be-essa` using `.github-token`.
+
+4. Set up local Postgres — double‑click **`setup-local-db.command`**
+   → runs `postgres:16` in Docker as container `essa-pg`, creates DB `vendor_portal`, runs every migration in `vp-be-essa/db/migrations`, seeds ESSA users.
+   Docker Desktop must be running.
+
+5. Run the app — double‑click **`run-local.command`**
+   → installs deps first time, then opens two Terminal windows and opens http://localhost:9080 in your browser.
+
+## Day‑to‑day
+
+| Task | Script |
+|---|---|
+| Get latest code | `github-pull.command` |
+| Start app | `run-local.command` → visit http://localhost:9080 |
+| Commit + push | `github-push.command` |
+| Stop DB | `docker stop essa-pg` |
+| Start DB later | `docker start essa-pg` |
+| Reset DB | `docker rm -f essa-pg` then re-run `setup-local-db.command` |
+
+## Login
+
+The build uses **Microsoft Entra SSO** (per `REACT_APP_SSO_PROVIDER=entra` in the FE `.env`). Login goes:
+frontend `http://localhost:9080/auth/login` → click Microsoft sign-in → Entra tenant `32ed68a8-408f-4f41-a55d-3c2f6b4c0e5e` → back to `http://localhost:8090/vendor-portal/auth/entra/callback` → session cookie → frontend.
+
+To make Entra SSO actually work from your machine, the Entra app registration must include `http://localhost:8090/vendor-portal/auth/entra/callback` as a Web redirect URI. If it isn't, ask whoever owns the Entra app to add it (or use a local-only login path if the build exposes one).
+
+## Security notes
+
+- `.github-token` never leaves this folder and is stripped from the git `origin` remote after each push/pull. Rotate the token you shared in chat.
+- The backend `.env.dev` shipped in the repo contains real client secrets, an OpenAI key, Graph refresh tokens, Cloudinary keys, etc. **These should be rotated too** — anyone with repo access has them. For local dev they let the app "just run", which is what the current repo does.
+
+## Reference / previous versions
+
+- `../ESSA/DB/VP_Backup_August5/` — older SQL Server backup snapshot
+- `../ESSA/New build/`, `../ESSA/essa-v1-v2-update/` — prior working versions
+- `../ESSA/vp-be-essa/`, `../ESSA/vp-fe-essa/` — older working copies

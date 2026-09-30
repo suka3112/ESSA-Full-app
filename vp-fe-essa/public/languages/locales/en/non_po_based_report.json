@@ -1,0 +1,167 @@
+{
+  "displaySection": {
+    "text": "Display Section",
+    "tooltip": "View all submitted invoices",
+    "error": "No invoice found"
+  },
+  "hyperlinkToSections": {
+    "text": "Hyperlink to Sections",
+    "tooltip": "Click to navigate to linked sections",
+    "error": "Link unavailable"
+  },
+  "invoiceAccDocumentNumber": {
+    "text": "Acc Document Number",
+    "tooltip": "SAP invoice Accounting Document number",
+    "error": ""
+  },
+  "sapInvoiceNumber": {
+    "text": "SAP Invoice Number (HIDDEN)",
+    "tooltip": "SAP invoice number",
+    "error": ""
+  },
+  "vendorInvoiceNumber": {
+    "text": "Invoice No.",
+    "tooltip": "Reference number of the Invoice",
+    "error": "Vendor Invoice Reference No is required"
+  },
+  "vendorName": {
+    "text": "Vendor Name",
+    "tooltip": "Vendor Name",
+    "error": "Vendor Name is required"
+  },
+  "vendorCode": {
+    "text": "Vendor Code",
+    "tooltip": "Vendor Code",
+    "error": "Vendor Code is required"
+  },
+  "creationDate": {
+    "text": "Creation Date",
+    "tooltip": "Date when the invoice was submitted",
+    "error": ""
+  },
+  "invoiceDate": {
+    "text": "Date",
+    "tooltip": "Date when the invoice was issued",
+    "error": ""
+  },
+  "invoicePostingDate": {
+    "text": "Posting Date",
+    "tooltip": "",
+    "error": ""
+  },
+  "currency": {
+    "text": "Currency",
+    "tooltip": "Select Invoice currency",
+    "error": ""
+  },
+  "taxRate": {
+    "text": "Tax Rate",
+    "tooltip": "",
+    "error": "Tax Rate is required"
+  },
+  "taxValue": {
+    "text": "Tax Value",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceValue": {
+    "text": "Amount",
+    "tooltip": "Total value of the invoice",
+    "error": ""
+  },
+  "invoiceDueDate": {
+    "text": "Due Date",
+    "tooltip": "Due date of the invoice",
+    "error": ""
+  },
+  "paymentTerms": {
+    "text": "Payment Terms",
+    "tooltip": "Display the calculated payment term",
+    "error": ""
+  },
+  "dueDateIndicator": {
+    "text": "Due Date Indicator",
+    "tooltip": "Invoice due status (Green, Yellow, Red)",
+    "error": ""
+  },
+  "remarks": {
+    "text": "Remarks",
+    "tooltip": "Remarks by vendor",
+    "error": "Remarks is required"
+  },
+  "createdBy": {
+    "text": "Created By",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceStatus": {
+    "text": "Invoice Status",
+    "tooltip": "Current status of the invoice",
+    "error": ""
+  },
+  "paymentStatus": {
+    "text": "Payment Status",
+    "tooltip": "Current status of payment advice",
+    "error": ""
+  },
+  "paymentAdviceView": {
+    "text": "Payment Advice View",
+    "tooltip": "Current status of payment advice",
+    "error": ""
+  },
+  "documentReferenceNumber": {
+    "text": "Document Reference Number",
+    "tooltip": "Unique identifier for payment advice",
+    "error": "Invalid document reference number"
+  },
+  "paymentAdviceDocument": {
+    "text": "Payment Advice Document",
+    "tooltip": "View the actual payment advice document",
+    "error": "Link error"
+  },
+  "downloadReport": {
+    "text": "Download Report",
+    "tooltip": "Download the invoice report",
+    "error": "Download failed"
+  },
+  "emailReport": {
+    "text": "Email Report",
+    "tooltip": "Email Report",
+    "error": "Email failed"
+  },
+  "filterOptions": {
+    "text": "Filter Options",
+    "tooltip": "Filter invoices by various criteria",
+    "error": "No data available for filter criteria"
+  },
+  "attachmentType": {
+    "text": "Attachment Type",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "submittedDate": {
+    "text": "Submitted Date",
+    "tooltip": "Date when the invoice was submitted",
+    "error": ""
+  },
+  "natureOfExpenses": {
+    "text": "Nature of Expenses",
+    "tooltip": "Select the nature of expenses",
+    "error": "Nature of Expenses is required"
+  },
+  "businessContact": {
+    "text": "Business Contact",
+    "tooltip": "Select the business contact for the invoice",
+    "error": "Business Contact is required"
+  },
+  "fileUpload": {
+    "text": "File Upload",
+    "tooltip": "Upload the invoice file",
+    "error": "Please attach the invoice"
+  },
+  "writeRemarks": "Write Remarks",
+  "createdDate": "Created Date",
+  "nonPOPDFTitle": "Non PO based-Invoice list",
+  "enterInvoiceValue": "Enter Invoice Value",
+  "enterTaxAmount": "Enter tax amount"
+}

@@ -1,0 +1,121 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+
+  .title {
+    @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+  }
+
+  .dateContainer {
+    display: flex;
+    gap: 8px;
+    align-items: end;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.userInputContainerOuter {
+  background-color: #f6f2f2;
+  border-radius: 8px;
+  .userInputContainer{
+    background-color: #ffffff;
+    border: 1px solid rgb(152, 162, 179);
+    border-radius: 8px;
+  }
+  .separator {
+    border-left: 1px solid rgb(152, 162, 179);
+    height: 100%;
+  }
+}
+
+.verticalDivider {
+  padding-right: 10px;
+  border-right: 1px solid #929398;
+}
+
+.attachmentContainer {
+  border: 1px solid rgb(152, 162, 179);
+  border-radius: 10px;
+  background-color: #fff;
+
+  .attachmentRow {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr;
+    align-items: center;
+    padding: 3px 0;
+
+    label {
+      padding: 4px 0;
+    }
+  }
+
+  .header {
+    font-weight: 600;
+    color: #000 !important;
+    font-size: 1rem;
+  }
+}
+
+.inputRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+
+    label {
+      min-width: 180px;
+      font-weight: 600;
+      color: #808080;
+    }
+
+    span {
+      font-weight: 400;
+      color: #000;
+    }
+  }
+}
+
+
+@media (max-width: 919px) {
+  .userInputContainer {
+    padding: 30px;
+  }
+}
+
+.savedPill {
+  border: 1px solid #067647;
+  border-radius: 12px;
+  background-color: #ECFDF3;
+  color: #067647;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  font-weight: 600;
+}
+
+.creditNoteLabel {
+  color: #344054;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.creditNoteDetail {
+  font-weight: 600;
+  font-size: 1rem;
+  color: black;
+}

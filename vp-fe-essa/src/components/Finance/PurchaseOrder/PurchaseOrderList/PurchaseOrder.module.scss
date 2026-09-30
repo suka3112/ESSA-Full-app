@@ -1,0 +1,253 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.poContainer {
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  :global(.dx-page--invoices-fit) {
+    gap: 4px;
+  }
+
+  :global(.page-header-content) {
+    margin-top: 0;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .homeText {
+    @include fontCustomStyle(14px, 400, #616162, 18px);
+  }
+
+  .subHeaderBtn {
+    min-width: 140px;
+  }
+
+  .invoiceBtn {
+    min-width: 105px;
+  }
+
+  .subHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+    }
+  }
+
+  .subHeader>div {
+    display: flex;
+    gap: 10px;
+  }
+
+  .helpIconContainer {
+    height: 42px;
+    width: 42px;
+    border: 1px solid var(--brand-primary-color, $primary-color);
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0px 1px 5.8px 0px #82d5ff40;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      border: 1.5px solid var(--brand-primary-color, $primary-color);
+      box-shadow: 0px 4px 12px 0px #82d5ff80;
+    }
+  }
+}
+
+.userInputs {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  justify-content: space-evenly;
+  // width: 100%;
+
+  label {
+    @include fontCustomStyle(14px, 600, #333333, 16px);
+  }
+}
+
+.inputLabel {
+  @include fontCustomStyle(14px, 600, #333333, 16px);
+}
+
+.disabledPOBtn {
+  background-color: #dddfe0 !important;
+  color: #bababa !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+}
+
+.disabledIcon {
+  opacity: 0.4;
+  //pointer-events: none;
+  cursor: not-allowed;
+}
+
+.headerActions {
+  gap: 8px;
+}
+
+.headerIcons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.headerIcon {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  margin-right: 0 !important;
+}
+
+.filterBar {
+  gap: 8px !important;
+  font-family: var(--app-font), inherit;
+
+  :global(label) {
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 16px !important;
+    color: #6b7280 !important;
+    margin-bottom: 0 !important;
+  }
+
+  :global(.MuiOutlinedInput-root) {
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+    border-radius: 6px;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+  }
+
+  :global(.MuiOutlinedInput-input) {
+    padding: 6px 10px !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+  }
+}
+
+.poTableWrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  font-family: var(--app-font), inherit;
+
+  :global(.MuiPaper-root) {
+    box-shadow: none !important;
+    background: transparent;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+    overflow: visible !important;
+  }
+
+  :global(.custom-table-wrapper) {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  :global(.MuiTable-root) {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    font-family: inherit !important;
+  }
+
+  :global(.MuiTableCell-root) {
+    font-family: inherit !important;
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.25 !important;
+    height: auto !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  :global(.MuiTableCell-paddingCheckbox) {
+    width: 36px !important;
+    padding: 0 8px !important;
+  }
+
+  :global(.MuiTableBody-root .MuiTableRow-root) {
+    height: 32px !important;
+  }
+
+  :global(.MuiTableHead-root),
+  :global(.MuiTableHead-root .MuiTableRow-root) {
+    height: unset !important;
+  }
+
+  :global(.MuiTableHead-root .MuiTableCell-root),
+  :global(.MuiTableCell-stickyHeader) {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3;
+    background: var(--brand-primary-color, #2c9842) !important;
+    padding: 7px 12px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    line-height: 1.2 !important;
+    border-bottom: none !important;
+    vertical-align: middle !important;
+    color: #fff !important;
+  }
+
+  :global(.MuiTableHead-root .MuiTableCell-root > .MuiBox-root) {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-height: 0 !important;
+    text-transform: uppercase !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    line-height: 1 !important;
+  }
+
+  :global(.MuiCheckbox-root) {
+    padding: 0 !important;
+  }
+
+  :global(.MuiCheckbox-root .MuiSvgIcon-root) {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  :global(td span) {
+    font-family: inherit !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    height: 20px !important;
+    padding: 0 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  :global(td div) {
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+  }
+}

@@ -1,0 +1,59 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+.tooltip-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  // margin-left: 4px;
+}
+
+.tooltip-text {
+  @include fontCustomStyle(14px, 500, #344054, 12px);
+  line-height: 10px;
+  background: #fcfcfc;
+  border-radius: 6px;
+  border: 1px solid #344054;
+  padding: 8px 10px;
+  position: absolute;
+  left: 182%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  text-align: center;
+  transition: opacity 0.2s ease-in-out;
+  white-space: nowrap;
+
+  // Left-pointing arrow
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -7px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 7px solid #fcfcfc;
+    z-index: 1001;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid hsl(0, 0%, 90%);
+    z-index: 999;
+  }
+}

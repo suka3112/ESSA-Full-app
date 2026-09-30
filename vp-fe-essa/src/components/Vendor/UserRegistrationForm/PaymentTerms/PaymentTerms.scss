@@ -1,0 +1,40 @@
+@import "../../../../assets/scss/abstracts/abstracts.scss";
+
+.admin-form-container {
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0px 0px 4px 0px #00000040;
+}
+
+.form-fields-container {
+  display: flex;
+  align-items: baseline;
+
+}
+
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #f8f8f8;
+  width: 100%;
+}
+
+.upload-button {
+  background-color: #E7E7E7;
+  padding: 10px 15px;
+  font-size: 0.9375rem;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.textArea {
+  height: 100px !important;
+}

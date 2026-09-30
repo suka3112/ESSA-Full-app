@@ -1,0 +1,63 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.profile-container {
+  .home-text {
+    @include fontCustomStyle(14px, 400, #616162, 18px);
+  }
+
+  .sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    label {
+      @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+    }
+  }
+
+  .sub-header>div {
+    display: flex;
+    gap: 10px;
+  }
+
+  .helpIcon-container {
+    height: 42px;
+    width: 42px;
+    border: 1px solid #005D8B;
+    border-radius: 6px;
+    box-shadow: 0px 1px 5.8px 0px #82d5ff40;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+  }
+
+  .edit-btn {
+    width: 76px !important;
+    min-height: 40px;
+  }
+}
+
+/* style.scss */
+.sticky-header-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  // background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 10px;
+  padding-left: 20px;
+  margin-top: 2px;
+}
+
+.headerPadding {
+  padding: 10px 30px 0px 30px;
+}
+
+.other-tab {
+  &:hover {
+    border-bottom: 2px solid #005D8B;
+    cursor: pointer;
+  }
+}

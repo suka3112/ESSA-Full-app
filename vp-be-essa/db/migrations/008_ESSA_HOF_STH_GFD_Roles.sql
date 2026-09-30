@@ -1,0 +1,26 @@
+-- ESSA Non-PO DoA approver roles (IDs 11–13)
+-- Run before npm run seed:essa-users
+
+IF NOT EXISTS (SELECT 1 FROM dbo.USER_ROLE WHERE ID = 11)
+BEGIN
+  SET IDENTITY_INSERT dbo.USER_ROLE ON;
+  INSERT INTO dbo.USER_ROLE (ID, Role_Name_EN, Role_Name_AR, Is_Deleted, CreatedDt, CreatedBy, ModifiedDt)
+  VALUES (11, N'HOF', N'HOF', 0, GETDATE(), 1, GETDATE());
+  SET IDENTITY_INSERT dbo.USER_ROLE OFF;
+END;
+
+IF NOT EXISTS (SELECT 1 FROM dbo.USER_ROLE WHERE ID = 12)
+BEGIN
+  SET IDENTITY_INSERT dbo.USER_ROLE ON;
+  INSERT INTO dbo.USER_ROLE (ID, Role_Name_EN, Role_Name_AR, Is_Deleted, CreatedDt, CreatedBy, ModifiedDt)
+  VALUES (12, N'STH', N'STH', 0, GETDATE(), 1, GETDATE());
+  SET IDENTITY_INSERT dbo.USER_ROLE OFF;
+END;
+
+IF NOT EXISTS (SELECT 1 FROM dbo.USER_ROLE WHERE ID = 13)
+BEGIN
+  SET IDENTITY_INSERT dbo.USER_ROLE ON;
+  INSERT INTO dbo.USER_ROLE (ID, Role_Name_EN, Role_Name_AR, Is_Deleted, CreatedDt, CreatedBy, ModifiedDt)
+  VALUES (13, N'GFD', N'GFD', 0, GETDATE(), 1, GETDATE());
+  SET IDENTITY_INSERT dbo.USER_ROLE OFF;
+END;

@@ -1,0 +1,44 @@
+{
+  "employeeId": {
+    "text": "رقم الموظف",
+    "tooltip": "",
+    "error": "معرف الموظف مطلوب"
+  },
+  "enterName": {
+    "text": "أدخل الاسم",
+    "tooltip": "",
+    "error": "الاسم مطلوب"
+  },
+  "confirmPassword": {
+    "text": "تأكيد كلمة المرور",
+    "tooltip": "",
+    "error": ""
+  },
+  "department": {
+    "text": "القسم",
+    "tooltip": "",
+    "error": "القسم مطلوب"
+  },
+  "designation": {
+    "text": "المسمى الوظيفي",
+    "tooltip": "",
+    "error": "التعيين مطلوب"
+  },
+  "phone_number": {
+    "text": "رقم الهاتف",
+    "tooltip": "أدخل رقم الهاتف",
+    "error": "رقم الهاتف مطلوب"
+  },
+  "loginAsSupplier": "تسجيل الدخول كمورد",
+  "yes": "نعم",
+  "no": "لا",
+  "confirm_delete_account": "هل أنت متأكد أنك تريد حذف هذا الحساب؟",
+  "selectOption": "الرجاء تحديد خيار",
+  "entityRequired": "الكيان مطلوب",
+  "roleRequired": "الدور مطلوب",
+  "countryRequired": "مطلوب رمز البلد",
+  "selectCountry": "الرجاء تحديد رمز البلد",
+  "searchByNameOrEmail": "البحث حسب الاسم والبريد الإلكتروني",
+  "updatedSuccessfully": "تم التحديث بنجاح",
+  "userAddedSuccessFully": "تمت إضافة المستخدم بنجاح"
+}

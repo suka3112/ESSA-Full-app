@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Invoice Created Successfully</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; color: #000000; background-color: #f8f9fa; margin: 0; padding: 0;">
+  <div
+    style="background-color: #ffffff; max-width: 600px; margin: 20px auto; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
+    <!-- Logo -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <img
+        src="https://res.cloudinary.com/dvdgpxne8/image/upload/v1747829491/uploads/uploads/logo3-1747829489894.png.png"
+        alt="Daikin Logo" style="width: 200px;" />
+    </div>
+
+    <!-- Greeting -->
+    <p>Dear <strong>{{VENDOR_NAME}}</strong>,</p>
+    <p>I hope this email finds you well.</p>
+
+    <!-- Main message -->
+    <p>
+      This is to inform you that your invoice {{INVOICE_NO}} has been approved successfully in the Daikin Vendor Portal.
+      Below are the details of the invoice:
+    </p>
+
+    <!-- Call to action -->
+    <p>
+      You can view the full details by logging in to your vendor portal account.
+    </p>
+
+    <!-- Closing -->
+    <p>Thank you for your continued partnership with Daikin.</p>
+    <p>Best regards,<br />Daikin Vendor Portal Team</p>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div style="margin-top: 30px; font-size: 14px; color: #000000; text-align: center;">
+        Copyright © Daikin. All Rights Reserved |
+        <a href="https://www.daikinmea.com" style="color: #000000;">www.daikinmea.com</a>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <a href="{{FACEBOOK}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{TWITTER}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{LINKEDIN}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{YOUTUBE}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" alt="YouTube" width="20" height="20"
+            style="border: none;" />
+        </a>
+        <a href="{{INSTAGRAM}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram" width="20" height="20"
+            style="border: none;" />
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

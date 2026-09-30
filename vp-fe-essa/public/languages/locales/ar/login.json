@@ -1,0 +1,68 @@
+{
+  "email": {
+    "text": "اسم المستخدم/البريد الإلكتروني",
+    "tooltip": "أدخل اسم المستخدم/البريد الإلكتروني",
+    "error": "اسم المستخدم / البريد الإلكتروني مطلوب",
+    "validation": "عنوان البريد الإلكتروني غير صالح"
+  },
+  "password": {
+    "text": "كلمة المرور",
+    "tooltip": "أدخل كلمة المرور",
+    "error": "كلمة المرور مطلوبة"
+  },
+  "referenceNumber": {
+    "text": "رقم المرجع",
+    "tooltip": "أدخل رقم المرجع الخاص بك",
+    "error": "رقم المرجع مطلوب"
+  },
+  "companyName": {
+    "text": "اسم الشركة",
+    "tooltip": "أدخل اسم شركتك",
+    "error": "اسم الشركة مطلوب"
+  },
+  "tradeLicenceNumber": {
+    "text": "رقم الرخصة التجارية",
+    "tooltip": "أدخل رقم الرخصة التجارية",
+    "error": "رقم الرخصة التجارية مطلوب"
+  },
+  "forget_pwd": "نسيت كلمة المرور",
+  "submit": "إرسال",
+  "track_my_application": "تتبع طلبي",
+  "signin": "تسجيل الدخول",
+  "signin_sso": "تسجيل الدخول عبر Microsoft",
+  "or": "أو",
+  "trackYourApplication": "تتبع طلبك",
+  "remember_me": "تذكرني",
+  "vendor_authentication": "مصادقة المورد",
+  "admin_authentication": "مصادقة  المسؤول",
+  "business_authentication": "مصادقة الأعمال ",
+  "finance_authentication": "مصادقة المالية ",
+  "daikin_brand_statement": "دايكن هي علامة تجارية رائدة في مجال تكييف الهواء",
+  "daikin_brand_big_statement": "دايكن هي شركة عالمية رائدة في تطوير وتصنيع حلول التكييف.\nوالتدفئة والتهوية.\nوالتطبيقات الصناعية والتجارية والسكنية (HVAC).",
+  "brand_pitch": "{{brandName}} هي علامة تجارية رائدة في مجال تكييف الهواء",
+  "brand_statement": "{{brandName}} هي شركة عالمية رائدة في تطوير وتصنيع حلول التكييف.\nوالتدفئة والتهوية.\nوالتطبيقات الصناعية والتجارية والسكنية (HVAC).",
+  "emailIncorrect": "البريد الإلكتروني غير صحيح",
+  "yourApplicationStatus": "حالة طلبك",
+  "yourApplicationHasBeenSubmittedSuccessfully": "تم تقديم طلبك بنجاح",
+  "applicationSubmittedSuccessfully": "تم تقديم الطلب بنجاح",
+  "reviewInProgress": "المراجعة قيد التنفيذ",
+  "awaitingForApproval": "بانتظار الموافقة",
+  "onceApprovedNotificationSentToEmail": "بمجرد الموافقة، سيتم إرسال إشعار إلى بريدك الإلكتروني المسجّل",
+  "applicationCannotBeEditedUnderReview": "لا يمكن تعديل الطلب أثناء مراجعته",
+  "editYourApplication": "تعديل طلبك",
+  "goBack": "الرجوع",
+  "receiveCredentialsOnceApproved": "ستتلقى بيانات الدخول عبر بريدك الإلكتروني المسجّل عند الموافقة",
+  "congratulationsApplicationApproved": "تهانينا! تم اعتماد طلبك",
+  "credentialsSentToEmail": "تم إرسال بيانات الدخول إلى بريدك الإلكتروني، يرجى اتباع الرابط لتسجيل الدخول",
+  "viewYourApplication": "عرض طلبك",
+  "congratulations": "تهانينا!",
+  "yourApplicationApproved": "تم تقديم طلبك",
+  "credentialsSentToRegisteredEmail": "تم إرسال بيانات الدخول إلى عنوان بريدك الإلكتروني المسجّل",
+  "applicationReferenceNo": "رقم مرجع الطلب:",
+  "youWillBeNotifiedViaEmailOnceYourApplicationHasBeen": "سيتم إشعارك عبر البريد الإلكتروني عند",
+  "areYouSureYouWantToSubmitYourApplication": "هل أنت متأكد أنك تريد تقديم طلبك؟",
+  "formSubmitSuccessfully": "تم تقديم النموذج بنجاح",
+  "yourApplicationHasBeenSavedButIsNotYetSubmitted": "تم حفظ طلبك، لكنه لم يُقدَّم بعد",
+  "passwordResetEmailSent": "تم إرسال بريد إعادة تعيين كلمة المرور إلى صندوق الوارد الخاص بك",
+  "clickBelowToResetPassword": "يرجى النقر أدناه لإعادة تعيين كلمة المرور"
+}

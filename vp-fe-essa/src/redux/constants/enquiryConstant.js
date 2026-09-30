@@ -1,0 +1,1 @@
+export const SET_ENQUIRY_DATA = 'SET_ENQUIRY_DATA';

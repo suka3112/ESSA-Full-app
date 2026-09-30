@@ -1,0 +1,47 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.users-container {
+  // box-shadow: 0px 0px 4px 0px #00000040;
+  border: 1px solid rgb(152, 162, 179);
+  border-radius: 10px;
+
+  .sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+  }
+
+  .addBtn {
+    padding: 15px !important;
+    height: 45px;
+  }
+
+  .review-btn {
+    width: 100%;
+  }
+
+  .select-container {
+    min-width: 360px;
+  }
+}
+
+.headerTitle {
+  color: var(--brand-primary-color, $primary-color);
+  font-weight: 600;
+}
+
+.selectLabel {
+  @include fontCustomStyle(16px, 400, #000000, 12px);
+}
+
+.signInInputUser {
+  min-width: 360px;
+}
+
+.addUserTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2a2a2a !important;
+  text-align: left
+}

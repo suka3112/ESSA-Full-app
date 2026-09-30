@@ -1,0 +1,76 @@
+{
+  "bankChargeIndicator": {
+    "text": "Bank Charge Indicator",
+    "tooltip": "Specify who pays the Bank Charges",
+    "error": ""
+  },
+  "bankName": {
+    "text": "Bank Name",
+    "tooltip": "Enter bank name",
+    "error": "Bank Name is required"
+  },
+  "bankAccount": {
+    "text": "Bank Account",
+    "tooltip": "Enter bank account number",
+    "error": "Bank Account is required"
+  },
+  "bankAccountCurrency": {
+    "text": "Bank Account Currency",
+    "tooltip": "Standard currencies to be displayed in the drop down.",
+    "error": "Currency selection is required",
+    "placeholder": "Select Currency"
+  },
+  "bankStreet": {
+    "text": "Street/Building No. (Bank)",
+    "tooltip": "Enter street/house number",
+    "error": "Address is required",
+    "placeholder": "Enter Street/Building No. (Bank)"
+  },
+  "bankPostalCode": {
+    "text": "Postal Code (Bank)",
+    "tooltip": "Enter postal code",
+    "error": "Postal Code is required",
+    "placeholder": "Enter Postal Code (Bank)"
+  },
+  "bankCity": {
+    "text": "City (Bank)",
+    "tooltip": "Enter City",
+    "error": "City is required",
+    "placeholder": "Select City(Bank)"
+  },
+  "bankCountry": {
+    "text": "Bank Country",
+    "tooltip": "Select the bank's country",
+    "error": "Bank Country is required"
+  },
+  "invoiceCurrency": {
+    "text": "Invoice Currency",
+    "tooltip": "Select invoice currency",
+    "error": "Invoice Currency is required"
+  },
+  "swiftCode": {
+    "text": "SWIFT Code",
+    "tooltip": "Enter SWIFT code",
+    "error": "SWIFT Code is required"
+  },
+  "ibanNumber": {
+    "text": "IBAN Number",
+    "tooltip": "Enter IBAN number",
+    "error": "IBAN Number is required"
+  },
+  "paymentBy": {
+    "text": "Payment By",
+    "tooltip": "",
+    "error": ""
+  },
+    "uploadBankFile":{
+    "text": "Bank file",
+    "tooltip": "Upload bank file",
+    "error": "Bank Files are required"
+  },
+  "bank_details": "Bank Details",
+  "normalBankTransfer": "Normal Bank Transfer",
+  "note": "Note: ",
+  "contact_admin_click": "Contact Admin here",
+  "contact_admin_suffix": "to change these details."
+}

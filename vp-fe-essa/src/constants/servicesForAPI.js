@@ -1,0 +1,1 @@
+export const ENQUIRY_SERVICE = 'enquiry_service';

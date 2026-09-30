@@ -1,0 +1,19 @@
+export const CREATE_PO_INVOICE = '/invoice/AddPoInvoice'
+export const PO_INVOICE_LISTING = '/invoice/poInvoiceListing' // POST as per Postman
+export const PO_ITEM = '/purchaseOrder/multiplepoLineItemList' // POST as per Postman
+export const PO_INVOICE_DETAILS = '/invoice/getOneInvoice' // GET with ?id={id}
+export const POPULATE_PO_INVOICE = '/invoice/populatePOInvoice'
+export const POPULATE_PO_INVOICE_BY_MATERIAL = '/invoice/populate/invoice/material'
+export const PO_INVOICE_LISTING_EXPORT = '/invoice/poInvoiceListing/export'
+export const PO_INVOICE_LISTING_EMAIL_REPORT = '/invoice/poInvoiceListing/emailReport'
+export const PO_INVOICE_DETAILS_EXPORT = '/invoice/poInvoiceDetail/export' // Fixed typo "expor" to "export"
+export const UPDATE_PO_INVOICE = '/invoice/editPoInvoice'
+export const UPDATE_NON_PO_INVOICE = '/invoice/editNonPoInvoice'
+export const PO_INVOICE_UPDAT = '/invoice/editPoInvoice'
+//export const UPDATE_PO_INVOICE = '/invoice/pOInvoice/:id' // :id placeholder
+export const PO_INVOICE_DETAILS_EMAIL_REPORT = '/invoice/invoiceList/export'
+export const PO_BASED_INVOICE_DROPDOWN = '/invoice/invoiceDropdown'
+export const INVOICE_DETAILS = '/invoice/invoiceListById'
+export const PENDING_INVOICE = '/invoice/pendingInvoiceList'
+export const PENDING_INVOICE_EXPORT = '/invoice/pendingInvoiceList/export'
+export const DELETE_DRAFT_INVOICE = '/invoice/deleteInvoice'

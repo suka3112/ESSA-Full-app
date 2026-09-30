@@ -1,0 +1,486 @@
+$bp-100: 1910px; // ~100%
+$bp-125-min: 1528px; // 1920 / 1.25
+$bp-125-max: 1919px;
+$bp-150-min: 1270px; // 1920 / 1.5
+$bp-150-max: 1527px;
+
+@mixin for-fhd-100 {
+  @media screen and (min-width: $bp-100) {
+    @content;
+  }
+}
+
+@mixin for-fhd-125 {
+  @media screen and (min-width: $bp-125-min) and (max-width: $bp-125-max) {
+    @content;
+  }
+}
+
+@mixin for-fhd-150 {
+  @media screen and (min-width: $bp-150-min) and (max-width: $bp-150-max) {
+    @content;
+  }
+}
+
+@mixin not-for-fhd-150 {
+  @media screen and (max-width: #{$bp-150-min - 1px}), screen and (min-width: #{$bp-150-max + 1px}) {
+    @content;
+  }
+}
+
+@mixin not-for-fhd-125-150 {
+  @media screen and (max-width: #{$bp-150-min - 1px}), screen and (min-width: $bp-100) {
+    @content;
+  }
+}
+
+.custom-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto !important;
+
+  th{
+    white-space: nowrap;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  @include for-fhd-150 {
+    width: 100%;
+    overflow-y: hidden !important;
+    overflow-x: auto !important;
+  }
+}
+
+.custom-table {
+  width: 100%;
+  // table-layout: fixed !important;
+
+  @include for-fhd-150 {
+    width: 100%;
+    table-layout: auto !important;
+  }
+  tbody {
+    tr {
+      td {
+        font-size: 1rem;
+        padding: 0.75rem 0.6rem;
+      }
+    }
+  }
+
+  thead {
+    tr {
+      th {
+        font-size: 1rem;
+        padding: 0.75rem 0.6rem;
+      }
+    }
+  }
+}
+
+// Credit Note Listing
+.credit-note-list-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(3) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(4) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(5) {
+    //     width: 20%;
+    //   }
+    // }
+  }
+}
+
+// Non PO Based Listing
+.non-po-based-listing-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 21%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(3) {
+    //     width: 15%;
+    //   }
+    //   th:nth-child(4) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(5) {
+    //     width: 20%;
+    //   }
+    //   th:nth-child(6) {
+    //     width: 20%;
+    //   }
+    // }
+  }
+}
+
+// Logistics Invoice Listing
+.logistics-invoice-list-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 5%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 14%;
+    //   }
+    //   th:nth-child(3) {
+    //     width: 14%;
+    //   }
+    //   th:nth-child(4) {
+    //     width: 14%;
+    //   }
+    //   th:nth-child(5) {
+    //     width: 14%;
+    //   }
+    //   th:nth-child(6) {
+    //     width: 14%;
+    //   }
+    //   th:nth-child(7) {
+    //     width: 14%;
+    //   }
+    // }
+  }
+}
+
+// Edit Invoice Table
+.edit-invoice-table {
+  @include not-for-fhd-150 {
+    th{
+      width: max-content;
+    }
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 4.5%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 4%;
+    //   }
+    //   th:nth-child(3) {
+    //     width: 5%;
+    //   }
+    //   th:nth-child(4) {
+    //     width: 6.5%;
+    //   }
+    //   th:nth-child(5) {
+    //     width: 2%;
+    //   }
+    //   th:nth-child(6) {
+    //     width: 2.5%;
+    //   }
+    //   th:nth-child(7) {
+    //     width: 2.5%;
+    //   }
+    //   th:nth-child(8) {
+    //     width: 2.5%;
+    //   }
+    //   th:nth-child(9) {
+    //     width: 4%;
+    //   }
+    //   th:nth-child(10) {
+    //     width: 4%;
+    //   }
+    // }
+  }
+}
+
+// View Purchase Order Table
+.view-purchase-order-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   // PO Item No
+    //   th:nth-child(1) {
+    //     width: 5.5%;
+    //   }
+    //   // Status
+    //   th:nth-child(2) {
+    //     width: 4.75%;
+    //   }
+    //   // Material Code
+    //   th:nth-child(3) {
+    //     width: 6.95%;
+    //   }
+    //   // Material Description
+    //   th:nth-child(4) {
+    //     width: 9.45%;
+    //   }
+    //   // UOM
+    //   th:nth-child(5) {
+    //     width: 3.95%;
+    //   }
+    //   // PO Quantity
+    //   th:nth-child(6) {
+    //     width: 4%;
+    //   }
+    //   // Open Quantity
+    //   th:nth-child(7) {
+    //     width: 4.95%;
+    //   }
+    //   // Net Price
+    //   th:nth-child(8) {
+    //     width: 4.95%;
+    //   }
+    //   // GR Quantity
+    //   th:nth-child(9) {
+    //     width: 4.95%;
+    //   }
+    //   // QR Value
+    //   th:nth-child(10) {
+    //     width: 4.95%;
+    //   }
+    //   // Inv Quantity
+    //   th:nth-child(11) {
+    //     width: 4.75%;
+    //   }
+    //   // Inv Value
+    //   th:nth-child(12) {
+    //     width: 4.75%;
+    //   }
+    // }
+  }
+}
+
+// Advance Payment Table
+.advance-payment-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   // // Advance Payment No.
+    //   th:nth-child(1) {
+    //     width: 11.5%;
+    //   }
+    //   // Invoice Type
+    //   th:nth-child(2) {
+    //     width: 10.5%;
+    //   }
+    //   // Value of Advance Payment
+    //   th:nth-last-child(4) {
+    //     width: 14.5%;
+    //   }
+    //   // Date
+    //   th:nth-last-child(2) {
+    //     width: 11%;
+    //   }
+    //   // Status
+    //   th:last-child {
+    //     width: 16%;
+    //   }
+    // }
+  }
+}
+
+// PO GR Details
+.po-gr-details {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    } 
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 7%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 7%;
+    //   }
+    //   th:nth-child(3) {
+    //     width: 7%;
+    //   }
+    //   th:nth-child(4) {
+    //     width: 10%;
+    //   }
+    //   th:nth-child(5) {
+    //     width: 17%;
+    //   }
+    //   th:nth-child(6) {
+    //     width: 7%;
+    //   }
+    //   th:nth-child(7) {
+    //     width: 7%;
+    //   }
+    //   th:nth-child(8) {
+    //     width: 7%;
+    //   }
+    // }
+  }
+}
+
+// SOA Table
+.soa-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   // Type
+    //   th:nth-child(1) {
+    //     width: 6%;
+    //   }
+    //   // Invoice No.
+    //   th:nth-child(2) {
+    //     width: 10%;
+    //   }
+    //   th:nth-last-child(2) {
+    //     width: 13.5%;
+    //   }
+    //   th:last-child {
+    //     width: 18%;
+    //   }
+    // }
+  }
+}
+
+// Create SOA Table
+.create-soa-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   // Type
+    //   th:nth-child(1) {
+    //     width: 5%;
+    //   }
+    //   // Invoice No.
+    //   th:nth-child(2) {
+    //     width: 10%;
+    //   }
+    //   // Date
+    //   th:nth-child(3) {
+    //     width: 10%;
+    //   }
+    //   // Currency
+    //   th:nth-child(4) {
+    //     width: 7%;
+    //   }
+    //   // Amount
+    //   th:nth-child(5) {
+    //     width: 9%;
+    //   }
+    //   // Due Date
+    //   th:nth-child(6) {
+    //     width: 9%;
+    //   }
+    //   // Recon Status
+    //   th:nth-child(7) {
+    //     width: 11%;
+    //   }
+    //   // Recon Comments
+    //   th:nth-child(8) {
+    //     width: 11%;
+    //   }
+    //   // Actions
+    //   th:nth-child(9) {
+    //     width: 5%;
+    //   }
+    // }
+  }
+}
+
+// Invoice Details Table
+.invoice-detail-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 8%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 6%;
+    //   }
+    //   th:nth-child(3) {
+    //     width: 6%;
+    //   }
+    //   th:nth-child(4) {
+    //     width: 6%;
+    //   }
+    //   th:nth-child(5) {
+    //     width: 10%;
+    //   }
+    //   th:nth-child(6) {
+    //     width: 14%;
+    //   }
+    //   th:nth-child(7) {
+    //     width: 4%;
+    //   }
+    //   th:nth-child(8) {
+    //     width: 4%;
+    //   }
+    //   th:nth-child(9) {
+    //     width: 4%;
+    //   }
+    //   th:nth-child(10) {
+    //     width: 4.5%;
+    //   }
+    //   th:nth-child(11) {
+    //     width: 4.5%;
+    //   }
+    // }
+  }
+}
+
+.enquiry-list-table {
+  @include not-for-fhd-150 {
+    th{
+      width: fit-content;
+    }
+    // thead {
+    //   th:nth-child(1) {
+    //     width: 9%;
+    //   }
+    //   th:nth-child(2) {
+    //     width: 10%;
+    //   }
+    //   // Assigned Contact Person
+    //   th:nth-last-child(3) {
+    //     width: 16.5%;
+    //   }
+    //   // Date
+    //   th:nth-last-child(2) {
+    //     width: 11%;
+    //   }
+    //   // Status
+    //   th:last-child {
+    //     width: 13%;
+    //   }
+    // }
+  }
+}
+
+.po-based-listing-table {
+  thead {
+    th:last-child {
+      width: 16%;
+    }
+  }
+}

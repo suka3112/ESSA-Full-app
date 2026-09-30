@@ -1,0 +1,28 @@
+#video-container {
+    width: 100%;
+    max-width: 800px ;
+    max-height: 456px !important;
+    border-radius: 20px;
+
+  }
+  
+  
+  @media (max-width: 1024px) {
+    #video-container {
+      max-width: 600px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    #video-container {
+      max-width: 500px;
+    }
+  }
+
+  .video-container .react-player__controls [aria-label="More controls"] {
+    display: none !important;
+  }
+  .react-player video {
+    border-radius: 10px !important;
+  }
+  

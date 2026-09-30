@@ -1,0 +1,157 @@
+{
+  "displaySection": {
+    "text": "عرض الفئة",
+    "tooltip": "عرض جميع الفواتير المقدمة",
+    "error": "لا توجد فاتورة"
+  },
+  "hyperlinkToSections": {
+    "text": "رابط مباشر للأقسام",
+    "tooltip": "انقر للانتقال إلى الأقسام المرتبطة",
+    "error": "الرابط غير متاح"
+  },
+  "invoiceAccDocumentNumber": {
+    "text": "رقم مستند فاتورة الحساب",
+    "tooltip": "رقم المستند المحاسبي للفاتورة في SAP",
+    "error": ""
+  },
+  "sapInvoiceNumber": {
+    "text": "رقم فاتورة SAP (مخفي)",
+    "tooltip": "رقم الفاتورة في SAP",
+    "error": ""
+  },
+  "vendorInvoiceNumber": {
+    "text": "رقم الفاتورة",
+    "tooltip": "رقم الفاتورة الذي أدخله المورد",
+    "error": ""
+  },
+  "creationDate": {
+    "text": "تاريخ الإنشاء",
+    "tooltip": "تاريخ تقديم الفاتورة",
+    "error": ""
+  },
+  "invoiceDate": {
+    "text": "تاريخ الفاتورة",
+    "tooltip": "تاريخ إصدار الفاتورة",
+    "error": ""
+  },
+  "invoicePostingDate": {
+    "text": "تاريخ تسجيل الفاتورة",
+    "tooltip": "",
+    "error": ""
+  },
+  "currency": {
+    "text": "العملة",
+    "tooltip": "اختر عملة الفاتورة",
+    "error": ""
+  },
+  "taxRate": {
+    "text": "معدل الضريبة",
+    "tooltip": "",
+    "error": "معدل الضريبة مطلوب"
+  },
+  "taxValue": {
+    "text": "قيمة الضريبة",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceValue": {
+    "text": "قيمة الفاتورة",
+    "tooltip": "إجمالي قيمة الفاتورة",
+    "error": ""
+  },
+  "invoiceDueDate": {
+    "text": "تاريخ استحقاق الفاتورة",
+    "tooltip": "تاريخ استحقاق الفاتورة",
+    "error": ""
+  },
+  "paymentTerms": {
+    "text": "شروط الدفع",
+    "tooltip": "عرض فترة الدفع المحسوبة",
+    "error": ""
+  },
+  "dueDateIndicator": {
+    "text": "مؤشر تاريخ الاستحقاق",
+    "tooltip": "حالة استحقاق الفاتورة",
+    "error": ""
+  },
+  "remarks": {
+    "text": "ملاحظات",
+    "tooltip": "ملاحظات من المورد",
+    "error": "ملاحظات مطلوبة"
+  },
+  "createdBy": {
+    "text": "تم الإنشاء بواسطة",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceStatus": {
+    "text": "حالة الفاتورة",
+    "tooltip": "الحالة الحالية للفاتورة",
+    "error": ""
+  },
+  "paymentStatus": {
+    "text": "حالة السداد",
+    "tooltip": "الحالة الحالية لإشعار الدفع",
+    "error": ""
+  },
+  "paymentAdviceView": {
+    "text": "عرض إشعار الدفع",
+    "tooltip": "الحالة الحالية لإشعار الدفع",
+    "error": ""
+  },
+  "documentReferenceNumber": {
+    "text": "رقم مرجعي للمستند",
+    "tooltip": "مرجع فريد لإشعار الدفع",
+    "error": "رقم المستند المرجعي غير صالح"
+  },
+  "paymentAdviceDocument": {
+    "text": "مستند إشعار الدفع",
+    "tooltip": "عرض الوثيقة الفعلية لإشعار الدفع",
+    "error": "خطأ في الرابط"
+  },
+  "downloadReport": {
+    "text": "تنزيل التقرير",
+    "tooltip": "تنزيل تقرير الفاتورة",
+    "error": "فشل التنزيل"
+  },
+  "emailReport": {
+    "text": "إرسال التقرير عبر البريد الإلكتروني",
+    "tooltip": "تقرير البريد الإلكتروني",
+    "error": "فشل البريد الإلكتروني"
+  },
+  "filterOptions": {
+    "text": "خيارات التصنيف",
+    "tooltip": "تصنيف الفواتير وفقًا لمعايير مختلفة",
+    "error": "لا توجد بيانات متاحة لمعايير التصنيف"
+  },
+  "attachmentType": {
+    "text": "نوع المرفق",
+    "tooltip": "اختر نوع الوثيقة",
+    "error": ""
+  },
+  "submittedDate": {
+    "text": "تاريخ الإرسال",
+    "tooltip": "تاريخ تقديم الفاتورة",
+    "error": ""
+  },
+  "natureOfExpenses": {
+    "text": "طبيعة المصاريف",
+    "tooltip": "اختر طبيعة النفقات",
+    "error": "طبيعة النفقات مطلوبة"
+  },
+  "businessContact": {
+    "text": "جهة الاتصال التجارية",
+    "tooltip": "اختر الجهة المسؤولة عن الفاتورة",
+    "error": "مطلوب الاتصال التجاري"
+  },
+  "fileUpload": {
+    "text": "رفع الملف",
+    "tooltip": "رفع ملف الفاتورة",
+    "error": "يرجى إرفاق الفاتورة"
+  },
+   "writeRemarks" : "كتابة ملاحظات",
+   "createdDate": "تاريخ الإنشاء",
+   "nonPOPDFTitle": "قائمة الفواتير غير المعتمدة على أوامر الشراء",
+   "enterInvoiceValue": "أدخل قيمة الفاتورة",
+   "enterTaxAmount": "أدخل مبلغ الضريبة"
+}

@@ -1,0 +1,63 @@
+{
+  "licenseNo": {
+    "text": "License No.",
+    "tooltip": "Enter trade license number",
+    "error": "License No. is required"
+  },
+  "expiryDate": {
+    "text": "Expiry Date",
+    "tooltip": "Select trade license expiry date",
+    "error": "Expiry Date is required"
+  },
+  "nationalId": {
+    "text": "National ID No.",
+    "tooltip": "Enter National ID No.",
+    "error": "National ID is required for Saudi"
+  },
+  "nationalIdExpiryDate": {
+    "text": "Expiry Date",
+    "tooltip": "Select national ID expiry date",
+    "error": "Expiry Date is required"
+  },
+  "vatNo": {
+    "text": "VAT No.",
+    "tooltip": "Enter VAT No.",
+    "error": "VAT Number is required"
+  },
+  "vatGroup": {
+    "text": "VAT Group",
+    "tooltip": "Is the VAT part of a group?",
+    "error": "VAT Group selection is required"
+  },
+  "groupEntityName": {
+    "text": "Group Entity Name (If Yes)",
+    "tooltip": "Enter VAT group entity name",
+    "error": "Group Entity Name is required"
+  },
+  "uploadTradingLicense": {
+    "text": "Uploads Trade Supporting (License)",
+    "tooltip": "Upload trade license supporting document",
+    "error": "Trade License files are required"
+  },
+  "uploadNationalId": {
+    "text": "Uploads Supporting (National ID)",
+    "tooltip": "Upload National ID Supporting Document",
+    "error": ""
+  },
+  "uploadNda": {
+    "text": "Uploads Supporting (NDA)",
+    "tooltip": "Upload NDA Supporting Document",
+    "error": "NDA File is required"
+  },
+  "uploadVAT": {
+    "text": "Uploads Supporting (VAT)",
+    "tooltip": "Upload VAT Supporting Document",
+    "error": "VAT Files are required"
+  },
+  "legal_identification_details": "Legal Identification Details",
+  "trade_licence": "Trade Licence",
+  "vat": "VAT",
+  "national_id": "National ID",
+  "fileSelected": "file(s) selected",
+  "fileUploadFailed": "File upload or profile update failed."
+}

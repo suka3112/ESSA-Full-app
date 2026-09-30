@@ -1,0 +1,149 @@
+{
+  "displaySection": {
+    "text": "عرض الفئة",
+    "tooltip": "عرض جميع الفواتير اللوجستية المقدمة",
+    "error": "لا توجد فواتير لوجستية"
+  },
+  "status": {
+    "text": "الحالة",
+    "tooltip": "تحقق من حالة كل فاتورة لوجستية",
+    "error": "خطأ في عرض الحالة"
+  },
+  "createNewLogisticsInvoice": {
+    "text": "إنشاء فاتورة لوجستية جديدة",
+    "tooltip": "إنشاء فاتورة لوجستية جديدة",
+    "error": "فشل الإنشاء، يرجى المحاولة مرة أخرى"
+  },
+  "importFile": {
+    "text": "استيراد ملف اكسل",
+    "tooltip": "رفع ملف الاستيراد بتنسيق .xls",
+    "error": "تنسيق الملف غير صالح، فقط .xls مقبول"
+  },
+  "zipFileAllInvoices": {
+    "text": "ملف مضغوط (جميع الفواتير)",
+    "tooltip": "رفع ملف ZIP يحتوي على جميع الفواتير ذات الصلة",
+    "error": "تنسيق الملف غير صالح، فقط ZIP مقبول"
+  },
+  "invoiceRefNumber": {
+    "text": "رقم مرجع الفاتورة (رقم فاتورة المورد)",
+    "tooltip": "عرض العناصر المستوردة للتأكيد",
+    "error": "لا توجد بنود في الملف"
+  },
+  "attachInvoicesToLineItems": {
+    "text": "إلحاق الفواتير بعناصر السطر",
+    "tooltip": "إرفاق الفاتورة المقابلة لكل بند",
+    "error": "المرفق مفقود لعنصر واحد أو أكثر"
+  },
+  "costResponsible": {
+    "text": "المسؤول عن التكلفة (CR)",
+    "tooltip": "اختر الشخص المسؤول عن التكاليف",
+    "error": "مطلوب اختيار CR"
+  },
+  "submitInvoice": {
+    "text": "إرسال الفاتورة",
+    "tooltip": "تقديم الفاتورة اللوجستية للموافقة",
+    "error": "فشل التقديم، يرجى المحاولة مرة أخرى"
+  },
+  "editInvoice": {
+    "text": "تعديل الفاتورة",
+    "tooltip": "يمكن للمورد التعديل قبل أن يبدأ مستخدم دايكن عملية الموافقة",
+    "error": "غير قادر على التعديل"
+  },
+  "saveProgress": {
+    "text": "حفظ التغيرات",
+    "tooltip": "حفظ التغييرات لإكمالها لاحقًا",
+    "error": "خطأ في عملية الحفظ"
+  },
+  "statusUpdate": {
+    "text": "تحديث الحالة",
+    "tooltip": "عرض الحالة الحالية والتحديثات على الفاتورة",
+    "error": "خطأ في عرض الحالة"
+  },
+  "rfi": {
+    "text": "طلب معلومات (RFI)",
+    "tooltip": "",
+    "error": ""
+  },
+  "downloadReport": {
+    "text": "تنزيل التقرير",
+    "tooltip": "تنزيل تقرير الفاتورة اللوجستية",
+    "error": "فشل التنزيل"
+  },
+  "emailReport": {
+    "text": "إرسال التقرير عبر البريد الإلكتروني",
+    "tooltip": "إرسال تقرير الفواتير اللوجستية عبر البريد الإلكتروني",
+    "error": "فشل البريد الإلكتروني"
+  },
+  "invoiceNumberSAP": {
+    "text": "رقم الفاتورة (SAP)",
+    "tooltip": "مرجع فريد لإشعار الدفع",
+    "error": "رقم المستند المرجعي غير صالح"
+  },
+  "paymentStatus": {
+    "text": "حالة السداد",
+    "tooltip": "الحالة الحالية لإشعار الدفع",
+    "error": "خطأ في تحديث الحالة"
+  },
+  "paymentAdvice": {
+    "text": "إشعار الدفع",
+    "tooltip": "رابط إلى نصيحة الدفع",
+    "error": ""
+  },
+  "next": "التالي",
+  "save": "حفظ",
+  "invoiceNo": "رقم الفاتورة",
+  "date": "التاريخ",
+  "referenceNo": "الرقم المرجعي",
+  "uploadedInvoiceFile": "الملف المرفوع للفاتورة",
+  "invoiceList": "قائمة الفواتير",
+  "invoiceProcessingNonPoBased": "معالجة الفواتير غير المعتمدة على أوامر شراء",
+  "enterReferenceNo": "أدخل رقم المرجع",
+  "selectContact": "اختر جهة الاتصال",
+  "selectCategory": "اختر الفئة",
+  "selectTaxRate": "اختر نسبة الضريبة",
+  "example90Days": "مثال: ٩٠ يومًا",
+  "selectAttachmentType": "اختر نوع المرفق",
+  "draft": "مسودة",
+  "invoicePreview": "معاينة الفاتورة",
+  "logisticsInvoiceList": "قائمة فواتير الخدمات اللوجستية",
+  "searchInvoiceReference": "ابحث عن الفاتورة والمرجع",
+  "downloadLogisticsTemplate": "تحميل نموذج لوجستي",
+  "serialNo": "رقم تسلسلي",
+  "totalAmount": "المبلغ الإجمالي",
+  "invoiceCreated": "تم إنشاء الفاتورة",
+  "bulkApprove": " الموافقة",
+  "bulkReject": "رفض",
+  "areYouSureWantToApproveThis": "هل أنت متأكد أنك تريد الموافقة على هذا؟",
+  "bulkApprovalSuccessfully": "تمت الموافقة على فواتير الخدمات اللوجستية بنجاح.",
+  "bulkRejectionSuccessfully": "تم رفض فواتير الخدمات اللوجستية بنجاح.",
+  "invoiceApproved": "تمت الموافقة على الفاتورة",
+  "invoiceRejected": "تم رفض الفاتورة",
+  "uploadXlsOnly": "ارفع ملف الاستيراد بصيغة .xls فقط",
+  "logisticsInvoicePreview": "معاينة فاتورة الخدمات اللوجستية",
+  "uploadedXlsFile": "تم رفع ملف xls",
+  "noFileUploaded": "لم يتم رفع أي ملف",
+  "uploadedZipFile": "تم رفع ملف zip",
+  "notSpecified": "غير محدد",
+  "amount": "المبلغ",
+  "paymentDueDate": "تاريخ استحقاق الدفع",
+  "invoiceRefNo": "رقم مرجع الفاتورة",
+ "totalTax": "إجمالي الضريبة",
+ "poBasedInvoiceListPdf": "قائمة الفواتير المعتمدة على أوامر شراء.pdf",
+"nonPoBasedInvoiceListPdf": "قائمة الفواتير غير المعتمدة على أوامر شراء.pdf",
+"fileUploadRequired": "مطلوب تحميل الملف",
+"approvedSuccessfully": "تمت الموافقة بنجاح.",
+"logisticsInvoiceApprovedSuccessfully": "تمت الموافقة على فاتورة الخدمات اللوجستية بنجاح.",
+"logisticsInvoiceRejected": "تم رفض فاتورة الخدمات اللوجستية.",
+"uploadedXLSXFile": "ملف XLSX المحمّل",
+"costResponsibleRequired": "مطلوب مسؤول التكلفة",
+"uploadedInvoiceFiles": "ملفات الفواتير المحملة",
+"invoiceNumber": "رقم الفاتورة",
+"invoiceDateRequired": "تاريخ الفاتورة مطلوب",
+"invoiceValueRequired": "قيمة الفاتورة مطلوبة",
+"importZipFile": "استيراد ملف مضغوط",
+"accDocumentNo": "الوثيقة المحاسبية رقم",
+"pendingForApproval":"قيد الانتظار للموافقة",
+"searchInvoiceForAdmin": "ابحث عن رقم الفاتورة، اسم البائع/الرمز",
+"invoiceFile": "ملف الفاتورة",
+"areYouSureWantToApproveThisInvoice": "هل أنت متأكد أنك تريد الموافقة على هذه الفاتورة؟"
+}

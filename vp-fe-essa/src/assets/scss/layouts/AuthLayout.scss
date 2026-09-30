@@ -1,0 +1,144 @@
+@import '../abstracts/abstracts.scss';
+
+.auth-layout-container {
+  padding: 20px 70px;
+  // display: flex;
+  // align-items: center;
+  // background: $primary-color;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  overflow-x: hidden; // Prevent horizontal scrolling
+
+  // Use mask-image to allow SVG to use brand colors dynamically
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%; // Center relative to viewport
+    transform: translateX(-50%); // Center the element
+    width: 100vw; // Full viewport width
+    height: 50%; // Responsive height that scales with container
+    min-height: 364px; // Minimum height to match SVG
+    max-height: 600px; // Maximum height for very large screens
+    background-color: var(--brand-primary-color, $primary-color);
+    mask-image: url('../../images/bg-bottom-img.svg');
+    -webkit-mask-image: url('../../images/bg-bottom-img.svg');
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-size: cover; // Changed from contain to cover to fill width
+    -webkit-mask-size: cover;
+    mask-position: bottom center;
+    -webkit-mask-position: bottom center;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  min-height: 100dvh;
+  // min-width: 1300px;
+  // align-content: baseline;
+  // height: auto;
+  height: clamp(725px, 100dvh, 1800px);
+  // height: 100vh;
+
+  .auth-layout-content {
+    // padding: 25px 50px;
+
+    .auth-layout-logo {
+      width: 147px;
+      height: auto;
+      max-width: 100%;
+      display: block;
+    }
+
+    .daikin-text {
+      @include fontCustomStyle(24px, 500, var(--brand-primary-color, $primary-color), 2rem);
+      // [dir='rtl'] & {
+      //   padding-left: 5rem;
+      // }
+      // [dir='ltr'] & {
+      //   padding-right: 5rem;
+      // }
+
+      padding-top: 1.2rem;
+    }
+  }
+
+  .bg-img {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: -webkit-fill-available;
+    z-index: 2; // Ensure footer is above the background
+
+    .footer-left-content ul {
+      display: flex;
+      gap: 15px;
+      padding: 0 10px;
+      margin-bottom: 10px;
+    }
+
+    .footer-left-content ul li {
+      @include fontCustomStyle(0.9rem, 400, #ffffff, 28px);
+    }
+
+    .footer-item {
+      text-decoration: none;
+      @include fontCustomStyle(0.9rem, 400, #ffffff, 28px);
+      color: #ffffff !important;
+
+    }
+
+    .footer-right-content ul {
+      display: flex;
+      gap: 15px;
+      padding: 0 10px;
+      margin-bottom: 10px;
+    }
+
+    .footer-right-content {
+      @include fontCustomStyle(0.9rem, 400, #ffffff, 28px);
+    }
+
+    .footer-right-content img {
+      width: 20px;
+      height: 20px;
+      align-self: center;
+    }
+  }
+
+  .footer-container ul li:nth-of-type(1) {
+    @include fontCustomStyle(0.9rem, 400, #ffffff, 28px);
+  }
+
+  @media screen and (max-width: 1023px) {
+    padding: 35px;
+    height: auto;
+    min-height: 100vh;
+
+    // Background already uses 100vw, no adjustment needed
+  }
+
+  &.auth-layout--centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    padding: 24px;
+    height: 100dvh;
+    min-height: 100dvh;
+
+    &::after {
+      display: none;
+    }
+  }
+}

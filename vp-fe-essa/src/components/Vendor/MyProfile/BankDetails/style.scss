@@ -1,0 +1,58 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.bt-container {
+  box-shadow: 0px 0px 4px 0px #00000040;
+  padding: 30px;
+  border-radius: 10px;
+
+  .bt-details {
+    display: flex;
+    justify-content: space-between;
+
+    .bank-fields {
+      display: flex;
+      gap: 5rem;
+    }
+
+    .bank-fields>div {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .bank-fields div:nth-of-type(1) label {
+      @include fontCustomStyle(1rem, 600, #333333, 17px);
+      font-size: 1rem !important;
+    }
+
+    .bank-fields div:nth-of-type(2) label {
+      @include fontCustomStyle(1rem, 600, #6c6c6c, 17px);
+      font-size: 1rem !important;
+    }
+  }
+
+  .edit-link {
+    @include fontCustomStyle(14px, 400, "", 17px);
+  }
+
+  .edit-link a {
+    @include fontCustomStyle(14px, 700, var(--brand-primary-color, $primary-color), 17px);
+  }
+}
+.verticalDivider {
+  padding-right: 10px;
+  border-right: 1px solid #929398;
+}
+
+.verticalDividerArabic {
+  padding-right: 10px;
+  border-left: 1px solid #929398;
+}
+.dataValue{
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+.headerTitle {
+  @include fontCustomStyle(16px, 600, var(--brand-primary-color, $primary-color), 19px);
+}

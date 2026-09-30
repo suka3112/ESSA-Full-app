@@ -1,0 +1,27 @@
+{
+  "invoiceTypeCode": "MANPOWER_SERVICES",
+  "failOnMissingExtract": false,
+  "recordsByPo": {
+    "4203000472": {
+      "INV_NO": "FILL_FROM_OCR",
+      "INV_DATE": "FILL_FROM_OCR",
+      "VENDOR_CODE": "30000956",
+      "VENDOR_NAME": "PT AMANAH LESTARI ENERGY",
+      "PO_NUMBER": "4203000472",
+      "CURRENCY": "Rp",
+      "GROSS_AMT": "FILL_FROM_OCR",
+      "TAX_AMT": "FILL_FROM_OCR",
+      "NET_AMT": "FILL_FROM_OCR",
+      "DUE_DATE": "FILL_FROM_OCR",
+      "TAX_CODE": "FILL_FROM_OCR",
+      "COMPANY_CODE": "1000",
+      "COST_CENTER": "FILL_FROM_OCR",
+      "GL_ACCOUNT": "FILL_FROM_OCR",
+      "PAYMENT_TERM": ["30", "0001"],
+      "BANK_ACCOUNT": "1510010173695",
+      "BANK_KEY": "FILL_FROM_OCR",
+      "WHT_AMT": "FILL_FROM_OCR",
+      "SES_NO": "8000002266"
+    }
+  }
+}

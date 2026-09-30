@@ -1,0 +1,129 @@
+{
+  "createInquiry": {
+    "text": "إنشاء طلب إستعلام",
+    "tooltip": "",
+    "error": ""
+  },
+  "inquiryType": {
+    "text": "نوع الإستعلام",
+    "tooltip": "اختر طبيعة الاستعلام",
+    "error": "نوع الاستعلام غير محدد",
+    "default": "عام"
+  },
+  "assignedContactPerson": {
+    "text": "الشخص المعين للتواصل",
+    "tooltip": "الشخص المعين لهذا الاستعلام",
+    "error": "لم يتم تحديد شخص للتواصل",
+    "default": "يتم تعبئته تلقائيًا بناءً على نوع الاستعلام"
+  },
+  "inquiryDescription": {
+    "text": "وصف الإستعلام",
+    "tooltip": "عرض الوصف",
+    "error": "وصف الاستعلام مطلوب"
+  },
+  "attachmentType": {
+    "text": "فئة المرفق",
+    "tooltip": "اختر نوع المستند",
+    "error": ""
+  },
+  "uploadSupportingDoc": {
+    "text": "تحميل المستندات الداعمة",
+    "tooltip": "رفع المستند المرفق",
+    "error": ""
+  },
+  "inquirySubmissionDate": {
+    "text": "تاريخ تقديم الاستعلام",
+    "tooltip": "تاريخ تقديم الاستعلام",
+    "error": "خطأ في نمط التاريخ",
+    "default": "يتم تعبئته تلقائيًا عند الإرسال"
+  },
+  "submit": {
+    "text": "إرسال",
+    "tooltip": "",
+    "error": "",
+    "default": "سيتم إرسال الاستعلام"
+  },
+  "viewInquiryHistory": {
+    "text": "عرض تاريخ الاستعلامات",
+    "tooltip": "عرض التاريخ الكامل للاستعلام",
+    "error": "خطأ في استرجاع التاريخ",
+    "default": "رابط بناءً على سجل الاستعلام"
+  },
+  "inquiryStatus": {
+    "text": "حالة طلب الاستعلام",
+    "tooltip": "الحالة الحالية للاستعلام",
+    "error": "خطأ في تحديث الحالة",
+    "default": "الإعداد الافتراضي من الحالة السابقة"
+  },
+  "requestForUpdate": {
+    "text": "طلب معلومات محدثة",
+    "tooltip": "طلب تحديث تفاصيل الاستعلام",
+    "error": "خطأ في طلب التحديث"
+  },
+  "followUpRequest": {
+    "text": "طلب متابعة",
+    "tooltip": "طلب متابعة لهذا الاستعلام",
+    "error": "خطأ في طلب المتابعة"
+  },
+  "downloadInquiryReport": {
+    "text": "تحميل تقرير الاستعلام",
+    "tooltip": "تحميل تقرير الاستعلام",
+    "error": "فشل التنزيل"
+  },
+  "emailReport": {
+    "text": "إرسال التقرير عبر البريد الإلكتروني",
+    "tooltip": "إرسال تقرير الاستعلام عبر البريد الإلكتروني",
+    "error": "فشل في إرسال البريد الإلكتروني"
+  },
+  "responseFromDaikin": {
+    "text": "الرد (من دايكن)",
+    "tooltip": "عرض الرد من دايكن",
+    "error": ""
+  },
+  "subject": {
+    "text": "الموضوع",
+    "tooltip": "أدخل الموضوع",
+    "error": "الموضوع مطلوب"
+  },
+  "date": "التاريخ",
+  "selectDate": "اختر التاريخ",
+  "sendReport": "إرسال التقرير",
+  "enquiries": "الاستفسارات",
+  "searchEnquiryIdAndSubject": "بحث عن معرف الاستفسار والموضوع",
+  "searchEnquiryIdAndSubjectVendorName":"البحث عن معرف الاستفسار واسم المورّد والموضوع",
+  "status": "الحالة",
+  "createEnquiries": "إنشاء استفسارات",
+  "writeHere": "اكتب هنا",
+  "selectNatureOfEnquiry": "اختر نوع الاستفسار",
+  "subjectRequired": "الموضوع مطلوب",
+  "enquiryDescriptionRequired": "وصف الاستفسار مطلوب",
+  "followUp": "متابعة",
+  "followUpSent": "تم إرسال المتابعة",
+  "resolvedDate": "تاريخ الإغلاق",
+  "supportingFile": "ملف داعم",
+  "enquiryDescription": "وصف الاستفسار",
+  "response": "الرد",
+  "updatedSuccessfully": "تم التحديث بنجاح",
+  "enquiryUpdatedSuccessfully": "تم تحديث الاستفسار بنجاح",
+  "createdSuccessfully": "تم الإنشاء بنجاح",
+  "newEnquiryCreatedSuccessfully": "تم إنشاء استفسار جديد بنجاح",
+  "assignedPerson": "الشخص المعين",
+  "enquiryID": "رقم الاستفسار",
+  "resolved": "تم الحل",
+  "failedToLoadDetails": "فشل تحميل تفاصيل الاستعلام",
+  "responseSentSuccesfully": "تم إرسال الرد بنجاح",
+  "failedToSendResponse": "فشل في إرسال الرد",
+  "enquiryStatusUpdatedSuccess": "تم تحديث حالة الاستفسار بنجاح",
+  "failedToUpdateStatus": "فشل تحديث حالة الاستعلام",
+  "noResponseFound": "لم يتم العثور على ردود",
+  "submittedSuccessfully": "تم تقديم الاستفسار بنجاح!",
+  "writeLessNoOfCharacters": "الرجاء الكتابة أقل من 2000 حرف",
+  "select": "يختار",
+  "comments": "تعليقات",
+  "message": "رسالة",
+  "enquiryStatus": "حالة الاستفسار",
+  "selectStatus": "حدد الحالة",
+  "searchEnquiryId": "البحث عن معرف الاستفسار",
+  "email": "بريد إلكتروني",
+  "bankData": "بيانات البنك"
+}

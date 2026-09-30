@@ -1,0 +1,4998 @@
+{
+  "status": 200,
+  "message": "Document extracted and classified successfully",
+  "data": {
+    "classification": {
+      "totalPages": 47,
+      "method": "ai+vision",
+      "categories": [
+        {
+          "categoryId": "kwitansi",
+          "categoryLabel": "Kwitansi",
+          "pageCount": 1
+        },
+        {
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "pageCount": 1
+        },
+        {
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Faktur Pajak",
+          "pageCount": 1
+        },
+        {
+          "categoryId": "berita_acara",
+          "categoryLabel": "Berita Acara",
+          "pageCount": 1
+        },
+        {
+          "categoryId": "summary_of_claim",
+          "categoryLabel": "Summary Of Claim",
+          "pageCount": 2
+        },
+        {
+          "categoryId": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour",
+          "pageCount": 3
+        },
+        {
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Timesheet",
+          "pageCount": 24
+        },
+        {
+          "categoryId": "face_finger",
+          "categoryLabel": "Face Finger",
+          "pageCount": 1
+        },
+        {
+          "categoryId": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "pageCount": 2
+        },
+        {
+          "categoryId": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "pageCount": 11
+        }
+      ],
+      "documents": [
+        {
+          "documentIndex": 0,
+          "categoryId": "kwitansi",
+          "categoryLabel": "Receipt (Kwitansi)",
+          "pages": [1],
+          "startPage": 1,
+          "endPage": 1,
+          "pageCount": 1,
+          "confidence": 0.95,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 1,
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "pages": [2],
+          "startPage": 2,
+          "endPage": 2,
+          "pageCount": 1,
+          "confidence": 0.95,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 2,
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Tax Invoice (Faktur Pajak)",
+          "pages": [3],
+          "startPage": 3,
+          "endPage": 3,
+          "pageCount": 1,
+          "confidence": 0.98,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 3,
+          "categoryId": "berita_acara",
+          "categoryLabel": "Work Progress Certificate (Berita Acara)",
+          "pages": [4],
+          "startPage": 4,
+          "endPage": 4,
+          "pageCount": 1,
+          "confidence": 0.92,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 4,
+          "categoryId": "summary_of_claim",
+          "categoryLabel": "Summary of Claim",
+          "pages": [5, 6],
+          "startPage": 5,
+          "endPage": 6,
+          "pageCount": 2,
+          "confidence": 0.86,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 5,
+          "categoryId": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour",
+          "pages": [7],
+          "startPage": 7,
+          "endPage": 7,
+          "pageCount": 1,
+          "confidence": 0.93,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 6,
+          "categoryId": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour and Claim",
+          "pages": [8],
+          "startPage": 8,
+          "endPage": 8,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 7,
+          "categoryId": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Overtime / Claim",
+          "pages": [9],
+          "startPage": 9,
+          "endPage": 9,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 8,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "pages": [10],
+          "startPage": 10,
+          "endPage": 10,
+          "pageCount": 1,
+          "confidence": 0.92,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 9,
+          "categoryId": "face_finger",
+          "categoryLabel": "Face/Fingerprint Attendance Log",
+          "pages": [11],
+          "startPage": 11,
+          "endPage": 11,
+          "pageCount": 1,
+          "confidence": 0.92,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 10,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "pages": [12],
+          "startPage": 12,
+          "endPage": 12,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 11,
+          "categoryId": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "pages": [13],
+          "startPage": 13,
+          "endPage": 13,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 12,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "pages": [14],
+          "startPage": 14,
+          "endPage": 14,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 13,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "pages": [15],
+          "startPage": 15,
+          "endPage": 15,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 14,
+          "categoryId": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "pages": [16],
+          "startPage": 16,
+          "endPage": 16,
+          "pageCount": 1,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 15,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (handwritten) - employee timesheet",
+          "pages": [17, 18, 19, 20, 21],
+          "startPage": 17,
+          "endPage": 21,
+          "pageCount": 5,
+          "confidence": 0.86,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 16,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet - Lukman Umpel",
+          "pages": [22, 23, 24],
+          "startPage": 22,
+          "endPage": 24,
+          "pageCount": 3,
+          "confidence": 0.84,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 17,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "pages": [25, 26, 27],
+          "startPage": 25,
+          "endPage": 27,
+          "pageCount": 3,
+          "confidence": 0.89,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 18,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "pages": [28, 29, 30, 31],
+          "startPage": 28,
+          "endPage": 31,
+          "pageCount": 4,
+          "confidence": 0.88,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 19,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "pages": [32, 33, 34, 35, 36],
+          "startPage": 32,
+          "endPage": 36,
+          "pageCount": 5,
+          "confidence": 0.88,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 20,
+          "categoryId": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "pages": [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+          "startPage": 37,
+          "endPage": 47,
+          "pageCount": 11,
+          "confidence": 0.94,
+          "methods": ["vision"]
+        }
+      ],
+      "categoryGroups": [
+        {
+          "documentIndex": 0,
+          "categoryId": "kwitansi",
+          "categoryLabel": "Kwitansi",
+          "pages": [1],
+          "startPage": 1,
+          "endPage": 1,
+          "pageCount": 1,
+          "confidence": 0.95,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 1,
+          "categoryId": "invoice",
+          "categoryLabel": "Invoice",
+          "pages": [2],
+          "startPage": 2,
+          "endPage": 2,
+          "pageCount": 1,
+          "confidence": 0.95,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 2,
+          "categoryId": "faktur_pajak",
+          "categoryLabel": "Faktur Pajak",
+          "pages": [3],
+          "startPage": 3,
+          "endPage": 3,
+          "pageCount": 1,
+          "confidence": 0.98,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 3,
+          "categoryId": "berita_acara",
+          "categoryLabel": "Berita Acara",
+          "pages": [4],
+          "startPage": 4,
+          "endPage": 4,
+          "pageCount": 1,
+          "confidence": 0.92,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 4,
+          "categoryId": "summary_of_claim",
+          "categoryLabel": "Summary Of Claim",
+          "pages": [5, 6],
+          "startPage": 5,
+          "endPage": 6,
+          "pageCount": 2,
+          "confidence": 0.86,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 5,
+          "categoryId": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour",
+          "pages": [7, 8, 9],
+          "startPage": 7,
+          "endPage": 9,
+          "pageCount": 3,
+          "confidence": 0.91,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 6,
+          "categoryId": "daily_timesheet",
+          "categoryLabel": "Daily Timesheet",
+          "pages": [
+            10, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+            30, 31, 32, 33, 34, 35, 36
+          ],
+          "startPage": 10,
+          "endPage": 36,
+          "pageCount": 24,
+          "confidence": 0.88,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 7,
+          "categoryId": "face_finger",
+          "categoryLabel": "Face Finger",
+          "pages": [11],
+          "startPage": 11,
+          "endPage": 11,
+          "pageCount": 1,
+          "confidence": 0.92,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 8,
+          "categoryId": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "pages": [13, 16],
+          "startPage": 13,
+          "endPage": 16,
+          "pageCount": 2,
+          "confidence": 0.9,
+          "methods": ["vision"]
+        },
+        {
+          "documentIndex": 9,
+          "categoryId": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "pages": [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+          "startPage": 37,
+          "endPage": 47,
+          "pageCount": 11,
+          "confidence": 0.94,
+          "methods": ["vision"]
+        }
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "documentType": "kwitansi",
+          "categoryLabel": "Receipt (Kwitansi)",
+          "confidence": 0.95,
+          "isDocumentStart": true,
+          "documentIndex": 0,
+          "method": "vision"
+        },
+        {
+          "page": 2,
+          "documentType": "invoice",
+          "categoryLabel": "Invoice",
+          "confidence": 0.95,
+          "isDocumentStart": true,
+          "documentIndex": 1,
+          "method": "vision"
+        },
+        {
+          "page": 3,
+          "documentType": "faktur_pajak",
+          "categoryLabel": "Tax Invoice (Faktur Pajak)",
+          "confidence": 0.98,
+          "isDocumentStart": true,
+          "documentIndex": 2,
+          "method": "vision"
+        },
+        {
+          "page": 4,
+          "documentType": "berita_acara",
+          "categoryLabel": "Work Progress Certificate (Berita Acara)",
+          "confidence": 0.92,
+          "isDocumentStart": true,
+          "documentIndex": 3,
+          "method": "vision"
+        },
+        {
+          "page": 5,
+          "documentType": "summary_of_claim",
+          "categoryLabel": "Summary of Claim",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 4,
+          "method": "vision"
+        },
+        {
+          "page": 6,
+          "documentType": "summary_of_claim",
+          "categoryLabel": "Summary of Claim",
+          "confidence": 0.82,
+          "isDocumentStart": false,
+          "documentIndex": 4,
+          "method": "vision"
+        },
+        {
+          "page": 7,
+          "documentType": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour",
+          "confidence": 0.93,
+          "isDocumentStart": true,
+          "documentIndex": 5,
+          "method": "vision"
+        },
+        {
+          "page": 8,
+          "documentType": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour and Claim",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 6,
+          "method": "vision"
+        },
+        {
+          "page": 9,
+          "documentType": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Overtime / Claim",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 7,
+          "method": "vision"
+        },
+        {
+          "page": 10,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "confidence": 0.92,
+          "isDocumentStart": true,
+          "documentIndex": 8,
+          "method": "vision"
+        },
+        {
+          "page": 11,
+          "documentType": "face_finger",
+          "categoryLabel": "Face/Fingerprint Attendance Log",
+          "confidence": 0.92,
+          "isDocumentStart": true,
+          "documentIndex": 9,
+          "method": "vision"
+        },
+        {
+          "page": 12,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 10,
+          "method": "vision"
+        },
+        {
+          "page": 13,
+          "documentType": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 11,
+          "method": "vision"
+        },
+        {
+          "page": 14,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 12,
+          "method": "vision"
+        },
+        {
+          "page": 15,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Time Sheet / Daily Timesheet",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 13,
+          "method": "vision"
+        },
+        {
+          "page": 16,
+          "documentType": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 14,
+          "method": "vision"
+        },
+        {
+          "page": 17,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (handwritten) - employee timesheet",
+          "confidence": 0.9,
+          "isDocumentStart": true,
+          "documentIndex": 15,
+          "method": "vision"
+        },
+        {
+          "page": 18,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (continuation)",
+          "confidence": 0.85,
+          "isDocumentStart": false,
+          "documentIndex": 15,
+          "method": "vision"
+        },
+        {
+          "page": 19,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (continuation)",
+          "confidence": 0.85,
+          "isDocumentStart": false,
+          "documentIndex": 15,
+          "method": "vision"
+        },
+        {
+          "page": 20,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (continuation)",
+          "confidence": 0.85,
+          "isDocumentStart": false,
+          "documentIndex": 15,
+          "method": "vision"
+        },
+        {
+          "page": 21,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (continuation)",
+          "confidence": 0.85,
+          "isDocumentStart": false,
+          "documentIndex": 15,
+          "method": "vision"
+        },
+        {
+          "page": 22,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet - Lukman Umpel",
+          "confidence": 0.88,
+          "isDocumentStart": true,
+          "documentIndex": 16,
+          "method": "vision"
+        },
+        {
+          "page": 23,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (continuation)",
+          "confidence": 0.82,
+          "isDocumentStart": false,
+          "documentIndex": 16,
+          "method": "vision"
+        },
+        {
+          "page": 24,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet (continuation)",
+          "confidence": 0.82,
+          "isDocumentStart": false,
+          "documentIndex": 16,
+          "method": "vision"
+        },
+        {
+          "page": 25,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.92,
+          "isDocumentStart": true,
+          "documentIndex": 17,
+          "method": "vision"
+        },
+        {
+          "page": 26,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.88,
+          "isDocumentStart": false,
+          "documentIndex": 17,
+          "method": "vision"
+        },
+        {
+          "page": 27,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.87,
+          "isDocumentStart": false,
+          "documentIndex": 17,
+          "method": "vision"
+        },
+        {
+          "page": 28,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.91,
+          "isDocumentStart": true,
+          "documentIndex": 18,
+          "method": "vision"
+        },
+        {
+          "page": 29,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.88,
+          "isDocumentStart": false,
+          "documentIndex": 18,
+          "method": "vision"
+        },
+        {
+          "page": 30,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.87,
+          "isDocumentStart": false,
+          "documentIndex": 18,
+          "method": "vision"
+        },
+        {
+          "page": 31,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.86,
+          "isDocumentStart": false,
+          "documentIndex": 18,
+          "method": "vision"
+        },
+        {
+          "page": 32,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.92,
+          "isDocumentStart": true,
+          "documentIndex": 19,
+          "method": "vision"
+        },
+        {
+          "page": 33,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.88,
+          "isDocumentStart": false,
+          "documentIndex": 19,
+          "method": "vision"
+        },
+        {
+          "page": 34,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.87,
+          "isDocumentStart": false,
+          "documentIndex": 19,
+          "method": "vision"
+        },
+        {
+          "page": 35,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.87,
+          "isDocumentStart": false,
+          "documentIndex": 19,
+          "method": "vision"
+        },
+        {
+          "page": 36,
+          "documentType": "daily_timesheet",
+          "categoryLabel": "Daily Time Sheet",
+          "confidence": 0.86,
+          "isDocumentStart": false,
+          "documentIndex": 19,
+          "method": "vision"
+        },
+        {
+          "page": 37,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.97,
+          "isDocumentStart": true,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 38,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.95,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 39,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.95,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 40,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 41,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 42,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 43,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 44,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 45,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 46,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        },
+        {
+          "page": 47,
+          "documentType": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "confidence": 0.94,
+          "isDocumentStart": false,
+          "documentIndex": 20,
+          "method": "vision"
+        }
+      ]
+    },
+    "split": {
+      "uploadId": "upload_20260617_7900",
+      "uploadPath": "uploads/upload_20260617_7900",
+      "metadataPath": "uploads/upload_20260617_7900/metadata.json",
+      "sections": [
+        {
+          "sectionIndex": 1,
+          "documentName": "kwitansi",
+          "categoryLabel": "Kwitansi",
+          "startPage": 1,
+          "endPage": 1,
+          "pageCount": 1,
+          "pages": [1],
+          "pdfPath": "uploads/upload_20260617_7900/section_1_kwitansi.pdf"
+        },
+        {
+          "sectionIndex": 2,
+          "documentName": "invoice",
+          "categoryLabel": "Invoice",
+          "startPage": 2,
+          "endPage": 2,
+          "pageCount": 1,
+          "pages": [2],
+          "pdfPath": "uploads/upload_20260617_7900/section_2_invoice.pdf"
+        },
+        {
+          "sectionIndex": 3,
+          "documentName": "faktur_pajak",
+          "categoryLabel": "Faktur Pajak",
+          "startPage": 3,
+          "endPage": 3,
+          "pageCount": 1,
+          "pages": [3],
+          "pdfPath": "uploads/upload_20260617_7900/section_3_faktur_pajak.pdf"
+        },
+        {
+          "sectionIndex": 4,
+          "documentName": "berita_acara",
+          "categoryLabel": "Berita Acara",
+          "startPage": 4,
+          "endPage": 4,
+          "pageCount": 1,
+          "pages": [4],
+          "pdfPath": "uploads/upload_20260617_7900/section_4_berita_acara.pdf"
+        },
+        {
+          "sectionIndex": 5,
+          "documentName": "summary_of_claim",
+          "categoryLabel": "Summary Of Claim",
+          "startPage": 5,
+          "endPage": 6,
+          "pageCount": 2,
+          "pages": [5, 6],
+          "pdfPath": "uploads/upload_20260617_7900/section_5_summary_of_claim.pdf"
+        },
+        {
+          "sectionIndex": 6,
+          "documentName": "summary_calculation_manhour",
+          "categoryLabel": "Summary Calculation Manhour",
+          "startPage": 7,
+          "endPage": 9,
+          "pageCount": 3,
+          "pages": [7, 8, 9],
+          "pdfPath": "uploads/upload_20260617_7900/section_6_summary_calculation_manhour.pdf"
+        },
+        {
+          "sectionIndex": 7,
+          "documentName": "daily_timesheet",
+          "categoryLabel": "Daily Timesheet",
+          "startPage": 10,
+          "endPage": 36,
+          "pageCount": 24,
+          "pages": [
+            10, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+            30, 31, 32, 33, 34, 35, 36
+          ],
+          "pdfPath": "uploads/upload_20260617_7900/section_7_daily_timesheet.pdf"
+        },
+        {
+          "sectionIndex": 8,
+          "documentName": "face_finger",
+          "categoryLabel": "Face Finger",
+          "startPage": 11,
+          "endPage": 11,
+          "pageCount": 1,
+          "pages": [11],
+          "pdfPath": "uploads/upload_20260617_7900/section_8_face_finger.pdf"
+        },
+        {
+          "sectionIndex": 9,
+          "documentName": "fabrication_report",
+          "categoryLabel": "Fabrication Report",
+          "startPage": 13,
+          "endPage": 16,
+          "pageCount": 2,
+          "pages": [13, 16],
+          "pdfPath": "uploads/upload_20260617_7900/section_9_fabrication_report.pdf"
+        },
+        {
+          "sectionIndex": 10,
+          "documentName": "purchase_order",
+          "categoryLabel": "Purchase Order",
+          "startPage": 37,
+          "endPage": 47,
+          "pageCount": 11,
+          "pages": [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+          "pdfPath": "uploads/upload_20260617_7900/section_10_purchase_order.pdf"
+        }
+      ]
+    },
+    "documents": [
+      {
+        "type": "kwitansi",
+        "pdfPath": "uploads/upload_20260617_7900/section_1_kwitansi.pdf",
+        "data": {
+          "documentTypeLabel": "Kwitansi",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Kwitansi",
+          "pages": [
+            {
+              "page": 1,
+              "text": "No.: 568/PT.ALE-PAU/04/2026\nKWITANSI\nSudah Terima Dari : PT. PANCA AMARA UTAMA\nUang sebesar : Enam Puluh Satu Juta Delapan Puluh Dua Ribu Tujuh Ratus Empat Puluh Lima Rupiah\nUntuk Pembayaran : Manpower Supply For Piping Fabrication (Welder, Fitter, Pipe Fitter) PO 4203000546 Claim 10th Periode 07 March - 06 April 2026 Rp. 61.082.745\nMohon Dikirimkan Di : Bank MANDIRI Cabang Luwuk 151-00-1017369-5 PT. Amanah Lestari Energy\nDesa Padang, 22 April 2026\nSebesar : Rp. 61.082.745\n(stamps, meterai, signature)\nDITERIMA / RECEIVED - Sign & Date 23/04/26"
+            }
+          ],
+          "header": {
+            "No.": "568/PT.ALE-PAU/04/2026",
+            "Tanggal/Tempat": "Desa Padang, 22 April 2026",
+            "Sudah Terima Dari": "PT. PANCA AMARA UTAMA",
+            "Uang sebesar (terbilang)": "Enam Puluh Satu Juta Delapan Puluh Dua Ribu Tujuh Ratus Empat Puluh Lima Rupiah",
+            "Jumlah (angka)": "Rp. 61.082.745",
+            "Untuk Pembayaran": "Manpower Supply For Piping Fabrication (Welder, Fitter, Pipe Fitter) PO 4203000546 Claim 10th Periode 07 March - 06 April 2026",
+            "Mohon Dikirimkan Di": "Bank MANDIRI Cabang Luwuk 151-00-1017369-5 PT. Amanah Lestari Energy"
+          },
+          "lineItems": [],
+          "fields": [
+            {
+              "name": "Sebesar",
+              "value": "Rp. 61.082.745"
+            },
+            {
+              "name": "Meterai",
+              "value": "METERAI TEMPEL FEB04DN32533301"
+            },
+            {
+              "name": "Tanda Tangan (nama tercetak)",
+              "value": "MEIRWIN H BABO"
+            },
+            {
+              "name": "Cap/Stempel diterima",
+              "value": "DITERIMA / RECEIVED - Sign & Date 23/04/26"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "summary": "Receipt (Kwitansi) dated 22 April 2026 acknowledging payment of Rp. 61.082.745 from PT. PANCA AMARA UTAMA for manpower supply, with bank details for PT. Amanah Lestari Energy.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "invoice",
+        "pdfPath": "uploads/upload_20260617_7900/section_2_invoice.pdf",
+        "data": {
+          "documentTypeLabel": "Invoice",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Invoice",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "text": "PT. AMANAH LESTARI ENERGY\nJOB NO : A-509\nMESSRS : PT. PANCA AMADA UTAMA\nGd. DBS Bank Tower Lt.18\nCiputra World 1\nJakarta Selatan 12940 Indonesia\nATTENTION : Kanish Laroya (Director & Chief Project Officer)\nINVOICE NO : /SBY/FT.SAL-PAU/04/04/2025\nDATE : 22/04/2025\nPAYMENT TERM : 30 Days From Invoice Date\n\nINVOICE\nDESCRIPTION                                      AMOUNT (IDR)\nMANPOWER SUPPLY FOR PIPING FABRICATION (Welder, Fitter and Helper)\n10th Claim for 07 March - 06 April 2025 Direct Cost Welder      Rp 21.099.000\n10th Claim for 07 March - 06 April 2025 Stationery, Postage, Transportation    Rp 1.130.000\n10th Claim for 07 March - 06 April 2025 Office                  Rp 1.300.000\n10th Claim for 07 March - 06 April 2025 Overhead and Profit    Rp 4.456.500\n10th Claim for 07 March - 06 April 2025 Direct Cost Fitter     Rp 15.680.000\n10th Claim for 07 March - 06 April 2025 MCU                    Rp 1.750.000\n10th Claim for 07 March - 06 April 2025 PPE                    Rp 2.883.000\n10th Claim for 07 March - 06 April 2025 Overtime Welder        Rp 3.010.000\n10th Claim for 07 March - 06 April 2025 Overtime Fitter        Rp 3.880.000\nContract Order No. PO 4030000566\nTotal                                               Rp 55.029.500\nVAT 11%                                             Rp 6.053.245\nGrand Total                                         Rp 61.082.745\nSixty One Million Eighty Two Thousand Seven Hundred and Forty Five Rupiah\nPlease remit to the following bank:\nAccount Name: PT. Amanah Lestari Energy\nBank Address: PT. Bank Mandiri (Persero) Tbk. Cabang Unguk\nBank Account: 151-00-1017369-5\n\nSigned: MERVIN H BABO (Director)"
+            }
+          ],
+          "header": {
+            "supplierName": "PT. AMANAH LESTARI ENERGY",
+            "supplierAddress": "Desa Pandan, Kec. Karang Baru, Kab. Bengkulu, Sumatera Tengah",
+            "jobNo": "A-509",
+            "messrs": "PT. PANCA AMADA UTAMA",
+            "messrsAddress": "Gd. DBS Bank Tower Lt.18 Ciputra World 1 Jakarta Selatan 12940 Indonesia",
+            "attention": "Kanish Laroya (Director & Chief Project Officer)",
+            "invoiceNo": "568/PT.ALE-PAU/04/2026",
+            "date": "22/04/2025",
+            "paymentTerm": "30 Days From Invoice Date",
+            "contractOrderNo": "PO 4030000566",
+            "total": "Rp 55.029.500",
+            "vat11%": "Rp 6.053.245",
+            "grandTotal": "Rp 61.082.745",
+            "amountInWords": "Sixty One Million Eighty Two Thousand Seven Hundred and Forty Five Rupiah",
+            "authorizedSignature": "MERVIN H BABO (Director)"
+          },
+          "lineItems": [
+            {
+              "description": "MANPOWER SUPPLY FOR PIPING FABRICATION (Welder, Fitter and Helper)",
+              "amount": null
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Direct Cost Welder",
+              "amount": "Rp 21.099.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Stationery, Postage, Transportation",
+              "amount": "Rp 1.130.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Office",
+              "amount": "Rp 1.300.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Overhead and Profit",
+              "amount": "Rp 4.456.500"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Direct Cost Fitter",
+              "amount": "Rp 15.680.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 MCU",
+              "amount": "Rp 1.750.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 PPE",
+              "amount": "Rp 2.883.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Overtime Welder",
+              "amount": "Rp 3.010.000"
+            },
+            {
+              "description": "10th Claim for 07 March - 06 April 2025 Overtime Fitter",
+              "amount": "Rp 3.880.000"
+            }
+          ],
+          "fields": [
+            {
+              "name": "Supplier NPWP / Contact (as printed)",
+              "value": null
+            },
+            {
+              "name": "Bank - Account Name",
+              "value": "PT. Amanah Lestari Energy"
+            },
+            {
+              "name": "Bank - Bank Name / Branch",
+              "value": "PT. Bank Mandiri (Persero) Tbk. Cabang Unguk"
+            },
+            {
+              "name": "Bank - Account Number",
+              "value": "151-00-1017369-5"
+            },
+            {
+              "name": "Contract Order No",
+              "value": "PO 4030000566"
+            },
+            {
+              "name": "Total (net)",
+              "value": "Rp 55.029.500"
+            },
+            {
+              "name": "VAT 11%",
+              "value": "Rp 6.053.245"
+            },
+            {
+              "name": "Grand Total",
+              "value": "Rp 61.082.745"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Invoice lines",
+              "headers": ["DESCRIPTION", "AMOUNT (IDR)"],
+              "rows": [
+                [
+                  "MANPOWER SUPPLY FOR PIPING FABRICATION (Welder, Fitter and Helper)",
+                  ""
+                ],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Direct Cost Welder",
+                  "Rp 21.099.000"
+                ],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Stationery, Postage, Transportation",
+                  "Rp 1.130.000"
+                ],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Office",
+                  "Rp 1.300.000"
+                ],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Overhead and Profit",
+                  "Rp 4.456.500"
+                ],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Direct Cost Fitter",
+                  "Rp 15.680.000"
+                ],
+                ["10th Claim for 07 March - 06 April 2025 MCU", "Rp 1.750.000"],
+                ["10th Claim for 07 March - 06 April 2025 PPE", "Rp 2.883.000"],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Overtime Welder",
+                  "Rp 3.010.000"
+                ],
+                [
+                  "10th Claim for 07 March - 06 April 2025 Overtime Fitter",
+                  "Rp 3.880.000"
+                ],
+                ["Total", "Rp 55.029.500"],
+                ["VAT 11%", "Rp 6.053.245"],
+                ["Grand Total", "Rp 61.082.745"]
+              ]
+            }
+          ],
+          "summary": "Invoice from PT. Amanah Lestari Energy to PT. Panca Amada Utama for manpower supply (piping fabrication) covering 07 March - 06 April 2025, total Rp 61.082.745 (including 11% VAT).",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "faktur_pajak",
+        "pdfPath": "uploads/upload_20260617_7900/section_3_faktur_pajak.pdf",
+        "data": {
+          "documentTypeLabel": "Faktur Pajak",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Faktur Pajak",
+          "pages": [
+            {
+              "page": 1,
+              "content": "Faktur Pajak. Nama: AMANAH LESTARI ENERGY; Alamat: DESA PADANG, KAB. BANGGAI. Kode dan Nomor Seri Faktur Pajak: 040022600142842732. Pengusaha Kena Pajak: AMANAH LESTARI ENERGY; Alamat: DESA PADANG, RT 000, RW 000, PADANG, KINTOM, KAB. BANGGAI, SULAWESI TENGAH 94761; NPWP: 0821226702832000. Pembeli: PANCA AMARA UTAMA; Alamat: GEDUNG DBS BANK TOWER LT.18 CIPUTRA WORLD 1 JAKARTA, JL. PROF. DR SATRIO KAV 3-5, RT 000, RW 000, KARET KUNINGAN, SETIABUDI, KOTA ADM. JAKARTA SELATAN, DKI JAKARTA 12940; NPWP: 0021612924011000. Item 1 (kode 180102): Manpower Supply For Piping Fabrication (Welder, Fitter, Pipe Fitter) PO 42030000546 Claim 10th Periode 07 March - 06 April 2026 — Harga 55.029.500,00. Harga Jual total 55.029.500,00; Dikurangi Potongan Harga 0,00; Dikurangi Uang Muka yang telah diterima 0,00; Dasar Pengenaan Pajak 50.443.708,00; Jumlah PPN 6.053.245,00; Jumlah PPNBM 0,00. Ditandatangani secara elektronik oleh MEIRWIN HANSTRO BABO; KAB. BANGGAI, 22 April 2026."
+            }
+          ],
+          "header": {
+            "Kode dan Nomor Seri Faktur Pajak": "040022600142842732",
+            "Pengusaha Kena Pajak - Nama": "AMANAH LESTARI ENERGY",
+            "Pengusaha Kena Pajak - Alamat": "DESA PADANG, RT 000, RW 000, PADANG, KINTOM, KAB. BANGGAI, SULAWESI TENGAH 94761",
+            "Pengusaha Kena Pajak - NPWP": "0821226702832000",
+            "Pembeli / Penerima Jasa - Nama": "PANCA AMARA UTAMA",
+            "Pembeli / Penerima Jasa - Alamat": "GEDUNG DBS BANK TOWER LT.18 CIPUTRA WORLD 1 JAKARTA, JL. PROF. DR SATRIO KAV 3-5, RT 000, RW 000, KARET KUNINGAN, SETIABUDI, KOTA ADM. JAKARTA SELATAN, DKI JAKARTA 12940",
+            "Pembeli / Penerima Jasa - NPWP": "0021612924011000",
+            "Tempat dan Tanggal Ditandatangani": "KAB. BANGGAI, 22 April 2026",
+            "Penandatangan (tertera)": "MEIRWIN HANSTRO BABO"
+          },
+          "lineItems": [
+            {
+              "no": "1",
+              "kode": "180102",
+              "nama": "Manpower Supply For Piping Fabrication (Welder, Fitter, Pipe Fitter) PO 42030000546 Claim 10th Periode 07 March - 06 April 2026 Rp 55.029.500,00 x 1,00 Bulan. Potongan Harga = Rp 0,00. PPNBM (0,00%) = Rp 0,00",
+              "harga": "55.029.500,00"
+            }
+          ],
+          "fields": [
+            {
+              "name": "Harga Jual / Penggantian / Uang Muka / Termin (total)",
+              "value": "55.029.500,00"
+            },
+            {
+              "name": "Dikurangi Potongan Harga",
+              "value": "0,00"
+            },
+            {
+              "name": "Dikurangi Uang Muka yang telah diterima",
+              "value": "0,00"
+            },
+            {
+              "name": "Dasar Pengenaan Pajak",
+              "value": "50.443.708,00"
+            },
+            {
+              "name": "Jumlah PPN (Pajak Pertambahan Nilai)",
+              "value": "6.053.245,00"
+            },
+            {
+              "name": "Jumlah PPNBM (Pajak Penjualan atas Barang Mewah)",
+              "value": "0,00"
+            },
+            {
+              "name": "Catatan tanda tangan elektronik",
+              "value": "Ditetandatangani secara elektronik"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Daftar Barang/Jasa",
+              "headers": [
+                "No.",
+                "Kode Barang/Jasa",
+                "Nama Barang Kena Pajak / Jasa Kena Pajak",
+                "Harga Jual / Penggantian / Uang Muka / Termin (Rp)"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "180102",
+                  "Manpower Supply For Piping Fabrication (Welder, Fitter, Pipe Fitter) PO 42030000546 Claim 10th Periode 07 March - 06 April 2026 Rp 55.029.500,00 x 1,00 Bulan",
+                  "55.029.500,00"
+                ]
+              ]
+            }
+          ],
+          "summary": "Faktur Pajak (tax invoice) issued by AMANAH LESTARI ENERGY to PANCA AMARA UTAMA for manpower supply (piping fabrication) showing a gross amount of 55.029.500,00, taxable base 50.443.708,00 and PPN 6.053.245,00, signed in Kab. Banggai on 22 April 2026.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "berita_acara",
+        "pdfPath": "uploads/upload_20260617_7900/section_4_berita_acara.pdf",
+        "data": {
+          "documentTypeLabel": "Berita Acara",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Berita Acara Kemajuan Pekerjaan (Work Progress Certificate)",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "lines": [
+                "PT. AMANAH LESTARI ENERGY",
+                "Desa Padang, Kec. Kintom, Kab. Banggai, Sulawesi Tengah",
+                "BERITA ACARA KEMAJUAN PEKERJAAN",
+                "WORK PROGRESS CERTIFICATE",
+                "Nomor: 10",
+                "Tanggal: 07 July 2025",
+                "Nama Proyek: Banggai Ammonia Plant",
+                "Nomor Kontrak: PO 4230000046",
+                "Paket Pekerjaan: Manpower supply for piping work",
+                "Periode Kontrak: 01 June 2025 - 31 May 2026",
+                "Progress section with percentage and man-hours (see table)"
+              ]
+            }
+          ],
+          "header": {
+            "companyName": "PT. AMANAH LESTARI ENERGY",
+            "companyAddress": "Desa Padang, Kec. Kintom, Kab. Banggai, Sulawesi Tengah",
+            "documentTitle": "BERITA ACARA KEMAJUAN PEKERJAAN / WORK PROGRESS CERTIFICATE",
+            "Nomor": "10",
+            "Tanggal": "07 July 2025",
+            "Nama Proyek": "Banggai Ammonia Plant",
+            "Nomor Kontrak": "PO 4230000046",
+            "Paket Pekerjaan": "Manpower supply for piping work",
+            "Periode Kontrak": "01 June 2025 - 31 May 2026",
+            "Lokasi Pekerjaan": null
+          },
+          "lineItems": [],
+          "fields": [
+            {
+              "name": "This Work Progress Certificate made and signed in BAP on",
+              "value": "07 - 04 - 2025"
+            },
+            {
+              "name": "Parties",
+              "value": "PT PANCA AMARA UTAMA (PAU) and PT AMANAH LESTARI ENERGY"
+            },
+            {
+              "name": "Statement (Whereas) - ALE performed the Work with the progress as follows",
+              "value": null
+            },
+            {
+              "name": "Prepared by (signature block)",
+              "value": "MERWIN H BAJO, Director (PT. AMANAH LESTARI ENERGY)"
+            },
+            {
+              "name": "Acknowledged / Reviewed by (signatures visible)",
+              "value": "Achmad Firdaus; Ruliya; Kusworo H.; Surochman Singh Gidda; Novi Ariharnomo (names as printed in signature block)"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Progress",
+              "headers": [
+                "Description",
+                "Previous Period",
+                "This Period",
+                "Cumulative"
+              ],
+              "rows": [
+                ["Progress (%)", "67.21%", "0.00%", "67.21%"],
+                ["Man hours (Hours)", "74,213", "738.00 Hours", "74,951 Hours"],
+                ["Cumulative MH / Month", null, null, "8,413.79 jam"]
+              ]
+            }
+          ],
+          "summary": "Work Progress Certificate for Banggai Ammonia Plant (PT. AMANAH LESTARI ENERGY) dated 07 July 2025 including contract PO 4230000046, manpower for piping work, and progress metrics (percent complete and man-hours).",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "summary_of_claim",
+        "pdfPath": "uploads/upload_20260617_7900/section_5_summary_of_claim.pdf",
+        "data": {
+          "documentTypeLabel": "Summary Of Claim",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Summary Of Claim - Manpower Supply",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "imageRegionText": "PT AMANAH LESTARI ENERGY\nSUMMARY OF CLAIM MANPOWER SUPPLY\n10th Manpower Supply Claim for Period 07 March - 06 April 2026\n[A left block with project/client/site info - not legible in image]\nTable columns visible: No | DESCRIPTION | Claim (%) | Manpower Claim (IDR) | Indirect Cost (IDR) | Overhead and Profit (IDR) ...\nSection A. TOTAL VALUE OF CONTRACT\nSection B. MANPOWER (blue highlighted block showing 'This Claim for 07 March - 06 April 2026' with amounts such as 21,900,000 and related indirect/overhead amounts)"
+            },
+            {
+              "pageNumber": 2,
+              "imageRegionText": "Continuation of the detailed claim table (many rows of line items and amounts)\nBottom area: totals and signatory blocks with stamps\nVisible approver name: Achmad Firdaus\nStamp/date block visible: 07 April 2026"
+            }
+          ],
+          "header": {
+            "Company": "PT AMANAH LESTARI ENERGY",
+            "DocumentTitle": "SUMMARY OF CLAIM MANPOWER SUPPLY",
+            "ClaimTitle": "10th Manpower Supply Claim for Period 07 March - 06 April 2026",
+            "ClaimPeriod": "07 March - 06 April 2026",
+            "PreparedDate": "07 April 2026"
+          },
+          "lineItems": [],
+          "fields": [
+            {
+              "name": "Section headings visible",
+              "value": "A. TOTAL VALUE OF CONTRACT; B. MANPOWER; C. PREVIOUS MANPOWER CLAIM"
+            },
+            {
+              "name": "Top table column headers (as visible)",
+              "value": "No | DESCRIPTION | Claim (%) | Manpower Claim (IDR) | Indirect Cost (IDR) | Overhead and Profit (IDR) | Other Columns (overtime/allowance, operational safety, public holiday, remark)"
+            },
+            {
+              "name": "Prepared / Approved signature visible",
+              "value": "Achmad Firdaus"
+            },
+            {
+              "name": "Stamps / Dates (visible near signatures)",
+              "value": "Stamp/date block visible with date 07 April 2026"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Manpower claim details (full table spans both pages)",
+              "headers": [
+                "No",
+                "DESCRIPTION",
+                "Claim (%)",
+                "Manpower Claim (IDR)",
+                "Indirect Cost (IDR)",
+                "Overhead and Profit (IDR)",
+                "Overtime / Other Allowances (IDR)",
+                "Operational Safety / Public Holiday (IDR)",
+                "Remark"
+              ],
+              "rows": []
+            }
+          ],
+          "summary": "Two-page Summary of Claim (10th Manpower Supply Claim for period 07 March - 06 April 2026) from PT Amanah Lestari Energy showing a detailed manpower claim table, section headings for total contract value, manpower and previous claims, and approval stamps/signatures.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "summary_calculation_manhour",
+        "pdfPath": "uploads/upload_20260617_7900/section_6_summary_calculation_manhour.pdf",
+        "data": {
+          "documentTypeLabel": "Summary Calculation Manhour",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Summary Calculation Manhour",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "notes": "Summary Calculation Manhour table (manhour and overtime hours) with signatures; header with company, job no, project, scope, period."
+            },
+            {
+              "pageNumber": 2,
+              "notes": "Summary Calculation Manhour and Claim table including Unit Price / Hour and Amount Mhr (IDR); highlighted TOTAL AMOUNT 37.670.000 IDR; prepared date Desa Padang, 07 April 2026."
+            },
+            {
+              "pageNumber": 3,
+              "notes": "Summary Calculation Overtime and Claim with overtime amount columns (Mon-Sat and Sun & Public Holiday) and totals (3.480.000 IDR and 5.410.000 IDR) plus signatures."
+            }
+          ],
+          "header": {
+            "Company": "PT. AMANAH LESTARI ENERGY",
+            "Address": "Desa Padang, Kec. Kintom, Kab. Banggai, Sulawesi Tengah",
+            "Email": "amanahlestarienergy@gmail.com",
+            "NPWP": "82 212 670 2 822 000",
+            "Telp": "+62 822 937 622 26",
+            "Job No.": "A-509",
+            "Project": "BANGGAI AMMONIA PLANT PROJECT",
+            "Scope": "MANPOWER SUPPLY FOR PIPING FABRICATION PO 4203000546",
+            "Period": "07 March - 06 April 2026",
+            "Document Title": "Summary Calculation Manhour",
+            "Prepared Date": "Desa Padang, 07 April 2026"
+          },
+          "lineItems": [
+            {
+              "No.": "1",
+              "ID No.": "21121009",
+              "Name": "Purwanto",
+              "Position": "Welder",
+              "Unit": "Man-month",
+              "Day Work": "21",
+              "Actual Mhr": "178,00",
+              "Overtime Monday-Saturday": "18,00",
+              "Overtime Sunday & Public Holiday": "21,00",
+              "Total Actual Mhr": "217,00",
+              "Unit Price / Hour (IDR)": "60.000",
+              "Amount Mhr (IDR)": "10.680.000",
+              "Amount Overtime Mon-Sat (IDR)": "1.080.000",
+              "Amount Overtime Sun & PH (IDR)": "1.260.000",
+              "Remark": null
+            },
+            {
+              "No.": "2",
+              "ID No.": "21121025",
+              "Name": "Lukman Umpel",
+              "Position": "Welder",
+              "Unit": "Man-month",
+              "Day Work": "23",
+              "Actual Mhr": "188,50",
+              "Overtime Monday-Saturday": "12,00",
+              "Overtime Sunday & Public Holiday": "32,50",
+              "Total Actual Mhr": "233,00",
+              "Unit Price / Hour (IDR)": "60.000",
+              "Amount Mhr (IDR)": "11.310.000",
+              "Amount Overtime Mon-Sat (IDR)": "720.000",
+              "Amount Overtime Sun & PH (IDR)": "1.950.000",
+              "Remark": null
+            },
+            {
+              "No.": "3",
+              "ID No.": "21121023",
+              "Name": "Syaiful Kowiloy",
+              "Position": "Pipe Fitter",
+              "Unit": "Man-month",
+              "Day Work": "23",
+              "Actual Mhr": "197,00",
+              "Overtime Monday-Saturday": "12,00",
+              "Overtime Sunday & Public Holiday": "17,00",
+              "Total Actual Mhr": "226,00",
+              "Unit Price / Hour (IDR)": "40.000",
+              "Amount Mhr (IDR)": "7.880.000",
+              "Amount Overtime Mon-Sat (IDR)": "480.000",
+              "Amount Overtime Sun & PH (IDR)": "680.000",
+              "Remark": null
+            },
+            {
+              "No.": "4",
+              "ID No.": "21121012",
+              "Name": "Bustang",
+              "Position": "Fitter",
+              "Unit": "Man-month",
+              "Day Work": "24",
+              "Actual Mhr": "195,00",
+              "Overtime Monday-Saturday": "30,00",
+              "Overtime Sunday & Public Holiday": "38,00",
+              "Total Actual Mhr": "263,00",
+              "Unit Price / Hour (IDR)": "40.000",
+              "Amount Mhr (IDR)": "7.800.000",
+              "Amount Overtime Mon-Sat (IDR)": "1.200.000",
+              "Amount Overtime Sun & PH (IDR)": "1.520.000",
+              "Remark": null
+            },
+            {
+              "No.": "TOTAL",
+              "ID No.": null,
+              "Name": null,
+              "Position": null,
+              "Unit": null,
+              "Day Work": "91,00",
+              "Actual Mhr": "758,50",
+              "Overtime Monday-Saturday": "72,00",
+              "Overtime Sunday & Public Holiday": "108,50",
+              "Total Actual Mhr": "939,00",
+              "Unit Price / Hour (IDR)": null,
+              "Amount Mhr (IDR)": "37.670.000",
+              "Amount Overtime Mon-Sat (IDR)": "3.480.000",
+              "Amount Overtime Sun & PH (IDR)": "5.410.000",
+              "Remark": null
+            }
+          ],
+          "fields": [
+            {
+              "name": "TOTAL AMOUNT (Amount Mhr)",
+              "value": "37.670.000 IDR"
+            },
+            {
+              "name": "TOTAL AMOUNT Overtime Monday-Saturday",
+              "value": "3.480.000 IDR"
+            },
+            {
+              "name": "TOTAL AMOUNT Overtime Sunday & Public Holiday",
+              "value": "5.410.000 IDR"
+            },
+            {
+              "name": "Unit Rate - Welder",
+              "value": "(IDR) 60.000 /Hour"
+            },
+            {
+              "name": "Unit Rate - Fitter",
+              "value": "(IDR) 40.000 /Hour"
+            },
+            {
+              "name": "Unit Rate - Pipe Fitter",
+              "value": "(IDR) 40.000 /Hour"
+            },
+            {
+              "name": "Prepared By (name visible)",
+              "value": "Linda Kenda (HR Officer)"
+            },
+            {
+              "name": "Proposed By (name visible)",
+              "value": "Meirwin H. Babo (Director)"
+            },
+            {
+              "name": "Craftshop Foreman (name visible)",
+              "value": "Achmad Firdaus"
+            },
+            {
+              "name": "Mechanical Lead (name visible)",
+              "value": "Ruhiyat D"
+            },
+            {
+              "name": "Mechanical Manager (name visible)",
+              "value": "Kuswara Hendrayana"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Summary Calculation Manhour",
+              "headers": [
+                "No.",
+                "ID No.",
+                "Name",
+                "Position",
+                "Unit",
+                "Day Work",
+                "Actual Mhr",
+                "Overtime Monday-Saturday",
+                "Overtime Sunday & Public Holiday",
+                "Total Actual Mhr",
+                "Unit Price / Hour (IDR)",
+                "Amount Mhr (IDR)",
+                "Amount Overtime Mon-Sat (IDR)",
+                "Amount Overtime Sun & PH (IDR)",
+                "Remark"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "21121009",
+                  "Purwanto",
+                  "Welder",
+                  "Man-month",
+                  "21",
+                  "178,00",
+                  "18,00",
+                  "21,00",
+                  "217,00",
+                  "60.000",
+                  "10.680.000",
+                  "1.080.000",
+                  "1.260.000",
+                  null
+                ],
+                [
+                  "2",
+                  "21121025",
+                  "Lukman Umpel",
+                  "Welder",
+                  "Man-month",
+                  "23",
+                  "188,50",
+                  "12,00",
+                  "32,50",
+                  "233,00",
+                  "60.000",
+                  "11.310.000",
+                  "720.000",
+                  "1.950.000",
+                  null
+                ],
+                [
+                  "3",
+                  "21121023",
+                  "Syaiful Kowiloy",
+                  "Pipe Fitter",
+                  "Man-month",
+                  "23",
+                  "197,00",
+                  "12,00",
+                  "17,00",
+                  "226,00",
+                  "40.000",
+                  "7.880.000",
+                  "480.000",
+                  "680.000",
+                  null
+                ],
+                [
+                  "4",
+                  "21121012",
+                  "Bustang",
+                  "Fitter",
+                  "Man-month",
+                  "24",
+                  "195,00",
+                  "30,00",
+                  "38,00",
+                  "263,00",
+                  "40.000",
+                  "7.800.000",
+                  "1.200.000",
+                  "1.520.000",
+                  null
+                ],
+                [
+                  "TOTAL",
+                  null,
+                  null,
+                  null,
+                  null,
+                  "91,00",
+                  "758,50",
+                  "72,00",
+                  "108,50",
+                  "939,00",
+                  null,
+                  "37.670.000",
+                  "3.480.000",
+                  "5.410.000",
+                  null
+                ]
+              ]
+            }
+          ],
+          "summary": "Summary calculation of manhours for PT. Amanah Lestari Energy (Job A-509, Banggai Ammonia Plant Project) listing 4 workers with actual hours, overtime hours, unit rates and amounts; totals: 91 day-work, 758.50 actual hours, 72.00 Mon-Sat overtime, 108.50 Sun/PH overtime, total amount 37.670.000 IDR.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "daily_timesheet",
+        "pdfPath": "uploads/upload_20260617_7900/section_7_daily_timesheet.pdf",
+        "data": {
+          "documentTypeLabel": "Daily Timesheet",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Daily Timesheet",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "description": "Printed 'TIME SHEET Daily Labour and Overtime Calculation' (Period 07 March - 06 April 2026). Header fields visible: No. ID 21121009, Name Purwanto, Position Welder, Date of Hired 14-Jul-20, Class NON STAFF. Large table (overtime calculation) present (rows not transcribed on this page-level extraction)."
+            },
+            {
+              "pageNumber": 2,
+              "description": "Printed 'TIME SHEET Daily Labour and Overtime Calculation' (another employee sheet). Period header visible. Large overtime table present; header and totals visible but detailed table rows not transcribed here."
+            },
+            {
+              "pageNumber": 3,
+              "description": "Printed 'TIME SHEET Daily Labour and Overtime Calculation' (another employee sheet). Period header visible. Large overtime table present; header and totals visible but detailed table rows not transcribed here."
+            },
+            {
+              "pageNumber": 4,
+              "description": "Printed 'TIME SHEET Daily Labour and Overtime Calculation' (another employee sheet). Period header visible. Note text at bottom about cut/shift; table present but rows not transcribed here."
+            },
+            {
+              "pageNumber": 5,
+              "description": "Handwritten 'DAILY TIME SHEET' for Purwanto Tongko (Badge 21121009). Contains rows 1–5 with dates 07-03-26 to 12-03-26 and daily activities describing welding/fabrication work; signatures and prepared/approved stamps at bottom."
+            },
+            {
+              "pageNumber": 6,
+              "description": "Handwritten daily time sheet continuation. Contains rows 6–10 with dates approx. 13-03-26 to 18-03-26 and activities (welding, install support, assist welding)."
+            },
+            {
+              "pageNumber": 7,
+              "description": "Handwritten daily time sheet continuation. Contains rows 11–15 with dates 20-03-26 to 26-03-26 and activities (pre-fabrication, welding support, fabrication)."
+            },
+            {
+              "pageNumber": 8,
+              "description": "Handwritten daily time sheet continuation. Contains rows 16–20 with dates 27-03-26 to 01-04-26 and activities (welding support, cutting/fabrication, assisting vendor)."
+            },
+            {
+              "page": 9,
+              "headerName": "Purwanto Tongko",
+              "badgeNo": "21121009",
+              "rowsOnPage": [21, 22, 23, 24, 25]
+            },
+            {
+              "page": 10,
+              "headerName": "Lukman Umpel",
+              "badgeNo": "21121025",
+              "rowsOnPage": [1, 2, 3, 4, 5]
+            },
+            {
+              "page": 11,
+              "headerName": "Lukman Umpel",
+              "badgeNo": "21121025",
+              "rowsOnPage": [6, 7, 8, 9, 10]
+            },
+            {
+              "page": 12,
+              "headerName": "Lukman Umpel",
+              "badgeNo": "21121025",
+              "rowsOnPage": [11, 12, 13, 14, 15]
+            },
+            {
+              "page": 13,
+              "headerName": "Lukman Umpel",
+              "badgeNo": "21121025",
+              "rowsOnPage": [16, 17, 18, 19, 20]
+            },
+            {
+              "page": 14,
+              "headerName": "Lukman Umpel",
+              "badgeNo": "21121025",
+              "rowsOnPage": [21, 22, 23, 24, 25]
+            },
+            {
+              "page": 15,
+              "headerName": "Lukman Umpel",
+              "badgeNo": "21121025",
+              "rowsOnPage": [26]
+            },
+            {
+              "page": 16,
+              "headerName": "Syaiful Kawilov",
+              "badgeNo": "21121023",
+              "rowsOnPage": [1, 2, 3, 4, 5]
+            },
+            {
+              "pageNumber": 17,
+              "rows": [6, 7, 8, 9, 10],
+              "notes": "Employee: Syaiful Kusliow (Badge 21121023)"
+            },
+            {
+              "pageNumber": 18,
+              "rows": [11, 12, 13, 14, 15],
+              "notes": "Employee: Syaiful Kusliow (Badge 21121023)"
+            },
+            {
+              "pageNumber": 19,
+              "rows": [21, 22, 23, 24, 25],
+              "notes": "Employee: Syaiful Kusliow (Badge 21121023)"
+            },
+            {
+              "pageNumber": 20,
+              "rows": [1, 2, 3, 4, 5],
+              "notes": "Employee: Bustang (Badge 21121012)"
+            },
+            {
+              "pageNumber": 21,
+              "rows": [6, 7, 8, 9, 10],
+              "notes": "Employee: Bustang (Badge 21121012)"
+            },
+            {
+              "pageNumber": 22,
+              "rows": [16, 17, 18, 19, 20],
+              "notes": "Employee: Bustang (Badge 21121012)"
+            },
+            {
+              "pageNumber": 23,
+              "rows": [21, 22, 23, 24, 25],
+              "notes": "Employee: Bustang (Badge 21121012)"
+            },
+            {
+              "pageNumber": 24,
+              "rows": [26, 27],
+              "notes": "Employee: Bustang (Badge 21121012)"
+            }
+          ],
+          "header": {
+            "Period": "07 March - 06 April 2026",
+            "Page1_No. ID": "21121009",
+            "Page1_Name": "Purwanto",
+            "Page1_Position": "Welder",
+            "Page1_Date of Hired": "14-Jul-20",
+            "Page1_Class": "NON STAFF",
+            "HandwrittenPages_Name": "Purwanto Tongko",
+            "HandwrittenPages_Badge No.": "21121009",
+            "HandwrittenPages_Classification": "Welder",
+            "HandwrittenPages_Project Name": "Bengkalis Ammonia Plant",
+            "Prepared By (handwritten pages)": "Linda Kenda (HR Admin)",
+            "Approved By (handwritten pages)": "Andri Hasman",
+            "page9_Name": "Purwanto Tongko",
+            "page9_BadgeNo": "21121009",
+            "page9_Classification": "Welder",
+            "page9_ProjectName": "Banggai Ammonia Plant",
+            "pages10-15_Name": "Lukman Umpel",
+            "pages10-15_BadgeNo": "21121025",
+            "pages10-15_Classification": "Welder",
+            "pages10-15_ProjectName": "Banggai Ammonia Plant",
+            "page16_Name": "Syaiful Kawilov",
+            "page16_BadgeNo": "21121023",
+            "page16_Classification": "Fitter",
+            "page16_ProjectName": "Banggai Ammonia Plant",
+            "Project Name": "Banggai Ammonia Plant",
+            "PagesCovered": "virtual pages 17-24 (original PDF pages 29-36)",
+            "PersonsOnPages": "Syaiful Kusliow (Badge No. 21121023, Classification: Fitter) on pages 17-19; Bustang (Badge No. 21121012, Classification: Pipe Fitter) on pages 20-24",
+            "Prepared By": "PT. Amanah Lestari Energi (Linda Kendal, HR Admin) - visible on pages",
+            "Approved By": "Andri Hasman (signature visible)"
+          },
+          "lineItems": [
+            {
+              "no": "1",
+              "date": "Sabtu 07-03-26",
+              "in": "-",
+              "out": "-",
+              "sign": null,
+              "dailyActivity": "",
+              "signByUser": "signature (illegible)"
+            },
+            {
+              "no": "2",
+              "date": "09-03-26",
+              "in": "09:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabric cation and welding spool pipe pre (upstream) 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "3",
+              "date": "10-03-26",
+              "in": "09:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabric cation and welding spool pipe pre (upstream) 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "4",
+              "date": "11-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and install welding support pipe pre (upstream) 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "5",
+              "date": "12-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue welding and install support and spool pipe pre (upstream) 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "6",
+              "date": "13-03-26",
+              "in": "-",
+              "out": "-",
+              "sign": null,
+              "dailyActivity": "",
+              "signByUser": "signature (illegible)"
+            },
+            {
+              "no": "7",
+              "date": "14-03-26",
+              "in": "07:30",
+              "out": "16:30",
+              "sign": null,
+              "dailyActivity": "Continue welding and install support for pipe spool pre (upstream) 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "8",
+              "date": "16-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue welding support for pipe spool/leg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "9",
+              "date": "17-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Assist welding fabrication for steam drum 141-D (leak) / fabrication assistance",
+              "signByUser": "signature"
+            },
+            {
+              "no": "10",
+              "date": "18-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Install support 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "11",
+              "date": "20-03-26",
+              "in": "08:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Pre fabrication and install pipe and supports; continue welding support lapangan",
+              "signByUser": "signature"
+            },
+            {
+              "no": "12",
+              "date": "23-03-26",
+              "in": "-",
+              "out": "-",
+              "sign": null,
+              "dailyActivity": "",
+              "signByUser": "signature (illegible)"
+            },
+            {
+              "no": "13",
+              "date": "24-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Welding support 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": "14",
+              "date": "25-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Fabrication and welding support pipe (SWO) continue",
+              "signByUser": "signature"
+            },
+            {
+              "no": "15",
+              "date": "26-03-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Fabrication and welding support pipe SWO",
+              "signByUser": "signature"
+            },
+            {
+              "no": "16",
+              "date": "27-03-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Continue welding support pipe spool (text partially illegible)",
+              "signByUser": "signature"
+            },
+            {
+              "no": "17",
+              "date": "28-03-26",
+              "in": "08:00",
+              "out": "17:00",
+              "sign": null,
+              "dailyActivity": "Cutting, trim and fabrication and welding support pipe SWO",
+              "signByUser": "signature"
+            },
+            {
+              "no": "18",
+              "date": "30-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Fabrication plate for 141-D; rectif/correct (?); UP ??? tank leak (handwritten, partially illegible)",
+              "signByUser": "signature"
+            },
+            {
+              "no": "19",
+              "date": "31-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding plate pump for STG (handwritten, partially illegible)",
+              "signByUser": "signature"
+            },
+            {
+              "no": "20",
+              "date": "01-04-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Assist vendor welding MB plate for manhole steam drum 141-D",
+              "signByUser": "signature"
+            },
+            {
+              "page": 9,
+              "no": 21,
+              "date": "02-04-26",
+              "day": "Kamis",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Repair safety fence at jetty (illegible)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 9,
+              "no": 22,
+              "date": "03-04-26",
+              "day": "Jumat",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "OFF"
+            },
+            {
+              "page": 9,
+              "no": 23,
+              "date": "04-04-26",
+              "day": "Sabtu",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication and welding box for leak line at LV-1010 to 101-V",
+              "signByUser": "signed"
+            },
+            {
+              "page": 9,
+              "no": 24,
+              "date": "05-04-26",
+              "day": "Minggu",
+              "in": "09:00",
+              "out": "17:00",
+              "sign": "present",
+              "dailyActivity": "Continue install and welding clamp box for leak line at LV-1010 to 101-V",
+              "signByUser": "signed"
+            },
+            {
+              "page": 9,
+              "no": 25,
+              "date": "06-04-26",
+              "day": "Senin",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication and welding special pad (text partly illegible)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 10,
+              "no": 1,
+              "date": "07-03-26",
+              "day": "Sabtu",
+              "in": "09:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue fabrication and welding spool pipe bootleg upstream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 10,
+              "no": 2,
+              "date": "09-03-26",
+              "day": "Senin",
+              "in": "09:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue welding temporary line for de-busting/adjusting works (handwritten, partly illegible)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 10,
+              "no": 3,
+              "date": "10-03-26",
+              "day": "Selasa",
+              "in": "09:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue welding spool pipe bootleg upstream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 10,
+              "no": 4,
+              "date": "11-03-26",
+              "day": "Rabu",
+              "in": "09:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue welding temporary line for de-busting works (handwritten)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 10,
+              "no": 5,
+              "date": "12-03-26",
+              "day": "Kamis",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "sick"
+            },
+            {
+              "page": 11,
+              "no": 6,
+              "date": "13-03-26",
+              "day": "Jumat",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue fit-up and welding spool pipe bootleg up stream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 11,
+              "no": 7,
+              "date": "14-03-26",
+              "day": "Sabtu",
+              "in": "07:30",
+              "out": "17:00",
+              "sign": "present",
+              "dailyActivity": "Continue fit-up and welding spool pipe bootleg up stream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 11,
+              "no": 8,
+              "date": "16-03-26",
+              "day": "Senin",
+              "in": "07:30",
+              "out": "17:20",
+              "sign": "present",
+              "dailyActivity": "Continue welding spool pipe bootleg up stream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 11,
+              "no": 9,
+              "date": "17-03-26",
+              "day": "Selasa",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "sakit"
+            },
+            {
+              "page": 11,
+              "no": 10,
+              "date": "18-03-26",
+              "day": "Rabu",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Fabrication bootleg upstream 144-L continue",
+              "signByUser": "signed"
+            },
+            {
+              "page": 12,
+              "no": 11,
+              "date": "19-03-26",
+              "day": "Kamis",
+              "in": "07:30",
+              "out": "16:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication upstream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 12,
+              "no": 12,
+              "date": "20-03-26",
+              "day": "Jumat",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Fabrication manhole steam drum 141-D",
+              "signByUser": "signed"
+            },
+            {
+              "page": 12,
+              "no": 13,
+              "date": "23-03-26",
+              "day": "Senin",
+              "in": "07:30",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication and installation flowmeter continue",
+              "signByUser": "signed"
+            },
+            {
+              "page": 12,
+              "no": 14,
+              "date": "24-03-26",
+              "day": "Selasa",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication welding pipe flowmeter",
+              "signByUser": "signed"
+            },
+            {
+              "page": 12,
+              "no": 15,
+              "date": "25-03-26",
+              "day": "Rabu",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": null
+            },
+            {
+              "page": 13,
+              "no": 16,
+              "date": "26-03-26",
+              "day": "Kamis",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Welding pipe support flowmeter di lapangan",
+              "signByUser": "signed"
+            },
+            {
+              "page": 13,
+              "no": 17,
+              "date": "27-03-26",
+              "day": "Jumat",
+              "in": "08:00",
+              "out": "12:00",
+              "sign": "present",
+              "dailyActivity": "Make add platform for STG continue",
+              "signByUser": "signed"
+            },
+            {
+              "page": 13,
+              "no": 18,
+              "date": "28-03-26",
+              "day": "Sabtu",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Welding add platform for STG done",
+              "signByUser": "signed"
+            },
+            {
+              "page": 13,
+              "no": 19,
+              "date": "30-03-26",
+              "day": "Senin",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Continue fabrication and welding platform for STG (handwritten, partly illegible)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 13,
+              "no": 20,
+              "date": "31-03-26",
+              "day": "Selasa",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Continue fabrication and welding out form for STG (handwritten, partly illegible)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 14,
+              "no": 21,
+              "date": "03-05-26",
+              "day": "Rabu",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Continue install plate form STG (A Ex) assist vendor welding support at stream drum 141-D",
+              "signByUser": "signed"
+            },
+            {
+              "page": 14,
+              "no": 22,
+              "date": "04-05-26",
+              "day": "Kamis",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Cutting gusset plate 16 ea flange SWQ line (handwritten, partly illegible)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 14,
+              "no": 23,
+              "date": "03-04-26",
+              "day": "Jumat",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "OFF"
+            },
+            {
+              "page": 14,
+              "no": 24,
+              "date": "04-04-26",
+              "day": "Sabtu",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication and welding box for leak line at LV-1010 to 101-V",
+              "signByUser": "signed"
+            },
+            {
+              "page": 14,
+              "no": 25,
+              "date": "05-04-26",
+              "day": "Minggu",
+              "in": "08:00",
+              "out": "17:00",
+              "sign": "present",
+              "dailyActivity": "Continue install and welding box for leak line at LV-1010 to 101-V",
+              "signByUser": "signed"
+            },
+            {
+              "page": 15,
+              "no": 26,
+              "date": "06-04-26",
+              "day": "Senin",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": "present",
+              "dailyActivity": "Fabrication and welding plate form for PR-2801 (handwritten)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 16,
+              "no": 1,
+              "date": "07-03-26",
+              "day": "Sabtu",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue fabrication and welding temporary line for de-busting/adjusting works (handwritten)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 16,
+              "no": 2,
+              "date": "09-03-26",
+              "day": "Senin",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue fabrication and welding temporary line for de-busting/adjusting works (handwritten)",
+              "signByUser": "signed"
+            },
+            {
+              "page": 16,
+              "no": 3,
+              "date": "10-03-26",
+              "day": "Selasa",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue fabrication and welding temporary line for de-busting/adjusting works",
+              "signByUser": "signed"
+            },
+            {
+              "page": 16,
+              "no": 4,
+              "date": "11-03-26",
+              "day": "Rabu",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue install and welding support for spool pipe bootleg up stream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "page": 16,
+              "no": 5,
+              "date": "12-03-26",
+              "day": "Kamis",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": "present",
+              "dailyActivity": "Continue install and welding support and spool pipe bootleg up stream 144-L",
+              "signByUser": "signed"
+            },
+            {
+              "no": 6,
+              "date": "13-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Fabrication and preparation spool drain MPHE (TA)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 7,
+              "date": "14-03-26",
+              "in": "07:30",
+              "out": "16:30",
+              "sign": null,
+              "dailyActivity": "Continue install and welding support pipe pre bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 8,
+              "date": "16-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue install and welding support pipe bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 9,
+              "date": "17-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Assist fabrication box for steam drum 141-D leak",
+              "signByUser": "signature"
+            },
+            {
+              "no": 10,
+              "date": "18-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Rectification of WW tank leak (continue)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 11,
+              "date": "20-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Pre-fabrication support bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 12,
+              "date": "23-03-26",
+              "in": "07:30",
+              "out": "16:00",
+              "sign": null,
+              "dailyActivity": "Install flowmeter (continue)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 13,
+              "date": "24-03-26",
+              "in": "08:00",
+              "out": "08:00",
+              "sign": null,
+              "dailyActivity": "Install flowmeter and support at lapangan (done)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 14,
+              "date": "25-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Cutting IBC Tank for water house (SEA)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 15,
+              "date": "26-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Cutting Hilban pipe",
+              "signByUser": "signature"
+            },
+            {
+              "no": 21,
+              "date": "02-04-26",
+              "in": "08:00",
+              "out": null,
+              "sign": null,
+              "dailyActivity": "Assist warehouse FO cutting IBC Tank; cutting gusset plate / flange (SWO line)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 22,
+              "date": "03-04-26",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "BPF (visible)"
+            },
+            {
+              "no": 23,
+              "date": "04-04-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Continue cleaning gusset plate / flange SWO line; fabrication box at front line at LV-1010 to 101-V",
+              "signByUser": "signature"
+            },
+            {
+              "no": 24,
+              "date": "05-04-26",
+              "in": "08:00",
+              "out": "17:00",
+              "sign": null,
+              "dailyActivity": "Continue install and welding box at back line LV-1010 to 101-V",
+              "signByUser": "signature"
+            },
+            {
+              "no": 25,
+              "date": "06-04-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Assist warehouse to cutting IBC tank; fabrication clamp box; pre-fabrication inspection spool S/16",
+              "signByUser": "signature"
+            },
+            {
+              "no": 1,
+              "date": "07-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Fabrication and welding pre bootleg upstream 144-L spool pipe (continue)",
+              "signByUser": "signature"
+            },
+            {
+              "no": 2,
+              "date": "09-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding spool pipe pre bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 3,
+              "date": "10-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding spool pipe pre bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 4,
+              "date": "11-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding spool and support pipe pre bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 5,
+              "date": "12-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue install spool and support pipe pre bootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 6,
+              "date": "13-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding spool pipe prebootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 7,
+              "date": "14-03-26",
+              "in": "07:30",
+              "out": "16:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding spool pipe prebootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 8,
+              "date": "16-03-26",
+              "in": "07:30",
+              "out": "17:30",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding spool pipe prebootleg upstream 144-L",
+              "signByUser": "signature"
+            },
+            {
+              "no": 9,
+              "date": "17-03-26",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "CUTI (leave)"
+            },
+            {
+              "no": 10,
+              "date": "18-03-26",
+              "in": null,
+              "out": null,
+              "sign": null,
+              "dailyActivity": null,
+              "signByUser": "CUTI (leave)"
+            },
+            {
+              "no": 16,
+              "date": "25-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Cutting IBC Tank for warehouse; fabrication and welding support pipe SWO",
+              "signByUser": "signature"
+            },
+            {
+              "no": 17,
+              "date": "26-03-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Continue fabrication and welding and cleaning support SWO",
+              "signByUser": "signature"
+            },
+            {
+              "no": 18,
+              "date": "27-03-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Continue cutting H-beam and fabrication and welding support pipe SWO",
+              "signByUser": "signature"
+            },
+            {
+              "no": 19,
+              "date": "28-03-26",
+              "in": "08:00",
+              "out": "17:00",
+              "sign": null,
+              "dailyActivity": "Continue cutting channel and fabrication and welding support pipe SWO",
+              "signByUser": "signature"
+            },
+            {
+              "no": 20,
+              "date": "30-03-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Cutting support clamp for electrical (10 EA); assist repair of WW tank leak",
+              "signByUser": "signature"
+            },
+            {
+              "no": 21,
+              "date": "31-03-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Cutting IBC Tank for warehouse; fabrication platform for GT6",
+              "signByUser": "signature"
+            },
+            {
+              "no": 22,
+              "date": "01-04-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Cutting IBC tanks at warehouse; rectification of WW tank leak",
+              "signByUser": "signature"
+            },
+            {
+              "no": 23,
+              "date": "02-04-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Rectification of WW tank leak",
+              "signByUser": "signature"
+            },
+            {
+              "no": 24,
+              "date": "03-04-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Continue rectification WW tank leak",
+              "signByUser": "signature"
+            },
+            {
+              "no": 25,
+              "date": "04-04-26",
+              "in": "08:00",
+              "out": "22:00",
+              "sign": null,
+              "dailyActivity": "Fabrication clamp box for work front line at LV-1010 to 101-V",
+              "signByUser": "signature"
+            },
+            {
+              "no": 26,
+              "date": "05-04-26",
+              "in": "08:00",
+              "out": "17:00",
+              "sign": null,
+              "dailyActivity": "Continue install and welding clamp box for work leak line at LV-1010 to 101-V",
+              "signByUser": "signature"
+            },
+            {
+              "no": 27,
+              "date": "06-04-26",
+              "in": "08:00",
+              "out": "18:00",
+              "sign": null,
+              "dailyActivity": "Fabrication and welding plate form for PPV-2801",
+              "signByUser": "signature"
+            }
+          ],
+          "fields": [
+            {
+              "name": "Period",
+              "value": "07 March - 06 April 2026"
+            },
+            {
+              "name": "Page 1 No. ID",
+              "value": "21121009"
+            },
+            {
+              "name": "Page 1 Name",
+              "value": "Purwanto"
+            },
+            {
+              "name": "Page 1 Position",
+              "value": "Welder"
+            },
+            {
+              "name": "Page 1 Date of Hired",
+              "value": "14-Jul-20"
+            },
+            {
+              "name": "Page 1 Class",
+              "value": "NON STAFF"
+            },
+            {
+              "name": "Handwritten sheet Name",
+              "value": "Purwanto Tongko"
+            },
+            {
+              "name": "Handwritten sheet Badge No.",
+              "value": "21121009"
+            },
+            {
+              "name": "Handwritten sheet Classification",
+              "value": "Welder"
+            },
+            {
+              "name": "Handwritten sheet Project Name",
+              "value": "Bengkalis Ammonia Plant"
+            },
+            {
+              "name": "Prepared By (handwritten)",
+              "value": "Linda Kenda (HR Admin)"
+            },
+            {
+              "name": "Approved By (handwritten)",
+              "value": "Andri Hasman"
+            },
+            {
+              "name": "Prepared by (HR Admin) signature",
+              "value": "present on each page (Linda Kenda)"
+            },
+            {
+              "name": "Approved by signature",
+              "value": "present on each page (Andri Hasman)"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Daily Labour and Overtime Calculation (page 1-4 style sheet)",
+              "headers": [
+                "No.",
+                "Date",
+                "Day",
+                "In",
+                "Out",
+                "Work Hours",
+                "Basic Time",
+                "OT Actual",
+                "L5",
+                "Overtime Hours",
+                "Overtime Monday - Saturday Paid",
+                "Overtime Sunday & Public Holiday",
+                "TOTAL OT Paid",
+                "Nhr Paid",
+                "Remarks"
+              ],
+              "rows": []
+            },
+            {
+              "name": "Daily Time Sheet (handwritten pages)",
+              "headers": [
+                "No.",
+                "DATE",
+                "IN",
+                "OUT",
+                "SIGN",
+                "DAILY ACTIVITY",
+                "SIGN BY USER"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "Sabtu 07-03-26",
+                  "-",
+                  "-",
+                  "",
+                  "",
+                  "signature (illegible)"
+                ],
+                [
+                  "2",
+                  "09-03-26",
+                  "09:30",
+                  "17:30",
+                  "",
+                  "Continue fabric cation and welding spool pipe pre (upstream) 144-L",
+                  "signature"
+                ],
+                [
+                  "3",
+                  "10-03-26",
+                  "09:30",
+                  "17:30",
+                  "",
+                  "Continue fabric cation and welding spool pipe pre (upstream) 144-L",
+                  "signature"
+                ],
+                [
+                  "4",
+                  "11-03-26",
+                  "07:30",
+                  "17:30",
+                  "",
+                  "Continue fabrication and install welding support pipe pre (upstream) 144-L",
+                  "signature"
+                ],
+                [
+                  "5",
+                  "12-03-26",
+                  "07:30",
+                  "17:30",
+                  "",
+                  "Continue welding and install support and spool pipe pre (upstream) 144-L",
+                  "signature"
+                ],
+                ["6", "13-03-26", "-", "-", "", "", "signature (illegible)"],
+                [
+                  "7",
+                  "14-03-26",
+                  "07:30",
+                  "16:30",
+                  "",
+                  "Continue welding and install support for pipe spool pre (upstream) 144-L",
+                  "signature"
+                ],
+                [
+                  "8",
+                  "16-03-26",
+                  "07:30",
+                  "17:30",
+                  "",
+                  "Continue welding support for pipe spool/leg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "9",
+                  "17-03-26",
+                  "07:30",
+                  "17:30",
+                  "",
+                  "Assist welding fabrication for steam drum 141-D (leak)",
+                  "signature"
+                ],
+                [
+                  "10",
+                  "18-03-26",
+                  "07:30",
+                  "17:30",
+                  "",
+                  "Install support 144-L",
+                  "signature"
+                ],
+                [
+                  "11",
+                  "20-03-26",
+                  "08:30",
+                  "17:30",
+                  "",
+                  "Pre fabrication and install pipe and supports; continue welding support lapangan",
+                  "signature"
+                ],
+                ["12", "23-03-26", "-", "-", "", "", "signature (illegible)"],
+                [
+                  "13",
+                  "24-03-26",
+                  "08:00",
+                  "18:00",
+                  "",
+                  "Welding support 144-L",
+                  "signature"
+                ],
+                [
+                  "14",
+                  "25-03-26",
+                  "08:00",
+                  "18:00",
+                  "",
+                  "Fabrication and welding support pipe (SWO) continue",
+                  "signature"
+                ],
+                [
+                  "15",
+                  "26-03-26",
+                  "08:00",
+                  "22:00",
+                  "",
+                  "Fabrication and welding support pipe SWO",
+                  "signature"
+                ],
+                [
+                  "16",
+                  "27-03-26",
+                  "08:00",
+                  "22:00",
+                  "",
+                  "Continue welding support pipe spool (partially illegible)",
+                  "signature"
+                ],
+                [
+                  "17",
+                  "28-03-26",
+                  "08:00",
+                  "17:00",
+                  "",
+                  "Cutting, trim and fabrication and welding support pipe SWO",
+                  "signature"
+                ],
+                [
+                  "18",
+                  "30-03-26",
+                  "08:00",
+                  "18:00",
+                  "",
+                  "Fabrication plate for 141-D; rectification / repair related to tank leak (handwritten, partially illegible)",
+                  "signature"
+                ],
+                [
+                  "19",
+                  "31-03-26",
+                  "08:00",
+                  "18:00",
+                  "",
+                  "Continue fabrication and welding plate pump for STG (handwritten, partially illegible)",
+                  "signature"
+                ],
+                [
+                  "20",
+                  "01-04-26",
+                  "08:00",
+                  "18:00",
+                  "",
+                  "Assist vendor welding MB plate for manhole steam drum 141-D",
+                  "signature"
+                ]
+              ]
+            },
+            {
+              "name": "Daily entries (combined pages 9-16)",
+              "headers": [
+                "No",
+                "Date",
+                "Day",
+                "In",
+                "Out",
+                "Sign",
+                "Daily Activity",
+                "Sign By User",
+                "Page"
+              ],
+              "rows": [
+                [
+                  "21",
+                  "02-04-26",
+                  "Kamis",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Repair safety fence at jetty (illegible)",
+                  "signed",
+                  "9"
+                ],
+                ["22", "03-04-26", "Jumat", null, null, null, null, "OFF", "9"],
+                [
+                  "23",
+                  "04-04-26",
+                  "Sabtu",
+                  "08:00",
+                  "22:00",
+                  "present",
+                  "Fabrication and welding box for leak line at LV-1010 to 101-V",
+                  "signed",
+                  "9"
+                ],
+                [
+                  "24",
+                  "05-04-26",
+                  "Minggu",
+                  "09:00",
+                  "17:00",
+                  "present",
+                  "Continue install and welding clamp box for leak line at LV-1010 to 101-V",
+                  "signed",
+                  "9"
+                ],
+                [
+                  "25",
+                  "06-04-26",
+                  "Senin",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Fabrication and welding special pad (illegible)",
+                  "signed",
+                  "9"
+                ],
+                [
+                  "1",
+                  "07-03-26",
+                  "Sabtu",
+                  "09:30",
+                  "17:30",
+                  "present",
+                  "Continue fabrication and welding spool pipe bootleg upstream 144-L",
+                  "signed",
+                  "10"
+                ],
+                [
+                  "2",
+                  "09-03-26",
+                  "Senin",
+                  "09:30",
+                  "17:30",
+                  "present",
+                  "Continue welding temporary line for de-busting/adjusting works (illegible)",
+                  "signed",
+                  "10"
+                ],
+                [
+                  "3",
+                  "10-03-26",
+                  "Selasa",
+                  "09:30",
+                  "17:30",
+                  "present",
+                  "Continue welding spool pipe bootleg upstream 144-L",
+                  "signed",
+                  "10"
+                ],
+                [
+                  "4",
+                  "11-03-26",
+                  "Rabu",
+                  "09:30",
+                  "17:30",
+                  "present",
+                  "Continue welding temporary line for de-busting works (handwritten)",
+                  "signed",
+                  "10"
+                ],
+                [
+                  "5",
+                  "12-03-26",
+                  "Kamis",
+                  null,
+                  null,
+                  null,
+                  null,
+                  "sick",
+                  "10"
+                ],
+                [
+                  "6",
+                  "13-03-26",
+                  "Jumat",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Continue fit-up and welding spool pipe bootleg up stream 144-L",
+                  "signed",
+                  "11"
+                ],
+                [
+                  "7",
+                  "14-03-26",
+                  "Sabtu",
+                  "07:30",
+                  "17:00",
+                  "present",
+                  "Continue fit-up and welding spool pipe bootleg up stream 144-L",
+                  "signed",
+                  "11"
+                ],
+                [
+                  "8",
+                  "16-03-26",
+                  "Senin",
+                  "07:30",
+                  "17:20",
+                  "present",
+                  "Continue welding spool pipe bootleg up stream 144-L",
+                  "signed",
+                  "11"
+                ],
+                [
+                  "9",
+                  "17-03-26",
+                  "Selasa",
+                  null,
+                  null,
+                  null,
+                  null,
+                  "sakit",
+                  "11"
+                ],
+                [
+                  "10",
+                  "18-03-26",
+                  "Rabu",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Fabrication bootleg upstream 144-L continue",
+                  "signed",
+                  "11"
+                ],
+                [
+                  "11",
+                  "19-03-26",
+                  "Kamis",
+                  "07:30",
+                  "16:00",
+                  "present",
+                  "Fabrication upstream 144-L",
+                  "signed",
+                  "12"
+                ],
+                [
+                  "12",
+                  "20-03-26",
+                  "Jumat",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Fabrication manhole steam drum 141-D",
+                  "signed",
+                  "12"
+                ],
+                [
+                  "13",
+                  "23-03-26",
+                  "Senin",
+                  "07:30",
+                  "18:00",
+                  "present",
+                  "Fabrication and installation flowmeter continue",
+                  "signed",
+                  "12"
+                ],
+                [
+                  "14",
+                  "24-03-26",
+                  "Selasa",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Fabrication welding pipe flowmeter",
+                  "signed",
+                  "12"
+                ],
+                ["15", "25-03-26", "Rabu", null, null, null, null, null, "12"],
+                [
+                  "16",
+                  "26-03-26",
+                  "Kamis",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Welding pipe support flowmeter di lapangan",
+                  "signed",
+                  "13"
+                ],
+                [
+                  "17",
+                  "27-03-26",
+                  "Jumat",
+                  "08:00",
+                  "12:00",
+                  "present",
+                  "Make add platform for STG continue",
+                  "signed",
+                  "13"
+                ],
+                [
+                  "18",
+                  "28-03-26",
+                  "Sabtu",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Welding add platform for STG done",
+                  "signed",
+                  "13"
+                ],
+                [
+                  "19",
+                  "30-03-26",
+                  "Senin",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Continue fabrication and welding platform for STG (illegible)",
+                  "signed",
+                  "13"
+                ],
+                [
+                  "20",
+                  "31-03-26",
+                  "Selasa",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Continue fabrication and welding out form for STG (illegible)",
+                  "signed",
+                  "13"
+                ],
+                [
+                  "21",
+                  "03-05-26",
+                  "Rabu",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Continue install plate form STG (A Ex) assist vendor welding support at stream drum 141-D",
+                  "signed",
+                  "14"
+                ],
+                [
+                  "22",
+                  "04-05-26",
+                  "Kamis",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Cutting gusset plate 16 ea flange SWQ line (illegible)",
+                  "signed",
+                  "14"
+                ],
+                [
+                  "23",
+                  "03-04-26",
+                  "Jumat",
+                  null,
+                  null,
+                  null,
+                  null,
+                  "OFF",
+                  "14"
+                ],
+                [
+                  "24",
+                  "04-04-26",
+                  "Sabtu",
+                  "08:00",
+                  "22:00",
+                  "present",
+                  "Fabrication and welding box for leak line at LV-1010 to 101-V",
+                  "signed",
+                  "14"
+                ],
+                [
+                  "25",
+                  "05-04-26",
+                  "Minggu",
+                  "08:00",
+                  "17:00",
+                  "present",
+                  "Continue install and welding box for leak line at LV-1010 to 101-V",
+                  "signed",
+                  "14"
+                ],
+                [
+                  "26",
+                  "06-04-26",
+                  "Senin",
+                  "08:00",
+                  "18:00",
+                  "present",
+                  "Fabrication and welding plate form for PR-2801 (handwritten)",
+                  "signed",
+                  "15"
+                ],
+                [
+                  "1",
+                  "07-03-26",
+                  "Sabtu",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Continue fabrication and welding temporary line for de-busting/adjusting works (handwritten)",
+                  "signed",
+                  "16"
+                ],
+                [
+                  "2",
+                  "09-03-26",
+                  "Senin",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Continue fabrication and welding temporary line for de-busting/adjusting works (handwritten)",
+                  "signed",
+                  "16"
+                ],
+                [
+                  "3",
+                  "10-03-26",
+                  "Selasa",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Continue fabrication and welding temporary line for de-busting/adjusting works",
+                  "signed",
+                  "16"
+                ],
+                [
+                  "4",
+                  "11-03-26",
+                  "Rabu",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Continue install and welding support for spool pipe bootleg up stream 144-L",
+                  "signed",
+                  "16"
+                ],
+                [
+                  "5",
+                  "12-03-26",
+                  "Kamis",
+                  "07:30",
+                  "17:30",
+                  "present",
+                  "Continue install and welding support and spool pipe bootleg up stream 144-L",
+                  "signed",
+                  "16"
+                ]
+              ]
+            },
+            {
+              "name": "Daily Activity Table",
+              "headers": [
+                "No.",
+                "Date",
+                "In",
+                "Out",
+                "Sign",
+                "Daily Activity",
+                "Sign by User"
+              ],
+              "rows": [
+                [
+                  "6",
+                  "13-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Fabrication and preparation spool drain MPHE (TA)",
+                  "signature"
+                ],
+                [
+                  "7",
+                  "14-03-26",
+                  "07:30",
+                  "16:30",
+                  null,
+                  "Continue install and welding support pipe pre bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "8",
+                  "16-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue install and welding support pipe bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "9",
+                  "17-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Assist fabrication box for steam drum 141-D leak",
+                  "signature"
+                ],
+                [
+                  "10",
+                  "18-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Rectification of WW tank leak (continue)",
+                  "signature"
+                ],
+                [
+                  "11",
+                  "20-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Pre-fabrication support bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "12",
+                  "23-03-26",
+                  "07:30",
+                  "16:00",
+                  null,
+                  "Install flowmeter (continue)",
+                  "signature"
+                ],
+                [
+                  "13",
+                  "24-03-26",
+                  "08:00",
+                  "08:00",
+                  null,
+                  "Install flowmeter and support at lapangan (done)",
+                  "signature"
+                ],
+                [
+                  "14",
+                  "25-03-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Cutting IBC Tank for water house (SEA)",
+                  "signature"
+                ],
+                [
+                  "15",
+                  "26-03-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Cutting Hilban pipe",
+                  "signature"
+                ],
+                [
+                  "21",
+                  "02-04-26",
+                  "08:00",
+                  null,
+                  null,
+                  "Assist warehouse FO cutting IBC Tank; cutting gusset plate / flange (SWO line)",
+                  "signature"
+                ],
+                ["22", "03-04-26", null, null, null, null, "BPF (visible)"],
+                [
+                  "23",
+                  "04-04-26",
+                  "08:00",
+                  "22:00",
+                  null,
+                  "Continue cleaning gusset plate / flange SWO line; fabrication box at front line at LV-1010 to 101-V",
+                  "signature"
+                ],
+                [
+                  "24",
+                  "05-04-26",
+                  "08:00",
+                  "17:00",
+                  null,
+                  "Continue install and welding box at back line LV-1010 to 101-V",
+                  "signature"
+                ],
+                [
+                  "25",
+                  "06-04-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Assist warehouse to cutting IBC tank; fabrication clamp box; pre-fabrication inspection spool S/16",
+                  "signature"
+                ],
+                [
+                  "1",
+                  "07-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Fabrication and welding pre bootleg upstream 144-L spool pipe (continue)",
+                  "signature"
+                ],
+                [
+                  "2",
+                  "09-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue fabrication and welding spool pipe pre bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "3",
+                  "10-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue fabrication and welding spool pipe pre bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "4",
+                  "11-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue fabrication and welding spool and support pipe pre bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "5",
+                  "12-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue install spool and support pipe pre bootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "6",
+                  "13-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue fabrication and welding spool pipe prebootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "7",
+                  "14-03-26",
+                  "07:30",
+                  "16:30",
+                  null,
+                  "Continue fabrication and welding spool pipe prebootleg upstream 144-L",
+                  "signature"
+                ],
+                [
+                  "8",
+                  "16-03-26",
+                  "07:30",
+                  "17:30",
+                  null,
+                  "Continue fabrication and welding spool pipe prebootleg upstream 144-L",
+                  "signature"
+                ],
+                ["9", "17-03-26", null, null, null, null, "CUTI"],
+                ["10", "18-03-26", null, null, null, null, "CUTI"],
+                [
+                  "16",
+                  "25-03-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Cutting IBC Tank for warehouse; fabrication and welding support pipe SWO",
+                  "signature"
+                ],
+                [
+                  "17",
+                  "26-03-26",
+                  "08:00",
+                  "22:00",
+                  null,
+                  "Continue fabrication and welding and cleaning support SWO",
+                  "signature"
+                ],
+                [
+                  "18",
+                  "27-03-26",
+                  "08:00",
+                  "22:00",
+                  null,
+                  "Continue cutting H-beam and fabrication and welding support pipe SWO",
+                  "signature"
+                ],
+                [
+                  "19",
+                  "28-03-26",
+                  "08:00",
+                  "17:00",
+                  null,
+                  "Continue cutting channel and fabrication and welding support pipe SWO",
+                  "signature"
+                ],
+                [
+                  "20",
+                  "30-03-26",
+                  "08:00",
+                  "22:00",
+                  null,
+                  "Cutting support clamp for electrical (10 EA); assist repair of WW tank leak",
+                  "signature"
+                ],
+                [
+                  "21",
+                  "31-03-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Cutting IBC Tank for warehouse; fabrication platform for GT6",
+                  "signature"
+                ],
+                [
+                  "22",
+                  "01-04-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Cutting IBC tanks at warehouse; rectification of WW tank leak",
+                  "signature"
+                ],
+                [
+                  "23",
+                  "02-04-26",
+                  "08:00",
+                  "22:00",
+                  null,
+                  "Rectification of WW tank leak",
+                  "signature"
+                ],
+                [
+                  "24",
+                  "03-04-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Continue rectification WW tank leak",
+                  "signature"
+                ],
+                [
+                  "25",
+                  "04-04-26",
+                  "08:00",
+                  "22:00",
+                  null,
+                  "Fabrication clamp box for work front line at LV-1010 to 101-V",
+                  "signature"
+                ],
+                [
+                  "26",
+                  "05-04-26",
+                  "08:00",
+                  "17:00",
+                  null,
+                  "Continue install and welding clamp box for work leak line at LV-1010 to 101-V",
+                  "signature"
+                ],
+                [
+                  "27",
+                  "06-04-26",
+                  "08:00",
+                  "18:00",
+                  null,
+                  "Fabrication and welding plate form for PPV-2801",
+                  "signature"
+                ]
+              ]
+            }
+          ],
+          "summary": "Pages contain time sheet forms for the period 07 March - 06 April 2026: pages 1–4 are formatted labour/overtime calculation sheets (headers visible for several employees, page 1 for Purwanto ID 21121009) and pages 5–8 are handwritten daily time sheets for Purwanto Tongko (badge 21121009) with 20 daily entries (7 Mar–1 Apr 2026) describing welding/fabrication activities.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "face_finger",
+        "pdfPath": "uploads/upload_20260617_7900/section_8_face_finger.pdf",
+        "data": {
+          "documentTypeLabel": "Face Finger",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Face Finger log (PT. Amanah Lestari Energy)",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "text": "FACE FINGER PT. AMANAH LESTARI ENERGY TEAM FABRICATION\nPERIODE 07 MARCH - 06 APRIL 2026\n\nTable columns: Date | Door | Device ID | Device | User Group | User | Event\n\n(Access log rows listing dates/times, door, device id, device name, user group 'AMANAH LESTARI ENERGY', user identifiers and repeated event '1:N authentication successful (Face)')\n\nPrepared by:\nPT. AMANAH LESTARI ENERGY\n[stamp and signature]\nLINDA KENDA\n\nApproved by:\nPT. PANCA AMARA UTAMA\n[signature]\nAchmad Firdaus"
+            }
+          ],
+          "header": {
+            "title": "FACE FINGER PT. AMANAH LESTARI ENERGY TEAM FABRICATION",
+            "period": "PERIODE 07 MARCH - 06 APRIL 2026"
+          },
+          "lineItems": [],
+          "fields": [
+            {
+              "name": "Table columns",
+              "value": "Date | Door | Device ID | Device | User Group | User | Event"
+            },
+            {
+              "name": "Prepared by (organization)",
+              "value": "PT. AMANAH LESTARI ENERGY"
+            },
+            {
+              "name": "Prepared by (name)",
+              "value": "LINDA KENDA"
+            },
+            {
+              "name": "Approved by (organization)",
+              "value": "PT. PANCA AMARA UTAMA"
+            },
+            {
+              "name": "Approved by (name)",
+              "value": "Achmad Firdaus"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Access log",
+              "headers": [
+                "Date",
+                "Door",
+                "Device ID",
+                "Device",
+                "User Group",
+                "User",
+                "Event"
+              ],
+              "rows": []
+            }
+          ],
+          "summary": "One-page Face Finger access log for PT. Amanah Lestari Energy covering the period 07 March - 06 April 2026, containing a table of daily face-authentication events and preparer/approver signatures.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "fabrication_report",
+        "pdfPath": "uploads/upload_20260617_7900/section_9_fabrication_report.pdf",
+        "data": {
+          "documentTypeLabel": "Fabrication Report",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Fabrication Report - Face Finger",
+          "pages": [
+            {
+              "pageNumber": 1,
+              "description": "Authentication log entries (user 21121025 (LUKMAN UMPEL)), signature block 'Prepared by' LINDA KENDA."
+            },
+            {
+              "pageNumber": 2,
+              "description": "Authentication log entries (user 21121012 (BUSTANG)), signature block 'Approved by' Achmad Firdaus."
+            }
+          ],
+          "header": {
+            "Title": "FACE FINGER PT. AMANAH LESTARI ENERGY TEAM FABRICATION",
+            "Periode": "07 MARCH - 06 APRIL 2026",
+            "Company": "PT. AMANAH LESTARI ENERGY",
+            "Prepared by (Organization)": "PT. AMANAH LESTARI ENERGY",
+            "Prepared by (Name)": "LINDA KENDA",
+            "Approved by (Organization)": "PT. PANCA AMARA UTAMA",
+            "Approved by (Name)": "Achmad Firdaus"
+          },
+          "lineItems": [],
+          "fields": [
+            {
+              "name": "Report title",
+              "value": "FACE FINGER PT. AMANAH LESTARI ENERGY TEAM FABRICATION"
+            },
+            {
+              "name": "Periode",
+              "value": "07 MARCH - 06 APRIL 2026"
+            },
+            {
+              "name": "Prepared by",
+              "value": "PT. AMANAH LESTARI ENERGY / LINDA KENDA"
+            },
+            {
+              "name": "Approved by",
+              "value": "PT. PANCA AMARA UTAMA / Achmad Firdaus"
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "Authentication log - page 1 (user: 21121025(LUKMAN UMPEL))",
+              "headers": [
+                "Date",
+                "Door",
+                "Device ID",
+                "Device",
+                "User Group",
+                "User",
+                "Event"
+              ],
+              "rows": [
+                [
+                  "07/03/2026 07:21",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "08/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "09/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "10/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "11/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "12/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "13/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "14/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "15/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "16/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "17/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "18/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "19/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "20/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "21/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "22/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "23/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "24/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "25/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "26/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "27/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "28/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "29/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "30/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "31/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "01/04/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "02/04/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "03/04/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "04/04/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "05/04/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "06/04/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121025(LUKMAN UMPEL)",
+                  "1:N authentication succeeded (Face)"
+                ]
+              ]
+            },
+            {
+              "name": "Authentication log - page 2 (user: 21121012(BUSTANG))",
+              "headers": [
+                "Date",
+                "Door",
+                "Device ID",
+                "Device",
+                "User Group",
+                "User",
+                "Event"
+              ],
+              "rows": [
+                [
+                  "07/03/2026 07:35",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "08/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "09/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "10/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "11/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "12/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "13/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "14/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "15/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "16/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "17/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "18/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "19/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "20/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "21/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "22/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "23/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "24/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "25/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "26/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "27/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "28/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "29/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "30/03/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "31/03/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "01/04/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "02/04/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "03/04/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "04/04/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "05/04/2026 07:30",
+                  null,
+                  "542150973",
+                  "BAP-TAM-GAT0204",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ],
+                [
+                  "06/04/2026 07:30",
+                  null,
+                  "542150975",
+                  "BAP-TAM-GAT0202",
+                  "AMANAH LESTARI ENERGY",
+                  "21121012(BUSTANG)",
+                  "1:N authentication succeeded (Face)"
+                ]
+              ]
+            }
+          ],
+          "summary": "Two pages of authentication logs (07 March - 06 April 2026) for PT. Amanah Lestari Energy showing daily 1:N face authentication events for users 21121025 (LUKMAN UMPEL) and 21121012 (BUSTANG) on devices BAP-TAM-GAT0202 / BAP-TAM-GAT0204.",
+          "extractionMethod": "vision"
+        }
+      },
+      {
+        "type": "purchase_order",
+        "pdfPath": "uploads/upload_20260617_7900/section_10_purchase_order.pdf",
+        "data": {
+          "documentTypeLabel": "Purchase Order",
+          "fileName": "MPO Invoice - PT Amanah Lestari Energy-po_match.pdf",
+          "fileType": "application/pdf",
+          "status": "extracted",
+          "detectedDocumentType": "Purchase Order",
+          "pages": [38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+          "header": {
+            "poNumber": "4203000812",
+            "poDate": "28 November 2025",
+            "orderType": "PAU",
+            "buyerName": "PT PANCA AMARA UTAMA",
+            "vendorName": "UD SINAR MAS",
+            "projectName": "Banggai Ammonia Plant [BAP]",
+            "currency": "IDR",
+            "totalPrice": 14275000,
+            "totalPriceText": "14,275,000 IDR",
+            "documentTitle": "Appendix - 3 GENERAL TERMS & CONDITIONS",
+            "appendix": "3",
+            "buyer": "PT PANCA AMARA UTAMA",
+            "pagesReferenced": "Page 10 to 10; Page 11 to 10",
+            "governingLaw": "Indonesia",
+            "arbitrationRules": "Indonesian National Board of Arbitration (BANI) Rules and Law No. 30 Year 1999; Singapore International Arbitration Centre (SIAC) for international contracts",
+            "noticeMethods": "registered mail, courier, email",
+            "noticeReceiptTimelines": {
+              "registeredMail": "five days after posting",
+              "courier": "on the date of delivery",
+              "email": "on the date the email is sent, provided there is no automated failure message"
+            },
+            "breachNotificationRequirement": "Vendor is required to notify the buyer within 72 hrs in writing of any breaches or potential breaches of this contract",
+            "terminationForConvenienceNoticeDays": "30",
+            "terminationForBreachRemedy": "Buyer entitled to refund for undelivered or non-conforming Deliverables; payment for delivered and accepted Deliverables but no further compensation on convenience termination",
+            "arbitrationLocation": "Jakarta, Indonesia (BANI arbitration); SIAC (for international contracts)",
+            "languageOfArbitration": "English (for BANI arbitration as specified)"
+          },
+          "lineItems": [
+            {
+              "no": "1",
+              "itemCode": "4260000007",
+              "description": "MNT_SVC- VEH,VEH,CRTV,TYT -AVNZ MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-AVANZA",
+              "additionalText": null,
+              "unit": "EA",
+              "qty": 1,
+              "unitPrice": null,
+              "totalPrice": null,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "1.1",
+              "itemCode": "1213000890",
+              "description": "CM (CORRECTIVE MAINTENANCE) CM AVANZA DN 1184 CC GANTI BAN DEPAN DAN BELAKANG (KIRI DAN KANAN) TIRE SIZE 195/60 R16 89 H DUNLOP TOTAL: 4",
+              "additionalText": "TIRE REPLACE",
+              "unit": "EA",
+              "qty": 4,
+              "unitPrice": 1040000,
+              "totalPrice": 4160000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "1.2",
+              "itemCode": null,
+              "description": "SPOORING",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 200000,
+              "totalPrice": 200000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "1.3",
+              "itemCode": null,
+              "description": "BALANCING",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 280000,
+              "totalPrice": 280000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "2",
+              "itemCode": "4260000006",
+              "description": "MNT_SVC- VEH,VEH,CRTV,TYT -INNV MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-INNOVA",
+              "additionalText": "WINDOW TINT / RIBEN CM INNOVA - DN 1729 CB WINDOW TINT (FRONT 20%, SIDES & REAR 40%) PERFECT GARD",
+              "unit": "EA",
+              "qty": 1,
+              "unitPrice": 2200000,
+              "totalPrice": 2200000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "3",
+              "itemCode": "4260000005",
+              "description": "MNT_SVC- VEH,VEH,CRTV,TYT -FRTNER MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-FORTUNER",
+              "additionalText": "WINDOW TINT / RIBEN CM FORTUNER - DN 1913 RA (FRONT 20%, SIDES & REAR 40%) PERFECT GARD",
+              "unit": "EA",
+              "qty": 1,
+              "unitPrice": 2025000,
+              "totalPrice": 2025000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "4",
+              "itemCode": "4260000008",
+              "description": "MNT_SVC- VEH,VEH,CRTV,TYT -HIACE MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-HIACE",
+              "additionalText": null,
+              "unit": "EA",
+              "qty": 1,
+              "unitPrice": null,
+              "totalPrice": null,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "4.1",
+              "itemCode": "1213000900",
+              "description": "CM (CORRECTIVE MAINTENANCE) CM HI-ACE DN 1642 CY GANTI BAN DEPAN (KIRI DAN KANAN) TIRE SIZE 205/70 R15C BRIDGESTONE R624 TOTAL: 2",
+              "additionalText": "TIRE REPLACE",
+              "unit": "EA",
+              "qty": 2,
+              "unitPrice": 1280000,
+              "totalPrice": 2560000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "4.2",
+              "itemCode": null,
+              "description": "SPOORING",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 200000,
+              "totalPrice": 200000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "4.3",
+              "itemCode": null,
+              "description": "BALANCING",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 280000,
+              "totalPrice": 280000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "5",
+              "itemCode": "4260000006",
+              "description": "MNT_SVC- VEH,VEH,CRTV,TYT -INNV MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-INNOVA",
+              "additionalText": null,
+              "unit": "EA",
+              "qty": 1,
+              "unitPrice": null,
+              "totalPrice": null,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "5.1",
+              "itemCode": "1213000900",
+              "description": "CM (CORRECTIVE MAINTENANCE) CM INNOVA DN 1335 CE GANTI BAN DEPAN DAN BELAKANG TIRE SIZE 205/65 R16 DUNLOP ENASAVE TOTAL: 2",
+              "additionalText": "TIRE REPLACE",
+              "unit": "EA",
+              "qty": 2,
+              "unitPrice": 930000,
+              "totalPrice": 1860000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "5.2",
+              "itemCode": null,
+              "description": "SPOORING",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 200000,
+              "totalPrice": 200000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "5.3",
+              "itemCode": null,
+              "description": "BALANCING",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 280000,
+              "totalPrice": 280000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            },
+            {
+              "no": "5.4",
+              "itemCode": null,
+              "description": "TIRE ROTATION",
+              "additionalText": null,
+              "unit": "LOT",
+              "qty": 1,
+              "unitPrice": 30000,
+              "totalPrice": 30000,
+              "startDate": "28 Nov 2025",
+              "endDate": "31 Dec 2025"
+            }
+          ],
+          "fields": [
+            {
+              "name": "Optional Price Total Price",
+              "value": "14,275,000 IDR"
+            },
+            {
+              "name": "Payment Terms (Appendix A)",
+              "value": "100% by Telegraphic Transfer (T/T) within 30 days after complete & correct invoice"
+            },
+            {
+              "name": "Invoice Requirements",
+              "value": "Signed PO copy; Completion Report (BAST) signed by both parties; Original Invoice & Tax receipt (if any)"
+            },
+            {
+              "name": "Tax Invoice Address",
+              "value": "PT Panca Amara Utama, Jl. Prof. DR. Satrio No. Kav. 3-5, Gedung DBS Bank Tower Lantai 18, Ciputra World 1, Karet Kuningan, Setiabudi, Jakarta Selatan 12940"
+            },
+            {
+              "name": "Buyer NPWP",
+              "value": "02.161.292.4-011.000"
+            },
+            {
+              "name": "Invoice Email (scan copy)",
+              "value": "finance.pau@essa.id"
+            },
+            {
+              "name": "Invoice CC Emails",
+              "value": "procurement.pau@essa.id; procurement.bap@essa.id"
+            },
+            {
+              "name": "Liquidated Damage for Delayed Delivery (Appendix A)",
+              "value": "NOT APPLICABLE (per Appendix A)"
+            },
+            {
+              "name": "Consignee for Shipping Documents",
+              "value": "PT PANCA AMARA UTAMA, GD. DBS BANK TOWER LT.18, CIPUTRA WORLD 1, JL. PROF. DR. SATRIO KAV.3-5, KARET KUNINGAN, SETIABUDI, JAKARTA SELATAN 12940, INDONESIA"
+            },
+            {
+              "name": "NOTICES",
+              "value": "a. Any notices required under the Contract shall be in writing and sent by registered mail, courier, or email to the respective Parties at their addresses or email addresses specified in the Contract. b. Notices shall be deemed to have been received: i. In the case of registered mail, five days after posting; ii. In the case of courier, on the date of delivery; iii. In the case of email, on the date the email is sent, provided there is no automated failure message. c. Either Party may change its address or email for notices by giving the other Party written notice of the new address or email."
+            },
+            {
+              "name": "NOTIFICATION OF BREACH",
+              "value": "Vendor is required to notify the buyer within 72 hrs in writing of any breaches or potential breaches of this contract as soon as they become aware of such occurrences. This notification must include a detailed description of the nature of the breach, the circumstances surrounding it, and any relevant information that may assist in the resolution of the issue. Failure to provide timely notification may result in the cancellation of the contract and vendor being held liable for any resulting damages or losses incurred by the buyer."
+            },
+            {
+              "name": "COUNTERPARTS",
+              "value": "The Contract may be executed in any number of counterparts, each of which shall be deemed as original, but all of which together shall constitute one and the same Contract. Signatures delivered electronically (e.g., via email or an electronic signature platform) shall be deemed valid and binding for all purposes."
+            },
+            {
+              "name": "SEVERABILITY",
+              "value": "If any provision of the Contract is found to be invalid, illegal, or unenforceable by a court of competent jurisdiction, such provision shall be deemed severed from the Contract, and the remaining provisions shall continue in full force and effect. The Parties shall use their best efforts to negotiate a valid and enforceable replacement provision that reflects the original intent of the severed provision."
+            },
+            {
+              "name": "WAIVER",
+              "value": "No waiver of any provision of the Contract by either Party shall be effective unless made in writing and signed by the waiving Party. The failure of either Party to enforce any provision of the Contract shall not be construed as a waiver of that provision or any other provisions, nor affect the validity of the Contract."
+            },
+            {
+              "name": "SURVIVAL",
+              "value": "The provisions of the Contract that are inherently intended to survive termination or expiry (including but not limited to warranties, indemnities, confidentiality obligations, and dispute resolution provisions) shall survive the termination or expiry of the Contract."
+            },
+            {
+              "name": "THIRD-PARTY RIGHTS",
+              "value": "Unless otherwise expressly provided in the Contract, no person other than the Buyer and the Vendor shall have any rights to enforce any term of the Contract."
+            },
+            {
+              "name": "INDEMNITY",
+              "value": "The Vendor agrees to indemnify, defend, and hold harmless the Buyer, its affiliates, employees, and agents from and against any and all claims, damages, liabilities, costs, or expenses (including legal fees) arising from or in connection with: a. Any breach of the Vendor`s obligations under the Contract; b. Injury or damage to property or persons (including death) resulting from the Vendor`s actions or omissions; c. Defects in the Deliverables supplied or the Vendor`s failure to comply with applicable laws, regulations, or standards. d. Any claims arising from infringement of third-party intellectual property rights due to the use, sale, or distribution of the Deliverables under the Contract."
+            },
+            {
+              "name": "TERMINATION",
+              "value": "a. The Buyer reserves the right to terminate the Contract, in whole or in part, with immediate effect by providing written notice to the Vendor in the event of: i. The Vendor`s breach of any material term or condition of the Contract or it is evident that such breach will occur and if not remedied within 14 days of receiving notice of the breach; ii. The Vendor`s insolvency, bankruptcy, or appointment of a receiver or administrator; iii. Any Force Majeure event that continues for more than 30 days. b. Upon termination, the Buyer shall be entitled to a refund of any payments made for undelivered or non-conforming Deliverables. c. The Buyer may terminate the Contract for convenience by giving the Vendor 30 days` written notice. In such a case, the Vendor shall be entitled to payment for any Deliverables already delivered and accepted by the Buyer but shall not be entitled to any further compensation or damages. d. Termination of the Contract shall not affect the accrued rights, remedies, obligations, or liabilities of the parties existing at termination. Conditions that expressly or by implication survive termination of the Contract shall continue in full force and effect."
+            },
+            {
+              "name": "DISPUTE RESOLUTION AND GOVERNING LAW",
+              "value": "a. The Contract, including any disputes or claims arising out of or in connection with it, shall be governed by and construed in accordance with the laws of Indonesia, excluding its conflicts of law provisions. b. Disputes between the Parties, including those related to interpretation, performance, breach, or termination of the Contract, shall first be attempted to be resolved amicably through negotiation within thirty (30) calendar days from the date of written notice of the dispute by either Party. c. If amicable resolution fails, disputes shall be resolved by arbitration under the Indonesian National Board of Arbitration (BANI) Rules and Law No. 30 Year 1999 regarding Arbitration and Alternative Dispute Resolution. The arbitration panel shall consist of three arbitrators: one appointed by ESSA, one appointed by the Buyer, and a third, who will act as the chairman, appointed by the first two arbitrators or, failing agreement, by the Chairman of BANI. The arbitration will be conducted in Jakarta, Indonesia, in English. d. For international contracts, disputes shall be resolved by arbitration administered by the Singapore International Arbitration Centre (SIAC) in accordance with the SIAC Rules. e. Provisions regarding Governing Law and Arbitration shall survive termination or expiration of the Contract."
+            },
+            {
+              "name": "CODE OF BUSINESS CONDUCT",
+              "value": "a) The Vendor acknowledges that it has read, understands, and agrees to comply with the Buyer`s Code of Business Conduct, which outlines the Buyer`s commitment to ethical business practices, corporate responsibility, and compliance with legal standards. b) The Vendor shall ensure that its employees, agents, and subcontractors adhere to the principles of the Buyer`s Code of Business Conduct [under development] in the performance of their obligations under this Contract. c) The Vendor agrees to conduct its business in a manner consistent with the highest ethical standards, including but not limited to compliance with human rights, fair competition, and sustainability practices."
+            },
+            {
+              "name": "COMPLIANCE VERIFICATION",
+              "value": "a) The Buyer reserves the right to review the Vendor`s records and processes, including those of any subcontractors, to ensure compliance with the terms of the Contract and the Buyer`s Code of Business Conduct, including but not limited to quality and adherence to applicable laws and regulations. b) Such reviews may be conducted with reasonable notice during normal business hours. The Vendor shall provide full cooperation and grant access to relevant records, facilities, and personnel to support the review."
+            }
+          ],
+          "documentId": null,
+          "validation": null,
+          "tables": [
+            {
+              "name": "PRICE BREAKDOWN AND DESCRIPTION OF PURCHASE ORDER",
+              "headers": [
+                "No.",
+                "Item Code",
+                "Description",
+                "Additional Text / Vendor Reference",
+                "Unit",
+                "Qty",
+                "Unit Price (IDR)",
+                "Total Price (IDR)",
+                "Start Date - End Date"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "4260000007",
+                  "MNT_SVC- VEH,VEH,CRTV,TYT -AVNZ MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-AVANZA",
+                  "",
+                  "EA",
+                  "1",
+                  null,
+                  null,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "1.1",
+                  "1213000890",
+                  "CM AVANZA DN 1184 CC GANTI BAN DEPAN DAN BELAKANG (KIRI DAN KANAN) TIRE SIZE 195/60 R16 89 H DUNLOP TOTAL: 4",
+                  "TIRE REPLACE",
+                  "EA",
+                  "4",
+                  1040000,
+                  4160000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "1.2",
+                  null,
+                  "SPOORING",
+                  "",
+                  "LOT",
+                  "1",
+                  200000,
+                  200000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "1.3",
+                  null,
+                  "BALANCING",
+                  "",
+                  "LOT",
+                  "1",
+                  280000,
+                  280000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "2",
+                  "4260000006",
+                  "MNT_SVC- VEH,VEH,CRTV,TYT -INNV MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-INNOVA",
+                  "WINDOW TINT / RIBEN CM INNOVA - FRONT 20% / SIDES & REAR 40% PERFECT GARD",
+                  "EA",
+                  "1",
+                  2200000,
+                  2200000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "3",
+                  "4260000005",
+                  "MNT_SVC- VEH,VEH,CRTV,TYT -FRTNER MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-FORTUNER",
+                  "WINDOW TINT / RIBEN CM FORTUNER - FRONT 20% / SIDES & REAR 40% PERFECT GARD",
+                  "EA",
+                  "1",
+                  2025000,
+                  2025000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "4",
+                  "4260000008",
+                  "MNT_SVC- VEH,VEH,CRTV,TYT -HIACE MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-HIACE",
+                  "",
+                  "EA",
+                  "1",
+                  null,
+                  null,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "4.1",
+                  "1213000900",
+                  "CM HI-ACE DN 1642 CY GANTI BAN DEPAN (KIRI DAN KANAN) TIRE SIZE 205/70 R15C BRIDGESTONE R624 TOTAL: 2",
+                  "TIRE REPLACE",
+                  "EA",
+                  "2",
+                  1280000,
+                  2560000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "4.2",
+                  null,
+                  "SPOORING",
+                  "",
+                  "LOT",
+                  "1",
+                  200000,
+                  200000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "4.3",
+                  null,
+                  "BALANCING",
+                  "",
+                  "LOT",
+                  "1",
+                  280000,
+                  280000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "5",
+                  "4260000006",
+                  "MNT_SVC- VEH,VEH,CRTV,TYT -INNV MAINTENANCE SERVICE - VEHICLE, VEHICLE, CORRECTIVE, TOYOTA-INNOVA",
+                  "",
+                  "EA",
+                  "1",
+                  null,
+                  null,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "5.1",
+                  "1213000900",
+                  "CM INNOVA DN 1335 CE GANTI BAN DEPAN DAN BELAKANG TIRE SIZE 205/65 R16 DUNLOP ENASAVE TOTAL: 2",
+                  "TIRE REPLACE",
+                  "EA",
+                  "2",
+                  930000,
+                  1860000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "5.2",
+                  null,
+                  "SPOORING",
+                  "",
+                  "LOT",
+                  "1",
+                  200000,
+                  200000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "5.3",
+                  null,
+                  "BALANCING",
+                  "",
+                  "LOT",
+                  "1",
+                  280000,
+                  280000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ],
+                [
+                  "5.4",
+                  null,
+                  "TIRE ROTATION",
+                  "",
+                  "LOT",
+                  "1",
+                  30000,
+                  30000,
+                  "28 Nov 2025 - 31 Dec 2025"
+                ]
+              ]
+            }
+          ],
+          "summary": "Purchase Order 4203000812 dated 28 November 2025 from PT Panca Amara Utama to UD SINAR MAS for vehicle corrective maintenance services (tires, spooring, balancing, window tinting, etc.) for various Toyota vehicles, total IDR 14,275,000.",
+          "extractionMethod": "ai"
+        }
+      }
+    ],
+    "validation": {
+      "mode": "generic",
+      "overallStatus": "PASS",
+      "summary": "Validation passed.",
+      "results": [
+        {
+          "ruleCode": "EXTRACTION_COUNT",
+          "ruleName": "Documents extracted",
+          "severity": "PASS",
+          "message": "Extracted 10 document(s) across 10 categories.",
+          "expectedValue": ">= 1",
+          "actualValue": "10"
+        },
+        {
+          "ruleCode": "CATEGORY_COVERAGE",
+          "ruleName": "Detected categories",
+          "severity": "PASS",
+          "message": "Categories: kwitansi, invoice, faktur_pajak, berita_acara, summary_of_claim, summary_calculation_manhour, daily_timesheet, face_finger, fabrication_report, purchase_order",
+          "expectedValue": "At least one category",
+          "actualValue": "kwitansi, invoice, faktur_pajak, berita_acara, summary_of_claim, summary_calculation_manhour, daily_timesheet, face_finger, fabrication_report, purchase_order"
+        }
+      ],
+      "categories": [
+        "kwitansi",
+        "invoice",
+        "faktur_pajak",
+        "berita_acara",
+        "summary_of_claim",
+        "summary_calculation_manhour",
+        "daily_timesheet",
+        "face_finger",
+        "fabrication_report",
+        "purchase_order"
+      ],
+      "presentDocuments": [
+        "kwitansi",
+        "invoice",
+        "faktur_pajak",
+        "berita_acara",
+        "summary_of_claim",
+        "summary_calculation_manhour",
+        "daily_timesheet",
+        "face_finger",
+        "fabrication_report",
+        "purchase_order"
+      ]
+    },
+    "meta": {
+      "validationMode": "generic",
+      "openAiEnabled": true,
+      "extractionMode": "parallel",
+      "extractionConcurrency": 10,
+      "extractionSectionCount": 10,
+      "timing": {
+        "classificationMs": 65284,
+        "splittingMs": 402,
+        "extractionMs": 137596,
+        "totalMs": 203283
+      },
+      "performanceTargetsMs": {
+        "classification": 30000,
+        "splitting": 10000,
+        "extraction": 60000,
+        "total": 120000
+      }
+    }
+  }
+}

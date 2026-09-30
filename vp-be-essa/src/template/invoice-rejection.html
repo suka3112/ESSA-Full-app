@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{INVOICE_REF}} {{INVOICE_TYPE}} Rejection Notification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .header img {
+      max-width: 200px;
+    }
+
+    .content {
+      font-size: 16px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .content strong {
+      color: #000000;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #000000;
+      margin-top: 10px;
+      padding: 10px 0; 
+    }
+
+    a {
+      color: #1f6ea9;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="email-container">
+    <div class="header">
+      <img
+        src="https://res.cloudinary.com/dvdgpxne8/image/upload/v1747829491/uploads/uploads/logo3-1747829489894.png.png"
+        alt="Daikin Logo" />
+    </div>
+    <div class="content">
+      <p>Dear <strong>{{VENDOR_NAME}}</strong>,</p>
+
+      <p>
+        We are sorry to inform you that your submitted
+        <strong>{{INVOICE_TYPE}}</strong>
+        has been <strong>rejected</strong>.
+      </p>
+
+      <p>Below are the details:</p>
+
+      <p><strong style="color: #1f6ea9;">Entity Code:</strong> {{ENTITY_CODE}}</p>
+      <p><strong style="color: #1f6ea9;">Entity Name:</strong> {{ENTITY_NAME}}</p>
+      <p><strong style="color: #1f6ea9;">Vendor Code:</strong> {{VENDOR_CODE}}</p>
+      <p><strong style="color: #1f6ea9;">Invoice Ref No:</strong> {{INVOICE_REF}}</p>
+
+      {{#if IS_PO_BASED}}
+      <p><strong style="color: #1f6ea9;">PO Number:</strong> {{PO_CODE}}</p>
+      {{/if}}
+
+      <p>Best regards,<br />Daikin Vendor Portal Team</p>
+    </div>
+
+    <!-- Clean Footer -->
+    <div class="footer">
+      <div style="font-size: 14px; color: #000000; text-align: center; margin: 0;">
+        Copyright © Daikin. All Rights Reserved |
+        <a href="https://www.daikinmea.com" style="color: #000000; text-decoration: none;">www.daikinmea.com</a>
+      </div>
+
+      <div style="margin-top: 10px; text-align: center;">
+        <a href="{{FACEBOOK}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" width="20" height="20"
+            style="display: block;" />
+        </a>
+        <a href="{{TWITTER}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" width="20" height="20"
+            style="display: block;" />
+        </a>
+        <a href="{{LINKEDIN}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" width="20" height="20"
+            style="display: block;" />
+        </a>
+        <a href="{{YOUTUBE}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" alt="YouTube" width="20" height="20"
+            style="display: block;" />
+        </a>
+        <a href="{{INSTAGRAM}}" target="_blank" rel="noopener noreferrer" style="margin: 0 5px; display: inline-block;">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram" width="20" height="20"
+            style="display: block;" />
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

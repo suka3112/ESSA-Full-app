@@ -1,0 +1,134 @@
+{
+  "displaySection": {
+    "text": "Display Section",
+    "tooltip": "View all submitted credit notes",
+    "error": "No credit notes found"
+  },
+  "status": {
+    "text": "Status",
+    "tooltip": "Check status of each credit note",
+    "error": "Status view error"
+  },
+  "createNewCreditNote": {
+    "text": "Create Credit Note",
+    "tooltip": "Create a new credit note",
+    "error": "Creation failed, please try again"
+  },
+  "creditNoteReference": {
+    "text": "Credit Note No.",
+    "tooltip": "Enter a unique reference for the credit note",
+    "error": "Credit Note Reference is required"
+  },
+  "invoiceSelection": {
+    "text": "Invoice Selection",
+    "tooltip": "Select the invoice associated with the credit note",
+    "error": "Invoice selection is required"
+  },
+  "poBasedInvoiceHeader": {
+    "text": "PO Based Invoice",
+    "tooltip": "Select the invoice associated with the credit note",
+    "error": "Selection is required"
+  },
+  "nonPoBasedInvoiceHeader": {
+    "text": "Non PO Based Invoice",
+    "tooltip": "Select the invoice associated with the credit note",
+    "error": "Selection is required"
+  },
+  "submissionDate": {
+    "text": "Submission Date",
+    "tooltip": "",
+    "error": ""
+  },
+  "creditNoteAmount": {
+    "text": "Amount",
+    "tooltip": "Enter the total amount of the credit note",
+    "error": "Amount is required and must be positive"
+  },
+  "currency": {
+    "text": "Currency",
+    "placeholder": "Select Currency",
+    "tooltip": "Select currency for the credit note amount",
+    "error": "Currency is required"
+  },
+  "attachmentType": {
+    "text": "Attachment Type",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "supportingDocuments": {
+    "text": "Supporting Documents",
+    "tooltip": "Attach any relevant supporting documents",
+    "error": "Document upload failed"
+  },
+  "saveProgress": {
+    "text": "Save",
+    "tooltip": "Save changes for later completion",
+    "error": "Save action error"
+  },
+  "submit": {
+    "text": "Submit",
+    "tooltip": "Submit credit note request for review",
+    "error": "Submission failed"
+  },
+  "sortAndFilter": {
+    "text": "Sort and Filter",
+    "tooltip": "",
+    "error": "Selection error"
+  },
+  "fileUpload": {
+    "text": "File Upload",
+    "tooltip": "Upload the invoice file",
+    "error": "Please attach the invoice"
+  },
+  "selectDate": "Select Date",
+  "creditNotePreview": "Credit Note Preview",
+  "creditNoteList": "Credit Note List",
+  "searchCreditNoteNo": "Search Credit Note No.",
+  "searchCreditNote": "Search Credit Note No, Vendor Name/Code",
+  "creditNoteNo": "Credit Note No.",
+  "createCreditNote": "Create Credit Note",
+  "enterCreditNoteRef": "Enter Credit Note Ref",
+  "enterAmount": "Enter Amount",
+  "upload": "Upload",
+  "requestForCreditNote":"Request For Credit Note",
+  "sendRequest":"Send Request",
+  "selectVendors":{
+    "text":"Select Vendors",
+    "error":"Select vendors is required"
+  },
+  "selectInvoice":{
+    "text":"Select Invoice",
+    "error":"Select invoice is required"
+  },
+  "invoiceNum":"Invoice No.",
+  "invoiceText":"Invoice",
+  "creditNoteText":"Credit Note",
+  "invoiceProcessing": "Invoice Processing",
+  "home": "Home",
+  "srNo": "S.No",
+  "createCreditNoteText": "Create Credit Note",
+  "editCreditNoteText": "Edit Credit Note",
+  "emailReport": "Email Report",
+  "downloadReport": "Download Report",
+  "help": "Help",
+  "selectInvoiceType": "Select Invoice Type",
+  "selectInvoiceTooltip": "Select the invoice associated with the credit note",
+  "savedSuccessfully": "Credit note saved successfully",
+  "createdSuccessfully": "Credit note created successfully",
+  "updatedSuccessfully": "Credit note updated successfully",
+  "failedToCreateCreditNote": "Failed to create credit note",
+  "failedToUpdateCreditNote": "Failed to update credit note",
+  "pleaseUploadSelectedFile": "Please upload the selected file before proceeding",
+  "failedToLoadCreditNoteDetails": "Failed to load credit note details",
+  "failedToExportCreditNote": "Failed to export credit note",
+  "failedToEmailReport": "Failed to email report",
+  "creditNoteReportEmailedSuccessfully": "Credit note report emailed successfully",
+  "creditNotesPDFTitle": "Credit_Note_list",
+  "credit_note": "Credit Note",
+  "selectVendorCode": "Select Vendor Code",
+  "noItemsToBeAdded": "No line items added to this credit note",
+  "noLineItemsFound": "No line items found",
+  "creditNoteNotFound": "Credit note not found",
+  "zeroError": "Total Amount of the credit note must be greater than 0"
+
+}

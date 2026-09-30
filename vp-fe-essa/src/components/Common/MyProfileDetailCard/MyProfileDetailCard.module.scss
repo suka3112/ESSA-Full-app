@@ -1,0 +1,31 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.cardLabel {
+    @include fontCustomStyle(1rem, 500, #6c6c6c, 20px);
+    width: 200px;
+    margin-bottom: 0px;
+    padding-right: 10px;
+    // text-transform: capitalize;
+    word-wrap: break-word;
+    // word-break: break-all;
+}
+@media (min-width: 1025px) {
+  .cardValue{
+    width: 230px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .cardLabel {
+    width: 150% !important;
+    margin-bottom: 5px;
+  }
+}
+
+.cardValue {
+    @include fontCustomStyle(1rem, 600, #000, 20px);
+    margin-bottom: 0px;
+    // text-transform: capitalize;
+    word-wrap: break-word;
+    // word-break: break-all;
+}

@@ -1,0 +1,129 @@
+{
+  "displaySection": {
+    "text": "Display Section",
+    "tooltip": "View all submitted SOA entries",
+    "error": "No SOA entries found"
+  },
+  "status": {
+    "text": "Status",
+    "tooltip": "Check status of each SOA entry",
+    "error": "Status view error"
+  },
+  "downloadSOATemplate": {
+    "text": "Download SOA Template",
+    "tooltip": "Download SOA report template",
+    "error": "Download failed"
+  },
+  "uploadSOADocument": {
+    "text": "Upload SOA Document",
+    "tooltip": "Upload SOA document in .xls format",
+    "error": "File format not supported"
+  },
+  "vendorInvoiceCreditNoteNo": {
+    "text": "Invoice No.",
+    "tooltip": "Invoice or Credit Note Number",
+    "error": "Invalid invoice/credit note number"
+  },
+  "invoiceCurrency": {
+    "text": "Currency",
+    "tooltip": "Currency of the invoice",
+    "error": "Currency code error"
+  },
+  "invoiceCreditNoteDate": {
+    "text": "Date",
+    "tooltip": "Date of the invoice/credit note",
+    "error": "Invalid date format"
+  },
+  "amountPerCurrency": {
+    "text": "Amount",
+    "tooltip": "Total amount per currency",
+    "error": "Amount field error"
+  },
+  "totalPerCurrency": {
+    "text": "Total per Currency",
+    "tooltip": "Total amount per currency",
+    "error": "Amount field error"
+  },
+  "dueDate": {
+    "text": "Due Date",
+    "tooltip": "Next payment due date",
+    "error": "Invalid date format"
+  },
+  "hyperlinkToInvoice": {
+    "text": "Hyperlink to Invoice",
+    "tooltip": "View associated invoice",
+    "error": "Link error"
+  },
+  "downloadReport": {
+    "text": "Download Report",
+    "tooltip": "Download SOA report in Excel/PDF",
+    "error": "Download failed"
+  },
+  "emailReport": {
+    "text": "Email Report",
+    "tooltip": "Email SOA report to registered email",
+    "error": "Email failed"
+  },
+  "reconciliationStatus": {
+    "text": "Reconciliation Status",
+    "tooltip": "",
+    "error": ""
+  },
+  "reconciliationComments": {
+    "text": "Reconciliation Comments",
+    "tooltip": "",
+    "error": ""
+  },
+  "editNotReconciledItems": {
+    "text": "Edit (Not Reconciled Items)",
+    "tooltip": "",
+    "error": ""
+  },
+  "type": "Type",
+  "year": "Year",
+  "month": "Month",
+  "uploadNewSoa": "Upload New SOA",
+  "uploadNew": "Upload New",
+  "soaHistory": "SOA History",
+  "dragAndDrop": "Drag & Drop here",
+  "or": "Or",
+  "selectFile": "Select File",
+  "searchInvoiceforVendor": "Search invoice and credit note No.",
+  "help": "Help",
+  "history": "History",
+  "assignedPerson": "Assigned Person",
+  "search": "Search",
+  "vendorName": "Vendor Name",
+  "vendorCode": "Vendor Code",
+  "searchInvoice": "Search Invoice/Credit Note No, Vendor Code/Name",
+  "reconciled": "Reconciled",
+  "mismatched": "Mismatched",
+  "pendingForReconciliation":"Pending For Reconciliation",
+  "jan": "January",
+  "feb": "February",
+  "mar": "March",
+  "apr": "April",
+  "may": "May",
+  "june": "June",
+  "july": "July",
+  "aug": "August",
+  "sep": "September",
+  "oct": "October",
+  "nov": "November",
+  "dec": "December",
+  "actions": "Actions",
+  "createSOA": "Create SOA",
+  "failedToLoadSOA": "Failed to fetch SOA data",
+  "detailsUpdatedSuccess": "Details updated successfully",
+  "failedToUpdateRow": "Failed to update row",
+  "selectValidType": "Please select a valid type",
+  "SOAUploadedSuccess": "SOA uploaded successfully",
+  "failedToLoadSOAHistory": "Failed to load SOA history",
+  "selectInvoiceType": "Select Invoice Type",
+  "soaPDFTitle": "Statement_of_accounts_list",
+  "soaHistoryPDFTitle": "SOA_history",
+  "daikin": "Daikin",
+  "noSOADataAvailable": "No SOA data available",
+  "noSOAHistoryDataAvailable": "No SOA history data available",
+  "nonPOBasedInvoice": "Non - PO Based Invoice"
+}

@@ -1,0 +1,37 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.emailReport {
+  input {
+    width: 100%;
+    font-weight: 600;
+    color: #5f6368;
+    caret-color: transparent;
+    cursor: pointer;
+  }
+
+  svg {
+    color: black !important;
+    fill: black !important;
+  }
+
+  .label {
+    @include fontCustomStyle(14px, 600, #333333, 16.8px);
+  }
+
+  .sendReportBtn {
+    width: 100%;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 700 !important;
+    margin: 15px 0;
+    height: 2.5rem !important;
+  }
+  .disabledsendReportBtn{
+    width: 100%;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 700 !important;
+    margin-top: 20px;
+    height: 2.5rem !important;
+  }
+}

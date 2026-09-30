@@ -1,0 +1,28 @@
+{
+  "invalid": "{{fieldName}} غير صالح",
+  "cannotBeEmpty": "{{fieldName}} غير صالح: لا يمكن أن يكون فارغًا",
+  "multipleSpaces": "{{fieldName}} غير صالح: لا يمكن أن يحتوي على مسافات متتالية متعددة",
+  "minLength": "{{fieldName}} غير صالح: يجب أن يكون على الأقل {{minLength}} أحرف",
+  "maxLength": "{{fieldName}} غير صالح: لا يمكن أن يتجاوز {{maxLength}} حرفًا",
+  "onlyNumbers": "{{fieldName}} غير صالح: يجب أن يحتوي على أرقام فقط",
+  "notOnlyNumbers": "{{fieldName}} غير صالح: لا يمكن أن يحتوي على أرقام فقط",
+  "onlyText": "{{fieldName}} غير صالح: يجب أن يحتوي على أحرف فقط",
+  "notOnlyText": "{{fieldName}} غير صالح: لا يمكن أن يحتوي على أحرف فقط",
+  "onlySymbols": "{{fieldName}} غير صالح: يجب أن يحتوي على رموز فقط",
+  "notOnlySymbols": "{{fieldName}} غير صالح: يجب أن يحتوي على حرف أو رقم واحد على الأقل",
+  "alphaNumeric": "{{fieldName}} غير صالح: يجب أن يحتوي على أحرف وأرقام",
+  "invalidEmail": "{{fieldName}} غير صالح: عنوان بريد إلكتروني غير صالح",
+  "noSymbols": "{{fieldName}} غير صالح: لا يمكن أن يحتوي على رموز",
+  "noText": "{{fieldName}} غير صالح: لا يمكن أن يحتوي على أحرف",
+  "noNumbers": "{{fieldName}} غير صالح: لا يمكن أن يحتوي على أرقام",
+  "atLeastOneCharacter": "{{fieldName}} غير صالح: يجب أن يحتوي على حرف واحد على الأقل",
+  "atLeastOneUppercase": "{{fieldName}} غير صالح: يجب أن يحتوي على حرف كبير واحد على الأقل",
+  "atLeastOneLowercase": "{{fieldName}} غير صالح: يجب أن يحتوي على حرف صغير واحد على الأقل",
+  "atLeastOneSymbol": "{{fieldName}} غير صالح: يجب أن يحتوي على رمز واحد على الأقل",
+  "atLeastOneNumber": "{{fieldName}} غير صالح: يجب أن يحتوي على رقم واحد على الأقل",
+  "alphanumericNoSymbols": "{{fieldName}} غير صالح: الأرقام والأحرف فقط {{allowSpace}}مسموح بها، بدون رموز خاصة.",
+  "alphanumericNoSymbolsWithSpace": "والمسافات ",
+  "cannotPassValidation": "{{fieldName}} غير صالح: لا يمكن اجتياز التحقق",
+  "postalCodeIncorrect": "الرمز البريدي غير صحيح"
+}
+

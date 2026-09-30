@@ -1,0 +1,1 @@
+export const TRACK_APPLICATION = '/users/trackMyApplication'

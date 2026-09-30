@@ -1,0 +1,14 @@
+{
+  "submit": "إرسال",
+  "save_and_continue": "حفظ ومتابعة",
+  "save_and_close": "حفظ وإغلاق",
+  "back": "رجوع",
+  "no_files_uploaded": "لم يتم رفع أي ملف",
+  "no_files_selected": "لم يتم تحديد أي ملف",
+  "upload_file": "رفع ملف",
+  "general_communication_details": "التفاصيل العامة والتواصل",
+  "bank_details": "تفاصيل البنك",
+  "legal_identification_details": "تفاصيل الهوية القانونية",
+  "payment_terms": "شروط الدفع",
+    "yes" : "نعم","no" : "لا"
+}

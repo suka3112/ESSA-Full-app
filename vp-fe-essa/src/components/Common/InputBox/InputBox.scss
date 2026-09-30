@@ -1,0 +1,302 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.fs-18 {
+  font-size: 14px !important;
+}
+
+.numericSign {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+}
+
+.disabled {
+  background-color: #e5e5e5 !important;
+  border: 1px solid #929398 !important;
+}
+
+.numericSign-upper {
+  position: absolute;
+  right: 10px;
+  top: 25px;
+  transform: rotate(180deg);
+}
+
+.passwordIcon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.passwordIcon-ar{
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+.normal-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+
+  label {
+
+    @media screen and (max-width: 667px) {
+      font-size: 0.875rem;
+      line-height: 20px;
+    }
+  }
+
+  .inputBox {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 45px;
+    //height: 100%;
+    font-size: 1rem;
+    color: #030303;
+    // background: #f8f8f8;
+    border: 1px solid #929398;
+    border-radius: 6px;
+    padding: 8px 12px;
+    background: #fcfcfc;
+    // margin-bottom: 20px;
+  }
+
+  .tooltip-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    // margin-left: 4px;
+  }
+
+  .tooltip-text {
+    @include fontCustomStyle(14px, 500, #344054, 12px);
+    background: #fcfcfc;
+    border-radius: 6px;
+    // box-shadow: 0px 0px 4px 0px #00000040;
+    border: 1px solid #344054;
+    padding: 6px 8px;
+    position: relative;
+    left: 15px;
+    top: 50%;
+    transform: translateY(0%);
+    z-index: 10001 !important;
+    text-align: center;
+    transition: opacity 0.2s ease-in-out;
+
+    // Add the left-pointing arrow using ::before
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -8px;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 8px solid #fcfcfc;
+      z-index: 10001 !important;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -9px;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      border-right: 9px solid #e5e5e5;
+      z-index: 10001 !important;
+    }
+  }
+
+  // Ensure the title-label doesn’t shrink
+  .title-label {
+    flex-shrink: 0;
+  }
+  .input-box-icon {
+    position: absolute;
+    bottom: 23px;
+    right: 3px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    border: 1.5px solid var(--brand-primary-color, $primary-color);
+    min-height: 41px;
+    border-radius: 6px;
+    padding: 11px 12px;
+
+    .input-box-icon-inner {
+      border-radius: 5px;
+      min-height: 16px;
+      min-width: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        padding: 0px 4px;
+        font-size: 1rem;
+        line-height: 1;
+        height: 17px;
+      }
+    }
+  }
+  .input-box-icon-error {
+    position: absolute;
+    right: 0;
+    bottom: 20px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    border: 1px solid #005d8b;
+    min-height: 45px;
+    border-radius: 6px;
+    padding: 6px 10px;
+
+    .input-box-icon-inner {
+      border-radius: 6px;
+
+      button {
+        // padding: 0px 8px;
+        padding: 0px 4px;
+        font-size: 0.85rem;
+        line-height: 0.5;
+        height: 10px;
+      }
+    }
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    height: 100%;
+    font-size: 1rem;
+    color: #7e7e7e;
+    background: #fdfdfd;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 16px 18px 18px 16px;
+
+    &:disabled {
+      background-color: #fff;
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      background: #fdfdfd;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  input::placeholder {
+    @include fontCustomStyle(1rem, 400, #5f5f5f, 20px);
+  }
+
+  .title-label {
+    @include fontCustomStyle(1rem, 500, #344054, 12px);
+    // font-family: 'MyriadPro-Regular';
+    letter-spacing: 0.3px;
+    text-align: left;
+    text-decoration-skip-ink: none;
+    //font-size: 16px !important;
+  }
+}
+
+.normal-input.searchbox {
+  height: 100%;
+
+  .form-control {
+    border: 1px solid #003975;
+    font-size: 1rem;
+    color: black;
+    border-radius: 4px;
+    // background-image: url("../../../assets/svg/Search_Icon.svg");
+    background-repeat: no-repeat;
+    background-position: 6% 45%;
+    padding-left: 38px;
+
+    &:focus {
+      background-color: transparent;
+    }
+  }
+
+  input::placeholder {
+    @include fontCustomStyle(1rem, 500, #003975);
+    letter-spacing: -0.11px;
+  }
+}
+
+@include media-breakpoint-mobile-port {
+  .normal-input.searchbox {
+    .form-control {
+      padding-left: 45px;
+    }
+  }
+
+  .normal-input {
+    input::placeholder {
+      @include fontCustomStyle(1rem, 500, #5f5f5f);
+    }
+  }
+}
+
+input[type="radio"] {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border: 1px solid #929398;
+  appearance: none;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+/* Inner dot */
+input[type="radio"]::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background-color: #3a3a3a;
+  border-radius: 50%;
+  position: absolute;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+.text-area-box::placeholder {
+  @include fontCustomStyle(1rem, 400, #5f5f5f, 20px);
+}
+
+/* Show inner dot when checked */
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+.normal-input input:focus,
+.normal-input textarea:focus {
+  border: 1.5px solid #005d8b !important; /* Blue border on focus */
+  outline: none !important;
+  box-shadow: 0px 1px 4px 0px #82d5ff80; /* Optional subtle glow */
+}

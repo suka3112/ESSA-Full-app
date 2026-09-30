@@ -1,0 +1,28 @@
+.custom-fieldset {
+  border-radius: 8px;
+  border: 1px solid #00000080;
+  // box-shadow: 0px 1px 1px 0px #00000040;
+  padding: 15px 20px;
+  margin-bottom: 16px;
+  position: relative;
+  padding-top: 24px;
+
+  &:focus-within {
+    //border-color: #007bff;
+  }
+}
+
+.custom-legend {
+  position: absolute;
+  top: -11px;
+  left: 25px;
+  background-color: #fff;
+  padding: 0 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333333;
+  border-radius: 4px;
+  margin: 0;
+  width: max-content;
+  z-index: 1;
+}

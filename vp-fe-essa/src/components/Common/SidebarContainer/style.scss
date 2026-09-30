@@ -1,0 +1,261 @@
+.sidebar-outside-wrap {
+  height: 100%;
+}
+
+/* =========================
+   EAPA Sidebar
+   ========================= */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+
+  width: 236px;
+  height: 100%;
+
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+}
+
+.eapa-logo {
+  padding-left: 16px;
+  padding-right: 16px;
+
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+/* ESSA Logo */
+.eapa-logo img {
+  display: block;
+
+  height: 32px;
+  width: auto;
+}
+
+/* EAPA Subtitle */
+.eapa-logo span {
+  display: block;
+
+  margin-top: 4px;
+
+  font-family:
+    'Segoe UI',
+    'Segoe UI Variable Text',
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+  line-height: 16px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.1em;
+
+  color: #4b5563;
+}
+
+/* =========================
+   Main Navigation
+   ========================= */
+
+.sidebar-nav {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 16px;
+}
+
+/* =========================
+   Navigation Item
+   ========================= */
+
+.sidebar-nav-item {
+  margin-bottom: 2px;
+}
+
+/* =========================
+   Main Navigation Link
+   ========================= */
+
+.sidebar-nav-link {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border-radius: 6px;
+
+  padding: 8px 10px;
+
+  font-family:
+    'Segoe UI',
+    'Segoe UI Variable Text',
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  line-height: normal;
+
+  text-decoration: none !important;
+
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+
+  svg {
+    flex-shrink: 0;
+    color: inherit;
+  }
+}
+
+/* =========================
+   Active Main Navigation
+   ========================= */
+
+.sidebar-nav-link.active {
+  background-color: #2d9a47;
+  color: #ffffff !important;
+
+  box-shadow: 0 1px 2px 0 rgb(16 24 40 / 0.05);
+}
+
+/* =========================
+   Inactive Main Navigation
+   ========================= */
+
+.sidebar-nav-link:not(.active) {
+  color: #374151 !important;
+}
+
+/* =========================
+   Main Navigation Hover
+   ========================= */
+
+.sidebar-nav-link:not(.active):hover {
+  background-color: #eef9f1;
+  color: #1d6530 !important;
+}
+
+/* =========================
+   Sub Navigation Container
+   ========================= */
+
+.sidebar-subnav {
+  margin-left: 16px;
+  margin-top: 2px;
+
+  padding-left: 8px;
+
+  border-left: 1px solid #e5e7eb;
+}
+
+/* =========================
+   Sub Navigation Link
+   ========================= */
+
+.sidebar-subnav-link {
+  display: block;
+
+  border-radius: 4px;
+
+  padding: 6px 8px;
+
+  font-family:
+    'Segoe UI',
+    'Segoe UI Variable Text',
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  line-height: normal;
+
+  text-decoration: none !important;
+}
+
+/* =========================
+   Active Sub Navigation
+   ========================= */
+
+.sidebar-subnav-link.active {
+  background-color: #eef9f1;
+  color: #247e3a !important;
+}
+
+/* =========================
+   Inactive Sub Navigation
+   ========================= */
+
+.sidebar-subnav-link:not(.active) {
+  color: #6b7280 !important;
+}
+
+/* =========================
+   Sub Navigation Hover
+   ========================= */
+
+.sidebar-subnav-link:not(.active):hover {
+  background-color: #eef0f2;
+  color: #1f2937 !important;
+}
+
+.sidebar-subnav-link--dummy {
+  cursor: default;
+}
+
+.sidebar-subnav-link--dummy:hover {
+  background-color: transparent;
+  color: #6b7280 !important;
+}
+
+/* =========================
+   Sidebar Footer
+   ========================= */
+
+.sidebar-footer {
+  border-top: 1px solid #e5e7eb;
+
+  padding: 12px 16px;
+
+  font-family:
+    'Segoe UI',
+    'Segoe UI Variable Text',
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+
+  line-height: 16px;
+
+  color: #6b7280;
+}

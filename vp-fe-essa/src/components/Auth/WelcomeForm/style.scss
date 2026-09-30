@@ -1,0 +1,30 @@
+.welcome-form-container {
+  text-align: center;
+
+  .title {
+    color: #0071c5;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    position: relative;
+    font-weight: bold;
+  }
+
+  .successGif {
+    display: flex;
+    justify-content: center;
+  }
+
+  .subtitle {
+    font-size: 1.3em;
+    margin: 30px 0px;
+  }
+
+  .message {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .welcome-btn {
+    text-transform: capitalize !important;
+  }
+}

@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-font:
+    'Segoe UI', 'Segoe UI Variable Text', Inter, -apple-system, BlinkMacSystemFont, Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --app-font-size: 14px;
+  --app-font-weight: 400;
+  --app-line-height: 20px;
+  --bs-font-sans-serif: var(--app-font);
+  --bs-body-font-family: var(--app-font);
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--app-font) !important;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html,
+body {
+  font-size: var(--app-font-size) !important;
+  font-weight: var(--app-font-weight);
+  line-height: var(--app-line-height);
+}
+
+body {
+  margin: 0;
+  color: #1f2937;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.MuiTypography-root,
+.MuiButton-root,
+.MuiInputBase-root,
+.MuiMenuItem-root,
+.MuiInputLabel-root,
+.MuiTableCell-root {
+  font-family: var(--app-font) !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.MuiPaginationItem-previousNext {
+  [dir='rtl'] & {
+    rotate: 180deg;
+  }
+
+  [dir='ltr'] & {
+    rotate: 0deg;
+  }
+}
+
+.MuiTableCell-root {
+  [dir='rtl'] & {
+    text-align: right;
+  }
+
+  [dir='ltr'] & {
+    text-align: left;
+  }
+}

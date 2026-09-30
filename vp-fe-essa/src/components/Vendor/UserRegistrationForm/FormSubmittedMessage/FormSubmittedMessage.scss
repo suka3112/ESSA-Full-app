@@ -1,0 +1,40 @@
+@import "../../../../assets/scss/abstracts/abstracts.scss";
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 6rem 0;
+  border: 1px solid #98a2b3;
+  border-radius: 14px;
+  padding: 20px;
+  width: fit-content;
+
+  h2 {
+    @include fontCustomStyle(24px, 600, #1a1a1a, 31px);
+    margin-bottom: 10px;
+  }
+
+  p {
+    @include fontCustomStyle(16px, 400, #1a1a1a, 31px);
+  }
+
+  .track-btn {
+    min-width: 200px;
+    margin-top: 4rem;
+  }
+
+  .ref-number {
+    @include fontCustomStyle(18px, 600, #1a1a1a, 31px);
+  }
+  .successGif {
+  display: flex;
+  justify-content: center;
+  img {
+    height: 104px;
+    width: 104px;
+  }
+}
+}

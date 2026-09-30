@@ -1,0 +1,81 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.poContainer {
+  padding: 0px 0px 20px 0px;
+
+  .homeText {
+    @include fontCustomStyle(14px, 400, #616162, 18px);
+  }
+
+  .subHeaderBtn {
+    min-width: 140px;
+  }
+
+  .invoiceBtn {
+    min-width: 105px;
+  }
+
+  .subHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+    }
+  }
+}
+
+
+
+
+.resetBtn {
+  width: 100%;
+}
+
+.forgotPassword {
+  display: flex;
+  justify-content: end;
+
+  label {
+    cursor: pointer;
+  }
+
+  label {
+    @include fontCustomStyle(12px, 400, #007aff, 20px);
+  }
+}
+
+.resetTitle {
+  @include fontCustomStyle(24px, 600, var(--brand-primary-color, $primary-color), 28px);
+  margin: 10px 0;
+
+  .emailTxt {
+    @include fontCustomStyle(20px, 400, #2a2a2a, 28px);
+
+    b {
+      @include fontCustomStyle(20px, 600, #2a2a2a, 28px);
+    }
+  }
+}
+
+
+.reset-password-container {
+  // margin-top: 7rem;
+
+  .rpc-msg {
+    font-size: 1.5rem !important;
+    font-weight: 400;
+    color: #2a2a2a;
+  }
+}
+
+.login-input-reset {
+  min-width: 360px;
+}
+
+.passInfo {
+  font-weight: 400;
+  font-size: 24px;
+  color: #2a2a2a;
+}

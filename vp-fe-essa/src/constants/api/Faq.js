@@ -1,0 +1,8 @@
+export const CREATE_FAQ_HEADER = '/faq/createheader'
+export const ADD_FAQ_QUESTION = '/faq/addQuestion'
+export const GET_FAQ_HEADERS = '/faq/faqHeaders'
+export const GET_FAQ_QUESTIONS = '/faq/faqquestions'
+export const UPDATE_FAQ_HEADER = '/faq/faqHeaders'
+export const UPDATE_FAQ_QUESTION = '/faq/faqquestions'
+export const DELETE_FAQ_HEADER = '/faq/faqHeaders'
+export const DELETE_FAQ_QUESTION = '/faq/faqquestions'

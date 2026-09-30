@@ -1,0 +1,6 @@
+export const VENDOR_USER_TYPE = 'vendor'
+export const FINANCE_USER_TYPE = 'finance'
+export const BUSINESS_USER_TYPE = 'business'
+export const ADMIN_USER_TYPE = 'admin'
+export const AUTH_SETUP = 'auth'
+export const VENDOR_PORTAL = 'vendor-portal'

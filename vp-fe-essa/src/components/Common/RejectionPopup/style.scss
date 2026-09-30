@@ -1,0 +1,31 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.confimationBtns {
+  width: 120px !important;
+  height: 42px !important;
+}
+.actionBtns {
+  width: 100% !important;
+  height: 42px !important;
+  flex: 1;
+}
+.customBtn {
+  width: 100% !important;
+}
+.inputArea {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  // justify-content: space-between;
+  gap: 1rem;
+
+  label {
+    flex: 0 0 20%;
+    margin-bottom: 0;
+    @include fontCustomStyle(16px, 500, #374151, 20px);
+  }
+
+  .inputBox {
+    flex: 0 0 70%;
+  }
+}

@@ -1,0 +1,1391 @@
+{
+  "status": 200,
+  "message": "Document extracted and classified successfully",
+  "data": {
+    "documents": [
+      {
+        "documentType": "invoice",
+        "documentTypeLabel": "Invoice",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": null,
+        "invoicePages": [1, 2],
+        "header": {
+          "invoiceNumber": "568/PT/ALE-PAU/04/2026",
+          "invoiceDate": "22/04/2026",
+          "dueDate": "22/05/2026",
+          "vendorName": "PT. AMANAH LESTARI ENERGY",
+          "vendorAddress": "Desa Padang, Kec. Kintom, Kab. Banggai, Sulawesi Tengah",
+          "vendorTaxId": "082212670823200000000",
+          "buyerName": "PT. PANCA AMARA UTAMA",
+          "poNumber": "4203000546",
+          "serviceName": "MANPOWER SUPPLY FOR PIPING FABRICATION (Welder, Fitter and Helper)",
+          "currency": "IDR",
+          "manhourUnitRate": null,
+          "subtotal": "55.029.500",
+          "taxAmount": "6.053.245",
+          "totalAmount": "61.082.745",
+          "grandTotal": "61.082.745",
+          "paymentTerms": "30 Days From Invoice Date",
+          "bankName": "PT. Bank Mandiri (Persero) Tbk.",
+          "bankBranch": "Cabang Luwuk",
+          "bankAccount": "1510010173695",
+          "accountHolder": "PT. Amanah Lestari Energy"
+        },
+        "lineItems": [
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 Direct Cost Welder",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "21.990.000",
+            "role": "Welder"
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 Stationery, Postage, Transportation",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "1.130.000",
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 MGU",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": null,
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 PPE",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": null,
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 Overhead and Profit",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "4.465.500",
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 Direct Cost Fitter",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "15.680.000",
+            "role": "Fitter"
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 MCU",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": null,
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 PPE",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": null,
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 Overhead and Profit",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "2.883.000",
+            "role": null
+          },
+          {
+            "description": "10th Claim for 07 March - 06 April 2026 Overtime Fitter",
+            "quantity": null,
+            "unit": null,
+            "unitPrice": null,
+            "amount": "3.880.000",
+            "role": "Fitter"
+          }
+        ],
+        "fields": [],
+        "documentId": 145,
+        "validation": null
+      },
+      {
+        "documentType": "tax_invoice",
+        "documentTypeLabel": "Tax Invoice (VAT)",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": null,
+        "invoicePages": [],
+        "header": {
+          "taxInvoiceNumber": "04002600142842732",
+          "invoiceDate": "KAB. BANGGAI, 22 April 2026",
+          "taxAmount": "6.053.245,00",
+          "grandTotal": "55.029.500,00",
+          "bankName": "PT. Bank Mandiri (Persero) Tbk.",
+          "bankAccount": "1510010173695",
+          "bankBranch": "Cabang Luwuk",
+          "serviceName": "MANPOWER SUPPLY FOR PIPING FABRICATION (Welder, Fitter and Helper)",
+          "vendorName": "AMANA LESTARI ENERGY",
+          "vendorTaxId": "082212670823200000000",
+          "buyerName": "PANCA AMARA UTAMA",
+          "currency": "IDR"
+        },
+        "lineItems": [],
+        "fields": [],
+        "documentId": 146,
+        "validation": null
+      },
+      {
+        "documentType": "berita_acara",
+        "documentTypeLabel": "D. Work Progress Certificate (Berita Acara)",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "Berita Acara",
+        "invoicePages": [4],
+        "header": {
+          "poNumber": "4203000546",
+          "periodStart": "07 March 2026",
+          "periodEnd": "06 April 2026",
+          "manhourCompletionPct": "6.92%",
+          "serviceName": "Manpower supply for piping work",
+          "preparedBy": "MERWIN B BABO",
+          "reviewedBy": "Achmad Firdaus",
+          "acknowledgedBy": "Ruhiyat D",
+          "approvedBy": "Novi Arihanomo",
+          "vendorName": "PT. AMANAH LESTARI ENERGY",
+          "projectName": "BANGGAI AMMONIA PLANT PROJECT"
+        },
+        "lineItems": [
+          {
+            "description": "",
+            "quantity": null,
+            "unit": "",
+            "unitPrice": "",
+            "amount": null,
+            "serviceName": null,
+            "role": "Mechanical Lead",
+            "manpowerName": "Ruhiyat D",
+            "completionPct": null
+          },
+          {
+            "description": "",
+            "quantity": null,
+            "unit": "",
+            "unitPrice": "",
+            "amount": null,
+            "serviceName": null,
+            "role": "Mechanical Manager",
+            "manpowerName": "Kuswara H",
+            "completionPct": null
+          },
+          {
+            "description": "",
+            "quantity": null,
+            "unit": "",
+            "unitPrice": "",
+            "amount": null,
+            "serviceName": null,
+            "role": "Maintenance Head",
+            "manpowerName": "Gurucharan Singh Gidda",
+            "completionPct": null
+          },
+          {
+            "description": "",
+            "quantity": null,
+            "unit": "",
+            "unitPrice": "",
+            "amount": null,
+            "serviceName": null,
+            "role": "Procurement & Logistics",
+            "manpowerName": "Mohan Doddagoudar",
+            "completionPct": null
+          },
+          {
+            "description": "",
+            "quantity": null,
+            "unit": "",
+            "unitPrice": "",
+            "amount": null,
+            "serviceName": null,
+            "role": "Operations & Site Head",
+            "manpowerName": "Novi Arihanomo",
+            "completionPct": null
+          }
+        ],
+        "fields": [],
+        "documentId": 147,
+        "validation": null
+      },
+      {
+        "documentType": "manhour_summary",
+        "documentTypeLabel": "E. Summary Calculation Manhour",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "Summary Calculation Manhour",
+        "invoicePages": [5, 7, 8, 9],
+        "header": {
+          "poNumber": "4203000546",
+          "periodStart": "07 March 2026",
+          "periodEnd": "06 April 2026",
+          "vendorName": "PT. AMANAH LESTARI ENERGY",
+          "projectName": "BANGGAI AMMONIA PLANT PROJECT",
+          "totalRegularManhour": "758,50",
+          "totalOvertimeManhour": "180.50",
+          "currency": "IDR"
+        },
+        "lineItems": [
+          {
+            "description": null,
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "regularManhour": "178,00",
+            "overtimeManhour": "39"
+          },
+          {
+            "description": null,
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "role": "Welder",
+            "manpowerName": "Lukman Umpel",
+            "regularManhour": "188,50",
+            "overtimeManhour": "44.50"
+          },
+          {
+            "description": null,
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "role": "Pipe Fitter",
+            "manpowerName": "Syafiful Kowlioy",
+            "regularManhour": "197,00",
+            "overtimeManhour": "29"
+          },
+          {
+            "description": null,
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "role": "Fitter",
+            "manpowerName": "Bustang",
+            "regularManhour": "195,00",
+            "overtimeManhour": "68"
+          }
+        ],
+        "fields": [],
+        "documentId": 148,
+        "validation": null
+      },
+      {
+        "documentType": "timesheet",
+        "documentTypeLabel": "F. Daily Time Sheet",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "Daily Time Sheet",
+        "invoicePages": [
+          10, 12, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+          30, 31, 32, 33, 34, 35, 36
+        ],
+        "header": {
+          "poNumber": "4203000546",
+          "periodStart": "07-Mar-26",
+          "periodEnd": "06-Apr-26",
+          "vendorName": "PT. AMANAH LESTARI ENERGY",
+          "projectName": "BANGGAI AMMONIA PLANT PROJECT"
+        },
+        "lineItems": [
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "7-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "8-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "9-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "10-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "11-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "12-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8.50",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "13-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "8"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "14-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "15-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "16-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "17-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "18-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "19-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "20-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "9",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "21-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "22-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "23-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "24-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "25-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "26-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "27-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "28-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "29-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "30-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "31-Mar-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "1-Apr-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "2-Apr-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "3-Apr-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "4-Apr-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "5-Apr-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "6-Apr-26",
+            "username": "21121009",
+            "role": "Welder",
+            "manpowerName": "Purwanto",
+            "basicTime": null,
+            "otActual": null,
+            "regularManhour": "8",
+            "overtimeManhour": "0"
+          }
+        ],
+        "fields": [],
+        "timesheets": [
+          {
+            "manpowerName": "Purwanto",
+            "username": "21121009",
+            "role": "Welder",
+            "periodStart": "07-Mar-26",
+            "periodEnd": "06-Apr-26",
+            "totalRegularManhour": "257.50",
+            "totalOvertimeManhour": "8",
+            "sheetPages": [10],
+            "entries": [
+              {
+                "date": "7-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "8-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "9-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "10-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "11-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "12-Mar-26",
+                "regularManhour": "8.50",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "13-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "8"
+              },
+              {
+                "date": "14-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "15-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "16-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "17-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "18-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "19-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "20-Mar-26",
+                "regularManhour": "9",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "21-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "22-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "23-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "24-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "25-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "26-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "27-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "28-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "29-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "30-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "31-Mar-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "1-Apr-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "2-Apr-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "3-Apr-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "4-Apr-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "5-Apr-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              },
+              {
+                "date": "6-Apr-26",
+                "regularManhour": "8",
+                "overtimeManhour": "0"
+              }
+            ]
+          }
+        ],
+        "documentId": 149,
+        "validation": null
+      },
+      {
+        "documentType": "attendance",
+        "documentTypeLabel": "G. Daily Attendance (Biometrics)",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "Daily Attendance",
+        "invoicePages": [11, 13, 16],
+        "header": {
+          "site": "PT. AMANAH LESTARI ENERGY",
+          "periodStart": "07 MARCH 2026",
+          "periodEnd": "06 APRIL 2026",
+          "vendorName": "PT. AMANAH LESTARI ENERGY"
+        },
+        "lineItems": [
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "03/03/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "04/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "06/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "06/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "06/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "06/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          },
+          {
+            "description": "",
+            "quantity": "",
+            "unit": "",
+            "unitPrice": "",
+            "amount": "",
+            "date": "06/04/2026",
+            "username": "21121009(PURWANTO)",
+            "event": "IN authentication succeeded (Face)"
+          }
+        ],
+        "fields": [],
+        "documentId": 150,
+        "validation": null
+      },
+      {
+        "documentType": "po",
+        "documentTypeLabel": "H. PO",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": null,
+        "invoicePages": [37],
+        "header": {
+          "poNumber": "4203000546",
+          "poDate": "07 July 2025",
+          "vendorName": "PT PANCA AMARA UTAMA",
+          "vendorCode": "30000956",
+          "buyerName": "PT AMANAH LESTARI ENERGY",
+          "projectName": "DESA PADANG, KINTOM 94761 BANGGAI",
+          "requisitionNo": "1213000365",
+          "deliveryDate": "01 June 2025",
+          "serviceStartDate": null,
+          "serviceEndDate": null,
+          "currency": "IDR",
+          "subtotal": "795,234,000",
+          "taxAmount": null,
+          "totalAmount": "795,234,000",
+          "paymentTerms": "Due in 30 days from Invoice Receipt Date",
+          "incoterms": null
+        },
+        "lineItems": [
+          {
+            "description": "MANPOWER SUPPLY FOR PIPING FABRICATION",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "795,234,000",
+            "amount": "795,234,000",
+            "deliveryDate": "01 June 2025"
+          }
+        ],
+        "fields": [],
+        "documentId": 151,
+        "validation": null
+      },
+      {
+        "documentType": "po_appendix",
+        "documentTypeLabel": "I. PO Appendix",
+        "fileName": "MPO Invoice - PT Amanah Lestari Energy.pdf",
+        "fileType": "application/pdf",
+        "status": "extracted",
+        "detectedDocumentType": "PO Appendix",
+        "invoicePages": [38, 39, 40],
+        "header": {
+          "poNumber": "4203000812",
+          "poDate": "28 November 2025",
+          "vendorName": "UD SINAR MAS",
+          "vendorCode": "",
+          "buyerName": "PT PANCA AMARA UTAMA",
+          "projectName": "Banggai Ammonia Plant [BAP]",
+          "currency": "IDR"
+        },
+        "lineItems": [
+          {
+            "description": "MNT_SVC-VEH,VEH,CRTV,TYT -AVNZ MAINTENANCE SERVICE - VEHICLE, CORRECTIVE, TOYOTA-AVANZA",
+            "quantity": "4",
+            "unit": "",
+            "unitPrice": "1,040,000",
+            "amount": "4,160,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "SPOORING",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "200,000",
+            "amount": "200,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "BALANCING",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "280,000",
+            "amount": "280,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "MNT_SVC-VEH,VEH,CRTV,TYT -INVN MAINTENANCE SERVICE - VEHICLE, CORRECTIVE, TOYOTA-INNOVA",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "2,200,000",
+            "amount": "2,200,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "MNT_SVC-VEH,VEH,CRTV,TYT -HIACE MAINTENANCE SERVICE - VEHICLE, CORRECTIVE, TOYOTA-HIACE",
+            "quantity": "2",
+            "unit": "",
+            "unitPrice": "1,280,000",
+            "amount": "2,560,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "SPOORING",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "200,000",
+            "amount": "200,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "BALANCING",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "280,000",
+            "amount": "280,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "MNT_SVC-VEH,VEH,CRTV,TYT -INVN MAINTENANCE SERVICE - VEHICLE, CORRECTIVE, TOYOTA-INNOVA",
+            "quantity": "2",
+            "unit": "",
+            "unitPrice": "930,000",
+            "amount": "1,860,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "SPOORING",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "200,000",
+            "amount": "200,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "BALANCING",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "280,000",
+            "amount": "280,000",
+            "manpowerRole": "",
+            "role": ""
+          },
+          {
+            "description": "TIRE ROTATION",
+            "quantity": "1",
+            "unit": "",
+            "unitPrice": "30,000",
+            "amount": "30,000",
+            "manpowerRole": "",
+            "role": ""
+          }
+        ],
+        "fields": [],
+        "documentId": 152,
+        "validation": null
+      }
+    ]
+  }
+}

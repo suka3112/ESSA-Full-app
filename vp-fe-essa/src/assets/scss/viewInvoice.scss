@@ -1,0 +1,10 @@
+@import './abstracts/abstracts.scss';
+
+.detailValueContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fileLink{
+  color: var(--brand-primary-color, $primary-color);
+}

@@ -1,0 +1,19 @@
+export const LIST_PO = '/purchaseOrder/poList';
+export const PO_EXPORT = 'purchaseOrder/poList/export'
+export const PO_LINE_ITEM_EXPORT = 'purchaseOrder/poLineItemList/export'
+export const PO_GR_DETAILS = 'purchaseOrder/goodsReceivedList'
+export const PO_GR_DETAILS_EXPORT = 'purchaseOrder/goodsReceivedListExport'
+export const PO_INV_DETAILS_EXPORT = 'invoice/getPoInvoice/export'
+export const PO_INVOICE_LISTING = 'invoice/invoiceList'
+export const PO_INVOICE_DETAIL_LISTING = 'invoice/getPoInvoice'
+export const GET_PO_DROPDOWN = '/purchaseOrder/poDropdown'
+export const GR_DROPDOWN = 'purchaseOrder/grDropdown'
+export const PO_LINE_ITEM_DETAILS = 'purchaseOrder/poDeliveryList'
+
+// export const PO_DETAILS = '/purchaseOrder/purchaseOrderDetails';
+export const PO_DETAILS = '/purchaseOrder/poLineItemList';
+export const PO_MATERIAL_LISTING = '/purchaseOrder/purchaseOrder/materialListing';
+export const PO_MATERIAL_QUANTITY_LISTING = '/purchaseOrder/purchaseOrder/materialQuantityListing';
+export const PO_GOODS_RECEIPT_LISTING = 'purchaseOrder/purchaseOrder/goodsReceipt';
+export const EXPORT_GOODS_RECEIPT_LISTING = 'purchaseOrder/goodsReceipt/export';
+export const SEND_GOODS_RECEIPT_EMAIL_REPORT = 'purchaseOrder/goodsReceipt/emailReport'

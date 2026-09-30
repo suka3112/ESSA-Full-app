@@ -1,0 +1,126 @@
+{
+  "createNewInvoice": {
+    "text": "Create New Invoice",
+    "tooltip": "Create a new invoice for NON-PO",
+    "error": "Action failed"
+  },
+  "businessContact": {
+    "text": "Business Contact",
+    "tooltip": "Select the business contact for the invoice",
+    "error": ""
+  },
+  "natureOfExpenses": {
+    "text": "Nature of Expenses",
+    "tooltip": "Select the nature of expenses",
+    "error": ""
+  },
+  "remarks": {
+    "text": "Remarks",
+    "tooltip": "Remarks by vendor",
+    "error": ""
+  },
+  "vendorInvoiceReferenceNumber": {
+    "text": "Vendor Invoice Reference No",
+    "tooltip": "Reference number of the Invoice",
+    "error": ""
+  },
+  "submittedDate": {
+    "text": "Submitted Date",
+    "tooltip": "Date when the invoice was submitted",
+    "error": ""
+  },
+  "invoiceDate": {
+    "text": "Invoice Date",
+    "tooltip": "Date when the invoice was issued",
+    "error": "Pick current or past date only"
+  },
+  "currency": {
+    "text": "Currency",
+    "tooltip": "Invoice currency",
+    "error": ""
+  },
+  "taxPercentage": {
+    "text": "Tax Percentage",
+    "tooltip": "Select the tax percentage from drop down",
+    "error": ""
+  },
+  "totalInvoiceAmount": {
+    "text": "Total Invoice Amount",
+    "tooltip": "Enter invoice amount excl tax",
+    "error": "Total Invoice Amount is required",
+    "zeroError": "Total Invoice Amount must be greater than 0"
+  },
+  "paymentTerms": {
+    "text": "Payment Terms",
+    "tooltip": "Agreed payment terms mentioned on Vendor Profile",
+    "error": ""
+  },
+  "attachmentType": {
+    "text": "Attachment Type",
+    "tooltip": "Select the document type",
+    "error": ""
+  },
+  "fileUpload": {
+    "text": "File Upload",
+    "tooltip": "Upload the invoice file",
+    "tooltip2": "Attach any relevant supporting documents",
+    "error": "Please attach the invoice"
+  },
+  "fileSubmission": {
+    "text": "File Submission",
+    "tooltip": "Submit invoice for processing",
+    "error": "Submission failed"
+  },
+  "totalNetValue": {
+    "text": "Total Net Value (exc tax)",
+    "tooltip": "System calculates based on the above line items",
+    "error": ""
+  },
+  "totalTaxAmount": {
+    "text": "Total Tax Amount",
+    "tooltip": "System calculates based on the above line items",
+    "error": ""
+  },
+  "saveProgress": {
+    "text": "Save Progress",
+    "tooltip": "Save changes for later completion",
+    "error": "Save action error"
+  },
+  "createdBy": {
+    "text": "Created By",
+    "tooltip": "",
+    "error": ""
+  },
+  "paymentStatus": {
+    "text": "Payment Status",
+    "tooltip": "Shows the current status (e.g., Posted, Pending)",
+    "error": ""
+  },
+  "taxRate": {
+    "text": "Tax Rate",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceDueDate": {
+    "text": "Invoice Due Date",
+    "tooltip": "Due date of the invoice",
+    "error": ""
+  },
+  "vendorInvoiceNumber": {
+    "text": "Invoice No.",
+    "tooltip": "Invoice number that Vendor entered",
+    "error": "",
+    "placeholder": "Enter Invoice No."
+  },
+  
+  "vendorName": "Vendor Name",
+  "vendorCode": "Vendor Code",
+  "writeRemarks": "Write Remarks",
+  "lineItemValue": "Line Item Value",
+  "uom": "UOM",
+  "lineItemNo": "Line Item No",
+  "invoice": "Invoice",
+  "delivery_note": "Delivery Note",
+  "shipping_documents": "Shipping Documents",
+  "others": "Others"
+}

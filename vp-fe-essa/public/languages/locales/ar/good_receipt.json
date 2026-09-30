@@ -1,0 +1,92 @@
+{
+  "goodsReceiptNumber": {
+    "text": "رقم استلام البضائع",
+    "tooltip": "رقم إيصال البضائع الفريد للتتبع",
+    "error": ""
+  },
+  "companyCode": {
+    "text": "رمز الشركة",
+    "tooltip": "",
+    "error": ""
+  },
+  "fiscalYear": {
+    "text": "السنة المالية",
+    "tooltip": "",
+    "error": ""
+  },
+  "receiptDatePostingDate": {
+    "text": "تاريخ الاستلام / تاريخ القيد",
+    "tooltip": "تاريخ استلام البضائع",
+    "error": ""
+  },
+  "purchaseOrderNumber": {
+    "text": "رقم أمر الشراء",
+    "tooltip": "رقم طلب الشراء المرتبط",
+    "error": ""
+  },
+  "quantityReceived": {
+    "text": "الكمية المستلمة",
+    "tooltip": "كمية العناصر المستلمة",
+    "error": ""
+  },
+  "remarks": {
+    "text": "ملاحظات (اختياري)",
+    "tooltip": "أي ملاحظات من SAP",
+    "error": ""
+  },
+  "materialCode": {
+    "text": "رمز المادة",
+    "tooltip": "",
+    "error": ""
+  },
+  "materialDescription": {
+    "text": "وصف المادة",
+    "tooltip": "",
+    "error": ""
+  },
+  "uom": {
+    "text": "وحدة القياس (UOM)",
+    "tooltip": "وحدة القياس لكل سطر",
+    "error": "مطلوب وحدة قياس"
+  },
+  "lineItemNumber": {
+    "text": "قيمة السطر",
+    "tooltip": "رقم السطر لتتبع",
+    "error": ""
+  },
+  "poLineItemNumber": {
+    "text": "رقم عنصر السطر في أمر الشراء",
+    "tooltip": "رقم بند طلب الشراء لكل سطر",
+    "error": ""
+  },
+  "poNumber": {
+    "text": "رقم أمر الشراء",
+    "tooltip": "رقم طلب الشراء لكل سطر في إيصال البضائع",
+    "error": ""
+  },
+  "grValue": {
+    "text": "قيمة استلام البضائع",
+    "tooltip": "",
+    "error": "#N/A"
+  },
+  "grQuantity": {
+    "text": "كمية استلام البضائع",
+    "tooltip": "الكمية في إيصال البضائع لكل سطر",
+    "error": ""
+  },
+  "viewLineItemDetails": {
+    "text": "استعراض تفاصيل السطر",
+    "tooltip": "عرض تفاصيل العناصر والمستند",
+    "error": ""
+  },
+  "downloadGoodsReceiptReport": {
+    "text": "تنزيل تقرير استلام البضائع",
+    "tooltip": "تحميل تقرير استلام البضائع",
+    "error": ""
+  },
+  "sortAndFilter": {
+    "text": "الفرز والتصنيف",
+    "tooltip": "تصنيف وترتيب استلامات البضائع",
+    "error": ""
+  }
+}

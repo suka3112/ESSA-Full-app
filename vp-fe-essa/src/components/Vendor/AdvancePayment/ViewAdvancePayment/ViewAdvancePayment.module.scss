@@ -1,0 +1,241 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.poContainer {
+  padding: 0px 0px 20px 0px;
+}
+
+.homeText {
+  @include fontCustomStyle(14px, 400, #616162, 18px);
+}
+
+.subHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  label {
+    @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+  }
+
+  div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+}
+
+.subHeader>div {
+  display: flex;
+  gap: 10px;
+}
+
+.helpIconContainer {
+  height: 42px;
+  width: 42px;
+  border: 1px solid var(--brand-primary-color, $primary-color);
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 1px 5.8px 0px #82d5ff40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    border: 1.5px solid var(--brand-primary-color, $primary-color);
+    box-shadow: 0px 4px 12px 0px #82d5ff80;
+  }
+}
+
+.faqIconContainer {
+  height: 42px;
+  width: 42px;
+  border: 1px solid #005D8B;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 1px 5.8px 0px #82d5ff40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userInputContainer {
+  // box-shadow: 0px 0px 4px 0px #00000040;
+  border: 1px solid rgb(152, 162, 179);
+  border-radius: 10px;
+  padding: 20px 10px;
+  display: flex;
+  margin-bottom: 12px;
+  background-color: #fff;
+
+  .userInputContainerInner {
+    display: flex;
+    flex-direction: column;
+    //justify-content: space-evenly;
+    //align-items: baseline;
+
+    .inputQues {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      white-space: nowrap;
+      padding-left: 1rem;
+
+      label {
+        @include fontCustomStyle(14px, 600, #808080, 20px);
+      }
+    }
+
+    .inputAns {
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
+      margin-left: 1rem;
+
+      label {
+        @include fontCustomStyle(14px, 600, black, 20px);
+      }
+    }
+  }
+
+  .paidTxt {
+    color: #188A42 !important;
+    text-transform: capitalize !important;
+  }
+
+  .pendingTxt {
+    color: #EB2E2E !important;
+    text-transform: capitalize !important;
+  }
+
+  .financeContainerInner {
+    display: flex;
+    //padding: 0px 20px;
+    // justify-content: space-between;
+    // width: 400px;
+    align-items: baseline;
+
+    .inputQues {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      white-space: nowrap;
+      padding-left: 1rem;
+
+      label {
+        @include fontCustomStyle(14px, 600, #808080, 20px);
+      }
+
+      .paidTxt {
+        color: #188A42;
+      }
+
+      .pendingTxt {
+        color: #EB2E2E;
+      }
+
+    }
+
+    .inputAns {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      margin-left: 1rem;
+
+      label {
+        @include fontCustomStyle(14px, 600, black, 20px);
+      }
+    }
+  }
+
+}
+
+//new styling for Attachment section
+.attachmentFinContainer {
+  // box-shadow: 0px 0px 4px 0px #00000040;
+  border: 1px solid rgb(152, 162, 179);
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 12px;
+  background-color: #fff;
+
+  .attachmentFinRow {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr;
+    align-items: center;
+    padding: 2px 0;
+
+    label,
+    a {
+      padding: 4px 0;
+      word-break: break-word;
+    }
+  }
+
+  .header {
+    font-weight: 600;
+  }
+
+  .docLink {
+    @include fontCustomStyle(14px, 400, var(--brand-primary-color, $primary-color), 16px);
+  }
+}
+
+
+.documentDetailsContainer {
+  box-shadow: 0px 0px 4px 0px #00000040;
+  border-radius: 10px;
+  display: flex;
+  margin-bottom: 12px;
+  background-color: #fff;
+  padding: 30px;
+
+  td {
+    @include fontCustomStyle(16px, 600, #202124, 20px);
+
+  }
+
+  td {
+    @include fontCustomStyle(16px, 400, #202124, 20px);
+
+  }
+
+  .thirdColumn {
+    @include fontCustomStyle(16px, 500, var(--brand-primary-color, $primary-color), 20px);
+    text-decoration: underline;
+
+  }
+}
+
+.verticalDivider {
+  padding-right: 10px;
+  border-right: 1px solid #929398;
+}
+
+.verticalDividerArabic {
+  padding-right: 10px;
+  border-left: 1px solid #929398;
+}
+
+.attachmentContainer {
+  box-shadow: 0px 0px 4px 0px #00000040;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  margin-bottom: 12px;
+  background-color: #fff;
+
+  .attachment {
+    width: 50%;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+}
+
+@media (max-width: 919px) {
+  .userInputContainer {
+    padding: 30px;
+  }
+}

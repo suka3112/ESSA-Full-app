@@ -1,0 +1,28 @@
+{
+  "invalid": "Invalid {{fieldName}}",
+  "cannotBeEmpty": "Invalid {{fieldName}}: Cannot be empty",
+  "multipleSpaces": "Invalid {{fieldName}}: Cannot contain multiple consecutive spaces",
+  "minLength": "Invalid {{fieldName}}: Must be at least {{minLength}} characters long",
+  "maxLength": "Invalid {{fieldName}}: Cannot exceed {{maxLength}} characters",
+  "onlyNumbers": "Invalid {{fieldName}}: Must contain only numbers",
+  "notOnlyNumbers": "Invalid {{fieldName}}: Cannot contain only numbers",
+  "onlyText": "Invalid {{fieldName}}: Must contain only letters",
+  "notOnlyText": "Invalid {{fieldName}}: Cannot contain only letters",
+  "onlySymbols": "Invalid {{fieldName}}: Must contain only symbols",
+  "notOnlySymbols": "Invalid {{fieldName}}: Must contain at least one letter or number",
+  "alphaNumeric": "Invalid {{fieldName}}: Must contain both letters and numbers",
+  "invalidEmail": "Invalid {{fieldName}}: Invalid email address",
+  "noSymbols": "Invalid {{fieldName}}: Cannot contain symbols",
+  "noText": "Invalid {{fieldName}}: Cannot contain letters",
+  "noNumbers": "Invalid {{fieldName}}: Cannot contain numbers",
+  "atLeastOneCharacter": "Invalid {{fieldName}}: Must contain at least one letter",
+  "atLeastOneUppercase": "Invalid {{fieldName}}: Must contain at least one uppercase letter",
+  "atLeastOneLowercase": "Invalid {{fieldName}}: Must contain at least one lowercase letter",
+  "atLeastOneSymbol": "Invalid {{fieldName}}: Must contain at least one symbol",
+  "atLeastOneNumber": "Invalid {{fieldName}}: Must contain at least one number",
+  "alphanumericNoSymbols": "Invalid {{fieldName}}: Only letters and numbers {{allowSpace}}are allowed, no special symbols.",
+  "alphanumericNoSymbolsWithSpace": "and spaces ",
+  "cannotPassValidation": "Invalid {{fieldName}}: Cannot pass the validation",
+  "postalCodeIncorrect": "The Postal Code is Incorrect"
+}
+

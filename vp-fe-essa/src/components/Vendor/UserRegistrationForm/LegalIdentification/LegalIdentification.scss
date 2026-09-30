@@ -1,0 +1,42 @@
+@import "../../../../assets/scss/abstracts/abstracts.scss";
+
+.form-container {
+  background: #fff;
+
+  &.admin-form-container {
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 0px 4px 0px #00000040;
+  }
+
+  .fieldset-container {
+    margin: 10px 0;
+
+    .rowContainer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+
+      label {
+        @include fontCustomStyle(1rem, 500, #344054);
+        letter-spacing: 0.3px;
+        text-align: left;
+        text-decoration-skip-ink: none;
+        font-size: 1rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+
+    .file-color {
+      color: #000 !important;
+      font-size: 1rem;
+    }
+
+    .fieldset {
+      margin-bottom: 2rem;
+    }
+  }
+}

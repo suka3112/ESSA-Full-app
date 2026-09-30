@@ -1,0 +1,159 @@
+{
+  "createNewInvoice": {
+    "text": "إنشاء فاتورة جديدة",
+    "tooltip": "إنشاء فاتورة جديدة لأمر الشراء (PO)",
+    "error": "فشل الإجراء"
+  },
+  "poSelection": {
+    "text": "اختيار أمر الشراء",
+    "tooltip": "اختر العناصر لإنشاء الفاتورة",
+    "error": "اختيار البند في طلب الشراء مطلوب"
+  },
+  "vendor_invoice_number": {
+    "text": "رقم مرجع فاتورة المورد",
+    "tooltip": "رقم مرجع الفاتورة",
+    "error": ""
+  },
+  "submittedDate": {
+    "text": "تاريخ الإرسال",
+    "tooltip": "تاريخ تقديم الفاتورة",
+    "error": ""
+  },
+  "invoice_date": {
+    "text": "تاريخ الفاتورة",
+    "tooltip": "تاريخ إصدار الفاتورة",
+    "error": "اختر تاريخًا حاليًا أو ماضيًا فقط"
+  },
+  "currency": {
+    "text": "العملة",
+    "tooltip": "عملة الفاتورة",
+    "error": ""
+  },
+  "tax_percentage": {
+    "text": "نسبة الضريبة",
+    "tooltip": "حدد معدل الضريبة المطبق",
+    "error": ""
+  },
+  "totalTaxAmount": {
+    "text": "إجمالي مبلغ الضريبة",
+    "tooltip": "أدخل الضرائب المطبقة على الفاتورة",
+    "error": "المبلغ الضريبي غير صالح"
+  },
+  "paymentTerms": {
+    "text": "شروط الدفع",
+    "tooltip": "شروط الدفع المتفق عليها المذكورة في أمر الشراء",
+    "error": ""
+  },
+  "selectedPOList": {
+    "text": "القائمة المختارة لأوامر الشراء",
+    "tooltip": "رابط إلى صفحة تفاصيل أمر الشراء",
+    "error": ""
+  },
+  "attachment_type": {
+    "text": "نوع المرفق",
+    "tooltip": "اختر نوع الوثيقة",
+    "error": ""
+  },
+  "invoiceFileUpload": {
+    "text": "رفع ملف الفاتورة",
+    "tooltip": "رفع ملف الفاتورة",
+    "error": "يرجى إرفاق الفاتورة"
+  },
+  "POInvoiceVendorName": {
+    "text": "اسم المورد",
+    "tooltip": "اسم البائع بناءً على رمز البائع",
+    "error": "اسم المورد مطلوب"
+  },
+  "POInvoiceVendorCode": {
+    "text": "رمز المورد",
+    "tooltip": "حدد رمز البائع",
+    "error": "رمز المورد مطلوب"
+  },
+  "invoiceSubmission": {
+    "text": "إرسال الفاتورة",
+    "tooltip": "تقديم الفاتورة للمعالجة",
+    "error": "فشل في التقديم"
+  },
+  "lineItemNumber": {
+    "text": "قيمة السطر",
+    "tooltip": "",
+    "error": ""
+  },
+  "materialCode": {
+    "text": "المادة",
+    "tooltip": "رمز المادة لكل سطر",
+    "error": ""
+  },
+  "materialDescription": {
+    "text": "وصف المادة",
+    "tooltip": "وصف المادة لكل سطر",
+    "error": ""
+  },
+  "uom": {
+    "text": "وحدة القياس (UOM)",
+    "tooltip": "وحدة القياس لكل سطر",
+    "error": ""
+  },
+  "poQuantity": {
+    "text": "كمية أمر الشراء",
+    "tooltip": "الكمية لكل سطر في أمر الشراء",
+    "error": ""
+  },
+  "grQuantity": {
+    "text": "كمية استلام البضائع (GR)",
+    "tooltip": "كمية البضائع المستلمة لكل سطر",
+    "error": ""
+  },
+  "irQuantity": {
+    "text": "كمية الفاتورة (INV)",
+    "tooltip": "كمية الفاتورة لكل سطر",
+    "error": ""
+  },
+  "lineItemValue": {
+    "text": "قيمة السطر",
+    "tooltip": "السعر لكل سطر",
+    "error": ""
+  },
+  "taxLineItem": {
+    "text": "ضريبة عنصر السطر",
+    "tooltip": "محسوب استنادًا إلى سعر السطر ونسبة الضريبة المحددة",
+    "error": ""
+  },
+  "totalTaxAmountCalc": {
+    "text": "إجمالي مبلغ الضريبة",
+    "tooltip": "يقوم النظام بالحساب بناءً على العناصر المذكورة أعلاه",
+    "error": ""
+  },
+  "totalNetValue": {
+    "text": "إجمالي القيمة الصافية (بدون الضريبة)",
+    "tooltip": "يقوم النظام بالحساب بناءً على العناصر المذكورة أعلاه",
+    "error": ""
+  },
+  "saveProgress": {
+    "text": "حفظ التغيرات",
+    "tooltip": "حفظ التغيرات لإكمالها لاحقًا",
+    "error": "خطأ في عملية الحفظ"
+  },
+  "remarks": "ملاحظات",
+  "poLineItemNo": "رقم السطر في أمر الشراء",
+  "poNo": "رقم أمر الشراء",
+  "paymentAdvice": "إشعار دفع",
+  "documentName": "اسم الوثيقة",
+  "invoiceValue": "قيمة الفاتورة",
+  "amount": "المبلغ",
+  "date": "التاريخ",
+  "status": "الحالة",
+   "searchForInvoiceNo" : "البحث عن رقم الفاتورة",
+   "searchInvoiceVendorNo": "البحث عن رقم الفاتورة، اسم البائع/الرمز",
+     "next" : "التالي",
+  "save" : "حفظ",
+  "upload": "رفع",
+  "uploading": "جارٍ الرفع...",
+  "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا الملف؟",
+  "enterQuantity": "أدخل الكمية",
+  "taxAmountExceeds": "لا ينبغي أن يتجاوز مبلغ الضريبة {{taxPercentage}}% من مبلغ الفاتورة ({{roundedMaxTax}})",
+  "invalidTaxCalculation": "حساب الضريبة غير صالح",
+  "taxAmtRequired": "مبلغ الضريبة مطلوب",
+  "qtyRangeValidate": "يجب أن تكون أكبر من 0 وأقل من أو تساوي كمية GR ({{grQty}})",
+  "searchForInvoiceSource": "ابحث عن رقم الفاتورة ورقم المرجع"
+}

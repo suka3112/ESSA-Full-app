@@ -1,0 +1,31 @@
+{
+  "successTitle": "نجاح",
+  "errorTitle": "خطأ",
+  "selectAtLeastOneRow": "يرجى تحديد صف واحد على الأقل.",
+  "fileDeleted": "تم حذف الملف بنجاح.",
+  "fileDeleteFailed": "فشل حذف الملف. يرجى المحاولة مرة أخرى.",
+  "attachTypeAndFileRequired": "نوع المرفق والملف مطلوبان.",
+  "onlyTwoFilesPerType": "يسمح بملفين فقط لكل نوع مرفق ({{type}}).",
+  "duplicateFileExists": "يوجد ملف بالاسم والنوع نفسه بالفعل.",
+  "selectDateRangeBeforeSending": "يرجى تحديد نطاق تاريخ قبل إرسال التقرير.",
+  "error": "خطأ",
+  "fileUploadFailed": "فشل تحميل الملف",
+  "applicationSubmissionFailed": "فشل تقديم الطلب",
+  "failedToFetchTrackUpdates": "فشل في جلب تحديثات المسار",
+  "failedToAddExtension": "فشل في إضافة الامتداد",
+  "applicationRejected": "تم رفض الطلب.",
+  "applicationApproved": "تمت الموافقة بنجاح.",
+  "applicationApprovedSuccess": "تمت الموافقة على الطلب بنجاح.",
+  "applicationIsRejected": "تم رفض الطلب.",
+  "onlyTwoFilesAllowed": "مسموح بملفين فقط",
+  "noDataToExport": "لا توجد بيانات للتصدير",
+  "updatesRejected": "تم رفض التحديثات",
+  "extensionRejected": "تم رفض الامتداد",
+  "bulkRejected": "تم رفض الفواتير",
+  "bulkApproved": "تمت الموافقة على الفواتير",
+  "onlyPDFFilesAllowed": "يُسمح فقط بملفات PDF لمرفقات الفاتورة",
+  "invoiceNoLessThan17Char": "يجب أن يكون رقم الفاتورة أقل من 17 حرفًا.",
+  "onlyPDFFilesAllowedCreditNote": "يُسمح فقط بملفات PDF لمرفقات مذكرة الائتمان"
+}
+
+

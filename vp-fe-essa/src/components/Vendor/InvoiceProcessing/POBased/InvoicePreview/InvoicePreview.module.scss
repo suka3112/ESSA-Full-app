@@ -1,0 +1,138 @@
+@import "../../../../../assets/scss/abstracts/abstracts.scss";
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+
+  .title {
+    @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+  }
+
+  .dateContainer {
+    display: flex;
+    gap: 8px;
+    align-items: end;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.userInputContainerOuter {
+  background-color: #f6f2f2;
+  border-radius: 8px;
+  .userInputContainer {
+    background-color: #ffffff;
+    border: 1px solid rgb(152, 162, 179);
+    border-radius: 8px;
+  }
+  .separator {
+    border-left: 1px solid rgb(152, 162, 179);
+    height: 100%;
+  }
+}
+
+.verticalDivider {
+  padding-inline-end: 10px;
+  border-inline-end: 1px solid #929395;
+}
+
+.attachmentContainer {
+  border: 1px solid rgb(152, 162, 179);
+  border-radius: 8px;
+  background-color: #fff;
+
+  .attachmentDetails {
+    display: flex;
+    gap: 4rem;
+
+    label {
+      padding: 10px 0;
+    }
+
+    .headerText {
+      @include fontCustomStyle(1rem, 600, black, 16px);
+    }
+
+    .title {
+      @include fontCustomStyle(1rem, 600, black, 16px);
+    }
+
+    .fileText {
+      @include fontCustomStyle(1rem, 400, #202124, 24px);
+    }
+
+    .docLink {
+      @include fontCustomStyle(1rem, 400, var(--brand-primary-color, $primary-color), 16px);
+      color: var(--brand-primary-color, $primary-color) !important;
+    }
+  }
+}
+
+.headerText {
+  font-weight: 600 !important;
+  font-size: 1rem;
+  color: black;
+}
+
+.attachmentRow {
+  display: grid;
+  grid-template-columns: 100px 200px 1fr;
+  align-items: center;
+  padding: 3px 0;
+}
+
+.colSn {
+  width: 100px;
+  text-align: left;
+}
+.colSnArabic {
+  width: 100px;
+  text-align: right;
+}
+
+.colType {
+  // flex: 1;
+  width: 250px;
+  padding-left: 10px;
+  font-size: 1rem;
+  color: black;
+}
+
+.colName {
+  flex: 2;
+}
+
+@media (max-width: 919px) {
+  .userInputContainer {
+    padding: 30px;
+  }
+}
+
+.savedPill {
+  border: 1px solid #067647;
+  border-radius: 12px;
+  background-color: #ecfdf3;
+  color: #067647;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  font-weight: 600;
+}
+
+.creditNoteLabel {
+  color: #344054;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.creditNoteDetail {
+  font-weight: 600;
+  font-size: 1rem;
+  color: black;
+}

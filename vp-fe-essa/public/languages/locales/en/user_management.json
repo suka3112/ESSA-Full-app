@@ -1,0 +1,43 @@
+{
+  "employeeId": {
+    "text": "Employee ID",
+    "tooltip": "",
+    "error": "Employee ID is required"
+  },
+  "enterName": {
+    "text": "Enter Name",
+    "tooltip": "",
+    "error": "Name is required"
+  },
+  "confirmPassword": {
+    "text": "Confirm Password",
+    "tooltip": "",
+    "error": ""
+  },
+  "department": {
+    "text": "Department",
+    "tooltip": "",
+    "error": "Department is required"
+  },
+  "designation": {
+    "text": "Designation",
+    "tooltip": "",
+    "error": "Designation is required"
+  },
+  "phone_number": {
+    "text": "Phone Number",
+    "tooltip": "Enter Phone Number",
+    "error": "Phone number is required"
+  },
+  "loginAsSupplier": "Login As Supplier",
+  "yes": "Yes",
+  "no": "No",
+  "confirm_delete_account": "Are you sure you want to Delete this account?",
+  "selectOption": "Please select an option",
+  "entityRequired": "Entity is required",
+  "roleRequired": "Role is required",
+  "countryRequired": "Country code is required",
+  "searchByNameOrEmail": "Search by Name, Email",
+  "updatedSuccessfully": "Updated successfully",
+  "userAddedSuccessFully": "User added successfully"
+}

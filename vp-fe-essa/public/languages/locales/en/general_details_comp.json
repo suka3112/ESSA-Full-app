@@ -1,0 +1,119 @@
+{
+  "vendor_name": {
+    "text": "Vendor Name",
+    "tooltip": "Enter your company name",
+    "error": "Vendor Name is required"
+  },
+  "diakinEntityName": {
+    "text": "Daikin Entity Name",
+    "tooltip": "Display Daikin company name",
+    "error": ""
+  },
+  "diakinContactName": {
+    "text": "Daikin Contact Name",
+    "tooltip": "Display Daikin contact name",
+    "error": ""
+  },
+  "industryType": {
+    "text": "Industry Type",
+    "tooltip": "Select type of industry",
+    "error": "Industry Type is required"
+  },
+  "industryKey": {
+    "text": "Industry Key",
+    "tooltip": "Select industry key",
+    "error": "Industry Key is required"
+  },
+  "street_and_house_number": {
+    "text": "Street/House No.",
+    "tooltip": "Enter your street or house number",
+    "error": "Street/House No. is required"
+  },
+  "postel_code": {
+    "text": "Postal Code",
+    "tooltip": "Enter your postal code",
+    "error": "Postal Code is required",
+    "invalid": "The Postal Code is Incorrect"
+  },
+  "city": {
+    "text": "City",
+    "tooltip": "Enter City of Operation",
+    "error": "City is required"
+  },
+  "country": {
+    "text": "Country",
+    "tooltip": "Select the country of operation",
+    "error": "Country is required"
+  },
+  "region": {
+    "text": "Region",
+    "tooltip": "Select the region of operation",
+    "error": "Region is required"
+  },
+  "phone_number": {
+    "text": "Phone No",
+    "tooltip": "Enter Phone Number",
+    "error": "Phone number is required"
+  },
+  "fax": {
+    "text": "Fax",
+    "tooltip": "Enter Fax number",
+    "error": "Fax number is required"
+  },
+  "email_primary": {
+    "text": "E-mail (Primary)",
+    "tooltip": "Enter primary email address",
+    "error": "Valid Email Id is required"
+  },
+  "email_Secondary": {
+    "text": "E-mail (Secondary)",
+    "tooltip": "Enter secondary email address {{index}}",
+    "error": "Valid Email Id is required"
+  },
+  "wht_applicable": {
+    "text": "WHT Applicable",
+    "tooltip": "Is WHT applicable?",
+    "error": "WHT selection is required"
+  },
+  "wht_rate": {
+    "text": "WHT Rate (If Yes)",
+    "tooltip": "Specify WHT rate",
+    "error": "WHT Rate is required if applicable"
+  },
+  "taxable_basis": {
+    "text": "VAT Percentage",
+    "tooltip": "Select VAT Percentage",
+    "error": "VAT Percentage is required"
+  },
+  "vendorCode": {
+    "text": "Vendor Code"
+  },
+  "vendorNameArabic": {
+    "text": "Vendor Name (Arabic)",
+    "tooltip": "Enter Vendor Name (Arabic)",
+    "error": "Vendor Name is required (Arabic)"
+  },
+  "general_communication_details": "General & Communication Details",
+  "email": "E-mail",
+  "select": "Select",
+  "selectCountry": "Select Country",
+  "selectRegion": "Select Region",
+  "selectCity": "Select City",
+  "removeEmail": "Remove Email",
+  "addMoreEmail": "Add More Email",
+  "trackUpdateRequest": "Your request to Change your information is",
+  "requestSubmitted": "Request Submitted Successfully",
+  "failedToUpdateImage": "Failed to update profile image",
+  "inlineLevelUpdated": "Inline Level updated to",
+  "failedToFetchImage": "Failed to fetch profile image",
+  "loginSuccess": "Login success",
+  "loggedInAsVendor": "Logged in as Vendor Successfully.",
+  "failedToApproveOrReject": "Failed to approve/reject application",
+  "failedToFetchProfileDetails": "Failed to fetch vendor profile details",
+  "failedToUpdateDetails": "Failed to update profile details",
+  "reflectedChanges": "The changes will be reflected once approved by Diakin Business",
+  "submittedSuccess": "Submitted Successfully",
+  "inReview": "In Review",
+  "awaitingForApproval": "Awaiting for Approval",
+  "enter": "Enter"
+}

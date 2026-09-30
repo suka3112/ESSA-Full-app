@@ -1,0 +1,9 @@
+export const CREATE_ADVANCE_PAYMENT = '/advancePayment/createAdvancePayment'
+export const GET_ADVANCE_PAYMENT = '/advancePayment/getAdvancePayment'
+export const EDIT_ADVANCE_PAYMENT = '/advancePayment/submitAdvancePayment'
+export const ADVANCE_PAYMENT_DOWNLOAD_CSV = '/advancePayment/downloadAdvancePayment'
+export const ADVANCE_PAYMENT_SEND_CSV = '/advancePayment/sendAdvancePayment'
+export const GET_INVOICE_TYPES = '/advancePayment/getinvoice' // Added missing constant
+export const APPROVE_REJECT_ADVANCE_PAYMENT = '/advancePayment/approve-reject'
+export const STATUS_DROPDOWN = '/users/getInvoiceStatus'
+export const ADVANCE_PAYMENT_DRAFT_DELETE = '/advancePayment/deleteAdvancePayment'

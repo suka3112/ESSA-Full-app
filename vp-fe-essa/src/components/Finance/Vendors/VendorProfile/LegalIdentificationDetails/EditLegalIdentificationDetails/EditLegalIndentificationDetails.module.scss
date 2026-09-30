@@ -1,0 +1,47 @@
+@import '../../../../../../assets/scss/abstracts/abstracts.scss';
+
+.liDetailsContainer {
+  box-shadow: 0px 0px 4px 0px #00000040;
+  padding: 30px;
+  border-radius: 10px;
+
+  .submitBtn {
+    min-width: 241px;
+  }
+
+  .actionBtn {
+    min-width: 105px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+    text-align: center;
+    align-items: baseline;
+
+    .uploadDocuments {
+      text-align: left;
+
+      label {
+        @include fontCustomStyle(16px, 400, #000000, 12px);
+        letter-spacing: 0.3px;
+        text-align: left;
+        text-underline-position: from-font;
+        text-decoration-skip-ink: none;
+      }
+    }
+  }
+  .expiryDate {
+    display: flex;
+    flex-direction: column;
+    label {
+      @include fontCustomStyle(16px, 400, #000000, 12px);
+      text-align: start;
+      margin-bottom: 10px;
+    }
+  }
+}
+.liDetailsContainer > label {
+  @include fontCustomStyle(16px, 600, var(--brand-primary-color, $primary-color), 19px);
+}

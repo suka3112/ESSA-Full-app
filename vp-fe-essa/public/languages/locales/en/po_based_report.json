@@ -1,0 +1,179 @@
+{
+  "hyperlinkToSections": {
+    "text": "Hyperlink to Sections",
+    "tooltip": "Click to navigate to linked sections",
+    "error": "Link unavailable"
+  },
+  "invoiceAccDocumentNumber": {
+    "text": "Acc Document No.",
+    "tooltip": "SAP invoice Accounting Document no.",
+    "error": ""
+  },
+  "sapInvoiceNumber": {
+    "text": "SAP Invoice No.",
+    "tooltip": "SAP Invoice No.",
+    "error": ""
+  },
+  "vendorInvoiceNumber": {
+    "text": "Invoice No.",
+    "tooltip": "Invoice number that Vendor entered",
+    "error": ""
+  },
+  "creationDate": {
+    "text": "Creation Date",
+    "tooltip": "Date when the invoice was submitted",
+    "error": ""
+  },
+  "invoiceDate": {
+    "text": "Invoice Date",
+    "tooltip": "Date when the invoice was issued",
+    "error": ""
+  },
+  "invoicePostingDate": {
+    "text": "Posting Date",
+    "tooltip": "",
+    "error": ""
+  },
+  "currency": {
+    "text": "Currency",
+    "tooltip": "Invoice currency",
+    "error": ""
+  },
+  "taxRate": {
+    "text": "Tax Rate",
+    "tooltip": "",
+    "error": ""
+  },
+  "taxValue": {
+    "text": "Tax Value",
+    "tooltip": "",
+    "error": ""
+  },
+  "invoiceValue": {
+    "text": "Invoice Amount",
+    "tooltip": "Total value of the invoice",
+    "error": ""
+  },
+  "irLineNumber": {
+    "text": "IR Line No.",
+    "tooltip": "Invoice line item number IR",
+    "error": ""
+  },
+  "poLineItemNumber": {
+    "text": "Line No.",
+    "tooltip": "PO line Item no.",
+    "error": ""
+  },
+  "poNumber": {
+    "text": "PO No.",
+    "tooltip": "PO No. per line item",
+    "error": ""
+  },
+  "irQuantity": {
+    "text": "Inv Qty",
+    "tooltip": "Inv quantity per line item",
+    "error": ""
+  },
+  "uom": {
+    "text": "UOM",
+    "tooltip": "Unit of measure per line item",
+    "error": ""
+  },
+  "materialCode": {
+    "text": "Material",
+    "tooltip": "Material code for every line item",
+    "error": ""
+  },
+  "materialDescription": {
+    "text": "Material Description",
+    "tooltip": "Description about material for every line item",
+    "error": ""
+  },
+  "lineItemValue": {
+    "text": "Amount",
+    "tooltip": "Price per line item",
+    "error": ""
+  },
+  "invoiceStatus": {
+    "text": "Invoice Status",
+    "tooltip": "Status of the invoice (submitted, under review, approved, rejected)",
+    "error": ""
+  },
+  "paymentStatus": {
+    "text": "Payment Status",
+    "tooltip": "Shows the current status (e.g., Posted, Pending)",
+    "error": ""
+  },
+  "invoiceDueDate": {
+    "text": "Due Date",
+    "tooltip": "Due date of the invoice",
+    "error": ""
+  },
+  "paymentTerms": {
+    "text": "Payment Terms",
+    "tooltip": "Display the calculated payment term",
+    "error": ""
+  },
+  "dueDateIndicator": {
+    "text": "Due Date Indicator",
+    "tooltip": "Invoice due status (Green, Yellow, Red)",
+    "error": ""
+  },
+  "remarks": {
+    "text": "Remarks",
+    "tooltip": "Remarks from Daikin",
+    "error": ""
+  },
+  "createdBy": {
+    "text": "Created By",
+    "tooltip": "",
+    "error": ""
+  },
+  "documentReferenceNumber": {
+    "text": "Document Reference Number",
+    "tooltip": "Unique identifier for payment advice",
+    "error": "Invalid document reference number"
+  },
+  "paymentAdviceView": {
+    "text": "Payment Advice View",
+    "tooltip": "View the actual payment advice document",
+    "error": "Link error"
+  },
+  "downloadReport": {
+    "text": "Download Report",
+    "tooltip": "Download the invoice report",
+    "error": "Download failed"
+  },
+  "emailReport": {
+    "text": "Email Report",
+    "tooltip": "Email report to registered email",
+    "error": "Email failed"
+  },
+  "filterOptions": {
+    "text": "Filter Options",
+    "tooltip": "Filter invoices by various criteria",
+    "error": "No data available for filter criteria"
+  },
+  "taxPercentage": {
+    "text": "Tax Percentage (Header)",
+    "tooltip": "Select the applicable tax rate",
+    "error": ""
+  },
+  "totalTaxAmount": {
+    "text": "Total Tax Amount",
+    "tooltip": "Enter applicable taxes for invoice",
+    "error": "Invalid tax amount"
+  },
+  "submittedDate": {
+    "text": "Submitted Date (Header)",
+    "tooltip": "Date when the invoice was submitted",
+    "error": ""
+  },
+   "pendingInvoiceSearch":"Search for the Invoice No. and Reference No.",
+   "POBasedPDFTitle": "PO_based_Invoice_list",
+   "pendingInvoicesReport":"Pending Invoices - Report",
+   "delete": "Delete",
+   "confirmDeleteMessage": "Are you sure you want to delete the selected draft invoices?",
+   "bulkDeleteSuccessfully": "Drafts deleted successfully"
+
+}

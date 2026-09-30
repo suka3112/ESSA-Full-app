@@ -1,0 +1,23 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.successMsg {
+  @include fontCustomStyle(32px, 600, #1d71ac, 47px);
+}
+.closeButton {
+  //width: 50% !important;
+  width: 170px !important;
+  max-width: 100% !important;
+}
+.successGif {
+  display: flex;
+  justify-content: center;
+  img {
+    height: 104px;
+    width: 104px;
+  }
+}
+.closebtnWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

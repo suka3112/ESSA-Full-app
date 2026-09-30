@@ -1,0 +1,5 @@
+export const GET_DASHBOARD_DATA = '/dashboard/vendorDashboard'
+export const GET_OUTSTANDING_DATA = '/SOA/soaListingDashboard'
+export const GET_ENQUIRY_DATA = '/enquiry/getEnquiryDashboard'
+export const GET_PENDING_RECONCILATION = '/SOA/saoDashboardPendingReconcilation'
+export const GET_PAYABLE_MONTH = '/SOA/saoListingPayableMonth'

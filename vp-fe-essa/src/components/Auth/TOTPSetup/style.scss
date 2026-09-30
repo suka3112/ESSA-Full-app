@@ -1,0 +1,40 @@
+@import '../../../assets/scss/abstracts/abstracts.scss';
+
+.totp-form {
+  .title {
+    color: #2a2a2a;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  ol {
+    list-style-type: decimal;
+
+    li {
+      font-size: 0.75rem;
+      font-weight: 400;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .QR-Code-Message {
+    background-color: var(--brand-primary-color, $primary-color);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .welcomeToDiakinTxt {
+    color: #1D71AC;
+    font-weight: 600;
+    font-size: 42px;
+    text-align: center;
+    line-height: 40px;
+    margin-bottom: 15px;
+  }
+}

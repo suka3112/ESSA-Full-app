@@ -1,0 +1,67 @@
+/* Ensure the editor has a max width and overflow hidden/auto */
+
+.custom-quill-editor-wrapper {
+  max-width: 100%;
+  max-height: 400px;
+  /* Set your preferred max height */
+  overflow: auto;
+  position: relative;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+/* Prevent images from exceeding the editor width */
+
+.custom-quill-editor-wrapper .ql-editor {
+  max-height: 350px;
+  /* slightly less than wrapper to allow toolbar */
+  overflow: auto;
+}
+
+.ql-undo::before {
+  content: '↺';
+  font-size: 24px;
+}
+.ql-redo::before {
+  content: '↻';
+  font-size: 24px;
+}
+
+/* Align undo/redo icons in the Quill toolbar */
+.ql-toolbar .ql-undo,
+.ql-toolbar .ql-redo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  height: 28px;
+  width: 28px;
+  margin: 0 2px;
+  vertical-align: middle;
+}
+
+.ql-undo::before,
+.ql-redo::before {
+  display: inline-block;
+  line-height: 1;
+  position: absolute;
+  top: 6px;
+  vertical-align: middle;
+}
+
+.custom-quill-editor-wrapper .ql-editor img {
+  max-width: 100%;
+  max-height: 300px;
+  /* Prevent image from exceeding editor height */
+  height: auto;
+  display: block;
+}
+
+/* Constrain the image resize handles inside the editor */
+
+.custom-quill-editor-wrapper .ql-image-resize-module {
+  max-width: 100% !important;
+  max-height: 300px !important;
+  box-sizing: border-box;
+  overflow: hidden !important;
+}

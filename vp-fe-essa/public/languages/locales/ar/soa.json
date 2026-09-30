@@ -1,0 +1,127 @@
+{
+  "displaySection": {
+    "text": "قسم العرض",
+    "tooltip": "عرض جميع إدخالات كشف الحساب",
+    "error": "لم يتم العثور على أي إدخال في كشف الحساب"
+  },
+  "status": {
+    "text": "الحالة",
+    "tooltip": "تحقق من حالة كل إدخال في كشف الحساب",
+    "error": "خطأ في عرض الحالة"
+  },
+  "downloadSOATemplate": {
+    "text": "تنزيل كشف الحساب",
+    "tooltip": "تحميل نموذج تقرير كشف الحساب",
+    "error": "فشل في التحميل"
+  },
+  "uploadSOADocument": {
+    "text": "تحميل مستند كشف الحساب",
+    "tooltip": "رفع مستند كشف الحساب بصيغة .xls",
+    "error": "الملف غير مدعوم"
+  },
+  "vendorInvoiceCreditNoteNo": {
+    "text": "رقم فاتورة المورد/إشعار دائن",
+    "tooltip": "رقم الفاتورة أو إشعار الدائن",
+    "error": "رقم الفاتورة/إشعار الدائن غير صحيح"
+  },
+  "invoiceCurrency": {
+    "text": "عملة الفاتورة",
+    "tooltip": "عملة الفاتورة",
+    "error": "خطأ في رمز العملة"
+  },
+  "invoiceCreditNoteDate": {
+    "text": "تاريخ الفاتورة/إشعار دائن",
+    "tooltip": "تاريخ الفاتورة/إشعار دائن",
+    "error": "نمط التاريخ غير صحيح"
+  },
+  "amountPerCurrency": {
+    "text": "المبلغ",
+    "tooltip": "المبلغ الإجمالي لكل عملة",
+    "error": "خطأ في حقل المبلغ"
+  },
+  "totalPerCurrency": {
+    "text": "الإجمالي حسب العملة",
+    "tooltip": "المبلغ الإجمالي لكل عملة",
+    "error": "خطأ في حقل المبلغ"
+  },
+  "dueDate": {
+    "text": "تاريخ الاستحقاق",
+    "tooltip": "تاريخ استحقاق الدفعه التاليه",
+    "error": "نمط التاريخ غير صحيح"
+  },
+  "hyperlinkToInvoice": {
+    "text": "رابط الفاتورة",
+    "tooltip": "عرض الفاتورة المرتبطة",
+    "error": "خطأ في الرابط"
+  },
+  "downloadReport": {
+    "text": "تنزيل التقرير",
+    "tooltip": "تحميل تقرير كشف الحساب بصيغة Excel/PDF",
+    "error": "فشل في التحميل"
+  },
+  "emailReport": {
+    "text": "إرسال التقرير عبر البريد الإلكتروني",
+    "tooltip": "إرسال تقرير كشف الحساب إلى البريد الإلكتروني المسجل",
+    "error": "فشل في إرسال البريد الإلكتروني"
+  },
+  "reconciliationStatus": {
+    "text": "حالة التسوية",
+    "tooltip": "",
+    "error": ""
+  },
+  "reconciliationComments": {
+    "text": "تعليقات التسوية",
+    "tooltip": "",
+    "error": ""
+  },
+  "editNotReconciledItems": {
+    "text": "تعديل (العناصر غير المطابقة)",
+    "tooltip": "",
+    "error": ""
+  },
+  "type": "النوع",
+  "year": "السنة",
+  "month": "الشهر",
+  "uploadNewSoa": "رفع SOA جديد",
+  "uploadNew": "رفع ملف جديد",
+  "soaHistory": "سجل بيانات الحساب",
+  "dragAndDrop": "قم بسحب الملف إلى هنا",
+  "or": "أو",
+  "selectFile": "اختر ملفًا",
+  "searchInvoiceforVendor": "ابحث عن رقم الفاتورة أو إشعار الدائن",
+  "help": "مساعدة",
+  "history": "السجل",
+  "assignedPerson": "الشخص المكلّف",
+  "search": "بحث",
+  "reconciled": "تمت التسوية",
+  "mismatched": "غير متطابق",
+    "pendingForReconciliation":"في انتظار المصالحة",
+  "searchInvoice": "البحث عن رقم الفاتورة/مذكرة الائتمان، رمز البائع/الاسم",
+  "jan": "يناير",
+  "feb": "فبراير",
+  "mar": "مارس",
+  "apr": "أبريل",
+  "may": "مايو",
+  "june": "يونيو",
+  "july": "يوليو",
+  "aug": "أغسطس",
+  "sep": "سبتمبر",
+  "oct": "أكتوبر",
+  "nov": "نوفمبر",
+  "dec": "ديسمبر",
+  "actions": "الإجراءات",
+  "createSOA" : "يخلق SOA",
+  "failedToLoadSOA": "فشل جلب بيانات SOA",
+  "detailsUpdatedSuccess": "تم تحديث التفاصيل بنجاح",
+  "failedToUpdateRow": "فشل تحديث الصف",
+  "selectValidType": "الرجاء تحديد نوع صالح",
+  "SOAUploadedSuccess": "تم تحميل SOA بنجاح",
+  "failedToLoadSOAHistory": "فشل تحميل سجل SOA",
+  "selectInvoiceType": "حدد نوع الفاتورة",
+  "soaPDFTitle": "قائمة كشف الحسابات",
+  "soaHistoryPDFTitle": "تاريخ SOA",
+  "daikin": "دايكن",
+  "noSOADataAvailable": "لا تتوفر بيانات SOA",
+  "noSOAHistoryDataAvailable": "لا تتوفر بيانات تاريخ SOA",
+  "nonPOBasedInvoice": "فاتورة غير مبنية على أمر شراء"
+}

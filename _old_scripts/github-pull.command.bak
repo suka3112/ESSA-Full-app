@@ -1,0 +1,81 @@
+#!/bin/bash
+###############################################################################
+# ESSA – GitHub PULL
+#
+# Clones vp-fe-essa and vp-be-essa into this folder if they are not there yet,
+# otherwise pulls the latest changes for both.
+#
+# HOW TO RUN:
+#   • Double-click this file in Finder, OR
+#   • In Terminal:  ./github-pull.command
+#
+# The GitHub token is read (in this order):
+#   1. GITHUB_TOKEN environment variable, else
+#   2. a local file named ".github-token" sitting next to this script, else
+#   3. it will prompt you to type/paste it.
+###############################################################################
+set -euo pipefail
+
+# Always work from the folder this script lives in (the ESSA folder).
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+FE_NAME="vp-fe-essa"
+BE_NAME="vp-be-essa"
+GH_OWNER="Aven-sys"
+
+# --- resolve the token -------------------------------------------------------
+TOKEN="${GITHUB_TOKEN:-}"
+if [ -z "$TOKEN" ] && [ -f "$SCRIPT_DIR/.github-token" ]; then
+  TOKEN="$(tr -d ' \t\r\n' < "$SCRIPT_DIR/.github-token")"
+fi
+if [ -z "$TOKEN" ]; then
+  printf "Enter your GitHub token (input hidden): "
+  read -rs TOKEN
+  echo
+fi
+if [ -z "$TOKEN" ]; then
+  echo "ERROR: No GitHub token provided. Aborting."
+  read -rp "Press Enter to close..."
+  exit 1
+fi
+
+# --- helper: clone if missing, else pull -------------------------------------
+sync_repo () {
+  local name="$1"
+  local clean_url="https://github.com/${GH_OWNER}/${name}.git"
+  local auth_url="https://${TOKEN}@github.com/${GH_OWNER}/${name}.git"
+
+  if [ -d "$SCRIPT_DIR/$name/.git" ]; then
+    echo ""
+    echo ">>> Pulling latest for $name ..."
+    # Inject the token only for this operation, then wipe it from git config.
+    git -C "$SCRIPT_DIR/$name" remote set-url origin "$auth_url"
+    git -C "$SCRIPT_DIR/$name" pull --ff-only || git -C "$SCRIPT_DIR/$name" pull
+    git -C "$SCRIPT_DIR/$name" remote set-url origin "$clean_url"
+    echo ">>> $name is up to date."
+  else
+    echo ""
+    echo ">>> Cloning $name ..."
+    git clone "$auth_url" "$SCRIPT_DIR/$name"
+    # Remove the token from the stored remote so it is not saved on disk.
+    git -C "$SCRIPT_DIR/$name" remote set-url origin "$clean_url"
+    echo ">>> Cloned $name."
+  fi
+}
+
+echo "==============================================="
+echo " ESSA – pulling code from GitHub"
+echo " Target folder: $SCRIPT_DIR"
+echo "==============================================="
+
+sync_repo "$FE_NAME"
+sync_repo "$BE_NAME"
+
+echo ""
+echo "==============================================="
+echo " Done. Both repos are in:"
+echo "   $SCRIPT_DIR/$FE_NAME"
+echo "   $SCRIPT_DIR/$BE_NAME"
+echo "==============================================="
+read -rp "Press Enter to close..."

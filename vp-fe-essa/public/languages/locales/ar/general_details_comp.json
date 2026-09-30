@@ -1,0 +1,118 @@
+{
+  "vendor_name": {
+    "text": "اسم المورد",
+    "tooltip": "أدخل اسم الشركة الخاصة بك",
+    "error": "اسم المورد مطلوب"
+  },
+  "diakinEntityName": {
+    "text": "اسم شركة دايكن",
+    "tooltip": "عرض اسم شركة دايكن",
+    "error": ""
+  },
+  "diakinContactName": {
+    "text": "اسم جهة الاتصال لدى دايكن",
+    "tooltip": "عرض اسم جهة الاتصال في دايكن",
+    "error": ""
+  },
+  "industryType": {
+    "text": "نوع النشاط",
+    "tooltip": "اختر نوع النشاط",
+    "error": "نوع الصناعة مطلوب"
+  },
+  "industryKey": {
+    "text": "رمز النشاط",
+    "tooltip": "اختر رمز النشاط",
+    "error": "رمز الصناعة مطلوب"
+  },
+  "street_and_house_number": {
+    "text": "الشارع/رقم المنزل",
+    "tooltip": "أدخل رقم الشارع أو المنزل",
+    "error": "العنوان مطلوب"
+  },
+  "postel_code": {
+    "text": "الرمز البريدي",
+    "tooltip": "أدخل الرمز البريدي والمدينة",
+    "error": "الرمز البريدي / المدينة مطلوب",
+    "invalid": "الرمز البريدي غير صحيح"
+  },
+  "city": {
+    "text": "المدينة",
+    "tooltip": "أدخل مدينة العمل",
+    "error": "المدينة مطلوبة"
+  },
+  "country": {
+    "text": "الدولة",
+    "tooltip": "اختر بلد التشغيل",
+    "error": "البلد مطلوب"
+  },
+  "region": {
+    "text": "المنطقة",
+    "tooltip": "اختر منطقة التشغيل",
+    "error": "المنطقة مطلوبة"
+  },
+  "phone_number": {
+    "text": "رقم الهاتف",
+    "tooltip": "أدخل رقم الهاتف",
+    "error": "رقم الهاتف مطلوب"
+  },
+  "fax": {
+    "text": "رقم الفاكس",
+    "tooltip": "أدخل رقم الفاكس",
+    "error": "رقم الفاكس مطلوب"
+  },
+  "email_primary": {
+    "text": "البريد الإلكتروني (الرئيسي)",
+    "tooltip": "أدخل البريد الإلكتروني الرئيسي",
+    "error": " مطلوب بريد إلكتروني صالح"
+  },
+  "email_Secondary": {
+    "text": "البريد الإلكتروني (الثانوي)",
+    "tooltip": "أدخل البريد الإلكتروني الثانوي {{index}}",
+    "error": "مطلوب معرف بريد إلكتروني صالح"
+  },
+  "wht_applicable": {
+    "text": "تطبيق ضريبة الخصم والإضافة (WHT)",
+    "tooltip": "هل WHT قابلة للتطبيق؟",
+    "error": "اختيار الخصم الضريبي مطلوب"
+  },
+  "wht_rate": {
+    "text": "نسبة ضريبة الخصم والإضافة",
+    "tooltip": "حدد معدل الخصم الضريبي",
+    "error": "معدل الخصم الضريبي مطلوب إذا كان قابلًا للتطبيق"
+  },
+  "taxable_basis": {
+    "text": "أساس الضريبة (ضريبة الخصم والإضافة",
+    "tooltip": "اختر أساس فرض الضريبة",
+    "error": " أساس فرض الضريبة مطلوب"
+  },
+  "vendorCode": {
+    "text": "رمز المورد"
+  },
+  "vendorNameArabic": {
+    "text": "اسم المورد (Arabic)",
+    "tooltip": "أدخل اسم المورد (Arabic)",
+    "error": "اسم المورد مطلوب (Arabic)"
+  },
+  "general_communication_details": "التفاصيل العامة والتواصل",
+  "select": "اختر",
+  "selectCountry": "اختر الدولة",
+  "selectRegion": "اختر المنطقة",
+  "selectCity": "اختر المدينة",
+  "removeEmail": "إزالة البريد الإلكتروني",
+  "addMoreEmail": "إضافة المزيد من البريد الإلكتروني",
+  "trackUpdateRequest": "طلبك لتغيير معلوماتك هو",
+  "requestSubmitted": "تم تقديم الطلب بنجاح",
+  "failedToUpdateImage":"فشل تحديث صورة الملف الشخصي",
+  "inlineLevelUpdated": "تم تحديث المستوى المضمن إلى",
+  "failedToFetchImage": "فشل جلب صورة الملف الشخصي",
+  "loginSuccess": "نجاح تسجيل الدخول",
+  "loggedInAsVendor": "تم تسجيل الدخول كبائع بنجاح.",
+  "failedToApproveOrReject": "فشل في الموافقة/رفض الطلب",
+  "failedToFetchProfileDetails": "فشل في جلب تفاصيل ملف تعريف البائع",
+  "failedToUpdateDetails": "فشل في تحديث تفاصيل الملف الشخصي",
+  "reflectedChanges": "سيتم تطبيق التغييرات بمجرد الموافقة عليها من قبل شركة دياكين للأعمال",
+   "submittedSuccess": "تم الإرسال بنجاح",
+   "inReview": "قيد المراجعة",
+  "awaitingForApproval": "في انتظار الموافقة",
+  "enter": "يدخل"
+}

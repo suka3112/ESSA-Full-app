@@ -1,0 +1,89 @@
+@import "../../../assets/scss/abstracts/abstracts.scss";
+
+.placeholder-text {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #808080;
+}
+
+.seleectMainContainer {
+  .error-helper-text {
+    position: absolute;
+    bottom: 0;
+    font-size: 11px !important;
+    margin-left: 0px !important;
+    color: #d50000;
+  }
+  .disabled {
+    // background-color: #E5E5E5 !important;
+    border: 0.5px solid #e5e5e5 !important;
+  }
+}
+
+.custom-selectBox {
+  .MuiSelect-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &.Mui-expanded {
+    .MuiSelect-icon {
+      transform: rotate(-180deg);
+    }
+  }
+
+  .MuiSelect-select[aria-expanded="true"] ~ .MuiSelect-icon {
+    transform: rotate(-180deg);
+  }
+}
+
+.tooltip-text-select {
+  @include fontCustomStyle(14px, 500, #344054, 12px);
+  background: #fcfcfc;
+  border-radius: 6px;
+  // box-shadow: 0px 0px 4px 0px #00000040;
+  border: 1px solid #344054;
+  padding: 6px 8px;
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  text-align: center;
+  transition: opacity 0.2s ease-in-out;
+  white-space: nowrap;
+
+  // Add the left-pointing arrow using ::before
+  &::before {
+    content: none;
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #fcfcfc;
+    z-index: 1;
+  }
+
+  &::after {
+    content: none;
+    position: absolute;
+    top: 50%;
+    left: -9px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-right: 9px solid #e5e5e5;
+    z-index: 0;
+    display: none;
+  }
+}
+.error-text {
+  color: #d50000;
+  font-size: 11px;
+  text-align: left;
+}

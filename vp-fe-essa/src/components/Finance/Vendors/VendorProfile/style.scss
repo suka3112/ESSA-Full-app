@@ -1,0 +1,37 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.profile-container {  
+  .home-text {
+    @include fontCustomStyle(14px, 400, #616162, 18.2px);
+  }
+
+  .sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    label {
+      @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27.3px);
+    }
+  }
+  .sub-header > div {
+    display: flex;
+    gap: 10px;
+  }
+  .helpIcon-container {
+    background-color: white;
+    height: 42px;
+    width: 42px;
+    border: 1px solid #005D8B;
+    border-radius: 6px;
+    box-shadow: 0px 1px 5.8px 0px #82d5ff40;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .edit-btn{
+    min-width: 76px;
+    min-height: 40px;
+  }
+}

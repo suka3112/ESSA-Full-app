@@ -1,0 +1,14 @@
+{
+  "submit": "Submit",
+  "save_and_continue": "Save & Continue",
+  "save_and_close": "Save & Close",
+  "back": "Back",
+  "no_files_uploaded": "No File Uploaded",
+  "no_files_selected": "No File Selected",
+  "upload_file": "Upload File",
+  "general_communication_details": "General & Communication Details",
+  "bank_details": "Bank Details",
+  "legal_identification_details": "Legal Identification Details",
+  "payment_terms": "Payment Terms",
+  "yes" : "Yes","no" : "No"
+}

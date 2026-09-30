@@ -1,0 +1,165 @@
+{
+  "displaySection": {
+    "text": "Display Section",
+    "tooltip": "View all submitted logistics invoices",
+    "error": "No logistics invoices found"
+  },
+  "status": {
+    "text": "Status",
+    "tooltip": "Check the status of each logistics invoice",
+    "error": "Status view error"
+  },
+  "createNewLogisticsInvoice": {
+    "text": "Create New Logistics Invoice",
+    "tooltip": "Create a new logistics invoice",
+    "error": "Creation failed, please try again"
+  },
+  "importFile": {
+    "text": "Import Excel File",
+    "tooltip": "Upload the import file in .xls format",
+    "error": "Invalid file format, only .xls accepted"
+  },
+  "zipFileAllInvoices": {
+    "text": "Zip File (All Invoices)",
+    "tooltip": "Upload ZIP file with all related invoices",
+    "error": "Invalid file format, only ZIP accepted"
+  },
+  "invoiceRefNumber": {
+    "text": "Invoice Ref No.",
+    "tooltip": "View imported line items for confirmation",
+    "error": "No line items found in file"
+  },
+  "attachInvoicesToLineItems": {
+    "text": "Attach Invoices to Line Items",
+    "tooltip": "Attach corresponding invoice for each line",
+    "error": "Missing attachment for one or more items"
+  },
+  "costResponsible": {
+    "text": "Cost Responsible",
+    "tooltip": "Select the Cost Responsible person",
+    "error": "CR selection is required"
+  },
+  "submitInvoice": {
+    "text": "Submit Invoice",
+    "tooltip": "Submit the logistics invoice for approval",
+    "error": "Submission failed, please try again"
+  },
+  "editInvoice": {
+    "text": "Edit Invoice",
+    "tooltip": "Vendor can edit before the Daikin user starts the approval process",
+    "error": "Unable to Edit"
+  },
+  "saveProgress": {
+    "text": "Save Progress",
+    "tooltip": "Save changes for later completion",
+    "error": "Save action error"
+  },
+  "statusUpdate": {
+    "text": "Status Update",
+    "tooltip": "View current status and updates on invoice",
+    "error": "Status view error"
+  },
+  "rfi": {
+    "text": "RFI (Request for Information)",
+    "tooltip": "",
+    "error": ""
+  },
+  "downloadReport": {
+    "text": "Download Report",
+    "tooltip": "Download the logistics invoice report",
+    "error": "Download failed"
+  },
+  "emailReport": {
+    "text": "Email Report",
+    "tooltip": "Send report of logistics invoices via email",
+    "error": "Email failed"
+  },
+  "invoiceNumberSAP": {
+    "text": "Invoice Number (SAP)",
+    "tooltip": "Unique identifier for payment advice",
+    "error": "Invalid document reference number"
+  },
+  "paymentStatus": {
+    "text": "Payment Status",
+    "tooltip": "Current status of payment advice",
+    "error": "Status update error"
+  },
+  "paymentAdvice": {
+    "text": "Payment Advice",
+    "tooltip": "Hyperlink to payment advice",
+    "error": ""
+  },
+  "currency": {
+    "text": "Currency",
+    "tooltip": "Invoice currency",
+    "error": ""
+  },
+  "remarks": {
+    "text": "Remarks",
+    "tooltip": "Remarks by vendor",
+    "error": ""
+  },
+  "invoiceDate": {
+    "text": "Invoice Date",
+    "tooltip": "Date when the invoice was issued",
+    "error": "Pick current or past date only"
+  },
+  "next": "Next",
+  "save": "Save",
+  "invoiceNo" : "Invoice No",
+  "date" : "Date",
+  "referenceNo" : "Reference No",
+  "uploadedInvoiceFile": "Uploaded Invoice File",
+  "invoiceList": "Invoice list",
+  "invoiceProcessingNonPoBased": "Invoice Processing - Non PO Based",
+  "enterReferenceNo": "Enter Reference No.",
+  "selectContact": "Select contact",
+  "selectCategory": "Select Category",
+  "selectTaxRate": "Select Tax Rate",
+  "example90Days": "E.g. 90 days",
+  "selectAttachmentType": "Select Attachment Type",
+  "draft": "Draft",
+   "invoicePreview": "Invoice Preview",
+  "logisticsInvoiceList": "Logistics Invoice List",
+  "searchInvoiceReference": "Search for Invoice No. and Reference No.",
+  "downloadLogisticsTemplate": "Download Logistics Template",
+  "serialNo": "S.No.",
+  "totalAmount": "Total Amount",
+  "invoiceCreated": "Invoice Created",
+  "invoiceApproved": "Invoice Approved",
+  "invoiceRejected": "Invoice Rejected",
+  "bulkApprove": "Approve",
+  "bulkReject": "Reject",
+  "areYouSureWantToApproveThis": "Are you sure you want to approve this?",
+  "bulkApprovalSuccessfully": "Logistics Invoices Approved Successfully.",
+  "bulkRejectionSuccessfully": "Logistics Invoices Rejected Successfully",
+  "uploadXlsOnly": "Upload the import file in .xls format only",
+  "logisticsInvoicePreview": "Logistics Invoice Preview",
+  "uploadedXlsFile": "Uploaded xls file",
+  "noFileUploaded": "No file uploaded",
+  "uploadedZipFile": "Uploaded zip file",
+  "notSpecified": "Not specified",
+  "amount": "Amount",
+  "paymentDueDate": "Payment Due Date",
+  "invoiceRefNo": "Invoice Ref No.",
+  "totalTax": "Total Tax",
+  "poBasedInvoiceListPdf": "PO based-Invoice list.pdf",
+"nonPoBasedInvoiceListPdf": "Non PO based-Invoice list",
+"fileUploadRequired":"File upload is required",
+"approvedSuccessfully": "Approved Successfully.",
+"logisticsInvoiceApprovedSuccessfully": "Logistics Invoice is Approved Successfully.",
+"logisticsInvoiceRejected": "Logistics Invoice is Rejected.",
+"uploadedXLSXFile": "Uploaded XLSX File",
+"costResponsibleRequired": "Cost responsible is required",
+"uploadedInvoiceFiles": "Uploaded Invoice File(s)",
+"invoiceNumber": "Invoice Number",
+"invoiceDateRequired": "Invoice date is required",
+"invoiceValueRequired": "Invoice Value is required",
+"importZipFile": "Import Zip File",
+"accDocumentNo": "Acc Document No.",
+"pendingForApproval": "Pending For Approval",
+"searchInvoiceForAdmin": "Search for Invoice No., Vendor Name/Code",
+"invoiceFile": "Invoice File",
+"areYouSureWantToApproveThisInvoice": "Are you sure you want to approve this Invoice?",
+"bulkSubmitSuccessfully": "Logistics Invoices Submitted Successfully."
+}

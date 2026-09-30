@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Open Sans', sans-serif !important;
+        background-color: #f7f7f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: #ffffff;
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        position: fixed;
+        top: 20px;
+        left: 0;
+        right: 0;
+        display: flex;
+      }
+      .logo img {
+        max-width: 250px;
+        margin: 0 auto 20px;
+      }
+      .title {
+        color: #0071c5;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        position: relative;
+      }
+      .title::after {
+        content: '';
+        display: block;
+        width: 80px; /* Adjust the width of the underline */
+        height: 2px; /* Adjust the thickness of the underline */
+        background-color: #0071c5;
+        margin: 5px auto 0;
+      }
+      .subtitle {
+        color: #0071c5;
+        font-size: 48px;
+        font-weight: normal;
+        margin-bottom: 30px;
+      }
+      .messageTitle,
+      .messageSubtitle {
+        font-size: 1.5rem;
+        color: #333333;
+        margin-bottom: 30px;
+      }
+      .messageSubtitle {
+        font-size: 1.125rem;
+      }
+      .credentials {
+        font-size: 0.875rem;
+        color: #555555;
+        margin-bottom: 20px;
+        line-height: 1.6;
+        font-weight: bold;
+      }
+
+      .button {
+        display: inline-block;
+        background-color: var(--brand-primary-color, $primary-color);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 20px;
+        width: 80%;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      .button:hover {
+        background-color: var(--brand-primary-color, $primary-color);
+      }
+
+      .mail-footer-container {
+        background-color: #1f6ea9;
+        padding: 20px;
+      }
+      .footer-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .footer-left-content ul,
+      .footer-right-content ul {
+        display: flex;
+        gap: 15px;
+        padding: 0 10px;
+        list-style: none; /* Ensure no default list styling */
+        margin: 0; /* Remove any default margin */
+      }
+
+      .footer-right-content {
+        display: flex;
+      }
+
+      .footer-left-content ul li,
+      .footer-right-content ul li {
+        /*TODO  font-family: 'MyriadPro-Regular', Arial, sans-serif;*/
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 28px;
+        display: flex;
+      }
+
+      .footer-right-content li {
+        margin-left: 10px;
+      }
+
+      .footer-right-content p {
+        /*TODO font-family: 'MyriadPro-Regular', Arial, sans-serif;*/
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 28px;
+        margin: 0 20px 0 0;
+      }
+
+      .footer-left-content ul li:first-of-type,
+      .footer-right-content ul li:first-of-type {
+        font-weight: 600; /* Make the first item bold */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo">
+      <img src="../assets/icons/logo.svg" alt="Daikin Logo" />
+    </div>
+    <div class="container">
+      <p class="title">Dear Vendor</p>
+      <h2 class="subtitle">Congratulations!</h2>
+      <p class="messageTitle">Your application has been Approved successfully.</p>
+      <p class="messageSubtitle">Please find your credentials below:</p>
+      <div class="credentials">
+        <p>Email - <span>admin@alnoortrading.ae</span></p>
+        <p>Password - <span>pass@12345qwerty</span></p>
+      </div>
+      <p class="message">Please click below to get started</p>
+      <a href="#" class="button">Start</a>
+    </div>
+    <div class="footer-container mail-footer-container">
+      <div class="footer-left-content">
+        <ul>
+          <li>© 2026 Daikin. All Rights Reserved</li>
+        </ul>
+      </div>
+      <div class="footer-right-content">
+        <p>www.diakinmea.com&nbsp;|</p>
+        <ul>
+          <li><img src="../assets/icons/social-media/facebook.png" /></li>
+          <li><img src="../assets/icons/social-media/twitter.png" /></li>
+          <li><img src="../assets/icons/social-media/linkedin.png" /></li>
+          <li><img src="../assets/icons/social-media/youtube.png" /></li>
+          <li><img src="../assets/icons/social-media/instagram.png" /></li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

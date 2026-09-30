@@ -1,0 +1,132 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.poContainer {
+  padding: 0px;
+
+  .subHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+    }
+
+    div {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+  }
+  .subHeader > div {
+    display: flex;
+    gap: 10px;
+  }
+  .helpIconContainer {
+    height: 42px;
+    width: 42px;
+    border: 1px solid var(--brand-primary-color, $primary-color);
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0px 1px 5.8px 0px #82d5ff40;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+      &:hover {
+border:1.5px solid var(--brand-primary-color, $primary-color);
+box-shadow: 0px 4px 12px 0px #82d5ff80;
+    }
+  }
+}
+.userInputContainer {
+  // box-shadow: 0px 0px 4px 0px #00000040;
+  border:1px solid rgb(152, 162, 179);
+  border-radius: 10px;
+  padding: 20px 10px;
+  display: flex;
+  margin-bottom: 12px;
+  background-color: #fff;
+
+  .userInputContainerInner {
+    display: flex;
+    // justify-content: space-evenly;
+    align-items: baseline;
+    .inputQues {
+      display: flex;
+      flex-direction: column;
+      row-gap: 11px;
+      white-space: nowrap;
+      label {
+        font-size: 1rem !important;
+        // @include fontCustomStyle(1rem, 500, #6C6C6C, 16px);
+        color: #344054 !important;
+        font-weight: 500 !important;
+      }
+    }
+    .inputAns {
+      display: flex;
+      flex-direction: column;
+      row-gap: 7px;
+      label {
+         font-size: 1rem !important;
+        // @include fontCustomStyle(1rem, 600, black, 20px);
+        color: black !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  .fieldsetContainer {
+    width: 100%;
+    padding: 10px 20px;
+    .title {
+      @include fontCustomStyle(21px, 500, var(--brand-primary-color, $primary-color), 27px);
+      margin-bottom: 30px;
+    }
+    .inputFields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 4rem;
+    }
+    .reqTitle {
+      @include fontCustomStyle(16px, 600, #6c6c6c, 20px);
+      margin-bottom: 20px;
+    }
+    
+    // Styles for file field containers
+    .fileFieldContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      
+      .fileFieldLabel {
+        @include fontCustomStyle(1.125rem, 400, #333333, 20px);
+        margin-bottom: 4px;
+      }
+    }
+  }
+}
+.verticalDivider {
+  padding-right: 10px;
+  border-right: 1px solid #e5e5e5;
+}
+.attachmentContainer {
+  box-shadow: 0px 0px 4px 0px #00000040;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  margin-bottom: 12px;
+  background-color: #fff;
+
+  .attachment {
+    width: 50%;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+}
+@media (max-width: 919px) {
+  .userInputContainer {
+    padding: 30px;
+  }
+}

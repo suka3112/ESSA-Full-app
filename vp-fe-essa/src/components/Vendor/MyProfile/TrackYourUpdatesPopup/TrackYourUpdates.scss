@@ -1,0 +1,24 @@
+@import '../../../../assets/scss/abstracts/abstracts.scss';
+
+.applicationText {
+  @include fontCustomStyle(24px, 400, #2a2a2a, 28px);
+}
+
+.submittedText {
+  @include fontCustomStyle(24px, 700, #1f6ea9, 28px);
+}
+
+.MuiStepLabel-label {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+
+.reqNumberTxt {
+  @include fontCustomStyle(16px, 400, '#1A1A1A', 31px);
+  margin: 20px 0;
+  text-align: center;
+
+  span {
+    @include fontCustomStyle(16px, 700, '#1A1A1A', 31px);
+  }
+}
