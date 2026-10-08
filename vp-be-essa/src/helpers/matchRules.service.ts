@@ -16,7 +16,7 @@ import { APIError } from "../utils/apiError.utils";
 import { StatusCodeEnum } from "../utils/enums/status.enum";
 import seedRules from "../json/matchRulesSeed.json";
 
-const RULE_TYPES = ["EXACT", "LOGICAL", "CALCULATION", "TOLERANCE", "UNIQUENESS", "AUTHENTICITY", "AVAILABILITY"];
+const RULE_TYPES = ["EXACT", "LOGICAL", "CALCULATION", "TOLERANCE", "UNIQUENESS", "AUTHENTICITY", "AVAILABILITY", "CALCULATION_TOLERANCE", "EXACT_UNIQUENESS", "AUTHENTICATE"];
 const MATCH_LEVELS = ["HEADER", "LINE", "WORKER"];
 const COMBINES = ["LOWER", "HIGHER", "PCT", "AMOUNT"];
 const GROUPS = ["IDENTITY", "COMMERCIAL", "QUANTITY", "AMOUNTS", "CONTROLS", "DOCUMENTS"];

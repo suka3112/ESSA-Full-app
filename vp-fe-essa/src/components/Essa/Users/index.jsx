@@ -1,18 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import {
-  CirclePlus,
-  Pencil,
-  Search,
-  Trash2,
-  Lock,
-  Check,
-  X,
-  Shield,
-  User,
-  Users as UsersIcon,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronsUpDown, CirclePlus, Loader2, Pencil, Search, Trash2 } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { connect } from 'react-redux'
 
@@ -21,15 +8,15 @@ import { PageHeader } from '../PageShell'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Dialog } from '../ui/Dialog'
+import { Input } from '../ui/Input'
 import {
   getEssaUsersAndRoles,
   createEssaUser,
   updateEssaUser,
   manageEssaRole
 } from '../../../api/essaUsers'
+import { DASHBOARD } from '../../../constants/url'
 import '../../../assets/scss/essa/dashboard.scss'
-
-const BRAND = 'var(--brand-primary-color, #2C9842)'
 
 const PERMISSION_MODULES = [
   { module: 'Dashboard', cells: { Read: { codes: ['DASHBOARD_VIEW'], allows: 'Open the dashboard' } } },
@@ -38,38 +25,38 @@ const PERMISSION_MODULES = [
     cells: {
       Read: { codes: ['INVOICE_VIEW'], allows: 'View invoices and their documents' },
       Create: { codes: ['INVOICE_UPLOAD'], allows: 'Upload an invoice manually' },
-      Edit: { codes: ['INVOICE_EDIT', 'FIELD_CORRECT', 'INVOICE_REVALIDATE'], allows: 'Correct extracted fields and revalidate an invoice' },
-    },
+      Edit: { codes: ['INVOICE_EDIT', 'FIELD_CORRECT', 'INVOICE_REVALIDATE'], allows: 'Correct extracted fields and revalidate an invoice' }
+    }
   },
   { module: 'Validation', cells: { Edit: { codes: ['VALIDATION_OVERRIDE'], allows: 'Override a failed validation check with a justification' } } },
   {
     module: 'Exceptions',
     cells: {
       Read: { codes: ['EXCEPTION_VIEW'], allows: 'Open the Exception Workbench' },
-      Edit: { codes: ['EXCEPTION_MANAGE'], allows: 'Resolve, override and retry exceptions' },
-    },
+      Edit: { codes: ['EXCEPTION_MANAGE'], allows: 'Resolve, override and retry exceptions' }
+    }
   },
   {
     module: 'Approvals',
     cells: {
       Read: { codes: ['APPROVAL_VIEW'], allows: 'See the approval queue' },
-      Edit: { codes: ['APPROVAL_ACT'], allows: 'Approve or reject an invoice' },
-    },
+      Edit: { codes: ['APPROVAL_ACT'], allows: 'Approve or reject an invoice' }
+    }
   },
   { module: 'Tax Review', cells: { Edit: { codes: ['TAX_REVIEW'], allows: 'Complete the tax review step' } } },
   {
     module: 'Vendors',
     cells: {
       Read: { codes: ['VENDOR_VIEW'], allows: 'View the vendor list' },
-      Edit: { codes: ['VENDOR_CONTROL'], allows: 'Block or unblock a vendor on this platform' },
-    },
+      Edit: { codes: ['VENDOR_CONTROL'], allows: 'Block or unblock a vendor on this platform' }
+    }
   },
   {
     module: 'SAP',
     cells: {
       Read: { codes: ['SAP_VIEW'], allows: 'View purchase orders and SAP status' },
-      Edit: { codes: ['SAP_RETRY'], allows: 'Send an invoice to SAP again' },
-    },
+      Edit: { codes: ['SAP_RETRY'], allows: 'Send an invoice to SAP again' }
+    }
   },
   { module: 'Attendance', cells: { Read: { codes: ['BIOMETRIC_VIEW'], allows: 'View attendance data used for validation' } } },
   {
@@ -77,8 +64,8 @@ const PERMISSION_MODULES = [
     cells: {
       Read: { codes: ['CONFIG_VIEW'], allows: 'View invoice categories, document types and rules' },
       Create: { codes: ['CONFIG_PUBLISH'], allows: 'Publish a new configuration version' },
-      Edit: { codes: ['CONFIG_EDIT'], allows: 'Change categories, document types and rules' },
-    },
+      Edit: { codes: ['CONFIG_EDIT'], allows: 'Change categories, document types and rules' }
+    }
   },
   {
     module: 'Users & Roles',
@@ -86,194 +73,98 @@ const PERMISSION_MODULES = [
       Read: { codes: ['USER_ADMIN'], allows: 'View users, roles and permissions' },
       Create: { codes: ['USER_ADMIN'], allows: 'Create a role' },
       Edit: { codes: ['USER_ADMIN'], allows: 'Assign roles and change permissions' },
-      Delete: { codes: ['USER_ADMIN'], allows: 'Delete a role' },
-    },
+      Delete: { codes: ['USER_ADMIN'], allows: 'Delete a role' }
+    }
   },
   { module: 'Audit Log', cells: { Read: { codes: ['AUDIT_VIEW'], allows: 'Search the audit log' } } },
-  { module: 'Reports', cells: { Read: { codes: ['REPORT_VIEW'], allows: 'Open reports' } } },
+  { module: 'Reports', cells: { Read: { codes: ['REPORT_VIEW'], allows: 'Open reports' } } }
 ]
 
 const ACTIONS = ['Read', 'Create', 'Edit', 'Delete']
 
-function fmtDateTime(iso) {
-  if (!iso) return 'Never'
-  try {
-    const d = new Date(iso)
-    if (isNaN(d.getTime())) return String(iso)
-    return `${d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}, ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`
-  } catch {
-    return String(iso)
-  }
+function roleEnabled(role) {
+  return role?.active !== false
 }
 
 function cellGranted(permissions = [], cell) {
-  if (!cell || !cell.codes) return false
-  return cell.codes.every((c) => permissions.includes(c))
+  if (!cell?.codes) return false
+  return cell.codes.every((code) => permissions.includes(code))
 }
 
-function pageWindow(current, total, maxVisible = 7) {
-  if (total <= maxVisible) return Array.from({ length: total }, (_, i) => i + 1)
-  const pages = []
-  const left = Math.max(2, current - 1)
-  const right = Math.min(total - 1, current + 1)
-  pages.push(1)
-  if (left > 2) pages.push('gap')
-  for (let p = left; p <= right; p++) pages.push(p)
-  if (right < total - 1) pages.push('gap')
-  pages.push(total)
-  return pages
+function fmtDateTime(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return String(iso)
+  const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  return `${date}, ${time}`
 }
 
-function Pagination({
-  page,
-  totalPages,
-  total,
-  pageSize,
-  onPage,
-  onPageSize,
-  unit = 'users'
-}) {
-  const from = total === 0 ? 0 : (page - 1) * pageSize + 1
-  const to = Math.min(total, page * pageSize)
-  const pages = pageWindow(page, Math.max(1, totalPages))
+function initials(name) {
+  return String(name || '')
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+}
 
+function nextSort(current, key) {
+  if (current.key !== key) return { key, dir: 'asc' }
+  if (current.dir === 'asc') return { key, dir: 'desc' }
+  return { key: '', dir: '' }
+}
+
+function compareValues(a, b, dir) {
+  const left = a == null ? '' : a
+  const right = b == null ? '' : b
+  const result = String(left).localeCompare(String(right), undefined, { numeric: true, sensitivity: 'base' })
+  return dir === 'desc' ? -result : result
+}
+
+function SortTh({ label, column, sort, onSort, align }) {
+  const active = sort.key === column
+  const Icon = !active ? ChevronsUpDown : sort.dir === 'asc' ? ArrowUp : ArrowDown
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 12,
-        padding: '10px 18px',
-        borderTop: '1px solid #EEF0F2',
-        background: '#FFFFFF',
-        fontSize: 12,
-        color: '#6B7280'
-      }}
-    >
-      <span>
-        Showing {from} to {to} of {total.toLocaleString('en-US')} {unit}
-      </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <button
-          type="button"
-          aria-label="Previous page"
-          disabled={page <= 1}
-          onClick={() => onPage(page - 1)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 28,
-            height: 28,
-            borderRadius: 4,
-            border: '1px solid #E5E7EB',
-            background: '#FFFFFF',
-            cursor: page <= 1 ? 'not-allowed' : 'pointer',
-            color: page <= 1 ? '#9CA3AF' : '#374151',
-            opacity: page <= 1 ? 0.5 : 1
-          }}
-        >
-          ‹
-        </button>
-        {pages.map((p, idx) =>
-          p === 'gap' ? (
-            <span key={`gap-${idx}`} style={{ padding: '0 4px', color: '#9CA3AF' }}>
-              …
-            </span>
-          ) : (
-            <button
-              key={p}
-              type="button"
-              onClick={() => onPage(p)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: 28,
-                height: 28,
-                padding: '0 6px',
-                borderRadius: 4,
-                fontSize: 12,
-                fontWeight: 600,
-                border: '1px solid',
-                borderColor: p === page ? BRAND : '#E5E7EB',
-                background: p === page ? BRAND : '#FFFFFF',
-                color: p === page ? '#FFFFFF' : '#374151',
-                cursor: 'pointer'
-              }}
-            >
-              {p}
-            </button>
-          )
-        )}
-        <button
-          type="button"
-          aria-label="Next page"
-          disabled={page >= totalPages}
-          onClick={() => onPage(page + 1)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 28,
-            height: 28,
-            borderRadius: 4,
-            border: '1px solid #E5E7EB',
-            background: '#FFFFFF',
-            cursor: page >= totalPages ? 'not-allowed' : 'pointer',
-            color: page >= totalPages ? '#9CA3AF' : '#374151',
-            opacity: page >= totalPages ? 0.5 : 1
-          }}
-        >
-          ›
-        </button>
-      </div>
-      {onPageSize && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Rows per page:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => onPageSize(Number(e.target.value))}
-            style={{
-              height: 28,
-              padding: '0 8px',
-              borderRadius: 4,
-              border: '1px solid #E5E7EB',
-              background: '#FFFFFF',
-              fontSize: 12,
-              color: '#374151'
-            }}
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </select>
-        </div>
-      )}
-    </div>
+    <th className={align === 'center' ? 'is-center' : undefined}>
+      <button type="button" className={`ur-sort${active ? '' : ' ur-sort-idle'}`} onClick={() => onSort(column)}>
+        {label}
+        <Icon size={12} />
+      </button>
+    </th>
   )
 }
 
-function UsersManagementComp({ userInfo: { userType = 'admin' } }) {
+function StatusBadge({ enabled }) {
+  return <span className={`ur-badge ${enabled ? 'ur-badge-success' : 'ur-badge-neutral'}`}>{enabled ? 'Enabled' : 'Disabled'}</span>
+}
+
+function Field({ label, required, hint, children }) {
+  return (
+    <label className="ur-field">
+      <span className="ur-field-label">
+        {label} {required ? <span className="ur-req">*</span> : null}
+      </span>
+      {children}
+      {hint ? <span className="ur-hint">{hint}</span> : null}
+    </label>
+  )
+}
+
+function UsersManagementComp({ userInfo: { userType = 'admin' } = {} }) {
   const [tab, setTab] = useState('users')
   const [data, setData] = useState({ users: [], roles: [], permissions: [] })
   const [loading, setLoading] = useState(true)
-
-  // Filters & Pagination
   const [userSearch, setUserSearch] = useState('')
   const [userRoleFilter, setUserRoleFilter] = useState('')
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(25)
+  const [userSort, setUserSort] = useState({ key: '', dir: '' })
+  const [roleSort, setRoleSort] = useState({ key: '', dir: '' })
 
-  // Modals state
   const [newUserModal, setNewUserModal] = useState(null)
   const [editingUser, setEditingUser] = useState(null)
   const [editRoleIds, setEditRoleIds] = useState([])
   const [editUserEnabled, setEditUserEnabled] = useState(true)
-
   const [roleModal, setRoleModal] = useState(null)
   const [deleteRoleModal, setDeleteRoleModal] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -282,9 +173,7 @@ function UsersManagementComp({ userInfo: { userType = 'admin' } }) {
     setLoading(true)
     try {
       const res = await getEssaUsersAndRoles()
-      if (res) {
-        setData(res)
-      }
+      if (res) setData(res)
     } catch (err) {
       console.error('Failed to load users:', err)
       toast.error('Failed to load users and roles from database')
@@ -300,36 +189,36 @@ function UsersManagementComp({ userInfo: { userType = 'admin' } }) {
   const filteredUsers = useMemo(() => {
     const rows = data.users || []
     const q = userSearch.trim().toLowerCase()
-    return rows.filter((u) => {
-      if (userRoleFilter && !u.roleIds.includes(userRoleFilter)) return false
+    const matched = rows.filter((user) => {
+      if (userRoleFilter && !(user.roleIds || []).includes(userRoleFilter)) return false
       if (!q) return true
-      return [u.name, u.email, u.title].some((v) => v?.toLowerCase().includes(q))
+      return [user.name, user.email, user.title].some((value) => value?.toLowerCase().includes(q))
     })
-  }, [data.users, userSearch, userRoleFilter])
+    if (!userSort.key) return matched
+    const valueOf = (user) => {
+      if (userSort.key === 'name') return user.name
+      if (userSort.key === 'title') return user.title
+      if (userSort.key === 'roles') return user.roleNames?.length ? user.roleNames.join(', ') : 'No access'
+      if (userSort.key === 'login') return user.lastLoginAt || ''
+      if (userSort.key === 'enabled') return user.enabled ? 'Enabled' : 'Disabled'
+      return ''
+    }
+    return [...matched].sort((a, b) => compareValues(valueOf(a), valueOf(b), userSort.dir))
+  }, [data.users, userSearch, userRoleFilter, userSort])
 
-  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize))
-  const pagedUsers = useMemo(() => {
-    const start = (page - 1) * pageSize
-    return filteredUsers.slice(start, start + pageSize)
-  }, [filteredUsers, page, pageSize])
+  const sortedRoles = useMemo(() => {
+    const roles = data.roles || []
+    if (!roleSort.key) return roles
+    const countOf = (role) => (data.users || []).filter((user) => (user.roleIds || []).includes(role.id)).length
+    const valueOf = (role) => {
+      if (roleSort.key === 'name') return role.name
+      if (roleSort.key === 'users') return countOf(role)
+      if (roleSort.key === 'status') return roleEnabled(role) ? 'Enabled' : 'Disabled'
+      return ''
+    }
+    return [...roles].sort((a, b) => compareValues(valueOf(a), valueOf(b), roleSort.dir))
+  }, [data.roles, data.users, roleSort])
 
-  // Reset page to 1 when changing filters
-  const handleSearchChange = (val) => {
-    setUserSearch(val)
-    setPage(1)
-  }
-
-  const handleRoleFilterChange = (val) => {
-    setUserRoleFilter(val)
-    setPage(1)
-  }
-
-  const handlePageSizeChange = (size) => {
-    setPageSize(size)
-    setPage(1)
-  }
-
-  // Actions
   const handleCreateUser = async () => {
     if (!newUserModal?.name?.trim() || !newUserModal?.email?.trim()) {
       toast.error('Full name and corporate email are required.')
@@ -407,17 +296,38 @@ function UsersManagementComp({ userInfo: { userType = 'admin' } }) {
   const toggleRolePermissionCell = (cell, on) => {
     if (!roleModal) return
     const current = new Set(roleModal.permissions || [])
-    cell.codes.forEach((c) => (on ? current.add(c) : current.delete(c)))
+    cell.codes.forEach((code) => (on ? current.add(code) : current.delete(code)))
     setRoleModal({ ...roleModal, permissions: Array.from(current) })
   }
 
+  const openRoleEditor = (role) => {
+    if (role) {
+      setRoleModal({
+        id: role.id,
+        name: role.name,
+        active: roleEnabled(role),
+        permissions: [...(role.permissions || [])],
+        system: role.system
+      })
+      return
+    }
+    setRoleModal({ name: '', active: true, permissions: [] })
+  }
+
+  const tabs = [
+    { key: 'users', label: `Users (${data.users.length})` },
+    { key: 'roles', label: `Roles (${data.roles.length})` },
+    { key: 'matrix', label: 'Permission Matrix' }
+  ]
+
   return (
-    <div style={{ background: '#F8FAF9', padding: '16px 20px', width: '100%', boxSizing: 'border-box' }}>
-      <div className="dx-page dx-stack" style={{ gap: 14, width: '100%' }}>
-        {/* Top Page Header */}
-        <PageHeader
+    <LeftPageContainer>
+      <div className="essa-dashboard ur-page">
+        <style>{pageCss}</style>
+        <div className="ur-stack">
+          <PageHeader
             breadcrumb={[
-              { label: 'Home', to: `/${userType}` },
+              { label: 'Home', to: `/${userType}${DASHBOARD}` },
               { label: 'Administration' },
               { label: 'Users & Roles' }
             ]}
@@ -425,531 +335,247 @@ function UsersManagementComp({ userInfo: { userType = 'admin' } }) {
             description="Users are signed in with their corporate account. What they can see and do on this platform is decided by the roles assigned here."
             actions={
               tab === 'users' ? (
-                <Button
-                  size="sm"
-                  onClick={() =>
-                    setNewUserModal({
-                      name: '',
-                      email: '',
-                      title: '',
-                      roleIds: [],
-                      enabled: true
-                    })
-                  }
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                >
-                  <CirclePlus size={14} /> Add user
+                <Button size="sm" className="ur-add" onClick={() => setNewUserModal({ name: '', email: '', title: '', roleIds: [], enabled: true })}>
+                  <CirclePlus size={13} /> Add user
                 </Button>
               ) : tab === 'roles' ? (
-                <Button
-                  size="sm"
-                  onClick={() =>
-                    setRoleModal({
-                      name: '',
-                      active: true,
-                      permissions: ['DASHBOARD_VIEW', 'INVOICE_VIEW']
-                    })
-                  }
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                >
-                  <CirclePlus size={14} /> Create role
+                <Button size="sm" className="ur-add" onClick={() => openRoleEditor()}>
+                  <CirclePlus size={13} /> Create role
                 </Button>
               ) : null
             }
           />
 
-          {/* Main Container Card with 3 Tabs */}
-          <Card
-            pad={false}
-            style={{
-              border: '1px solid #E5E7EB',
-              borderRadius: 8,
-              background: '#FFFFFF',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            {/* Tab Navigation */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '12px 18px',
-                borderBottom: '1px solid #EEF0F2',
-                background: '#FAFAFA'
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setTab('users')}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 6,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  border: 'none',
-                  background: tab === 'users' ? BRAND : 'transparent',
-                  color: tab === 'users' ? '#FFFFFF' : '#4B5563',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                Users ({data.users.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => setTab('roles')}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 6,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  border: 'none',
-                  background: tab === 'roles' ? BRAND : 'transparent',
-                  color: tab === 'roles' ? '#FFFFFF' : '#4B5563',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                Roles ({data.roles.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => setTab('matrix')}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 6,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  border: 'none',
-                  background: tab === 'matrix' ? BRAND : 'transparent',
-                  color: tab === 'matrix' ? '#FFFFFF' : '#4B5563',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                Permission Matrix
-              </button>
+          <Card pad={false}>
+            <div className="ur-tabs" role="tablist">
+              {tabs.map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === item.key}
+                  className={tab === item.key ? 'is-active' : undefined}
+                  onClick={() => setTab(item.key)}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
 
-            {/* TAB 1: USERS */}
             {tab === 'users' && (
-              <div>
-                {/* Search & Role Filter Bar */}
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'flex-end',
-                    gap: 12,
-                    padding: '12px 18px',
-                    borderBottom: '1px solid #EEF0F2',
-                    background: '#FAFAFA'
-                  }}
-                >
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' }}>
-                      Search
-                    </label>
-                    <div style={{ position: 'relative', minWidth: 260 }}>
-                      <Search
-                        size={14}
-                        style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }}
-                      />
-                      <input
-                        className="dx-input"
+              <>
+                <div className="ur-filters">
+                  <span className="ur-filter">
+                    <span className="ur-filter-label">Search</span>
+                    <span className="ur-search">
+                      <Search size={14} />
+                      <Input
                         value={userSearch}
-                        onChange={(e) => handleSearchChange(e.target.value)}
+                        onChange={(e) => setUserSearch(e.target.value)}
                         placeholder="Name, email or job title…"
-                        style={{ paddingLeft: 30, height: 34, fontSize: 12, width: '100%' }}
+                        aria-label="Search users"
                       />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <label style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', textTransform: 'uppercase' }}>
-                      Role
-                    </label>
-                    <select
-                      className="dx-select"
-                      value={userRoleFilter}
-                      onChange={(e) => handleRoleFilterChange(e.target.value)}
-                      style={{ height: 34, fontSize: 12, minWidth: 160 }}
-                    >
+                    </span>
+                  </span>
+                  <span className="ur-filter">
+                    <span className="ur-filter-label">Role</span>
+                    <select className="ur-select" value={userRoleFilter} onChange={(e) => setUserRoleFilter(e.target.value)} aria-label="Role filter">
                       <option value="">Any role</option>
-                      {data.roles.map((r) => (
-                        <option key={r.id} value={r.id}>
-                          {r.name}
-                        </option>
+                      {(data.roles || []).map((role) => (
+                        <option key={role.id} value={role.id}>{role.name}</option>
                       ))}
                     </select>
-                  </div>
+                  </span>
                 </div>
-
-                {/* Users Data Table */}
-                <div
-                  className="dx-table-wrap"
-                  style={{
-                    overflowX: 'auto',
-                    overflowY: 'auto',
-                    maxHeight: 'calc(100vh - 370px)',
-                    position: 'relative'
-                  }}
-                >
-                  <table className="dx-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND }}>
-                      <tr style={{ background: BRAND, borderBottom: '1px solid #E5E7EB' }}>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase' }}>
-                          User
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase' }}>
-                          Job Title
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase' }}>
-                          Roles
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase' }}>
-                          Last Sign In
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', textAlign: 'center' }}>
-                          Status
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', textAlign: 'center', width: 80 }}>
-                          Action
-                        </th>
+                <div className="ur-table-wrap">
+                  <table className="ur-table">
+                    <thead>
+                      <tr>
+                        <SortTh label="User" column="name" sort={userSort} onSort={(key) => setUserSort((current) => nextSort(current, key))} />
+                        <SortTh label="Job Title" column="title" sort={userSort} onSort={(key) => setUserSort((current) => nextSort(current, key))} />
+                        <SortTh label="Roles" column="roles" sort={userSort} onSort={(key) => setUserSort((current) => nextSort(current, key))} />
+                        <SortTh label="Last Sign In" column="login" sort={userSort} onSort={(key) => setUserSort((current) => nextSort(current, key))} />
+                        <SortTh label="Status" column="enabled" sort={userSort} onSort={(key) => setUserSort((current) => nextSort(current, key))} />
+                        <th className="is-center ur-sticky">Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {loading ? (
-                        <tr>
-                          <td colSpan={6} style={{ padding: 48, textAlign: 'center', color: '#6B7280', fontSize: 13 }}>
-                            Loading users from database…
+                        <tr className="ur-state-row">
+                          <td colSpan={6}>
+                            <div className="ur-state">
+                              <Loader2 size={18} className="ur-spin" />
+                              <p>Loading users…</p>
+                            </div>
                           </td>
                         </tr>
                       ) : filteredUsers.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} style={{ padding: 40, textAlign: 'center', color: '#6B7280', fontSize: 13 }}>
-                            No users match the search criteria.
+                        <tr className="ur-state-row">
+                          <td colSpan={6}>
+                            <div className="ur-state">
+                              <p className="ur-state-title">No matching results</p>
+                              <p>{userSearch ? `Nothing matches “${userSearch}”.` : 'No users to show.'}</p>
+                            </div>
                           </td>
                         </tr>
                       ) : (
-                        pagedUsers.map((u) => {
-                          const initials = (u.name || 'User')
-                            .split(' ')
-                            .map((p) => p[0])
-                            .slice(0, 2)
-                            .join('')
-                            .toUpperCase()
-
-                          return (
-                            <tr key={u.id} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                              <td style={{ padding: '12px 14px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                  <span
-                                    style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      width: 30,
-                                      height: 30,
-                                      borderRadius: '50%',
-                                      background: BRAND,
-                                      color: '#FFFFFF',
-                                      fontSize: 11,
-                                      fontWeight: 700,
-                                      flexShrink: 0
-                                    }}
-                                  >
-                                    {initials}
-                                  </span>
-                                  <div>
-                                    <div style={{ fontWeight: 600, color: '#1F2937', fontSize: 13 }}>{u.name}</div>
-                                    <div style={{ fontSize: 11, color: '#6B7280' }}>{u.email}</div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td style={{ padding: '12px 14px', fontSize: 12, color: '#374151' }}>
-                                {u.title || 'Portal User'}
-                              </td>
-                              <td style={{ padding: '12px 14px' }}>
-                                {!u.roleNames?.length || u.roleNames[0] === 'No access' ? (
-                                  <span style={{ fontSize: 11, fontStyle: 'italic', color: '#9CA3AF' }}>No access</span>
-                                ) : (
-                                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                                    {u.roleNames.map((rn) => (
-                                      <span
-                                        key={rn}
-                                        style={{
-                                          display: 'inline-flex',
-                                          alignItems: 'center',
-                                          borderRadius: 4,
-                                          padding: '2px 8px',
-                                          fontSize: 10,
-                                          fontWeight: 600,
-                                          background: '#E0F2FE',
-                                          color: '#0369A1',
-                                          border: '1px solid #BAE6FD'
-                                        }}
-                                      >
-                                        {rn}
-                                      </span>
-                                    ))}
-                                  </div>
-                                )}
-                              </td>
-                              <td style={{ padding: '12px 14px', fontSize: 11, color: '#4B5563', whiteSpace: 'nowrap' }}>
-                                {fmtDateTime(u.lastLoginAt)}
-                              </td>
-                              <td style={{ padding: '12px 14px', textAlign: 'center' }}>
-                                <span
-                                  style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    borderRadius: 4,
-                                    padding: '2px 8px',
-                                    fontSize: 11,
-                                    fontWeight: 700,
-                                    textTransform: 'uppercase',
-                                    background: u.enabled ? '#E6F5EA' : '#F3F4F6',
-                                    color: u.enabled ? '#2D9A47' : '#6B7280',
-                                    border: `1px solid ${u.enabled ? '#B5E3C4' : '#E5E7EB'}`
-                                  }}
-                                >
-                                  {u.enabled ? 'Enabled' : 'Disabled'}
+                        filteredUsers.map((user, index) => (
+                          <tr key={user.id} className={index % 2 === 1 ? 'is-zebra' : undefined}>
+                            <td>
+                              <span className="ur-user">
+                                <span className="ur-avatar">{initials(user.name) || '—'}</span>
+                                <span>
+                                  <span className="ur-name">{user.name}</span>
+                                  <span className="ur-email">{user.email}</span>
                                 </span>
-                              </td>
-                              <td style={{ padding: '12px 14px', textAlign: 'center' }}>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  title={`Edit ${u.name}`}
-                                  onClick={() => {
-                                    setEditingUser(u)
-                                    setEditRoleIds(u.roleIds || [])
-                                    setEditUserEnabled(u.enabled !== false)
-                                  }}
-                                  style={{ padding: '4px 8px', borderRadius: 6 }}
-                                >
-                                  <Pencil size={13} style={{ color: '#4B5563' }} />
-                                </Button>
-                              </td>
-                            </tr>
-                          )
-                        })
+                              </span>
+                            </td>
+                            <td><span className="ur-small">{user.title || '—'}</span></td>
+                            <td>
+                              {!user.roleNames?.length ? (
+                                <span className="ur-none">No access</span>
+                              ) : (
+                                <span className="ur-roles">
+                                  {user.roleNames.map((name) => (
+                                    <span key={name} className="ur-badge ur-badge-info">{name}</span>
+                                  ))}
+                                </span>
+                              )}
+                            </td>
+                            <td><span className="ur-tiny">{user.lastLoginAt ? fmtDateTime(user.lastLoginAt) : 'Never'}</span></td>
+                            <td><StatusBadge enabled={user.enabled !== false} /></td>
+                            <td className="is-center ur-sticky">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="ur-icon"
+                                aria-label={`Edit ${user.name}`}
+                                title="Assign roles and enable or disable this user"
+                                onClick={() => {
+                                  setEditingUser(user)
+                                  setEditRoleIds(user.roleIds || [])
+                                  setEditUserEnabled(user.enabled !== false)
+                                }}
+                              >
+                                <Pencil size={13} />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
                       )}
                     </tbody>
                   </table>
                 </div>
-
-                {/* Users Pagination */}
-                <Pagination
-                  page={page}
-                  totalPages={totalPages}
-                  total={filteredUsers.length}
-                  pageSize={pageSize}
-                  onPage={setPage}
-                  onPageSize={handlePageSizeChange}
-                  unit="users"
-                />
-              </div>
+              </>
             )}
 
-            {/* TAB 2: ROLES */}
             {tab === 'roles' && (
-              <div
-                className="dx-table-wrap"
-                style={{
-                  overflowX: 'auto',
-                  overflowY: 'auto',
-                  maxHeight: 'calc(100vh - 315px)',
-                  position: 'relative'
-                }}
-              >
-                <table className="dx-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND }}>
-                    <tr style={{ background: BRAND, borderBottom: '1px solid #E5E7EB' }}>
-                      <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase' }}>
-                        Role
-                      </th>
-                      <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', textAlign: 'center', width: 120 }}>
-                        Users
-                      </th>
-                      <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', textAlign: 'center', width: 120 }}>
-                        Status
-                      </th>
-                      <th style={{ position: 'sticky', top: 0, zIndex: 5, background: BRAND, padding: '10px 14px', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', textAlign: 'center', width: 100 }}>
-                        Action
-                      </th>
+              <div className="ur-table-wrap">
+                <table className="ur-table">
+                  <thead>
+                    <tr>
+                      <SortTh label="Role" column="name" sort={roleSort} onSort={(key) => setRoleSort((current) => nextSort(current, key))} />
+                      <SortTh label="Users" column="users" sort={roleSort} onSort={(key) => setRoleSort((current) => nextSort(current, key))} align="center" />
+                      <SortTh label="Status" column="status" sort={roleSort} onSort={(key) => setRoleSort((current) => nextSort(current, key))} />
+                      <th className="is-center ur-sticky">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data.roles.map((r) => {
-                      const userCount = data.users.filter((u) => u.roleIds.includes(r.id)).length
-                      const isEnabled = r.active !== false
-
-                      return (
-                        <tr key={r.id} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                          <td style={{ padding: '12px 14px', fontWeight: 600, color: '#1F2937', fontSize: 13 }}>
-                            {r.name}
-                            {r.system && (
-                              <span style={{ marginLeft: 8, fontSize: 10, color: '#6B7280', fontWeight: 400 }}>
-                                (System)
-                              </span>
-                            )}
-                          </td>
-                          <td style={{ padding: '12px 14px', textAlign: 'center', fontWeight: 600, fontSize: 13 }}>
-                            {userCount}
-                          </td>
-                          <td style={{ padding: '12px 14px', textAlign: 'center' }}>
-                            <span
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                borderRadius: 4,
-                                padding: '2px 8px',
-                                fontSize: 11,
-                                fontWeight: 700,
-                                textTransform: 'uppercase',
-                                background: isEnabled ? '#E6F5EA' : '#F3F4F6',
-                                color: isEnabled ? '#2D9A47' : '#6B7280',
-                                border: `1px solid ${isEnabled ? '#B5E3C4' : '#E5E7EB'}`
-                              }}
-                            >
-                              {isEnabled ? 'Enabled' : 'Disabled'}
-                            </span>
-                          </td>
-                          <td style={{ padding: '12px 14px', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                title={`Manage permissions for ${r.name}`}
-                                onClick={() =>
-                                  setRoleModal({
-                                    id: r.id,
-                                    name: r.name,
-                                    active: isEnabled,
-                                    permissions: [...(r.permissions || [])],
-                                    system: r.system
-                                  })
-                                }
-                                style={{ padding: '4px 8px', borderRadius: 6 }}
-                              >
-                                <Pencil size={13} style={{ color: '#4B5563' }} />
-                              </Button>
-
-                              {!r.system && (
+                    {loading ? (
+                      <tr className="ur-state-row">
+                        <td colSpan={4}>
+                          <div className="ur-state">
+                            <Loader2 size={18} className="ur-spin" />
+                            <p>Loading roles…</p>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : sortedRoles.length === 0 ? (
+                      <tr className="ur-state-row">
+                        <td colSpan={4}>
+                          <div className="ur-state">
+                            <p className="ur-state-title">No roles</p>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      sortedRoles.map((role, index) => {
+                        const userCount = (data.users || []).filter((user) => (user.roleIds || []).includes(role.id)).length
+                        return (
+                          <tr key={role.id} className={index % 2 === 1 ? 'is-zebra' : undefined}>
+                            <td><span className="ur-name">{role.name}</span></td>
+                            <td className="is-center">{userCount}</td>
+                            <td><StatusBadge enabled={roleEnabled(role)} /></td>
+                            <td className="is-center ur-sticky">
+                              <span className="ur-actions">
                                 <Button
                                   size="sm"
                                   variant="ghost"
-                                  title={`Delete ${r.name}`}
-                                  onClick={() => setDeleteRoleModal(r)}
-                                  style={{ padding: '4px 8px', borderRadius: 6, color: '#DC2626' }}
+                                  className="ur-icon"
+                                  aria-label={`Manage permissions for ${role.name}`}
+                                  title="Manage permissions, rename, enable or disable"
+                                  onClick={() => openRoleEditor(role)}
                                 >
-                                  <Trash2 size={13} />
+                                  <Pencil size={13} />
                                 </Button>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    })}
+                                {!role.system && (
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="ur-icon ur-icon-danger"
+                                    aria-label={`Delete ${role.name}`}
+                                    title="Delete this role"
+                                    onClick={() => setDeleteRoleModal(role)}
+                                  >
+                                    <Trash2 size={13} />
+                                  </Button>
+                                )}
+                              </span>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
             )}
 
-            {/* TAB 3: PERMISSION MATRIX */}
             {tab === 'matrix' && (
-              <div style={{ padding: 18 }}>
-                <p style={{ margin: '0 0 14px', fontSize: 12, color: '#4B5563', lineHeight: 1.5 }}>
-                  Each row is something a person can do. A tick (<strong style={{ color: BRAND }}>✓</strong>) means the
-                  role is allowed to do it; read the row to see which roles have a permission, read a column to see
-                  everything a role can do.
+              <div className="ur-matrix">
+                <p>
+                  Each row is something a person can do. A tick means the role is allowed to do it; read the row to see which
+                  roles have a permission, read a column to see everything a role can do.
                 </p>
-
-                <div
-                  style={{
-                    overflowX: 'auto',
-                    overflowY: 'auto',
-                    maxHeight: 'calc(100vh - 370px)',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: 8,
-                    position: 'relative'
-                  }}
-                >
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-                    <thead style={{ position: 'sticky', top: 0, zIndex: 5, background: '#F9FAFB' }}>
-                      <tr style={{ borderBottom: '1px solid #E5E7EB' }}>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: '#F9FAFB', padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: '#374151', minWidth: 120 }}>
-                          Area
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: '#F9FAFB', padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: '#374151', minWidth: 80 }}>
-                          Permission
-                        </th>
-                        <th style={{ position: 'sticky', top: 0, zIndex: 5, background: '#F9FAFB', padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: '#374151', minWidth: 240 }}>
-                          What it allows
-                        </th>
-                        {data.roles.map((r) => (
-                          <th
-                            key={r.id}
-                            style={{
-                              position: 'sticky',
-                              top: 0,
-                              zIndex: 5,
-                              background: BRAND,
-                              color: '#FFFFFF',
-                              padding: '10px 14px',
-                              textAlign: 'center',
-                              fontWeight: 700,
-                              whiteSpace: 'nowrap',
-                              minWidth: 100
-                            }}
-                          >
-                            {r.name}
-                          </th>
+                <div className="ur-matrix-wrap">
+                  <table className="ur-matrix-table">
+                    <thead>
+                      <tr>
+                        <th className="ur-sticky-col">Area</th>
+                        <th>Permission</th>
+                        <th>What it allows</th>
+                        {(data.roles || []).map((role) => (
+                          <th key={role.id} className="ur-role-col">{role.name}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {PERMISSION_MODULES.flatMap((m) =>
-                        ACTIONS.filter((a) => m.cells[a]).map((a, idx) => {
-                          const cell = m.cells[a]
+                      {PERMISSION_MODULES.flatMap((module) =>
+                        ACTIONS.filter((action) => module.cells[action]).map((action, index) => {
+                          const cell = module.cells[action]
                           return (
-                            <tr
-                              key={`${m.module}-${a}`}
-                              style={{
-                                borderTop: idx === 0 ? '1px solid #E5E7EB' : '1px solid #F3F4F6',
-                                background: idx === 0 ? '#FAFBFA' : '#FFFFFF'
-                              }}
-                            >
-                              <td style={{ padding: '8px 14px', fontWeight: idx === 0 ? 700 : 400, color: '#1F2937' }}>
-                                {idx === 0 ? m.module : ''}
-                              </td>
-                              <td style={{ padding: '8px 14px', color: '#4B5563', fontWeight: 500 }}>
-                                {a}
-                              </td>
-                              <td style={{ padding: '8px 14px', color: '#6B7280', fontSize: 11 }}>
-                                {cell.allows}
-                              </td>
-                              {data.roles.map((r) => {
-                                const granted = cellGranted(r.permissions, cell)
+                            <tr key={`${module.module}-${action}`} className={index === 0 ? 'is-group' : undefined}>
+                              <td className="ur-sticky-col ur-area">{index === 0 ? module.module : ''}</td>
+                              <td className="ur-perm">{action}</td>
+                              <td className="ur-allows">{cell.allows}</td>
+                              {(data.roles || []).map((role) => {
+                                const granted = cellGranted(role.permissions, cell)
                                 return (
-                                  <td
-                                    key={r.id}
-                                    style={{
-                                      padding: '8px 14px',
-                                      textAlign: 'center',
-                                      borderLeft: '1px solid #F3F4F6'
-                                    }}
-                                  >
+                                  <td key={role.id} className="is-center">
                                     {granted ? (
-                                      <span style={{ color: BRAND, fontWeight: 700, fontSize: 14 }}>✓</span>
+                                      <span className="ur-tick" title={`${role.name} can ${cell.allows.toLowerCase()}`}>✓</span>
                                     ) : (
-                                      <span style={{ color: '#D1D5DB' }}>—</span>
+                                      <span className="ur-dash" title={`${role.name} cannot ${cell.allows.toLowerCase()}`}>—</span>
                                     )}
                                   </td>
                                 )
@@ -966,371 +592,300 @@ function UsersManagementComp({ userInfo: { userType = 'admin' } }) {
           </Card>
         </div>
 
-      {/* ----------------- MODAL 1: ADD USER ----------------- */}
-      {newUserModal && (
         <Dialog
           open={Boolean(newUserModal)}
-          onClose={() => setNewUserModal(null)}
+          onClose={() => !saving && setNewUserModal(null)}
           title="Add user"
-          width={560}
+          width={768}
+          footer={
+            <>
+              <Button variant="ghost" className="ur-dialog-btn" onClick={() => setNewUserModal(null)} disabled={saving}>Cancel</Button>
+              <Button className="ur-dialog-btn ur-dialog-primary" disabled={saving || !newUserModal?.name?.trim() || !newUserModal?.email?.trim()} onClick={handleCreateUser}>
+                {saving ? 'Adding…' : 'Add user'}
+              </Button>
+            </>
+          }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <p
-              style={{
-                margin: 0,
-                padding: '10px 14px',
-                borderRadius: 6,
-                border: '1px solid #E5E7EB',
-                background: '#F6F8F7',
-                fontSize: 11,
-                color: '#4B5563',
-                lineHeight: 1.5
-              }}
-            >
-              This does not create a password. The person signs in with their ESSA corporate account — adding them here
-              is what gives that account access to this platform, and the roles decide what they can do.
-            </p>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>
-                  Full name <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <input
-                  className="dx-input"
-                  value={newUserModal.name}
-                  onChange={(e) => setNewUserModal({ ...newUserModal, name: e.target.value })}
-                  placeholder="e.g. Dewi Lestari"
-                  style={{ height: 34, fontSize: 13 }}
-                />
+          {newUserModal && (
+            <div className="ur-form">
+              <p className="ur-note">
+                This does not create a password. The person signs in with their ESSA corporate account — adding them here
+                is what gives that account access to this platform, and the roles decide what they can do.
+              </p>
+              <div className="ur-grid">
+                <Field label="Full name" required>
+                  <Input value={newUserModal.name} placeholder="e.g. Dewi Lestari" onChange={(e) => setNewUserModal((user) => user && ({ ...user, name: e.target.value }))} />
+                </Field>
+                <Field label="Corporate email" required hint="The address they sign in with">
+                  <Input type="email" value={newUserModal.email} placeholder="e.g. dewi.lestari@essa.co.id" onChange={(e) => setNewUserModal((user) => user && ({ ...user, email: e.target.value }))} />
+                </Field>
               </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>
-                  Corporate email <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <input
-                  type="email"
-                  className="dx-input"
-                  value={newUserModal.email}
-                  onChange={(e) => setNewUserModal({ ...newUserModal, email: e.target.value })}
-                  placeholder="e.g. dewi.lestari@essa.com"
-                  style={{ height: 34, fontSize: 13 }}
-                />
-              </div>
+              <Field label="Job title" hint="Shown on the users list; it does not affect what they can do">
+                <Input value={newUserModal.title} placeholder="e.g. AP Processor" onChange={(e) => setNewUserModal((user) => user && ({ ...user, title: e.target.value }))} />
+              </Field>
+              <Field label="Roles" hint="What the person can see and do. Leave every role unticked to add the account with no access yet.">
+                <div className="ur-checks">
+                  {(data.roles || []).map((role) => (
+                    <label key={role.id} className="ur-check">
+                      <input
+                        type="checkbox"
+                        checked={newUserModal.roleIds.includes(role.id)}
+                        onChange={(e) => setNewUserModal((user) => user && ({
+                          ...user,
+                          roleIds: e.target.checked ? [...user.roleIds, role.id] : user.roleIds.filter((id) => id !== role.id)
+                        }))}
+                      />
+                      <span>
+                        <span className="ur-check-name">{role.name}</span>
+                        {role.description ? <span className="ur-check-desc">{role.description}</span> : null}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </Field>
+              <Field label="Status">
+                <select className="ur-select ur-select-full" value={newUserModal.enabled ? 'enabled' : 'disabled'} onChange={(e) => setNewUserModal((user) => user && ({ ...user, enabled: e.target.value === 'enabled' }))}>
+                  <option value="enabled">Enabled — they can sign in now</option>
+                  <option value="disabled">Disabled — add the account but keep it closed for now</option>
+                </select>
+              </Field>
             </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>Job title</label>
-              <input
-                className="dx-input"
-                value={newUserModal.title}
-                onChange={(e) => setNewUserModal({ ...newUserModal, title: e.target.value })}
-                placeholder="e.g. AP Processor"
-                style={{ height: 34, fontSize: 13 }}
-              />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>Roles</label>
-              <div
-                style={{
-                  maxHeight: 160,
-                  overflowY: 'auto',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: 6,
-                  padding: 8,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6,
-                  background: '#FFFFFF'
-                }}
-              >
-                {data.roles.map((r) => (
-                  <label
-                    key={r.id}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: 8,
-                      fontSize: 12,
-                      cursor: 'pointer',
-                      padding: '4px 6px',
-                      borderRadius: 4
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={newUserModal.roleIds.includes(r.id)}
-                      onChange={(e) => {
-                        const next = e.target.checked
-                          ? [...newUserModal.roleIds, r.id]
-                          : newUserModal.roleIds.filter((x) => x !== r.id)
-                        setNewUserModal({ ...newUserModal, roleIds: next })
-                      }}
-                      style={{ marginTop: 2, accentColor: BRAND }}
-                    />
-                    <div>
-                      <span style={{ fontWeight: 600, color: '#1F2937' }}>{r.name}</span>
-                      {r.description && (
-                        <span style={{ display: 'block', fontSize: 10, color: '#6B7280' }}>
-                          {r.description}
-                        </span>
-                      )}
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>Status</label>
-              <select
-                className="dx-select"
-                value={newUserModal.enabled ? 'enabled' : 'disabled'}
-                onChange={(e) => setNewUserModal({ ...newUserModal, enabled: e.target.value === 'enabled' })}
-                style={{ height: 34, fontSize: 12 }}
-              >
-                <option value="enabled">Enabled — they can sign in now</option>
-                <option value="disabled">Disabled — add the account but keep it closed for now</option>
-              </select>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 10 }}>
-              <Button variant="ghost" onClick={() => setNewUserModal(null)}>
-                Cancel
-              </Button>
-              <Button loading={saving} onClick={handleCreateUser}>
-                Add user
-              </Button>
-            </div>
-          </div>
+          )}
         </Dialog>
-      )}
 
-      {/* ----------------- MODAL 2: EDIT USER ----------------- */}
-      {editingUser && (
         <Dialog
           open={Boolean(editingUser)}
-          onClose={() => setEditingUser(null)}
-          title={`Edit user — ${editingUser.name}`}
-          width={500}
+          onClose={() => !saving && setEditingUser(null)}
+          title={`Edit user — ${editingUser?.name || ''}`}
+          width={520}
+          footer={
+            <>
+              <Button variant="ghost" className="ur-dialog-btn" onClick={() => setEditingUser(null)} disabled={saving}>Cancel</Button>
+              <Button className="ur-dialog-btn ur-dialog-primary" disabled={saving} onClick={handleUpdateUser}>
+                {saving ? 'Saving…' : 'Save'}
+              </Button>
+            </>
+          }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <p style={{ margin: 0, fontSize: 12, color: '#6B7280' }}>
-              A user with no role has no access to the platform.
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>Roles</label>
-              <div
-                style={{
-                  maxHeight: 200,
-                  overflowY: 'auto',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: 6,
-                  padding: 8,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6
-                }}
-              >
-                {data.roles.map((r) => (
-                  <label
-                    key={r.id}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      fontSize: 12,
-                      cursor: 'pointer',
-                      padding: '4px 6px'
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={editRoleIds.includes(r.id)}
-                      onChange={(e) => {
-                        const next = e.target.checked
-                          ? [...editRoleIds, r.id]
-                          : editRoleIds.filter((x) => x !== r.id)
-                        setEditRoleIds(next)
-                      }}
-                      style={{ accentColor: BRAND }}
-                    />
-                    <span style={{ fontWeight: 500, color: '#1F2937' }}>{r.name}</span>
-                  </label>
-                ))}
-              </div>
+          {editingUser && (
+            <div className="ur-form">
+              <Field label="Roles" hint="A user with no role has no access to the platform.">
+                <div className="ur-role-list">
+                  {(data.roles || []).filter(roleEnabled).map((role) => (
+                    <label key={role.id} className="ur-role-option">
+                      <input
+                        type="checkbox"
+                        checked={editRoleIds.includes(role.id)}
+                        onChange={(e) => setEditRoleIds((prev) => (e.target.checked ? [...prev, role.id] : prev.filter((id) => id !== role.id)))}
+                      />
+                      <span className="ur-check-name">{role.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </Field>
+              <label className="ur-enable">
+                <input type="checkbox" checked={editUserEnabled} onChange={(e) => setEditUserEnabled(e.target.checked)} />
+                User enabled — can sign in to the platform
+              </label>
             </div>
-
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#1F2937', cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={editUserEnabled}
-                onChange={(e) => setEditUserEnabled(e.target.checked)}
-                style={{ accentColor: BRAND }}
-              />
-              <span>User enabled — can sign in to the platform</span>
-            </label>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 10 }}>
-              <Button variant="ghost" onClick={() => setEditingUser(null)}>
-                Cancel
-              </Button>
-              <Button loading={saving} onClick={handleUpdateUser}>
-                Save
-              </Button>
-            </div>
-          </div>
+          )}
         </Dialog>
-      )}
 
-      {/* ----------------- MODAL 3: ROLE EDITOR ----------------- */}
-      {roleModal && (
         <Dialog
           open={Boolean(roleModal)}
-          onClose={() => setRoleModal(null)}
-          title={roleModal.id ? `Edit role — ${roleModal.name}` : 'Create role'}
-          width={680}
+          onClose={() => !saving && setRoleModal(null)}
+          title={roleModal?.id ? `Edit role — ${roleModal.name}` : 'Create role'}
+          width={768}
+          footer={
+            <>
+              <Button variant="ghost" className="ur-dialog-btn" onClick={() => setRoleModal(null)} disabled={saving}>Cancel</Button>
+              <Button className="ur-dialog-btn ur-dialog-primary" disabled={saving || !roleModal?.name?.trim()} onClick={handleSaveRole}>
+                {saving ? 'Saving…' : roleModal?.id ? 'Save role' : 'Create role'}
+              </Button>
+            </>
+          }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>
-                  Role name <span style={{ color: '#DC2626' }}>*</span>
-                </label>
-                <input
-                  className="dx-input"
-                  value={roleModal.name}
-                  onChange={(e) => setRoleModal({ ...roleModal, name: e.target.value })}
-                  placeholder="e.g. AP Supervisor"
-                  style={{ height: 34, fontSize: 13 }}
-                />
+          {roleModal && (
+            <div className="ur-form">
+              <div className="ur-grid">
+                <Field label="Role name" required>
+                  <Input value={roleModal.name} placeholder="e.g. AP Supervisor" onChange={(e) => setRoleModal((role) => role && ({ ...role, name: e.target.value }))} />
+                </Field>
+                <Field label="Status">
+                  <select className="ur-select ur-select-full" value={roleModal.active ? 'enabled' : 'disabled'} onChange={(e) => setRoleModal((role) => role && ({ ...role, active: e.target.value === 'enabled' }))}>
+                    <option value="enabled">Enabled</option>
+                    <option value="disabled">Disabled</option>
+                  </select>
+                </Field>
               </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>Status</label>
-                <select
-                  className="dx-select"
-                  value={roleModal.active ? 'enabled' : 'disabled'}
-                  onChange={(e) => setRoleModal({ ...roleModal, active: e.target.value === 'enabled' })}
-                  style={{ height: 34, fontSize: 12 }}
-                >
-                  <option value="enabled">Enabled</option>
-                  <option value="disabled">Disabled</option>
-                </select>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#1F2937' }}>Permissions</label>
-              <div
-                style={{
-                  maxHeight: 240,
-                  overflowY: 'auto',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: 6
-                }}
-              >
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-                  <thead>
-                    <tr style={{ background: '#FAFBFA', borderBottom: '1px solid #E5E7EB' }}>
-                      <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: '#4B5563' }}>Area</th>
-                      {ACTIONS.map((a) => (
-                        <th key={a} style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, color: '#4B5563' }}>
-                          {a}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {PERMISSION_MODULES.map((m) => (
-                      <tr key={m.module} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                        <td style={{ padding: '6px 12px', fontWeight: 600, color: '#1F2937' }}>{m.module}</td>
-                        {ACTIONS.map((a) => {
-                          const cell = m.cells[a]
-                          if (!cell) {
+              <Field label="Permissions">
+                <div className="ur-perm-wrap">
+                  <table className="ur-perm-table">
+                    <thead>
+                      <tr>
+                        <th>Area</th>
+                        {ACTIONS.map((action) => <th key={action} className="is-center">{action}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {PERMISSION_MODULES.map((module) => (
+                        <tr key={module.module}>
+                          <td className="ur-area">{module.module}</td>
+                          {ACTIONS.map((action) => {
+                            const cell = module.cells[action]
+                            if (!cell) return <td key={action} className="is-center ur-dash">—</td>
                             return (
-                              <td key={a} style={{ padding: '6px 12px', textAlign: 'center', color: '#D1D5DB' }}>
-                                —
+                              <td key={action} className="is-center">
+                                <input
+                                  type="checkbox"
+                                  aria-label={`${module.module} — ${action}`}
+                                  title={cell.allows}
+                                  checked={cellGranted(roleModal.permissions, cell)}
+                                  onChange={(e) => toggleRolePermissionCell(cell, e.target.checked)}
+                                />
                               </td>
                             )
-                          }
-                          const isChecked = cellGranted(roleModal.permissions, cell)
-                          return (
-                            <td key={a} style={{ padding: '6px 12px', textAlign: 'center' }}>
-                              <input
-                                type="checkbox"
-                                title={cell.allows}
-                                checked={isChecked}
-                                onChange={(e) => toggleRolePermissionCell(cell, e.target.checked)}
-                                style={{ accentColor: BRAND }}
-                              />
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Field>
+              <p className="ur-note">
+                These permissions decide both what appears in the menu and what the platform allows — the two always match.
+              </p>
             </div>
-
-            <p style={{ margin: 0, padding: '8px 12px', borderRadius: 6, background: '#F6F8F7', fontSize: 11, color: '#6B7280' }}>
-              These permissions decide both what appears in the menu and what the platform allows — the two always match.
-            </p>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 10 }}>
-              <Button variant="ghost" onClick={() => setRoleModal(null)}>
-                Cancel
-              </Button>
-              <Button loading={saving} onClick={handleSaveRole}>
-                {roleModal.id ? 'Save role' : 'Create role'}
-              </Button>
-            </div>
-          </div>
+          )}
         </Dialog>
-      )}
 
-      {/* ----------------- MODAL 4: DELETE ROLE ----------------- */}
-      {deleteRoleModal && (
         <Dialog
           open={Boolean(deleteRoleModal)}
-          onClose={() => setDeleteRoleModal(null)}
-          title={`Delete role — ${deleteRoleModal.name}`}
-          width={460}
+          onClose={() => !saving && setDeleteRoleModal(null)}
+          title={`Delete role — ${deleteRoleModal?.name || ''}`}
+          width={480}
+          footer={
+            <>
+              <Button variant="ghost" className="ur-dialog-btn" onClick={() => setDeleteRoleModal(null)} disabled={saving}>Cancel</Button>
+              <Button variant="danger" className="ur-dialog-btn" disabled={saving} onClick={handleDeleteRole}>
+                {saving ? 'Deleting…' : 'Delete role'}
+              </Button>
+            </>
+          }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <p style={{ margin: 0, fontSize: 13, color: '#4B5563', lineHeight: 1.5 }}>
-              {data.users.some((u) => u.roleIds.includes(deleteRoleModal.id))
-                ? 'This role is still assigned to users — remove the assignments first, or disable the role instead of deleting it.'
-                : 'This permanently removes the role. Nobody currently holds it, so no user is affected.'}
-            </p>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 10 }}>
-              <Button variant="ghost" onClick={() => setDeleteRoleModal(null)}>
-                Cancel
-              </Button>
-              <Button
-                variant="warning"
-                loading={saving}
-                onClick={handleDeleteRole}
-                disabled={data.users.some((u) => u.roleIds.includes(deleteRoleModal.id))}
-                style={{ background: '#DC2626', color: '#FFF' }}
-              >
-                Delete role
-              </Button>
-            </div>
-          </div>
+          <p className="ur-delete-copy">
+            {deleteRoleModal && (data.users || []).some((user) => (user.roleIds || []).includes(deleteRoleModal.id))
+              ? 'This role is still assigned to users — remove the assignments first, or disable the role instead of deleting it.'
+              : 'This permanently removes the role. Nobody currently holds it, so no user is affected.'}
+          </p>
         </Dialog>
-      )}
-    </div>
+      </div>
+    </LeftPageContainer>
   )
 }
 
+const pageCss = `
+.ur-page .ur-stack{display:flex;flex-direction:column;gap:12px;}
+.ur-page .ur-add.dx-btn{height:28px;padding:0 10px;border-radius:6px;font-size:12px;font-weight:500;gap:6px;background:#2C9842;border-color:#2C9842;color:#fff;}
+.ur-page .ur-add.dx-btn:hover{background:#247a35;filter:none;box-shadow:none;}
+.ur-page .ur-tabs{display:flex;gap:2px;padding:8px 12px 0;border-bottom:1px solid #e5e7eb;}
+.ur-page .ur-tabs button{background:transparent;border:none;border-bottom:2px solid transparent;padding:8px 14px;font-size:14px;font-weight:500;color:#4b5563;cursor:pointer;margin-bottom:-1px;}
+.ur-page .ur-tabs button:hover{color:#1f2937;border-bottom-color:#d1d5db;}
+.ur-page .ur-tabs button.is-active{color:#247a35;border-bottom-color:#2C9842;}
+.ur-page .ur-filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;border-bottom:1px solid #eef0f2;padding:12px;}
+.ur-page .ur-filter{display:flex;flex-direction:column;gap:2px;}
+.ur-page .ur-filter-label{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#4b5563;}
+.ur-page .ur-search{position:relative;display:block;width:256px;}
+.ur-page .ur-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none;z-index:1;}
+.ur-page .ur-search .dx-input,.ur-page .ur-select,.essa-dialog-root .ur-form .dx-input,.essa-dialog-root .ur-select{height:36px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;font-size:14px;color:#1f2937;padding:6px 10px;}
+.ur-page .ur-search .dx-input{width:100%;padding-left:32px;}
+.ur-page .ur-select{min-width:140px;}
+.ur-page .ur-search .dx-input:focus,.ur-page .ur-select:focus,.essa-dialog-root .ur-form .dx-input:focus,.essa-dialog-root .ur-select:focus{border-color:#3aaa55;outline:none;box-shadow:0 0 0 2px #d8f0dd;}
+.ur-page .ur-table-wrap{overflow:auto;max-height:62vh;}
+.ur-page .ur-table{width:100%;border-collapse:separate;border-spacing:0;text-align:left;font-size:14px;color:#1f2937;}
+.ur-page .ur-table thead th{position:sticky;top:0;z-index:2;background:#2C9842;color:#fff;font-size:14px;font-weight:700;text-transform:none;letter-spacing:0;padding:8px 12px;white-space:nowrap;border:none;text-align:left;}
+.ur-page .ur-table thead th.is-center,.ur-page .ur-table tbody td.is-center{text-align:center;}
+.ur-page .ur-sort{display:inline-flex;align-items:center;gap:4px;background:transparent;border:none;color:#fff;font:inherit;font-weight:700;cursor:pointer;padding:0;}
+.ur-page .ur-sort:hover{text-decoration:underline;}
+.ur-page .ur-sort-idle{opacity:.75;}
+.ur-page .ur-table tbody td{padding:6px 12px;border-bottom:1px solid #eef0f2;vertical-align:middle;background:#fff;}
+.ur-page .ur-table tbody tr.is-zebra td{background:#f6f8f7;}
+.ur-page .ur-table tbody tr:hover td{background:#eef8f0;}
+.ur-page .ur-table th.ur-sticky,.ur-page .ur-table td.ur-sticky{position:sticky;right:0;z-index:1;}
+.ur-page .ur-table th.ur-sticky{z-index:3;background:#2C9842;box-shadow:-6px 0 6px -6px rgba(16,24,40,.25);}
+.ur-page .ur-table td.ur-sticky{box-shadow:-6px 0 6px -6px rgba(16,24,40,.18);}
+.ur-page .ur-user{display:flex;align-items:center;gap:8px;}
+.ur-page .ur-avatar{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:#2C9842;color:#fff;font-size:10px;font-weight:700;flex-shrink:0;}
+.ur-page .ur-name{display:block;font-weight:500;}
+.ur-page .ur-email{display:block;font-size:10px;color:#9ca3af;}
+.ur-page .ur-small{font-size:12px;}
+.ur-page .ur-tiny{white-space:nowrap;font-size:10px;}
+.ur-page .ur-none{font-size:10px;font-style:italic;color:#9ca3af;}
+.ur-page .ur-roles{display:flex;flex-wrap:wrap;gap:4px;max-width:14rem;}
+.ur-badge{display:inline-flex;align-items:center;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:14px;white-space:nowrap;}
+.ur-badge-success{background:#e6f5ea;color:#2d9a47;}
+.ur-badge-neutral{background:#eef0f2;color:#374151;}
+.ur-badge-info{background:#e5f2f9;color:#0075a9;}
+.ur-page .ur-icon.dx-btn{height:28px;width:28px;padding:0;border-radius:6px;border-color:transparent;background:transparent;color:#374151;}
+.ur-page .ur-icon.dx-btn:hover{background:#eef0f2;border-color:transparent;filter:none;box-shadow:none;color:#247a35;}
+.ur-page .ur-icon-danger.dx-btn{color:#b91c1c;}
+.ur-page .ur-icon-danger.dx-btn:hover{background:#fdecec;color:#b91c1c;}
+.ur-page .ur-actions{display:inline-flex;justify-content:center;gap:4px;}
+.ur-page .ur-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:40px 16px;text-align:center;color:#6b7280;}
+.ur-page .ur-state-title{margin:0;font-size:14px;font-weight:500;color:#374151;}
+.ur-page .ur-state p{margin:0;font-size:12px;}
+.ur-page .ur-state-row:hover td{background:#fff;}
+.ur-page .ur-spin{color:#2C9842;animation:ur-spin 1s linear infinite;}
+@keyframes ur-spin{to{transform:rotate(360deg);}}
+.ur-page .ur-matrix{display:flex;flex-direction:column;gap:8px;padding:12px;}
+.ur-page .ur-matrix>p{margin:0;font-size:12px;color:#4b5563;}
+.ur-page .ur-matrix-wrap{overflow:auto;max-height:62vh;}
+.ur-page .ur-matrix-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;text-align:left;}
+.ur-page .ur-matrix-table th,.ur-page .ur-matrix-table td{padding:6px 8px;border-bottom:1px solid #e5e7eb;background:#fff;vertical-align:middle;}
+.ur-page .ur-matrix-table thead th{position:sticky;top:0;z-index:2;font-weight:600;text-align:left;}
+.ur-page .ur-matrix-table .ur-sticky-col{position:sticky;left:0;z-index:1;background:#fff;white-space:nowrap;}
+.ur-page .ur-matrix-table thead .ur-sticky-col{z-index:3;}
+.ur-page .ur-matrix-table .ur-role-col{background:#2C9842;color:#fff;text-align:center;white-space:nowrap;}
+.ur-page .ur-matrix-table td.is-center,.ur-page .ur-matrix-table th.is-center{text-align:center;}
+.ur-page .ur-matrix-table tr.is-group td{border-top:1px solid #e5e7eb;}
+.ur-page .ur-area{font-weight:500;white-space:nowrap;}
+.ur-page .ur-perm{white-space:nowrap;color:#4b5563;}
+.ur-page .ur-allows{font-size:10px;color:#4b5563;}
+.ur-page .ur-tick{font-weight:700;color:#2C9842;}
+.ur-page .ur-dash{color:#d1d5db;}
+.ur-page .ur-matrix-table td.is-center{border-left:1px solid #eef0f2;}
+.essa-dialog-root .ur-form{display:flex;flex-direction:column;gap:12px;}
+.essa-dialog-root .ur-note{margin:0;border-radius:6px;background:#f6f8f7;padding:8px 10px;font-size:10px;line-height:1.45;color:#4b5563;}
+.essa-dialog-root .ur-grid{display:grid;gap:12px;}
+@media (min-width:768px){.essa-dialog-root .ur-grid{grid-template-columns:1fr 1fr;}}
+.essa-dialog-root .ur-field{display:flex;flex-direction:column;gap:4px;}
+.essa-dialog-root .ur-field-label{font-size:12px;font-weight:600;color:#1f2937;}
+.essa-dialog-root .ur-req{color:#b91c1c;}
+.essa-dialog-root .ur-hint{font-size:10px;font-weight:400;color:#4b5563;}
+.essa-dialog-root .ur-select-full{width:100%;}
+.essa-dialog-root .ur-checks,.essa-dialog-root .ur-role-list{display:flex;flex-direction:column;gap:6px;border:1px solid #e5e7eb;border-radius:6px;padding:10px;}
+.essa-dialog-root .ur-role-list{gap:6px;}
+.essa-dialog-root .ur-check,.essa-dialog-root .ur-role-option,.essa-dialog-root .ur-enable{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#4b5563;cursor:pointer;}
+.essa-dialog-root .ur-role-option{align-items:center;border:1px solid #e5e7eb;border-radius:6px;padding:8px;}
+.essa-dialog-root .ur-role-option:hover{background:#f6f8f7;}
+.essa-dialog-root .ur-check input,.essa-dialog-root .ur-role-option input,.essa-dialog-root .ur-enable input,.essa-dialog-root .ur-perm-table input{width:14px;height:14px;accent-color:#2C9842;flex-shrink:0;}
+.essa-dialog-root .ur-check-name{display:block;font-weight:500;color:#1f2937;}
+.essa-dialog-root .ur-check-desc{display:block;font-size:10px;font-weight:400;color:#4b5563;}
+.essa-dialog-root .ur-perm-wrap{max-height:320px;overflow:auto;border:1px solid #e5e7eb;border-radius:6px;}
+.essa-dialog-root .ur-perm-table{width:100%;border-collapse:collapse;font-size:12px;}
+.essa-dialog-root .ur-perm-table th{position:sticky;top:0;background:#2C9842;color:#fff;padding:6px 8px;text-align:left;font-weight:600;}
+.essa-dialog-root .ur-perm-table th.is-center,.essa-dialog-root .ur-perm-table td.is-center{text-align:center;}
+.essa-dialog-root .ur-perm-table td{padding:6px 8px;border-top:1px solid #eef0f2;}
+.essa-dialog-root .ur-delete-copy{margin:0;font-size:12px;color:#374151;}
+.essa-dialog-root .ur-dialog-btn.dx-btn{height:36px;padding:0 14px;border-radius:6px;font-size:14px;font-weight:500;}
+.essa-dialog-root .ur-dialog-btn.dx-btn-ghost{border-color:transparent;background:transparent;color:#374151;}
+.essa-dialog-root .ur-dialog-primary.dx-btn{background:#2C9842;border-color:#2C9842;color:#fff;}
+.essa-dialog-root .ur-dialog-primary.dx-btn:hover:not(:disabled){background:#247a35;filter:none;}
+.essa-dialog-root .ur-dialog-btn.dx-btn-danger{background:#b91c1c;border-color:#b91c1c;color:#fff;}
+`
+
 const mapStateToProps = (state) => ({
-  userInfo: state.userInfo || {}
+  userInfo: state.user?.userInfo || state.userInfo || {}
 })
 
 export default connect(mapStateToProps)(UsersManagementComp)

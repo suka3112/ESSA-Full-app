@@ -1,64 +1,32 @@
-import { Fragment, useCallback, useEffect, useState } from 'react'
+﻿import { Fragment, useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowDown,
   ArrowUp,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
-  Download,
+  ChevronsUpDown,
   Info,
   ListFilter,
+  Loader2,
   RotateCcw,
   Search,
+  SearchX,
   ShieldCheck
 } from 'lucide-react'
 import { connect } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 
-import { HeaderBar } from 'components/Common/HeaderBar'
 import { LeftPageContainer } from 'pages/vendor/dashboard/dashboard.styles'
+import { PageHeader } from '../PageShell'
+import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
+import { Input } from '../ui/Input'
+import { Select } from '../ui/Select'
 import { ADMIN_USER_TYPE } from 'constants/userType'
-import { INVOICE_DETAIL } from 'constants/url'
-import { fmtDate } from 'api/essaDashboard'
+import { DASHBOARD, INVOICE_DETAIL } from 'constants/url'
 import { fetchEssaAuditLogs } from 'api/essaAudit'
 import '../../../assets/scss/essa/dashboard.scss'
-
-const auditLogsCss = `
-.audit-logs-table .dx-table-wrap-scroll .dx-table thead th {
-  background: var(--brand-primary-color, var(--dx-primary-600));
-  z-index: 2;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-}
-.audit-expand-panel {
-  background: var(--dx-card-muted, #f8fafc);
-  border-top: 1px solid var(--dx-border);
-}
-.audit-expand-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-@media (max-width: 900px) {
-  .audit-expand-grid { grid-template-columns: 1fr; }
-}
-.audit-pair {
-  display: flex;
-  gap: 10px;
-  padding: 2px 0;
-  font-size: 12px;
-}
-.audit-pair dt {
-  width: 120px;
-  flex-shrink: 0;
-  color: var(--dx-text-mute);
-}
-.audit-pair dd {
-  margin: 0;
-  font-weight: 600;
-  word-break: break-word;
-}
-`
 
 const FILTER_KEYS = ['search', 'objectType', 'action', 'source', 'result', 'dateFrom', 'dateTo']
 const EMPTY_DRAFT = {
@@ -72,12 +40,13 @@ const EMPTY_DRAFT = {
 }
 
 const RESULT_TONE = {
-  SUCCESS: 'pass',
-  PASS: 'pass',
-  FAIL: 'fail',
-  DENIED: 'fail',
-  OVERRIDDEN: 'warn',
-  REJECTED: 'warn'
+  SUCCESS: 'success',
+  PASS: 'success',
+  FAIL: 'error',
+  DENIED: 'error',
+  OVERRIDDEN: 'info',
+  REJECTED: 'warning',
+  WARNING: 'warning'
 }
 
 const RESULT_PHRASE = {
@@ -143,9 +112,53 @@ function leftPairs(row) {
       { label: 'After', value: changes[0].after }
     )
   } else if (changes.length > 1) {
-    changes.forEach((c) => pairs.push({ label: c.field, value: `${c.before}  →  ${c.after}` }))
+    changes.forEach((c) => pairs.push({ label: c.field, value: `${c.before}  â†’  ${c.after}` }))
+  }
+  const details = row.details
+  if (Array.isArray(details)) {
+    details.forEach((item) => {
+      if (item && typeof item === 'object' && 'label' in item) {
+        pairs.push({ label: item.label, value: fmtValue(item.value) })
+      } else {
+        pairs.push({ label: 'Detail', value: fmtValue(item) })
+      }
+    })
+  } else if (isPlainObject(details)) {
+    Object.entries(details).forEach(([key, value]) => {
+      pairs.push({ label: fieldLabel(key), value: fmtValue(value) })
+    })
+  } else if (typeof details === 'string' && details) {
+    pairs.push({ label: 'Details', value: details })
   }
   return pairs
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return String(iso)
+  const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  return `${date}, ${time}`
+}
+
+function fmtDay(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
+function pageWindow(page, totalPages) {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
+  const out = [1]
+  const from = Math.max(2, Math.min(page - 1, totalPages - 4))
+  const to = Math.min(totalPages - 1, Math.max(page + 1, 5))
+  if (from > 2) out.push('gap')
+  for (let n = from; n <= to; n += 1) out.push(n)
+  if (to < totalPages - 1) out.push('gap')
+  out.push(totalPages)
+  return out
 }
 
 function fmtExactTime(iso) {
@@ -241,12 +254,10 @@ function summaryOf(row) {
   return `This record shows that ${who} performed ${verb} on ${String(row.object_type || 'object').toLowerCase()} ${ref} ${where}, and ${outcome}.`
 }
 
-function FilterField({ label, children, style }) {
+function FilterField({ label, className, children }) {
   return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0, ...style }}>
-      <span className="text-xs" style={{ fontWeight: 600, color: 'var(--dx-text-mute)' }}>
-        {label}
-      </span>
+    <label className={`al-field ${className || ''}`}>
+      <span className="al-field-label">{label}</span>
       {children}
     </label>
   )
@@ -254,21 +265,75 @@ function FilterField({ label, children, style }) {
 
 function Pair({ label, value }) {
   return (
-    <div className="audit-pair">
+    <div className="al-pair">
       <dt>{label}</dt>
       <dd>{value || '—'}</dd>
     </div>
   )
 }
 
+function ResultBadge({ value }) {
+  const tone = RESULT_TONE[value] || 'neutral'
+  return <span className={`al-badge al-badge-${tone}`}>{value || '—'}</span>
+}
+
+function Pagination({ page, totalPages, total, pageSize, onPage, onPageSize }) {
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1
+  const to = Math.min(total, page * pageSize)
+  const pages = pageWindow(page, Math.max(1, totalPages))
+  return (
+    <div className="al-pager">
+      <span>
+        Showing {from} to {to} of {total.toLocaleString('en-US')} records
+      </span>
+      <div className="al-pager-controls">
+        <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => onPage(page - 1)}>
+          <ChevronLeft size={14} />
+        </button>
+        {pages.map((n, i) =>
+          n === 'gap' ? (
+            <span key={`gap-${i}`} className="al-pager-gap">
+              ...
+            </span>
+          ) : (
+            <button
+              key={n}
+              type="button"
+              aria-label={`Page ${n}`}
+              aria-current={n === page ? 'page' : undefined}
+              className={n === page ? 'is-current' : undefined}
+              onClick={() => onPage(n)}
+            >
+              {n}
+            </button>
+          )
+        )}
+        <button type="button" aria-label="Next page" disabled={page >= totalPages} onClick={() => onPage(page + 1)}>
+          <ChevronRight size={14} />
+        </button>
+        <span className="al-pager-size">
+          <span>Rows per page</span>
+          <Select value={pageSize} onChange={(e) => onPageSize(Number(e.target.value))} aria-label="Rows per page" className="al-page-size">
+            {[10, 25, 50, 100].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </Select>
+        </span>
+      </div>
+    </div>
+  )
+}
+
 function EssaAuditLogs({ userInfo: { userType } }) {
-  const { t } = useTranslation('sidebar')
   const canView = userType === ADMIN_USER_TYPE
 
   const [draft, setDraft] = useState(EMPTY_DRAFT)
   const [applied, setApplied] = useState(EMPTY_DRAFT)
   const [page, setPage] = useState(1)
-  const [sortDir, setSortDir] = useState('desc')
+  const [pageSize, setPageSize] = useState(10)
+  const [sortDir, setSortDir] = useState(null)
   const [expanded, setExpanded] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -276,7 +341,7 @@ function EssaAuditLogs({ userInfo: { userType } }) {
     items: [],
     total: 0,
     page: 1,
-    pageSize: 25,
+    pageSize: 10,
     totalPages: 1,
     facets: { objectTypes: [], actions: [], sources: [], results: [], users: [] }
   })
@@ -290,15 +355,15 @@ function EssaAuditLogs({ userInfo: { userType } }) {
       const result = await fetchEssaAuditLogs({
         ...applied,
         page,
-        pageSize: 25,
+        pageSize,
         sortBy: 'eventTime',
-        sortDir
+        sortDir: sortDir || 'desc'
       })
       setData({
         items: result.items || [],
         total: result.total || 0,
         page: result.page || page,
-        pageSize: result.pageSize || 25,
+        pageSize: result.pageSize || pageSize,
         totalPages: result.totalPages || 1,
         facets: result.facets || {}
       })
@@ -308,7 +373,7 @@ function EssaAuditLogs({ userInfo: { userType } }) {
     } finally {
       setLoading(false)
     }
-  }, [applied, page, sortDir])
+  }, [applied, page, pageSize, sortDir])
 
   useEffect(() => {
     if (canView) load()
@@ -317,6 +382,7 @@ function EssaAuditLogs({ userInfo: { userType } }) {
   const apply = (e) => {
     e?.preventDefault?.()
     setPage(1)
+    setExpanded(null)
     setApplied({ ...draft })
   }
 
@@ -324,81 +390,49 @@ function EssaAuditLogs({ userInfo: { userType } }) {
     setDraft(EMPTY_DRAFT)
     setApplied(EMPTY_DRAFT)
     setPage(1)
-    setSortDir('desc')
+    setPageSize(10)
+    setSortDir(null)
     setExpanded(null)
   }
 
   const dirty = FILTER_KEYS.some((k) => draft[k] !== applied[k])
   const hasFilters = FILTER_KEYS.some((k) => applied[k]) || dirty
 
-  const exportCsv = () => {
-    const headers = [
-      'Event ID',
-      'When',
-      'Object Type',
-      'Object ID',
-      'Action',
-      'Field',
-      'Old Value',
-      'New Value',
-      'Actor ID',
-      'Actor',
-      'Role',
-      'Reason',
-      'Source',
-      'Correlation ID',
-      'Result'
-    ]
-    const rows = (data.items || []).map((l) => [
-      l.event_id,
-      l.event_time,
-      l.object_type,
-      l.object_id,
-      l.action,
-      l.field_code || '',
-      l.old_value || '',
-      l.new_value || '',
-      l.actor_id || '',
-      l.actor_name || '',
-      l.actor_role || '',
-      l.reason_remarks || '',
-      l.source || '',
-      l.correlation_id || '',
-      l.result || ''
-    ])
-    const csv = [headers, ...rows]
-      .map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(','))
-      .join('\n')
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `audit-log-${new Date().toISOString().slice(0, 10)}.csv`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
-
-  const toggleSort = () => {
-    setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'))
+  const toggleTimeSort = () => {
+    setSortDir((current) => {
+      if (!current) return 'asc'
+      if (current === 'asc') return 'desc'
+      return null
+    })
     setPage(1)
   }
 
+  const timeSortHint = !sortDir
+    ? 'Sort by timestamp, oldest first'
+    : sortDir === 'asc'
+      ? 'Sort by timestamp, newest first'
+      : 'Stop sorting by timestamp'
+
   const facets = data.facets || {}
-  const invoiceHref = (objectId) =>
-    `/${userType}${INVOICE_DETAIL.replace(':id', encodeURIComponent(objectId))}`
+  const invoiceHref = (objectId) => `/${userType}${INVOICE_DETAIL.replace(':id', encodeURIComponent(objectId))}`
 
   if (!canView) {
     return (
       <LeftPageContainer>
-        <div className="essa-dashboard">
-          <HeaderBar title="Audit Logs" slug={t('auditLogs')} showBackArrow={false} />
-          <div className="dx-page">
-            <div className="dx-empty-state">
-              <ShieldCheck size={28} style={{ color: 'var(--dx-text-mute)' }} />
-              <h3>Restricted</h3>
-              <p>Audit logs are visible to Admin, Auditor, and Head-of-Finance roles only (AUDIT_VIEW).</p>
+        <div className="essa-dashboard al-page">
+          <style>{pageCss}</style>
+          <PageHeader
+            breadcrumb={[{ label: 'Home', to: `/${userType}${DASHBOARD}` }, { label: 'Audit Log' }]}
+            title="Audit Log"
+            description="Every transaction on the platform is recorded for accountability and transparency. Records cannot be edited or deleted."
+          />
+          <Card>
+            <div className="al-empty">
+              <ShieldCheck size={28} />
+              <p className="al-empty-title">Access denied</p>
+              <p>You do not have permission to view the audit log.</p>
             </div>
-          </div>
+          </Card>
         </div>
       </LeftPageContainer>
     )
@@ -406,325 +440,187 @@ function EssaAuditLogs({ userInfo: { userType } }) {
 
   return (
     <LeftPageContainer>
-      <div className="essa-dashboard">
-        <div className="dx-page dx-stack">
-          <style>{auditLogsCss}</style>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 12,
-              flexWrap: 'wrap'
-            }}
-          >
-            <p className="text-muted" style={{ fontSize: 13, margin: 0 }}>
-              Every transaction on the platform — who did what, when. Records cannot be edited or
-              deleted.
-            </p>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={exportCsv}
-              disabled={!data.items?.length}
-            >
-              <Download size={13} /> Export CSV
-            </Button>
-          </div>
+      <div className="essa-dashboard al-page">
+        <style>{pageCss}</style>
+        <div className="al-stack">
+          <PageHeader
+            breadcrumb={[{ label: 'Home', to: `/${userType}${DASHBOARD}` }, { label: 'Audit Log' }]}
+            title="Audit Log"
+            description="Every transaction on the platform is recorded for accountability and transparency. Records cannot be edited or deleted."
+          />
 
-          <form className="dx-card" style={{ padding: 14 }} onSubmit={apply}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'flex-end' }}>
-              <FilterField label="Search" style={{ flex: '1 1 200px' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '6px 12px',
-                    borderRadius: 8,
-                    background: 'var(--dx-card)',
-                    border: '1px solid var(--dx-border)'
-                  }}
-                >
-                  <Search size={12} style={{ color: 'var(--dx-text-mute)' }} />
-                  <input
-                    className="dx-input"
-                    placeholder="Keyword, ID, user…"
+          <Card pad={false}>
+            <form className="al-filters" onSubmit={apply}>
+              <FilterField label="Search" className="al-search-field">
+                <span className="al-search">
+                  <Search size={14} />
+                  <Input
                     value={draft.search}
                     onChange={(e) => setDraftValue('search', e.target.value)}
-                    style={{ border: 'none', padding: 0, width: '100%', fontSize: 12 }}
+                    placeholder="Search by keyword, ID, user…"
                     aria-label="Search the audit log"
-                  />
-                </div>
-              </FilterField>
-
-              <FilterField label="Object Type">
-                <select
-                  className="dx-select"
-                  style={{ width: 140 }}
-                  value={draft.objectType}
-                  onChange={(e) => setDraftValue('objectType', e.target.value)}
-                >
-                  <option value="">All</option>
-                  {(facets.objectTypes || []).map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </FilterField>
-
-              <FilterField label="Action">
-                <select
-                  className="dx-select"
-                  style={{ width: 140 }}
-                  value={draft.action}
-                  onChange={(e) => setDraftValue('action', e.target.value)}
-                >
-                  <option value="">All</option>
-                  {(facets.actions || []).map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </FilterField>
-
-              <FilterField label="Source">
-                <select
-                  className="dx-select"
-                  style={{ width: 120 }}
-                  value={draft.source}
-                  onChange={(e) => setDraftValue('source', e.target.value)}
-                >
-                  <option value="">All</option>
-                  {(facets.sources || []).map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </FilterField>
-
-              <FilterField label="Result">
-                <select
-                  className="dx-select"
-                  style={{ width: 120 }}
-                  value={draft.result}
-                  onChange={(e) => setDraftValue('result', e.target.value)}
-                >
-                  <option value="">All</option>
-                  {(facets.results || []).map((v) => (
-                    <option key={v} value={v}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
-              </FilterField>
-
-              <FilterField label="Date Range">
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <input
-                    type="date"
-                    className="dx-input"
-                    style={{ width: 140, fontSize: 12 }}
-                    value={draft.dateFrom}
-                    onChange={(e) => setDraftValue('dateFrom', e.target.value)}
-                  />
-                  –
-                  <input
-                    type="date"
-                    className="dx-input"
-                    style={{ width: 140, fontSize: 12 }}
-                    value={draft.dateTo}
-                    onChange={(e) => setDraftValue('dateTo', e.target.value)}
                   />
                 </span>
               </FilterField>
 
-              <span style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-                <Button type="button" variant="ghost" size="sm" onClick={reset} disabled={!hasFilters}>
+              <FilterField label="Object Type">
+                <Select value={draft.objectType} onChange={(e) => setDraftValue('objectType', e.target.value)} aria-label="Object type filter" className="al-select al-select-type">
+                  <option value="">All</option>
+                  {(facets.objectTypes || []).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FilterField>
+
+              <FilterField label="Action">
+                <Select value={draft.action} onChange={(e) => setDraftValue('action', e.target.value)} aria-label="Action filter" className="al-select al-select-action">
+                  <option value="">All</option>
+                  {(facets.actions || []).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FilterField>
+
+              <FilterField label="Source">
+                <Select value={draft.source} onChange={(e) => setDraftValue('source', e.target.value)} aria-label="Source filter" className="al-select al-select-short">
+                  <option value="">All</option>
+                  {(facets.sources || []).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FilterField>
+
+              <FilterField label="Result">
+                <Select value={draft.result} onChange={(e) => setDraftValue('result', e.target.value)} aria-label="Result filter" className="al-select al-select-short">
+                  <option value="">All</option>
+                  {(facets.results || []).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </FilterField>
+
+              <FilterField label="Date Range">
+                <span className="al-dates">
+                  <Input type="date" value={draft.dateFrom} onChange={(e) => setDraftValue('dateFrom', e.target.value)} aria-label="From date" />
+                  <span>–</span>
+                  <Input type="date" value={draft.dateTo} onChange={(e) => setDraftValue('dateTo', e.target.value)} aria-label="To date" />
+                </span>
+              </FilterField>
+
+              <span className="al-filter-actions">
+                <Button type="button" variant="ghost" size="sm" className="al-btn" onClick={reset} disabled={!hasFilters}>
                   <RotateCcw size={13} /> Reset
                 </Button>
-                <Button type="submit" size="sm">
+                <Button type="submit" size="sm" className="al-btn al-btn-primary">
                   <ListFilter size={13} /> Apply Filters
                 </Button>
               </span>
-            </div>
-          </form>
+            </form>
 
-          {error && (
-            <div className="dx-card" style={{ padding: 12, color: 'var(--dx-danger, #b91c1c)' }}>
-              {error}
-            </div>
-          )}
+            {error && <p className="al-error">{error}</p>}
 
-          <div className="dx-card audit-logs-table">
-            <div className="dx-table-wrap dx-table-wrap-scroll" style={{ height: 520 }}>
-              <table className="dx-table dx-table-compact">
-                <thead>
-                  <tr>
-                    <th style={{ width: 28 }} aria-label="Expand" />
-                    <th>
-                      <button
-                        type="button"
-                        onClick={toggleSort}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          background: 'none',
-                          border: 'none',
-                          color: 'inherit',
-                          font: 'inherit',
-                          cursor: 'pointer',
-                          padding: 0
-                        }}
-                        title={sortDir === 'desc' ? 'Newest first' : 'Oldest first'}
-                      >
-                        Timestamp
-                        {sortDir === 'desc' ? <ArrowDown size={12} /> : <ArrowUp size={12} />}
-                      </button>
-                    </th>
-                    <th>Object Type</th>
-                    <th>Object ID</th>
-                    <th>Action</th>
-                    <th>User</th>
-                    <th>Source</th>
-                    <th>Result</th>
-                    <th>Correlation ID</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading && (
+            {loading ? (
+              <div className="al-empty">
+                <Loader2 size={22} className="al-spin" />
+                <p>Loading…</p>
+              </div>
+            ) : !data.items?.length ? (
+              <div className="al-empty">
+                <SearchX size={28} />
+                <p className="al-empty-title">No matching results</p>
+                <p>
+                  {applied.search
+                    ? `Nothing matched "${applied.search}". Try adjusting the filters or search terms.`
+                    : 'Try adjusting the filters or search terms.'}
+                </p>
+              </div>
+            ) : (
+              <div className="al-table-wrap">
+                <table className="al-table">
+                  <thead>
                     <tr>
-                      <td colSpan={9} style={{ textAlign: 'center', padding: 32 }}>
-                        Loading audit events…
-                      </td>
+                      <th className="al-expand-col" aria-label="Expand" />
+                      <th aria-sort={!sortDir ? 'none' : sortDir === 'asc' ? 'ascending' : 'descending'}>
+                        <button type="button" className="al-sort" onClick={toggleTimeSort} aria-label={timeSortHint} title={timeSortHint}>
+                          Timestamp
+                          {!sortDir ? (
+                            <ChevronsUpDown size={13} className="al-sort-idle" aria-hidden />
+                          ) : sortDir === 'asc' ? (
+                            <ArrowUp size={13} aria-hidden />
+                          ) : (
+                            <ArrowDown size={13} aria-hidden />
+                          )}
+                        </button>
+                      </th>
+                      <th>Object Type</th>
+                      <th>Object ID</th>
+                      <th>Action</th>
+                      <th>User</th>
+                      <th>Source</th>
+                      <th>Result</th>
+                      <th>Correlation ID</th>
                     </tr>
-                  )}
-                  {!loading &&
-                    (data.items || []).map((row) => {
+                  </thead>
+                  <tbody>
+                    {data.items.map((row) => {
                       const open = expanded === row.event_id
                       const pairs = leftPairs(row)
                       return (
                         <Fragment key={row.event_id}>
-                          <tr
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => setExpanded(open ? null : row.event_id)}
-                          >
-                            <td>
-                              {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                            </td>
-                            <td className="text-xs">{fmtDate(row.event_time)}</td>
-                            <td className="text-xs fw-600">{row.object_type}</td>
-                            <td className="text-xs">
+                          <tr className={open ? 'is-open' : undefined} onClick={() => setExpanded(open ? null : row.event_id)}>
+                            <td className="al-chevron">{open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</td>
+                            <td className="al-muted al-nowrap">{fmtDateTime(row.event_time)}</td>
+                            <td className="al-nowrap al-semibold">{row.object_type}</td>
+                            <td className="al-nowrap">
                               {row.object_type === 'INVOICE' ? (
                                 <Link
-                                  to={invoiceHref(
-                                    row.invoice_id != null
-                                      ? `ocr-${row.invoice_id}`
-                                      : row.object_id
-                                  )}
+                                  to={invoiceHref(row.invoice_id != null ? `ocr-${row.invoice_id}` : row.object_id)}
                                   onClick={(e) => e.stopPropagation()}
-                                  style={{ fontFamily: 'SF Mono, Menlo, monospace' }}
+                                  className="al-link"
                                 >
                                   {row.object_id}
                                 </Link>
                               ) : (
-                                <span style={{ fontFamily: 'SF Mono, Menlo, monospace' }}>
-                                  {row.object_id}
-                                </span>
+                                <span className="al-medium">{row.object_id}</span>
                               )}
                             </td>
-                            <td>
-                              <span className="dx-badge skip">{row.action}</span>
+                            <td className="al-nowrap al-medium">{row.action}</td>
+                            <td className="al-nowrap">{row.actor_name || '—'}</td>
+                            <td className="al-nowrap al-muted">{row.source || '—'}</td>
+                            <td className="al-nowrap">
+                              <ResultBadge value={row.result} />
                             </td>
-                            <td className="fw-600 text-sm">{row.actor_name || '—'}</td>
-                            <td className="text-xs">{row.source || '—'}</td>
-                            <td>
-                              <span className={`dx-badge ${RESULT_TONE[row.result] || 'skip'}`}>
-                                {row.result}
-                              </span>
-                            </td>
-                            <td
-                              className="text-xs text-muted"
-                              style={{ fontFamily: 'SF Mono, Menlo, monospace' }}
-                            >
-                              {row.correlation_id || '—'}
-                            </td>
+                            <td className="al-nowrap al-mono">{row.correlation_id || '—'}</td>
                           </tr>
                           {open && (
-                            <tr>
-                              <td colSpan={9} style={{ padding: 0 }}>
-                                <div className="audit-expand-panel" style={{ padding: '14px 18px' }}>
-                                  <div className="audit-expand-grid">
+                            <tr className="al-detail-row">
+                              <td colSpan={9}>
+                                <div className="al-detail">
+                                  <dl className="al-detail-grid">
                                     <div>
-                                      <div
-                                        className="text-xs"
-                                        style={{
-                                          fontWeight: 700,
-                                          marginBottom: 8,
-                                          color: 'var(--dx-text-soft)',
-                                          textTransform: 'uppercase',
-                                          letterSpacing: 0.4
-                                        }}
-                                      >
-                                        What changed
-                                      </div>
                                       {pairs.length ? (
-                                        pairs.map((p) => (
-                                          <Pair key={p.label + p.value} label={p.label} value={p.value} />
-                                        ))
+                                        pairs.map((pair) => <Pair key={pair.label + pair.value} {...pair} />)
                                       ) : (
-                                        <p className="text-xs text-muted" style={{ margin: 0 }}>
-                                          No field-level before/after for this action.
-                                        </p>
+                                        <p className="al-faint">No field values changed in this activity.</p>
                                       )}
                                     </div>
                                     <div>
-                                      <div
-                                        className="text-xs"
-                                        style={{
-                                          fontWeight: 700,
-                                          marginBottom: 8,
-                                          color: 'var(--dx-text-soft)',
-                                          textTransform: 'uppercase',
-                                          letterSpacing: 0.4
-                                        }}
-                                      >
-                                        Who / why / when
-                                      </div>
-                                      <Pair label="Event ID" value={row.event_id} />
-                                      <Pair label="Actor ID" value={row.actor_id} />
-                                      <Pair label="Role" value={row.actor_role} />
-                                      <Pair label="Outcome code" value={row.outcome_code} />
-                                      <Pair label="Reason" value={row.reason_remarks} />
-                                      <Pair
-                                        label="Details"
-                                        value={
-                                          row.details
-                                            ? typeof row.details === 'string'
-                                              ? row.details
-                                              : JSON.stringify(row.details, null, 2)
-                                            : null
-                                        }
-                                      />
-                                      <Pair label="Exact time" value={fmtExactTime(row.event_time)} />
+                                      <Pair label="Role" value={row.actor_type && row.actor_type !== 'USER' ? 'System' : row.actor_role || '—'} />
+                                      <Pair label="Reason" value={row.reason_remarks || 'Not recorded'} />
+                                      <Pair label="Time" value={fmtExactTime(row.event_time)} />
                                     </div>
-                                  </div>
-                                  <p
-                                    className="text-xs"
-                                    style={{
-                                      margin: '12px 0 0',
-                                      display: 'flex',
-                                      gap: 8,
-                                      alignItems: 'flex-start',
-                                      color: 'var(--dx-text-soft)'
-                                    }}
-                                  >
-                                    <Info size={14} style={{ flexShrink: 0, marginTop: 1 }} />
-                                    {summaryOf(row)}
+                                  </dl>
+                                  <p className="al-summary">
+                                    <Info size={13} />
+                                    <span>{summaryOf(row)}</span>
                                   </p>
                                 </div>
                               </td>
@@ -733,64 +629,124 @@ function EssaAuditLogs({ userInfo: { userType } }) {
                         </Fragment>
                       )
                     })}
-                  {!loading && !data.items?.length && (
-                    <tr>
-                      <td
-                        colSpan={9}
-                        style={{ textAlign: 'center', padding: 32, color: 'var(--dx-text-mute)' }}
-                      >
-                        No events match the current filters.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '10px 14px',
-                borderTop: '1px solid var(--dx-border)',
-                fontSize: 12,
-                color: 'var(--dx-text-soft)'
-              }}
-            >
-              <span>
-                {data.total} event{data.total === 1 ? '' : 's'}
-                {data.totalPages > 1 ? ` · page ${data.page} of ${data.totalPages}` : ''}
-              </span>
-              <span style={{ display: 'flex', gap: 8 }}>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  disabled={page <= 1 || loading}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                >
-                  Previous
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  disabled={page >= (data.totalPages || 1) || loading}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  Next
-                </Button>
-              </span>
-            </div>
-          </div>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {!loading && (
+              <Pagination
+                page={data.page || page}
+                totalPages={data.totalPages || 1}
+                total={data.total || 0}
+                pageSize={data.pageSize || pageSize}
+                onPage={setPage}
+                onPageSize={(size) => {
+                  setPageSize(size)
+                  setPage(1)
+                }}
+              />
+            )}
+          </Card>
+
+          <p className="al-footnote">
+            <ShieldCheck size={12} />
+            <span>
+              Audit records are written once and can never be edited or deleted.
+              {applied.dateFrom || applied.dateTo
+                ? ` Showing ${applied.dateFrom ? fmtDay(applied.dateFrom) : 'the beginning'} to ${applied.dateTo ? fmtDay(applied.dateTo) : 'today'}.`
+                : ''}
+            </span>
+          </p>
         </div>
       </div>
     </LeftPageContainer>
   )
 }
 
+const pageCss = `
+.al-page .al-stack{display:flex;flex-direction:column;gap:12px;}
+.al-page .al-filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;border-bottom:1px solid #eef0f2;padding:12px;}
+.al-page .al-field{display:flex;min-width:0;flex-direction:column;gap:4px;}
+.al-page .al-field-label{font-size:10px;font-weight:600;color:#4b5563;}
+.al-page .al-search-field{flex:1 1 176px;min-width:176px;}
+.al-page .al-search{position:relative;display:block;}
+.al-page .al-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none;}
+.al-page .al-filters .dx-input,.al-page .al-select{height:36px;border-radius:6px;border:1px solid #e5e7eb;background-color:#fff;padding:6px 10px;font-size:14px;color:#1f2937;width:100%;}
+.al-page .al-select{appearance:none;-webkit-appearance:none;padding-right:36px !important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;}
+.al-page .al-search .dx-input{padding-left:32px;}
+.al-page .al-filters .dx-input:focus,.al-page .al-select:focus{border-color:#3aaa55;outline:none;box-shadow:0 0 0 2px #d8f0dd;}
+.al-page .al-select-type{width:144px;}
+.al-page .al-select-action{width:176px;}
+.al-page .al-select-short{width:112px;}
+.al-page .al-dates{display:flex;align-items:center;gap:6px;font-size:10px;color:#4b5563;}
+.al-page .al-dates .dx-input{width:128px;}
+.al-page .al-filter-actions{margin-left:auto;display:flex;align-items:flex-end;gap:8px;}
+.al-page .al-btn.dx-btn{height:28px;padding:0 10px;border-radius:6px;font-size:12px;font-weight:500;gap:6px;}
+.al-page .al-btn.dx-btn-ghost{border-color:transparent;background:transparent;color:#374151;}
+.al-page .al-btn.dx-btn-ghost:hover:not(:disabled){background:#eef0f2;border-color:transparent;filter:none;box-shadow:none;}
+.al-page .al-btn-primary.dx-btn{background:#2C9842;color:#fff;border-color:transparent;}
+.al-page .al-btn-primary.dx-btn:hover{background:#247a35;filter:none;box-shadow:none;}
+.al-page .al-error{margin:0;padding:10px 12px;font-size:12px;color:#b91c1c;}
+.al-page .al-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:40px 16px;text-align:center;color:#6b7280;}
+.al-page .al-empty-title{margin:0;font-size:14px;font-weight:500;color:#374151;}
+.al-page .al-empty p{margin:0;max-width:28rem;font-size:12px;}
+.al-page .al-spin{color:#2C9842;animation:al-spin 1s linear infinite;}
+@keyframes al-spin{to{transform:rotate(360deg);}}
+.al-page .al-table-wrap{overflow-x:auto;}
+.al-page .al-table{width:100%;border-collapse:collapse;text-align:left;font-size:12px;color:#1f2937;}
+.al-page .al-table thead th{background:#2C9842;color:#fff;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none;padding:8px 12px;white-space:nowrap;border:none;text-align:left;}
+.al-page .al-expand-col{width:32px;padding-left:8px;padding-right:8px;}
+.al-page .al-sort{display:inline-flex;align-items:center;gap:6px;background:transparent;border:none;color:#fff;font:inherit;font-weight:700;cursor:pointer;padding:0;}
+.al-page .al-sort:hover{text-decoration:underline;}
+.al-page .al-sort-idle{opacity:.75;}
+.al-page .al-table tbody td{padding:8px 12px;border-bottom:1px solid #eef0f2;vertical-align:middle;background:#fff;font-size:12px;}
+.al-page .al-table tbody tr{cursor:pointer;}
+.al-page .al-table tbody tr:hover td{background:#eef8f0;}
+.al-page .al-table tbody tr.is-open td{background:#eef8f0;}
+.al-page .al-chevron{width:32px;padding-left:8px;padding-right:8px;color:#9ca3af;}
+.al-page .al-muted{color:#374151;}
+.al-page .al-semibold{font-weight:600;color:#374151;}
+.al-page .al-medium{font-weight:500;}
+.al-page .al-nowrap{white-space:nowrap;}
+.al-page .al-link{font-weight:500;color:#247a35;text-decoration:none;}
+.al-page .al-link:hover{text-decoration:underline;}
+.al-page .al-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;color:#4b5563;}
+.al-badge{display:inline-flex;align-items:center;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:14px;}
+.al-badge-neutral{background:#eef0f2;color:#374151;}
+.al-badge-success{background:#e6f5ea;color:#2d9a47;}
+.al-badge-error{background:#fdecec;color:#b91c1c;}
+.al-badge-info{background:#e5f2f9;color:#0075a9;}
+.al-badge-warning{background:#fef5e7;color:#b45309;}
+.al-page .al-detail-row,.al-page .al-detail-row:hover{cursor:default;}
+.al-page .al-table tbody tr.al-detail-row:hover td{background:#f4fbf6;}
+.al-page .al-detail-row td{background:#f4fbf6;padding:4px 20px 16px;}
+.al-page .al-detail{border:1px solid #e5e7eb;border-radius:8px;background:#fff;padding:14px;}
+.al-page .al-detail-grid{display:grid;gap:2px 32px;margin:0;}
+@media (min-width:768px){.al-page .al-detail-grid{grid-template-columns:1fr 1fr;}}
+.al-page .al-pair{display:flex;gap:12px;padding:2px 0;}
+.al-page .al-pair dt{width:144px;flex-shrink:0;margin:0;font-size:10px;color:#4b5563;}
+.al-page .al-pair dd{min-width:0;margin:0;font-size:10px;font-weight:500;color:#1f2937;word-break:break-word;}
+.al-page .al-faint{margin:2px 0;font-size:10px;color:#9ca3af;}
+.al-page .al-summary{display:flex;align-items:flex-start;gap:8px;margin:12px 0 0;border:1px solid #d8f0dd;border-radius:6px;background:#eef8f0;padding:8px 10px;font-size:10px;line-height:14px;color:#374151;}
+.al-page .al-summary svg{margin-top:1px;flex-shrink:0;color:#2C9842;}
+.al-page .al-pager{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #eef0f2;padding:8px 12px;font-size:12px;color:#4b5563;}
+.al-page .al-pager-controls{display:flex;align-items:center;gap:4px;}
+.al-page .al-pager-controls>button{min-width:26px;height:26px;border-radius:4px;border:1px solid #e5e7eb;background:#fff;color:#374151;font-size:12px;font-weight:500;cursor:pointer;padding:0 6px;}
+.al-page .al-pager-controls>button:hover:not(:disabled){background:#eef0f2;}
+.al-page .al-pager-controls>button:disabled{opacity:.4;cursor:not-allowed;}
+.al-page .al-pager-controls>button.is-current{border-color:#2C9842;background:#2C9842;color:#fff;}
+.al-page .al-pager-gap{padding:0 4px;color:#9ca3af;}
+.al-page .al-pager-size{display:flex;align-items:center;gap:6px;margin-left:12px;white-space:nowrap;}
+.al-page .al-page-size{height:28px !important;width:78px !important;font-size:12px !important;border-radius:6px;border:1px solid #e5e7eb;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px;padding:2px 28px 2px 8px !important;appearance:none;-webkit-appearance:none;}
+.al-page .al-footnote{display:flex;align-items:center;gap:6px;margin:0;padding:0 4px;font-size:10px;color:#4b5563;}
+.al-page .al-footnote svg{color:#2C9842;flex-shrink:0;}
+`
+
 const mapStateToProps = (state) => ({
   userInfo: state.userInfo
 })
 
 export default connect(mapStateToProps)(EssaAuditLogs)
+
+

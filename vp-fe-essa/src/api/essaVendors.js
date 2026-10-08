@@ -13,7 +13,7 @@ export async function getEssaVendors({
   controlState,
   sapStatus,
   sortBy,
-  sortDir = 'asc',
+  sortDir,
   page = 1,
   pageSize = 25
 } = {}) {
@@ -25,7 +25,7 @@ export async function getEssaVendors({
         controlState: controlState || undefined,
         sapStatus: sapStatus || undefined,
         sortBy: sortBy || undefined,
-        sortDir,
+        sortDir: sortBy ? sortDir || 'asc' : undefined,
         page,
         pageSize
       }
@@ -70,13 +70,6 @@ export async function getEssaVendorDetail(code) {
  * Update vendor AP control overlay (negativeFlag, apEnabled, reason)
  */
 export async function updateEssaVendorControl(code, payload) {
-  try {
-    const res = await axiosInstance.post(`/essa/vendors/${code}/control`, payload)
-    if (res?.data?.data) {
-      return res.data.data
-    }
-  } catch (err) {
-    console.error(`Failed to update vendor control for ${code}:`, err)
-  }
-  return payload
+  const res = await axiosInstance.post(`/essa/vendors/${code}/control`, payload)
+  return res?.data?.data ?? payload
 }

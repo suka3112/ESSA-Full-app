@@ -8,8 +8,10 @@
 #  - From vp-fe-essa / vp-be-essa: only files git would track (respects their
 #    .gitignore, so no node_modules / build / .env). Local-dev patched files
 #    (src/index.ts, Login/index.jsx) are taken from the last commit instead.
-#  - NEVER pushed: tokens, .env files, DB/ (SQL dump + user backups),
-#    "Testing document " (real invoices), _backup_local_changes, .DS_Store
+#  - NEVER pushed (the GitHub repo is public): tokens, .env files, DB/ (SQL dump +
+#    user backups), real invoices and client documents ("Testing document*",
+#    "All requirment document*"), SIT runs (SIT_Execution_*: screenshots, workbooks),
+#    runtime data (vp-be-essa/data/essa-vendor-controls.json), _backup_local_changes, .DS_Store
 #  - Uses the token in .github-token-fullapp (or asks for one)
 ###############################################################################
 set -uo pipefail
@@ -21,6 +23,7 @@ MIRROR="$ROOT/.essa-full-app-mirror"
 TOKEN_FILE="$ROOT/.github-token-fullapp"
 SUBREPOS="vp-fe-essa vp-be-essa"
 LOCAL_PATCHED="^(src/index\.ts|src/components/Auth/Login/index\.jsx)$"
+NEVER_FROM_APPS="^data/essa-vendor-controls\.json$"   # runtime data with user names
 ENV_FILES="(^|/)\.env(\..*)?$"
 # top-level items that are never pushed
 EXCLUDE_TOP=".git .essa-full-app-mirror .github-token .github-token-fullapp DB _backup_local_changes .DS_Store $SUBREPOS"
@@ -67,7 +70,7 @@ for item in "$ROOT"/* "$ROOT"/.[!.]*; do
   [ -e "$item" ] || continue
   base="$(basename "$item")"
   case " $EXCLUDE_TOP " in *" $base "*) continue;; esac
-  [ "$base" = "Testing document " ] && continue
+  case "$base" in "Testing document"*|"All requirment document"*|SIT_Execution_*) continue;; esac
   if [ -d "$item" ]; then
     while IFS= read -r -d '' f; do
       rel="${f#$ROOT/}"
@@ -86,6 +89,7 @@ for name in $SUBREPOS; do
   dir="$ROOT/$name"; [ -d "$dir/.git" ] || continue
   while IFS= read -r -d '' rel; do
     [[ "$rel" =~ $ENV_FILES ]] && continue
+    [[ "$rel" =~ $NEVER_FROM_APPS ]] && continue
     [ -f "$dir/$rel" ] || continue
     if [[ "$rel" =~ $LOCAL_PATCHED ]]; then
       # use the committed version, not the local-dev patch

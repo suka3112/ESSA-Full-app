@@ -136,14 +136,22 @@ export const categoryForInvoiceType = (invoiceTypeCode) => {
 /* ── Comparison types ─────────────────────────────────────────────────── */
 export const RULE_TYPES = {
   EXACT: { code: 'EXACT', label: 'Exact', help: 'Values must be identical after normalisation (case, spaces, punctuation, legal suffixes).', tone: 'slate' },
-  LOGICAL: { code: 'LOGICAL', label: 'Logical (AI)', help: 'AI judges whether the values mean the same thing (e.g. “PT Maju Jaya” vs “Maju Jaya Tbk”, NALCO 7408 vs the PO description). The prompt is preset in the backend.', tone: 'violet', ai: true },
+  LOGICAL: { code: 'LOGICAL', label: 'Logical', help: 'AI judges whether the values mean the same thing (e.g. “PT Maju Jaya” vs “Maju Jaya Tbk”, NALCO 7408 vs the PO description). The prompt is preset in the backend.', tone: 'violet', ai: true },
   UNIQUENESS: { code: 'UNIQUENESS', label: 'Uniqueness', help: 'Checks the value has not been used before — usually against a DB history table.', tone: 'teal' },
-  TOLERANCE: { code: 'TOLERANCE', label: 'Tolerance', help: 'Numeric difference must fall within the % / amount limits.', tone: 'amber' },
   AUTHENTICITY: { code: 'AUTHENTICITY', label: 'Authenticity', help: 'Verifies the document is genuine (e.g. e-Faktur QR / barcode against DJP Coretax).', tone: 'rose' },
   CALCULATION: { code: 'CALCULATION', label: 'Calculation', help: 'Deterministic arithmetic — sums, amount ÷ qty, LD, advance recovery, due date. (Proposed: kept separate from Logical so money checks stay deterministic.)', tone: 'blue' },
+  CALCULATION_TOLERANCE: { code: 'CALCULATION_TOLERANCE', label: 'Calculation / Tolerance', help: 'The system calculates the value, then the difference must fall within the % / amount limits.', tone: 'blue', base: ['CALCULATION', 'TOLERANCE'] },
+  EXACT_UNIQUENESS: { code: 'EXACT_UNIQUENESS', label: 'Exact / Uniqueness', help: 'Values must be identical after normalisation, and the value must not have been used before.', tone: 'teal', base: ['EXACT', 'UNIQUENESS'] },
+  TOLERANCE: { code: 'TOLERANCE', label: 'Tolerance', help: 'Numeric difference must fall within the % / amount limits.', tone: 'amber' },
+  AUTHENTICATE: { code: 'AUTHENTICATE', label: 'Authenticate', help: 'Confirms the document was signed off by the right person (e.g. BAST approval per DOA).', tone: 'rose', base: ['AUTHENTICITY'] },
   AVAILABILITY: { code: 'AVAILABILITY', label: 'Availability only', help: 'Only checks that the document is present in the invoice package. Data point, target and validation type are not needed.', tone: 'gray', hidden: true }
 }
 export const RULE_TYPE_LIST = Object.values(RULE_TYPES).filter((t) => !t.hidden)
+
+/** True when a rule type is, or combines, the given base type (e.g. CALCULATION_TOLERANCE has TOLERANCE). */
+export const hasType = (ruleType, base) => ruleType === base || Boolean(RULE_TYPES[ruleType]?.base?.includes(base))
+/** Types evaluated by the server integration (SAP, history or portal), not field-by-field. */
+export const isServerType = (ruleType) => ['CALCULATION', 'UNIQUENESS', 'AUTHENTICITY'].some((b) => hasType(ruleType, b))
 
 /* ── Match level ──────────────────────────────────────────────────────── */
 export const MATCH_LEVELS = {
@@ -186,18 +194,18 @@ const GROUP_BY_DATA_KEY = {
 export const groupForRule = (rule) => {
   if (rule?.group && RULE_GROUPS[rule.group]) return rule.group
   if (rule?.ruleType === 'AVAILABILITY') return 'DOCUMENTS'
-  if (['UNIQUENESS', 'AUTHENTICITY'].includes(rule?.ruleType)) return 'CONTROLS'
+  if (['UNIQUENESS', 'AUTHENTICITY', 'AUTHENTICATE'].includes(rule?.ruleType)) return 'CONTROLS'
   return GROUP_BY_DATA_KEY[rule?.dataKey] || 'CONTROLS'
 }
 
 /* ── Requirement of a target ──────────────────────────────────────────── */
 export const REQUIREMENTS = {
-  REQUIRED: { code: 'REQUIRED', label: 'Must match', short: 'C', help: 'Compare against the anchor. Missing or different fails the rule. (X in the Excel matrix)' },
-  IF_PRESENT: { code: 'IF_PRESENT', label: 'If present', short: 'C?', help: 'Compared only when the document is in the bundle. (o in the Excel matrix)' },
-  PARTIAL: { code: 'PARTIAL', label: 'Partial', short: 'P', help: 'Only part of the value appears on this document — matched as “contains”.' },
-  EXTRACT: { code: 'EXTRACT', label: 'Extract only', short: 'E', help: 'Captured for context (shown to the reviewer), not compared.' }
+  REQUIRED: { code: 'REQUIRED', label: 'Mandatory', short: 'M', help: 'Compare against the anchor. Missing or different fails the rule.' },
+  PARTIAL: { code: 'PARTIAL', label: 'Partial', short: 'P', help: 'Only part of the value appears on this document — matched as “contains”.', hidden: true },
+  IF_PRESENT: { code: 'IF_PRESENT', label: 'Optional', short: 'O', help: 'Compared only when the document is in the bundle.' },
+  EXTRACT: { code: 'EXTRACT', label: 'Available', short: 'AV', help: 'Must be in the bundle; captured for context (shown to the reviewer), not compared.' }
 }
-export const REQUIREMENT_LIST = Object.values(REQUIREMENTS)
+export const REQUIREMENT_LIST = Object.values(REQUIREMENTS).filter((r) => !r.hidden)
 export const isCompareRole = (req) => req !== 'EXTRACT'
 
 /* ── Compare modes ────────────────────────────────────────────────────── */

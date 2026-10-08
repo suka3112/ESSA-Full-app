@@ -15,7 +15,7 @@ const joinList = (items) => {
 }
 
 export const scopeLabel = (rule) => {
-  if (!rule || rule.scope !== 'CATEGORY') return 'Common · all categories'
+  if (!rule || rule.scope !== 'CATEGORY') return 'Common rule — all invoice categories'
   const cats = rule.categories || []
   const isServices =
     cats.length === SERVICE_CATEGORY_CODES.length && SERVICE_CATEGORY_CODES.every((c) => cats.includes(c))
@@ -29,7 +29,8 @@ export const criteriaSummary = (rule) => {
   switch (rule?.ruleType) {
     case 'LOGICAL':
       return c.similarity || c.aiConfidence ? `AI match ≥ ${c.similarity || c.aiConfidence}%` : 'Same meaning (AI)'
-    case 'TOLERANCE': {
+    case 'TOLERANCE':
+    case 'CALCULATION_TOLERANCE': {
       const combine = { EITHER: 'HIGHER', BOTH: 'LOWER' }[c.combine] || c.combine || 'HIGHER'
       const pct = c.tolerancePct ? `${c.tolerancePct}%` : null
       const amt = c.toleranceAmount ? `IDR ${Number(c.toleranceAmount).toLocaleString('en-US')}` : null
@@ -40,10 +41,14 @@ export const criteriaSummary = (rule) => {
     }
     case 'AVAILABILITY':
       return 'Document is present in the invoice package'
+    case 'EXACT_UNIQUENESS':
+      return c.uniqueKey?.length ? `Identical, unique key: ${c.uniqueKey.join(' + ')}` : 'Identical and must be new'
     case 'UNIQUENESS':
       return c.uniqueKey?.length ? `Unique key: ${c.uniqueKey.join(' + ')}` : 'Must be new'
     case 'AUTHENTICITY':
       return 'Verified against the register'
+    case 'AUTHENTICATE':
+      return 'Signed off by the right approver'
     case 'CALCULATION':
       return 'Calculated value must agree'
     default:
@@ -55,14 +60,11 @@ export const criteriaSummary = (rule) => {
 export const describeRule = (rule) => {
   if (!rule) return ''
   if (rule.ruleType === 'AVAILABILITY') {
-    return `Check that the ${sourceLabel(rule.source)} is present in the invoice package. If it is missing: ${(FAIL_ACTIONS[rule.onFail]?.label || 'raise exception').toLowerCase()}.`
+    return `Check that the ${sourceLabel(rule.source)} is present in the invoice package.`
   }
   const targets = (rule.targets || []).filter((t) => t.requirement !== 'EXTRACT')
   const req = targets.filter((t) => t.requirement !== 'IF_PRESENT').map((t) => sourceLabel(t.doc))
   const opt = targets.filter((t) => t.requirement === 'IF_PRESENT').map((t) => sourceLabel(t.doc))
-  const when = rule.runCondition?.type && rule.runCondition.type !== 'ALWAYS' && rule.runCondition.text
-    ? `${rule.runCondition.text.replace(/\.$/, '')}: `
-    : ''
   let body
   if (rule.compareMode === 'STEPWISE' && targets.length) {
     const chain = [rule.source, ...targets.map((t) => t.doc)].map(sourceLabel)
@@ -70,12 +72,11 @@ export const describeRule = (rule) => {
   } else if (!targets.length) {
     body = `check ${rule.dataPoint.toLowerCase()} on ${sourceLabel(rule.source)}`
   } else {
-    body = `take ${rule.dataPoint.toLowerCase()} from ${sourceLabel(rule.source)} (anchor) and compare with ${joinList(req) || joinList(opt)}`
+    body = `take ${rule.dataPoint.toLowerCase()} from ${sourceLabel(rule.source)} and compare with ${joinList(req) || joinList(opt)}`
     if (req.length && opt.length) body += ` (and ${joinList(opt)} when attached)`
   }
-  const pass = criteriaSummary(rule)
-  const fail = (FAIL_ACTIONS[rule.onFail]?.label || 'Send to review').toLowerCase()
-  const sentence = `${when}${body}. Passes when: ${pass.charAt(0).toLowerCase()}${pass.slice(1)}. If it fails: ${fail}.`
+  const type = RULE_TYPES[rule.ruleType]?.label
+  const sentence = `${body}.${type ? ` Validation: ${type}.` : ''}`
   return sentence.charAt(0).toUpperCase() + sentence.slice(1)
 }
 
@@ -90,28 +91,18 @@ export const rulesToCsv = (rules, sourceCodes) => {
     const s = v == null ? '' : String(v)
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
   }
-  const header = ['Rule', 'Data point', 'Matrix refs', 'Type', ...sourceCodes.map(sourceLabel), 'Level', 'Mode', 'Scope', 'Passes when', 'Applies when', 'On fail', 'Requirement', 'Status', 'Business note']
+  const header = ['Data point', 'Invoice category', ...sourceCodes.map(sourceLabel), 'Validation type']
   const mark = (rule, code) => {
-    if (rule.source === code) return 'A'
+    if (rule.source === code) return 'Source'
     const t = (rule.targets || []).find((x) => x.doc === code)
     if (!t) return ''
-    return t.requirement === 'IF_PRESENT' ? 'o' : t.requirement === 'PARTIAL' ? 'P' : t.requirement === 'EXTRACT' ? 'E' : 'X'
+    return t.requirement === 'IF_PRESENT' ? 'O' : t.requirement === 'PARTIAL' ? 'P' : t.requirement === 'EXTRACT' ? 'AV' : 'M'
   }
   const rows = rules.map((r) => [
-    r.ruleKey,
     r.dataPoint,
-    r.refs || '',
-    typeLabel(r.ruleType),
-    ...sourceCodes.map((code) => mark(r, code)),
-    r.matchLevel || 'HEADER',
-    compareModeLabel(r.compareMode),
     scopeLabel(r),
-    r.criteriaText || criteriaSummary(r),
-    r.runCondition?.text || 'Always',
-    failLabel(r.onFail),
-    r.mandatory === false ? 'Optional' : 'Mandatory',
-    r.status,
-    r.businessNote
+    ...sourceCodes.map((code) => mark(r, code)),
+    typeLabel(r.ruleType)
   ])
   return [header, ...rows].map((row) => row.map(esc).join(',')).join('\n')
 }

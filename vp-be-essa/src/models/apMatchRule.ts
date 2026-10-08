@@ -43,7 +43,7 @@ ApMatchRule.init(
     RuleKey: { type: DataTypes.STRING(20), allowNull: false },
     DataPoint: { type: DataTypes.STRING(200), allowNull: false },
     DataKey: { type: DataTypes.STRING(60), allowNull: false },
-    RuleType: { type: DataTypes.STRING(20), allowNull: false },
+    RuleType: { type: DataTypes.STRING(30), allowNull: false },
     Scope: { type: DataTypes.STRING(20), allowNull: false, defaultValue: "COMMON" },
     Categories: { type: DataTypes.JSONB, allowNull: false, defaultValue: [] },
     DisabledCategories: { type: DataTypes.JSONB, allowNull: false, defaultValue: [] },

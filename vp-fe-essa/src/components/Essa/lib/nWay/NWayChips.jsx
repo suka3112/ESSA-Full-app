@@ -16,7 +16,7 @@ export function ChannelChip({ code }) {
   return <span className={`nw-channel nw-channel--${ch.tone}`}>{ch.label}</span>
 }
 
-/** Matrix marker: A (source) · ● must match · ○ if present · ◐ partial */
+/** Matrix marker: A (anchor) · M mandatory · O optional · AV available (P partial kept for older rules) */
 export function Marker({ role, title }) {
   if (role === 'SOURCE') {
     return (
@@ -26,19 +26,31 @@ export function Marker({ role, title }) {
     )
   }
   if (role === 'IF_PRESENT') {
-    return <span className="nw-mark nw-mark--o" title={title || 'Only if present'} aria-label="Only if present" />
+    return (
+      <span className="nw-mark nw-mark--o" title={title || 'Optional (O) — compared only when the document is attached'}>
+        O
+      </span>
+    )
   }
   if (role === 'EXTRACT') {
     return (
-      <span className="nw-mark nw-mark--e" title={title || 'Extract only — context, not compared'}>
-        E
+      <span className="nw-mark nw-mark--e" title={title || 'Available — must be in the bundle, not compared'}>
+        AV
       </span>
     )
   }
   if (role === 'PARTIAL') {
-    return <span className="nw-mark nw-mark--p" title={title || 'Partial'} aria-label="Partial" />
+    return (
+      <span className="nw-mark nw-mark--p" title={title || 'Partial (P) — part of the value appears here'}>
+        P
+      </span>
+    )
   }
-  return <span className="nw-mark nw-mark--x" title={title || 'Must match'} aria-label="Must match" />
+  return (
+    <span className="nw-mark nw-mark--x" title={title || 'Mandatory (M) — missing or different fails the rule'}>
+      M
+    </span>
+  )
 }
 
 export function DocChip({ code, role }) {
@@ -82,7 +94,7 @@ export const STATUS_META = {
 }
 
 export const COMPARISON_META = {
-  extract: { label: 'Extract only', tone: 'neutral' },
+  extract: { label: 'Available', tone: 'neutral' },
   match: { label: 'Match', tone: 'pass' },
   mismatch: { label: 'Differs', tone: 'fail' },
   missing: { label: 'Missing', tone: 'fail' },

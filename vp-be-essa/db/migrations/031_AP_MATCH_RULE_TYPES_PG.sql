@@ -1,0 +1,12 @@
+-- Migration 031 (Postgres): extra N-way match types
+-- Adds CALCULATION_TOLERANCE, EXACT_UNIQUENESS and AUTHENTICATE to the allowed rule types,
+-- and widens "RuleType" so CALCULATION_TOLERANCE (21 chars) fits. Safe to run more than once.
+--
+-- Apply:  npm run migrate:sql -- db/migrations/031_AP_MATCH_RULE_TYPES_PG.sql
+
+ALTER TABLE "AP_MATCH_RULE" ALTER COLUMN "RuleType" TYPE VARCHAR(30);
+
+ALTER TABLE "AP_MATCH_RULE" DROP CONSTRAINT IF EXISTS "CK_AP_MATCH_RULE_RuleType";
+ALTER TABLE "AP_MATCH_RULE" ADD CONSTRAINT "CK_AP_MATCH_RULE_RuleType"
+  CHECK ("RuleType" IN ('EXACT', 'LOGICAL', 'CALCULATION', 'TOLERANCE', 'UNIQUENESS', 'AUTHENTICITY', 'AVAILABILITY',
+                        'CALCULATION_TOLERANCE', 'EXACT_UNIQUENESS', 'AUTHENTICATE'));

@@ -3,23 +3,19 @@ import { createPortal } from 'react-dom'
 import { Check } from 'lucide-react'
 import { Marker } from '../../lib/nWay/NWayChips'
 
-/** Roles a matrix cell can take. `key` is the keyboard shortcut. */
+/** How a document is compared (the source document is set in the rule editor). `key` is the keyboard shortcut. */
 export const CELL_ROLES = [
-  { role: 'SOURCE', label: 'Anchor', hint: 'Source of truth — read the value here', key: 'A' },
-  { role: 'REQUIRED', label: 'Compare · must match', hint: 'Missing or different fails the rule', key: 'C' },
-  { role: 'IF_PRESENT', label: 'Compare · if present', hint: 'Only when the document is attached', key: 'O' },
-  { role: 'PARTIAL', label: 'Partial', hint: 'Part of the value appears here', key: 'P' },
-  { role: 'EXTRACT', label: 'Extract only', hint: 'Shown for context, not compared', key: 'E' },
+  { role: 'REQUIRED', label: 'Mandatory', hint: 'Missing or different fails the rule', key: 'M' },
+  { role: 'IF_PRESENT', label: 'Optional', hint: 'Only when the document is attached', key: 'O' },
+  { role: 'EXTRACT', label: 'Available', hint: 'Must be in the bundle; shown for context, not compared', key: 'A' },
   { role: null, label: 'Not used', hint: 'Remove this document from the rule', key: 'Del' }
 ]
 
 export const roleFromKey = (key) => {
   const k = String(key || '').toLowerCase()
-  if (k === 'a') return 'SOURCE'
-  if (k === 'c' || k === 'x') return 'REQUIRED'
+  if (k === 'm' || k === 'c' || k === 'x') return 'REQUIRED'
   if (k === 'o' || k === '?') return 'IF_PRESENT'
-  if (k === 'p') return 'PARTIAL'
-  if (k === 'e') return 'EXTRACT'
+  if (k === 'a' || k === 'e') return 'EXTRACT'
   if (k === 'delete' || k === 'backspace' || k === '-') return null
   return undefined
 }
@@ -34,7 +30,7 @@ export default function CellRoleMenu({ anchorEl, current, title, disabledReason,
   const [active, setActive] = useState(() => Math.max(0, CELL_ROLES.findIndex((o) => o.role === (current ?? null))))
 
   const isDisabled = (opt) =>
-    Boolean(disabledReason) || (current === 'SOURCE' && opt.role !== 'SOURCE') // the anchor moves only by picking another anchor
+    Boolean(disabledReason)
 
   useLayoutEffect(() => {
     if (!anchorEl || !menuRef.current) return
@@ -130,9 +126,7 @@ export default function CellRoleMenu({ anchorEl, current, title, disabledReason,
       })}
       <div className="nw-rolemenu__foot">
         {disabledReason ||
-          (current === 'SOURCE'
-            ? 'To move the anchor, set another document as Anchor — this one becomes “must match”.'
-            : 'Saved as soon as you pick. Shortcuts work on a focused cell too.')}
+          'Saved as soon as you pick. To change where the value is read, open the rule.'}
       </div>
     </div>,
     document.body

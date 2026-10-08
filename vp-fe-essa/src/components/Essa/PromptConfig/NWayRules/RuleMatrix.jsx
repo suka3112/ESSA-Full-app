@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
-import { AlertTriangle } from 'lucide-react'
-import { MATCH_LEVELS, RULE_GROUPS, RULE_GROUP_LIST, SOURCES, groupForRule, sourceChannel, sourceLabel } from '../../lib/nWay/catalog'
-import { FailChip, Marker, TypeChip } from '../../lib/nWay/NWayChips'
-import { criteriaSummary, scopeLabel } from '../../lib/nWay/ruleText'
+import { AlertTriangle, Info } from 'lucide-react'
+import { RULE_GROUP_LIST, SOURCES, groupForRule, sourceChannel, sourceLabel } from '../../lib/nWay/catalog'
+import { Marker, TypeChip } from '../../lib/nWay/NWayChips'
+import { scopeLabel } from '../../lib/nWay/ruleText'
 import CellRoleMenu, { roleFromKey } from './CellRoleMenu'
+import { MATRIX_MARK_LEGEND, matrixDocsForSource } from '../../lib/nWay/matrixMap'
 
 /** Sources actually used by the visible rules (matrix columns). */
 export const matrixColumns = (rules) => {
@@ -47,98 +48,123 @@ export const setCellRole = (rule, code, role) => {
   return { ...rule, targets: targets.map((t) => (t.doc === code ? { ...t, requirement: role } : t)) }
 }
 
-const ROLE_WORD = { SOURCE: 'anchor', REQUIRED: 'compare · must match', IF_PRESENT: 'compare · if present', PARTIAL: 'partial', EXTRACT: 'extract only' }
+const ROLE_WORD = { REQUIRED: 'mandatory', IF_PRESENT: 'optional', PARTIAL: 'partial', EXTRACT: 'available' }
+
+/** Compare roles in reading order, with the Excel mark each one comes from. */
+const COMPARE_LEGEND = [
+  { role: 'REQUIRED', text: 'Mandatory', excel: MATRIX_MARK_LEGEND.find((m) => m.role === 'REQUIRED')?.excel },
+  { role: 'IF_PRESENT', text: 'Optional', excel: null },
+  { role: 'EXTRACT', text: 'Available', excel: MATRIX_MARK_LEGEND.find((m) => m.role === 'EXTRACT')?.excel }
+]
+
+const CHANNEL_SHORT = { VENDOR_PDF: 'PDF', USER: 'User', ESSA_SYSTEM: 'ESSA', EXTERNAL: 'Portal', SAP: 'SAP' }
 
 const warningFor = (rule) => {
   if (rule.ruleType === 'AVAILABILITY') return null
   const compares = (rule.targets || []).filter((t) => t.requirement !== 'EXTRACT')
-  if (!compares.length && ['EXACT', 'TOLERANCE'].includes(rule.ruleType)) return 'Nothing to compare'
+  if (!compares.length && ['EXACT', 'TOLERANCE', 'EXACT_UNIQUENESS'].includes(rule.ruleType)) return 'Nothing to compare'
   return null
 }
 
-export default function RuleMatrix({ rules, categoryCode, selectedId, onSelect, onEdit, onSetRole, editable = true, readOnlyReason = '' }) {
+const columnTip = (c) => {
+  const ch = sourceChannel(c.code)
+  const excel = matrixDocsForSource(c.code)
+  return [
+    `${c.label} · ${ch.long}`,
+    excel.length ? `Excel column: ${excel.map((d) => `${d.title} (${d.column})`).join(' · ')}` : 'Not a column in the Excel matrix',
+    excel.length ? `Excel “Source”: ${[...new Set(excel.map((d) => d.origin))].join(' · ')}` : null,
+    c.ocrTypes.length ? `Read from pages classified as: ${c.ocrTypes.join(', ')}` : 'Looked up — no document needed'
+  ]
+    .filter(Boolean)
+    .join('\n')
+}
+
+export default function RuleMatrix({ rules, categoryCode, selectedId, onSelect, onOpen, onSetRole, editable = true, readOnlyReason = '' }) {
   const [menu, setMenu] = useState(null) // { rule, code, el }
   const closeMenu = useCallback(() => setMenu(null), [])
   const cols = useMemo(() => matrixColumns(rules), [rules])
-  const grouped = useMemo(
-    () =>
-      RULE_GROUP_LIST.map((g) => ({ ...g, rules: rules.filter((r) => groupForRule(r) === g.code) })).filter(
-        (g) => g.rules.length
-      ),
-    [rules]
-  )
+  // One continuous table, no topic sections. Rules keep their usual order (by topic, then rule);
+  // in a category view the category's own rules come first, then the common rules it inherits.
+  const ordered = useMemo(() => {
+    const flat = RULE_GROUP_LIST.flatMap((g) => rules.filter((r) => groupForRule(r) === g.code))
+    if (!categoryCode) return flat
+    return [...flat.filter((r) => r.scope === 'CATEGORY'), ...flat.filter((r) => r.scope !== 'CATEGORY')]
+  }, [rules, categoryCode])
 
   if (!rules.length) {
     return <div className="nw-empty">No rules match the current filters.</div>
   }
 
-  const colSpan = cols.length + 6
-
   return (
     <div className="nw-matrix-wrap">
-      <div className="nw-matrix-legend">
-        <span className="nw-label">Cell role</span>
-        <span><Marker role="SOURCE" /> Anchor — source of truth (exactly one)</span>
-        <span><Marker role="REQUIRED" /> Compare · must match</span>
-        <span><Marker role="IF_PRESENT" /> Compare · if present</span>
-        <span><Marker role="EXTRACT" /> Extract only (context)</span>
-        {editable ? (
-          <span className="nw-matrix-legend__hint">
-            Click any cell to set its role (or focus it and press <kbd>A</kbd> <kbd>C</kbd> <kbd>O</kbd> <kbd>P</kbd> <kbd>E</kbd> <kbd>Del</kbd>) · click a data point to edit the whole rule
+      <div className="nw-matrix-legend nw-matrix-legend--clean">
+        {COMPARE_LEGEND.map((m) => (
+          <span key={m.role}>
+            <Marker role={m.role} /> {m.text}
           </span>
-        ) : null}
+        ))}
+        <span
+          className="nw-matrix-legend__info"
+          tabIndex={0}
+          title={[
+            'Source = the document the value is read from first. Change it in the rule editor.',
+            `Excel marks: ${COMPARE_LEGEND.filter((m) => m.excel).map((m) => `${m.excel} = ${m.text}`).join(', ')}.`,
+            editable ? 'Click a cell, or focus it and press M, O, A or Del.' : ''
+          ]
+            .filter(Boolean)
+            .join('\n')}>
+          <Info size={13} aria-hidden /> How to read
+        </span>
       </div>
-      <table className="nw-matrix">
+      <table className="nw-matrix nw-matrix--split">
         <thead>
           <tr>
-            <th className="nw-matrix__id">#</th>
-            <th className="nw-matrix__dp">Data point</th>
-            {cols.map((c) => {
+            <th className="nw-matrix__dp nw-sticky nw-sticky--dp">Data point</th>
+            {cols.map((c, i) => {
               const ch = sourceChannel(c.code)
               return (
-                <th key={c.code} className="nw-matrix__col" title={`${c.label} · ${ch.long}`}>
+                <th key={c.code} className={`nw-matrix__col${i === 0 ? ' is-first' : ''}`} title={columnTip(c)}>
                   <span>{c.label}</span>
-                  <em className={`nw-channel nw-channel--${ch.tone} nw-channel--xs`}>{ch.code === 'VENDOR_PDF' ? 'PDF' : ch.code === 'USER' ? 'User' : ch.code === 'ESSA_SYSTEM' ? 'ESSA' : ch.code === 'EXTERNAL' ? 'Portal' : 'SAP'}</em>
+                  <em className={`nw-channel nw-channel--${ch.tone} nw-channel--xs`}>{CHANNEL_SHORT[ch.code]}</em>
                 </th>
               )
             })}
             <th>Match type</th>
-            <th>Tolerance / rule</th>
-            <th>Level</th>
-            <th>On fail</th>
           </tr>
         </thead>
-        {grouped.map((g) => (
-          <tbody key={g.code}>
-            <tr className="nw-matrix__grouprow">
-              <td colSpan={colSpan}>
-                {RULE_GROUPS[g.code].label} <span>{g.rules.length} rules</span>
-              </td>
-            </tr>
-            {g.rules.map((r) => {
+        <tbody>
+            {ordered.map((r) => {
               const off = categoryCode && (r.disabledCategories || []).includes(categoryCode)
               const warn = warningFor(r)
               return (
                 <tr
                   key={r.id}
                   className={`${selectedId === r.id ? 'is-selected' : ''}${off ? ' is-off' : ''}`}
-                  onClick={() => onSelect?.(r.id)}>
-                  <td className="nw-mono">{r.ruleKey}</td>
-                  <td className="nw-matrix__dp">
-                    <button type="button" className="nw-matrix__name" onClick={(e) => { e.stopPropagation(); onEdit?.(r) }}>
+                  onClick={() => onOpen?.(r)}>
+                  <td className="nw-matrix__dp nw-sticky nw-sticky--dp">
+                    <button type="button" className="nw-matrix__name" onClick={(e) => { e.stopPropagation(); onOpen?.(r) }}>
                       {r.dataPoint}
                     </button>
                     <span className="nw-matrix__sub">
-                      {r.refs ? <span>{r.refs}</span> : null}
-                      {r.status === 'CONFIRM' ? <span className="nw-status nw-status--warn nw-status--xs">Confirm</span> : null}
+                      {categoryCode && r.scope !== 'CATEGORY' ? <span className="nw-status nw-status--neutral nw-status--xs" title="Inherited from Common rules">Common</span> : null}
                       {off ? <span className="nw-status nw-status--neutral nw-status--xs">Off here</span> : null}
                       {r.scope === 'CATEGORY' && !categoryCode ? <span>{scopeLabel(r)}</span> : null}
                       {warn ? <span className="nw-matrix__warn"><AlertTriangle size={11} aria-hidden /> {warn}</span> : null}
                     </span>
                   </td>
                   {cols.map((c) => {
+                    if (r.source === c.code) {
+                      return (
+                        <td
+                          key={c.code}
+                          className="nw-matrix__cell nw-matrix__cell--source"
+                          title={`${sourceLabel(c.code)} is the source document for this rule`}
+                          aria-label={`${r.dataPoint}: ${sourceLabel(c.code)} is the source document`}
+                        />
+                      )
+                    }
                     const role = roleFor(r, c.code)
-                    const label = `${r.dataPoint} on ${sourceLabel(c.code)}: ${role ? ROLE_WORD[role] : 'not used'}`
+                    const label = `${r.dataPoint} on ${sourceLabel(c.code)}: ${role ? ROLE_WORD[role] : 'not compared'}`
                     const isOpen = menu && menu.rule.id === r.id && menu.code === c.code
                     return (
                       <td key={c.code} className="nw-matrix__cell">
@@ -172,14 +198,10 @@ export default function RuleMatrix({ rules, categoryCode, selectedId, onSelect, 
                     )
                   })}
                   <td><TypeChip type={r.ruleType} /></td>
-                  <td className="nw-matrix__tol">{r.criteriaText || criteriaSummary(r)}</td>
-                  <td className="nw-matrix__scope">{MATCH_LEVELS[r.matchLevel]?.label || 'Header'}</td>
-                  <td><FailChip action={r.onFail} /></td>
                 </tr>
               )
             })}
-          </tbody>
-        ))}
+        </tbody>
       </table>
       {menu ? (
         <CellRoleMenu

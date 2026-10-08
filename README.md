@@ -19,7 +19,7 @@ Terminal shortcuts: `./ESSA.command start | stop | pull | push | restore | check
 | File | Does |
 |---|---|
 | `Run App.command` | Starts everything (same as ESSA → 1) **and** applies new DB migrations the local DB is missing (e.g. `030_AP_MATCH_RULE_PG.sql` for N-Way Matching) |
-| `GitHub Pull.command` | Warns if you have unpushed work, then pulls `develop` (backs up local edits), re-applies local-dev settings, installs new packages |
+| `GitHub Pull.command` | Pulls `develop`. If you have unpushed work it asks: **K = keep my changes** (pull underneath them, recommended) or **R = replace** them (backup kept). Then re-applies local-dev settings and installs new packages |
 | `GitHub Push.command` | Lists what changed in each repo, then commits + pushes. Local-dev files (`.env`, `.env.dev`, `src/index.ts`, Login) are never pushed |
 
 All three use `ESSA.command` underneath, so keep it in this folder.

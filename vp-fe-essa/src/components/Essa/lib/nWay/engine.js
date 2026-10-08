@@ -130,7 +130,12 @@ const displayValue = (value) => {
 
 const findFieldValue = (fields = [], dataKey) => {
   const dp = DATA_POINTS[dataKey]
-  if (!dp) return null
+  if (!dp) {
+    // Rules built on a Fields to Capture field use the field name as their key.
+    const wanted = normKey(dataKey)
+    const exact = wanted && fields.find((f) => normKey(f.fieldKey || f.key) === wanted && !isBlank(displayValue(f.value)))
+    return exact ? { value: displayValue(exact.value), fieldLabel: exact.label || exact.fieldKey } : null
+  }
   const keys = new Set(dp.keys)
   const byKey = fields.find((f) => keys.has(normKey(f.fieldKey || f.key)) && !isBlank(displayValue(f.value)))
   if (byKey) return { value: displayValue(byKey.value), fieldLabel: byKey.label || byKey.fieldKey }
@@ -331,7 +336,7 @@ export const rulesForCategory = (rules = [], categoryCode) =>
 
 /* ── Rule evaluation ──────────────────────────────────────────────────── */
 
-const SELF_EVALUATED = new Set(['EXACT', 'LOGICAL', 'TOLERANCE'])
+const SELF_EVALUATED = new Set(['EXACT', 'LOGICAL', 'TOLERANCE', 'EXACT_UNIQUENESS'])
 
 const pairsFor = (rule) => {
   const targets = (rule.targets || []).filter((t) => t.requirement !== 'EXTRACT')
@@ -473,7 +478,7 @@ export const evaluateRule = (rule, ctx) => {
     }
   } else if (!clientSide) {
     own = 'pending'
-    headline = `${{ UNIQUENESS: 'History', AUTHENTICITY: 'Register', CALCULATION: 'Calculation' }[rule.ruleType] || 'Server-side'} check runs on the server`
+    headline = `${{ UNIQUENESS: 'History', AUTHENTICITY: 'Register', AUTHENTICATE: 'Approval', CALCULATION: 'Calculation', CALCULATION_TOLERANCE: 'Calculation' }[rule.ruleType] || 'Server-side'} check runs on the server`
   } else {
     own = 'pending'
     headline = `${srcMeta?.label || 'Source'}-only rule — evaluated on the server`

@@ -1,614 +1,664 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import {
-  AlertTriangle,
-  ArrowDown,
-  ArrowUp,
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Layers,
-  Plus,
-  Save,
-  ShieldCheck,
-  Trash2
-} from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { ArrowDown, ArrowUp, BellRing, ChevronsUpDown, Mail, MessageSquare, Pencil, Plus, ShieldAlert, Trash2 } from 'lucide-react'
 import { connect } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
-import { HeaderBar } from 'components/Common/HeaderBar'
 import { LeftPageContainer } from 'pages/vendor/dashboard/dashboard.styles'
+import { PageHeader } from '../PageShell'
+import { Card } from '../ui/Card'
+import { Button } from '../ui/Button'
+import { Dialog } from '../ui/Dialog'
+import { Input } from '../ui/Input'
+import { Select } from '../ui/Select'
 import { ADMIN_USER_TYPE } from 'constants/userType'
+import { DASHBOARD } from 'constants/url'
 import '../../../assets/scss/essa/dashboard.scss'
 
-const ROLES = [
-  { value: 'hos', label: 'HOS — Head of Section' },
-  { value: 'hod', label: 'HOD — Head of Department' },
-  { value: 'hof', label: 'HOF — Head of Function' },
-  { value: 'sth', label: 'STH — Operations & Site Head' },
-  { value: 'gfd', label: 'GFD — Group Functional Director' }
+const LEVELS = [1, 2, 3, 4]
+
+const DOA_ROLES = [
+  { value: 'HOS', label: 'Head of Section' },
+  { value: 'HOD', label: 'Head of Department' },
+  { value: 'HOF', label: 'Head of Function' },
+  { value: 'OSH_STH', label: 'Operations & Site Head' },
+  { value: 'GFD', label: 'Group Functional Director' }
 ]
 
-const ROLE_LABEL = Object.fromEntries(ROLES.map((r) => [r.value, r.label]))
-const roleShort = (v) => (v ? v.toUpperCase() : '—')
-const roleName = (v) => (ROLE_LABEL[v]?.split('—')[1] || '').trim() || v
+const ROLE_LABEL = {
+  HOS: 'Head of Section',
+  HOD: 'Head of Department',
+  HOF: 'Head of Function',
+  OSH_STH: 'Operations & Site Head',
+  GFD: 'Group Functional Director',
+  AP_REVIEWER: 'AP Supervisor',
+  TAX_REVIEWER: 'Tax Reviewer'
+}
 
-const DUMMY_MATRIX_RULES = [
-  { amount_min: 0, amount_max: 2_000_000, level: 1, role: 'hos', description: 'HOS sign-off for petty invoices' },
-  { amount_min: 2_000_000, amount_max: 5_000_000, level: 1, role: 'hos', description: 'HOS reviews mid-band invoice' },
-  { amount_min: 2_000_000, amount_max: 5_000_000, level: 2, role: 'hod', description: 'HOD final approval' },
-  { amount_min: 5_000_000, amount_max: 15_000_000, level: 1, role: 'hod', description: 'HOD reviews' },
-  { amount_min: 5_000_000, amount_max: 15_000_000, level: 2, role: 'hof', description: 'HOF final approval' },
-  { amount_min: 15_000_000, amount_max: 50_000_000, level: 1, role: 'hod', description: 'HOD reviews' },
-  { amount_min: 15_000_000, amount_max: 50_000_000, level: 2, role: 'hof', description: 'HOF reviews' },
-  { amount_min: 15_000_000, amount_max: 50_000_000, level: 3, role: 'sth', description: 'Site Head final approval' },
-  { amount_min: 50_000_000, amount_max: 100_000_000, level: 1, role: 'hod', description: 'HOD reviews' },
-  { amount_min: 50_000_000, amount_max: 100_000_000, level: 2, role: 'hof', description: 'HOF reviews' },
-  { amount_min: 50_000_000, amount_max: 100_000_000, level: 3, role: 'sth', description: 'Site Head reviews' },
-  { amount_min: 50_000_000, amount_max: 100_000_000, level: 4, role: 'gfd', description: 'GFD final approval' },
-  { amount_min: 100_000_000, amount_max: null, level: 1, role: 'hod', description: 'HOD reviews (>100M IDR)' },
-  { amount_min: 100_000_000, amount_max: null, level: 2, role: 'hof', description: 'HOF reviews' },
-  { amount_min: 100_000_000, amount_max: null, level: 3, role: 'sth', description: 'Site Head reviews' },
-  { amount_min: 100_000_000, amount_max: null, level: 4, role: 'gfd', description: 'GFD final approval' }
+const DOA_ROLE_LEGEND = [
+  { code: 'HOS', name: 'Head of Section' },
+  { code: 'HOD', name: 'Head of Department' },
+  { code: 'HOF', name: 'Head of Function' },
+  { code: 'OSH / STH', name: 'Operations & Site Head' },
+  { code: 'GFD', name: 'Group Functional Director' }
 ]
+
+const REMINDER_SCHEDULE = [
+  { n: 1, label: '1st reminder', after: '24 hours', recipient: 'Approver', channel: 'Email' },
+  { n: 2, label: '2nd reminder', after: '48 hours', recipient: 'Approver', channel: 'Email' },
+  { n: 3, label: '3rd reminder', after: '3 days', recipient: 'Approver + AP Manager', channel: 'Email' },
+  { n: 4, label: 'Final reminder', after: '5 days', recipient: 'Approver + AP Manager', channel: 'Email' }
+]
+
+const ESCALATION_LADDER = [
+  { n: 1, trigger: 'No action after 5-day final reminder', action: 'Auto-escalate to next DoA level', target: 'Next approver' },
+  { n: 2, trigger: 'No further DoA level exists', action: 'Escalate to AP Manager', target: 'AP Manager' },
+  { n: 3, trigger: 'All escalations', action: 'Log timestamp and SLA-breach reason', target: 'Audit trail' }
+]
+
+const VENDOR_CHASE = [
+  { n: 1, label: '1st notification', trigger: 'On detection of missing document', recipient: 'Vendor', drafter: 'System · AP sends' },
+  { n: 2, label: '1st reminder', trigger: 'Every 7 days while document still missing', recipient: 'Vendor', drafter: 'System · AP sends' },
+  { n: 3, label: 'Escalation', trigger: 'After 1st reminder with no response', recipient: 'Head of Function (HOF)', drafter: 'System' }
+]
+
+const WORKFLOW = {
+  id: 'wf-nonpo',
+  name: 'Non-PO Invoice Approval',
+  category: 'Non-PO Invoice',
+  status: 'ACTIVE',
+  steps: [
+    { stepNo: 1, name: 'AP Review', role: 'AP_REVIEWER', approverType: 'ROLE', slaHours: 24 },
+    { stepNo: 2, name: 'Approval Hierarchy', role: 'AP_REVIEWER', approverType: 'DOA', slaHours: 48, escalationTo: 'AP_REVIEWER' },
+    { stepNo: 3, name: 'Tax Review', role: 'TAX_REVIEWER', approverType: 'ROLE', taxStep: true, slaHours: 24 },
+    { stepNo: 4, name: 'Final Approval', role: 'AP_REVIEWER', approverType: 'ROLE', amountThresholdMin: 100_000_000, slaHours: 24 }
+  ]
+}
+
+function displayRole(role) {
+  if (!role) return '—'
+  return ROLE_LABEL[role] || role
+}
+
+function fmtMoney(amount) {
+  if (amount == null) return '—'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'IDR',
+    currencyDisplay: 'code',
+    maximumFractionDigits: 0
+  }).format(amount)
+}
+
+function emptyLevels() {
+  return { 1: '', 2: '', 3: '', 4: '' }
+}
+
+function initialBands() {
+  const rows = [
+    [0, 2_000_000, ['HOS']],
+    [2_000_001, 5_000_000, ['HOS', 'HOD']],
+    [5_000_001, 15_000_000, ['HOD', 'HOF']],
+    [15_000_001, 50_000_000, ['HOD', 'HOF', 'OSH_STH']],
+    [50_000_001, 100_000_000, ['HOD', 'HOF', 'OSH_STH', 'GFD']],
+    [100_000_001, null, ['HOD', 'HOF', 'OSH_STH', 'GFD']]
+  ]
+  return rows.map(([minAmount, maxAmount, roles], i) => ({
+    id: `band-${i + 1}`,
+    minAmount,
+    maxAmount,
+    active: true,
+    levels: { ...emptyLevels(), ...Object.fromEntries(roles.map((role, n) => [n + 1, role])) }
+  }))
+}
 
 let _uid = 0
-const uid = () => `b${++_uid}`
+const uid = () => `band-${Date.now()}-${++_uid}`
 
-function fmtCompact(n) {
-  if (n == null) return '∞'
-  const a = Math.abs(n)
-  const f = (v) => v.toLocaleString('id-ID', { maximumFractionDigits: 1 })
-  if (a >= 1_000_000_000) return `${f(n / 1_000_000_000)} M`
-  if (a >= 1_000_000) return `${f(n / 1_000_000)} jt`
-  if (a >= 1_000) return `${f(n / 1_000)} rb`
-  return f(n)
+function Tag({ tone = 'neutral', children }) {
+  return <span className={`wf-tag wf-tag-${tone}`}>{children}</span>
 }
 
-function bandLabel(min, max) {
-  if (max == null) return `${fmtCompact(min)} and above`
-  if (min === 0) return `up to ${fmtCompact(max)}`
-  return `${fmtCompact(min)} – ${fmtCompact(max)}`
-}
-
-function toBands(rules) {
-  const map = new Map()
-  for (const r of rules) {
-    const key = `${r.amount_min}|${r.amount_max ?? 'INF'}`
-    if (!map.has(key)) {
-      map.set(key, { id: uid(), min: r.amount_min, max: r.amount_max, levels: [] })
-    }
-    map.get(key).levels.push({
-      id: uid(),
-      level: r.level,
-      role: r.role,
-      description: r.description || ''
-    })
-  }
-  return [...map.values()]
-    .sort((a, b) => (a.min ?? 0) - (b.min ?? 0))
-    .map((b) => ({ ...b, levels: b.levels.sort((x, y) => x.level - y.level) }))
-}
-
-function fromBands(bands) {
-  const out = []
-  for (const b of bands) {
-    b.levels.forEach((lv, i) => {
-      out.push({
-        amount_min: b.min ?? 0,
-        amount_max: b.max ?? null,
-        level: i + 1,
-        role: lv.role,
-        description: lv.description || null
-      })
-    })
-  }
-  return out
-}
-
-function analyze(bands) {
-  const sorted = [...bands].sort((a, b) => (a.min ?? 0) - (b.min ?? 0))
-  const issues = {}
-  const rail = []
-  const add = (id, msg) => {
-    issues[id] = issues[id] || []
-    issues[id].push(msg)
-  }
-
-  if (sorted.length && (sorted[0].min ?? 0) > 0) {
-    rail.push({ kind: 'gap', from: 0, to: sorted[0].min })
-  }
-
-  sorted.forEach((b, i) => {
-    if (!b.levels.length) add(b.id, 'No approvers yet — invoices in this band cannot be routed.')
-    if (b.max != null && b.max <= (b.min ?? 0)) add(b.id, '“To” must be greater than “From”.')
-
-    rail.push({ kind: 'band', band: b })
-
-    const next = sorted[i + 1]
-    if (next) {
-      if (b.max == null) {
-        add(b.id, 'This band is open-ended but isn’t the highest — bands above it can never be reached.')
-      } else if ((next.min ?? 0) > b.max) {
-        rail.push({ kind: 'gap', from: b.max, to: next.min })
-        add(
-          b.id,
-          `Gap before the next band — amounts ${fmtCompact(b.max)}–${fmtCompact(next.min)} aren’t covered.`
-        )
-      } else if ((next.min ?? 0) < b.max) {
-        rail.push({ kind: 'overlap', from: next.min, to: b.max })
-        add(b.id, 'Overlaps the next band — an invoice could match two rules.')
-        add(next.id, 'Overlaps the previous band.')
-      }
-    } else if (b.max != null) {
-      rail.push({ kind: 'gap', from: b.max, to: null })
-      add(
-        b.id,
-        `Highest band has an upper limit — invoices above ${fmtCompact(b.max)} won’t route. Remove the upper limit to catch them.`
-      )
-    }
-  })
-
-  const problems = Object.values(issues).reduce((n, a) => n + a.length, 0)
-  return { sorted, issues, rail, problems }
-}
-
-function MoneyInput({ value, onChange, disabled, placeholder }) {
-  const display = value == null || value === '' ? '' : Number(value).toLocaleString('id-ID')
+function ChannelTag({ value }) {
+  const teams = value.includes('Teams')
+  const email = value.includes('Email')
+  const platform = value.includes('platform')
   return (
-    <input
-      className="dx-input dx-money"
-      inputMode="numeric"
-      disabled={disabled}
-      placeholder={placeholder}
-      value={display}
-      onChange={(e) => {
-        const digits = e.target.value.replace(/\D/g, '')
-        onChange(digits === '' ? null : Number(digits))
-      }}
-    />
+    <span className="wf-channels">
+      {teams && (
+        <span className="wf-channel wf-channel-teams">
+          <MessageSquare size={10} /> Teams
+        </span>
+      )}
+      {email && (
+        <span className="wf-channel wf-channel-email">
+          <Mail size={10} /> Email
+        </span>
+      )}
+      {platform && <span className="wf-channel wf-channel-platform">In-platform</span>}
+    </span>
   )
 }
 
-function EssaApprovalMatrix({ userInfo: { userType } }) {
-  const { t } = useTranslation('sidebar')
-  const editable = userType === ADMIN_USER_TYPE
+function SortIcon({ active, dir }) {
+  if (!active) return <ChevronsUpDown size={12} className="wf-sort-idle" aria-hidden />
+  return dir === 'asc' ? <ArrowUp size={12} aria-hidden /> : <ArrowDown size={12} aria-hidden />
+}
 
-  const [bands, setBands] = useState([])
-  const [dirty, setDirty] = useState(false)
-  const [savedAt, setSavedAt] = useState(null)
-  const [collapsed, setCollapsed] = useState({})
-  const [saving, setSaving] = useState(false)
-  const loaded = useRef(false)
+function DenseTable({ columns, rows, rowKey, sort, onSort }) {
+  return (
+    <div className="wf-table-wrap">
+      <table className="wf-table">
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th key={c.key} className={[c.align === 'right' && 'is-right', c.align === 'center' && 'is-center', c.sticky && 'wf-sticky'].filter(Boolean).join(' ')}>
+                {c.sortable ? (
+                  <button type="button" className="wf-sort" onClick={() => onSort(c.key)}>
+                    {c.header}
+                    <SortIcon active={sort?.key === c.key} dir={sort?.dir} />
+                  </button>
+                ) : (
+                  c.header
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={rowKey(row)} className={i % 2 === 1 ? 'is-zebra' : undefined}>
+              {columns.map((c) => (
+                <td key={c.key} className={[c.align === 'right' && 'is-right', c.align === 'center' && 'is-center', c.sticky && 'wf-sticky'].filter(Boolean).join(' ')}>
+                  {c.render(row)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
-  useEffect(() => {
-    setBands(toBands(DUMMY_MATRIX_RULES))
-    loaded.current = true
-  }, [])
-
-  const { issues, rail, problems } = useMemo(() => analyze(bands), [bands])
-
-  const mutate = (fn) => {
-    setBands((prev) => fn(structuredClone(prev)))
-    setDirty(true)
-  }
-  const updateBand = (id, patch) => mutate((bs) => bs.map((b) => (b.id === id ? { ...b, ...patch } : b)))
-  const removeBand = (id) => mutate((bs) => bs.filter((b) => b.id !== id))
-  const updateLevel = (bid, lid, patch) =>
-    mutate((bs) =>
-      bs.map((b) =>
-        b.id === bid ? { ...b, levels: b.levels.map((l) => (l.id === lid ? { ...l, ...patch } : l)) } : b
-      )
-    )
-  const addLevel = (bid) =>
-    mutate((bs) =>
-      bs.map((b) =>
-        b.id === bid ? { ...b, levels: [...b.levels, { id: uid(), role: 'hod', description: '' }] } : b
-      )
-    )
-  const removeLevel = (bid, lid) =>
-    mutate((bs) =>
-      bs.map((b) => (b.id === bid ? { ...b, levels: b.levels.filter((l) => l.id !== lid) } : b))
-    )
-  const moveLevel = (bid, lid, dir) =>
-    mutate((bs) =>
-      bs.map((b) => {
-        if (b.id !== bid) return b
-        const i = b.levels.findIndex((l) => l.id === lid)
-        const j = i + dir
-        if (j < 0 || j >= b.levels.length) return b
-        const lv = [...b.levels]
-        ;[lv[i], lv[j]] = [lv[j], lv[i]]
-        return { ...b, levels: lv }
+function workflowCells(band) {
+  const cells = []
+  for (const step of WORKFLOW.steps) {
+    if (step.approverType === 'DOA') {
+      for (const level of LEVELS) {
+        const role = band.levels[level]
+        if (role) {
+          cells.push({
+            key: `s${step.stepNo}-doa${level}`,
+            name: displayRole(role),
+            sub: `Approval hierarchy · DoA level ${level}`,
+            sla: step.slaHours,
+            escalationTo: step.escalationTo
+          })
+        }
+      }
+    } else if (step.amountThresholdMin == null || (band.maxAmount ?? Number.POSITIVE_INFINITY) >= step.amountThresholdMin) {
+      cells.push({
+        key: `s${step.stepNo}`,
+        name: step.name,
+        sub: displayRole(step.role),
+        sla: step.slaHours,
+        tax: step.taxStep,
+        escalationTo: step.escalationTo
       })
-    )
-  const addBand = () => {
-    setBands((prev) => {
-      const sorted = [...prev].sort((a, b) => (a.min ?? 0) - (b.min ?? 0))
-      const last = sorted[sorted.length - 1]
-      const start = last && last.max != null ? last.max : last ? (last.min ?? 0) + 1 : 0
-      return [
-        ...prev,
-        { id: uid(), min: start, max: null, levels: [{ id: uid(), role: 'hos', description: '' }] }
-      ]
-    })
-    setDirty(true)
-  }
-
-  const save = async () => {
-    setSaving(true)
-    try {
-      fromBands(bands)
-      setDirty(false)
-      setSavedAt(new Date())
-      toast.success('Approval matrix saved')
-    } finally {
-      setSaving(false)
     }
   }
+  return cells
+}
+
+function EssaApprovalMatrix({ userInfo: { userType } }) {
+  const canEdit = userType === ADMIN_USER_TYPE
+  const [bands, setBands] = useState(initialBands)
+  const [editing, setEditing] = useState(null)
+  const [deleting, setDeleting] = useState(null)
+  const [sort, setSort] = useState(null)
+
+  const hierarchy = useMemo(() => [...bands].sort((a, b) => a.minAmount - b.minAmount), [bands])
+
+  const overlaps = useMemo(() => {
+    if (!editing) return false
+    const min = editing.minAmount
+    const max = editing.maxAmount ?? Number.POSITIVE_INFINITY
+    if (max <= min) return true
+    return hierarchy.some((row) => {
+      if (editing.id && row.id === editing.id) return false
+      const rowMax = row.maxAmount ?? Number.POSITIVE_INFINITY
+      return min <= rowMax && row.minAmount <= max
+    })
+  }, [editing, hierarchy])
+
+  const rows = useMemo(() => {
+    const list = hierarchy.map((row, i) => ({ ...row, bandNo: i + 1 }))
+    if (!sort) return list
+    const value = (row) => (sort.key === 'to' ? row.maxAmount ?? Number.MAX_SAFE_INTEGER : row.minAmount)
+    return [...list].sort((a, b) => (sort.dir === 'asc' ? value(a) - value(b) : value(b) - value(a)))
+  }, [hierarchy, sort])
+
+  const toggleSort = (key) => {
+    setSort((current) => {
+      if (!current || current.key !== key) return { key, dir: 'asc' }
+      if (current.dir === 'asc') return { key, dir: 'desc' }
+      return null
+    })
+  }
+
+  const openEditor = (row) => {
+    setEditing({
+      id: row?.id ?? null,
+      minAmount: row?.minAmount ?? 0,
+      maxAmount: row?.maxAmount ?? null,
+      levelRoles: row ? { ...row.levels } : emptyLevels()
+    })
+  }
+
+  const saveBand = () => {
+    if (!editing || overlaps) return
+    const next = {
+      id: editing.id || uid(),
+      minAmount: editing.minAmount,
+      maxAmount: editing.maxAmount,
+      active: true,
+      levels: { ...editing.levelRoles }
+    }
+    setBands((prev) => (editing.id ? prev.map((row) => (row.id === editing.id ? { ...row, ...next, active: row.active } : row)) : [...prev, next]))
+    setEditing(null)
+    toast.success('Approval configuration updated. Applies to invoices that enter approval from now on.')
+  }
+
+  const deleteBand = () => {
+    if (!deleting) return
+    setBands((prev) => prev.filter((row) => row.id !== deleting.id))
+    setDeleting(null)
+    toast.success('Approval configuration updated. Applies to invoices that enter approval from now on.')
+  }
+
+  const hierarchyColumns = [
+    {
+      key: 'band',
+      header: 'Band',
+      render: (row) => <span className="wf-strong">Band {row.bandNo}</span>
+    },
+    {
+      key: 'from',
+      header: 'From Amount',
+      align: 'right',
+      sortable: true,
+      render: (row) => <span className="wf-nowrap">{fmtMoney(row.minAmount)}</span>
+    },
+    {
+      key: 'to',
+      header: 'To Amount',
+      align: 'right',
+      sortable: true,
+      render: (row) => <span className="wf-nowrap">{row.maxAmount != null ? fmtMoney(row.maxAmount) : 'No limit'}</span>
+    },
+    ...LEVELS.map((level) => ({
+      key: `level-${level}`,
+      header: `Level ${level}`,
+      align: 'center',
+      render: (row) => (row.levels[level] ? <Tag tone="info">{displayRole(row.levels[level])}</Tag> : <span className="wf-dash">—</span>)
+    })),
+    {
+      key: 'status',
+      header: 'Status',
+      render: (row) => <Tag tone={row.active ? 'success' : 'neutral'}>{row.active ? 'Enabled' : 'Disabled'}</Tag>
+    },
+    {
+      key: 'actions',
+      header: 'Action',
+      align: 'center',
+      sticky: true,
+      render: (row) =>
+        canEdit ? (
+          <div className="wf-row-actions">
+            <Button size="sm" variant="ghost" className="wf-icon-btn" aria-label="Edit amount range" title="Edit this amount range and its levels" onClick={() => openEditor(row)}>
+              <Pencil size={13} />
+            </Button>
+            <Button size="sm" variant="ghost" className="wf-icon-btn is-danger" aria-label="Delete amount range" title="Delete this amount range" onClick={() => setDeleting(row)}>
+              <Trash2 size={13} />
+            </Button>
+          </div>
+        ) : null
+    }
+  ]
 
   return (
     <LeftPageContainer>
-      <div className="essa-dashboard">
-        <HeaderBar title="Approval Matrix" slug={t('approvalMatrix')} showBackArrow={false} />
+      <div className="essa-dashboard wf-page">
+        <style>{pageCss}</style>
+        <div className="wf-stack">
+          <PageHeader
+            breadcrumb={[
+              { label: 'Home', to: `/${userType}${DASHBOARD}` },
+              { label: 'Administration' },
+              { label: 'Workflows & Approval Hierarchy' }
+            ]}
+            title="Workflows & Approval Hierarchy"
+          />
 
-        <style>{stepperCss}</style>
-
-        <div className="dx-page dx-stack">
-          <p className="text-muted" style={{ fontSize: 13, margin: 0 }}>
-            Which roles approve an invoice — and in what order — based on its amount.
-          </p>
-
-          {!editable && (
-            <div className="dx-note dx-note-warn">
-              <ShieldCheck size={14} /> Read-only — only an Administrator can change the approval matrix.
-            </div>
-          )}
-
-          <div className="dx-card" style={{ padding: '18px 20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-              <Layers size={15} style={{ color: 'var(--brand-primary-color, var(--dx-primary-600))' }} />
-              <span style={{ fontSize: 13, fontWeight: 700 }}>Amount coverage</span>
-              <span style={{ flex: 1 }} />
-              {problems === 0 ? (
-                <span className="dx-pill dx-pill-ok">
-                  <Check size={12} /> No gaps or overlaps
+          <Card
+            pad={false}
+            title={
+              <span>
+                Approval hierarchy
+                <span className="wf-card-sub">Non-PO</span>
+              </span>
+            }
+            actions={
+              canEdit ? (
+                <Button variant="secondary" size="sm" className="wf-add" onClick={() => openEditor()}>
+                  <Plus size={13} /> Add amount range
+                </Button>
+              ) : null
+            }
+          >
+            <div className="wf-legend">
+              <span className="wf-legend-label">Roles</span>
+              {DOA_ROLE_LEGEND.map((role) => (
+                <span key={role.code} className="wf-legend-pill">
+                  <strong>{role.code}</strong> {role.name}
                 </span>
-              ) : (
-                <span className="dx-pill dx-pill-warn">
-                  <AlertTriangle size={12} /> {problems} issue{problems > 1 ? 's' : ''} to fix
-                </span>
-              )}
+              ))}
             </div>
+            <DenseTable columns={hierarchyColumns} rows={rows} rowKey={(row) => row.id} sort={sort} onSort={toggleSort} />
+          </Card>
 
-            <div className="dx-rail">
-              {rail.map((seg, i) =>
-                seg.kind === 'band' ? (
-                  <div key={i} className="dx-rail-seg" title={bandLabel(seg.band.min, seg.band.max)}>
-                    <div className="dx-rail-bar" />
-                    <div className="dx-rail-cap">{bandLabel(seg.band.min, seg.band.max)}</div>
-                    <div className="dx-rail-sub">
-                      {seg.band.levels.length} approver{seg.band.levels.length !== 1 ? 's' : ''}
+          <Card
+            title={
+              <span>
+                {WORKFLOW.name}
+                <span className="wf-card-sub">{WORKFLOW.category}</span>
+              </span>
+            }
+            actions={<Tag tone="success">{WORKFLOW.status === 'ACTIVE' ? 'Active' : WORKFLOW.status}</Tag>}
+          >
+            <div className="wf-flows">
+              {hierarchy.map((band, index) => {
+                const cells = workflowCells(band)
+                return (
+                  <div key={band.id}>
+                    <div className="wf-flow-meta">
+                      <span className="wf-band-pill">Band {index + 1}</span>
+                      <span className="wf-strong">
+                        {fmtMoney(band.minAmount)} — {band.maxAmount != null ? fmtMoney(band.maxAmount) : 'No limit'}
+                      </span>
+                      <span className="wf-muted">
+                        · {cells.length} approval level{cells.length === 1 ? '' : 's'}
+                      </span>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    key={i}
-                    className={`dx-rail-seg dx-rail-${seg.kind}`}
-                    title={seg.kind === 'gap' ? 'Uncovered amounts' : 'Overlapping bands'}
-                  >
-                    <div className="dx-rail-bar" />
-                    <div className="dx-rail-cap">{seg.kind === 'gap' ? 'Gap' : 'Overlap'}</div>
-                    <div className="dx-rail-sub">
-                      {seg.kind === 'gap'
-                        ? seg.to == null
-                          ? `above ${fmtCompact(seg.from)}`
-                          : `${fmtCompact(seg.from)}–${fmtCompact(seg.to)}`
-                        : `${fmtCompact(seg.from)}–${fmtCompact(seg.to)}`}
-                    </div>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-
-          {editable && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-              <button type="button" className="dx-btn dx-btn-ghost dx-btn-sm" onClick={addBand}>
-                <Plus size={13} /> Add amount band
-              </button>
-              <button
-                type="button"
-                className="dx-btn dx-btn-primary dx-btn-sm"
-                disabled={!dirty || saving}
-                onClick={save}
-              >
-                <Save size={13} /> {saving ? 'Saving…' : dirty ? 'Save changes' : savedAt ? 'Saved' : 'No changes'}
-              </button>
-            </div>
-          )}
-
-          <div className="dx-stack-sm">
-            {bands.map((b) => {
-              const bandIssues = issues[b.id] || []
-              const isOpen = !collapsed[b.id]
-              const hasIssue = bandIssues.length > 0
-              return (
-                <div key={b.id} className="dx-card dx-band" data-issue={hasIssue ? 1 : 0}>
-                  <div className="dx-band-head">
-                    <button
-                      type="button"
-                      className="dx-band-toggle"
-                      onClick={() => setCollapsed((c) => ({ ...c, [b.id]: isOpen }))}
-                      title={isOpen ? 'Collapse' : 'Expand'}
-                    >
-                      {isOpen ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-                    </button>
-
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div className="dx-band-title">{bandLabel(b.min, b.max)}</div>
-                      <div className="dx-band-meta">
-                        {b.levels.length ? (
-                          <>
-                            Approval chain:&nbsp;
-                            {b.levels.map((l, i) => (
-                              <span key={l.id}>
-                                <span className="dx-chip-mini">{roleShort(l.role)}</span>
-                                {i < b.levels.length - 1 && <span className="dx-arrow-mini">→</span>}
-                              </span>
-                            ))}
-                          </>
-                        ) : (
-                          <span className="text-warning">No approvers set</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <span className={`dx-pill ${hasIssue ? 'dx-pill-warn' : 'dx-pill-soft'}`}>
-                      {b.levels.length} level{b.levels.length !== 1 ? 's' : ''}
-                    </span>
-
-                    {editable && (
-                      <button
-                        type="button"
-                        className="dx-icon-btn"
-                        title="Remove band"
-                        onClick={() => {
-                          if (window.confirm(`Remove the ${bandLabel(b.min, b.max)} band?`)) removeBand(b.id)
-                        }}
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
-                  </div>
-
-                  {isOpen && (
-                    <div className="dx-band-body">
-                      <div className="dx-range">
-                        <label className="dx-range-field">
-                          <span className="dx-range-lbl">From (IDR)</span>
-                          <MoneyInput
-                            value={b.min}
-                            disabled={!editable}
-                            onChange={(v) => updateBand(b.id, { min: v ?? 0 })}
-                            placeholder="0"
-                          />
-                          <span className="dx-range-hint">{fmtCompact(b.min ?? 0)}</span>
-                        </label>
-
-                        <span className="dx-range-dash">→</span>
-
-                        <label className="dx-range-field">
-                          <span className="dx-range-lbl">To (IDR)</span>
-                          {b.max == null ? (
-                            <div className="dx-input dx-input-static">
-                              No upper limit · catches everything above
-                            </div>
-                          ) : (
-                            <MoneyInput
-                              value={b.max}
-                              disabled={!editable}
-                              onChange={(v) => updateBand(b.id, { max: v })}
-                              placeholder="e.g. 5.000.000"
-                            />
-                          )}
-                          <span className="dx-range-hint">{b.max == null ? '∞' : fmtCompact(b.max)}</span>
-                        </label>
-
-                        {editable && (
-                          <label className="dx-range-toggle">
-                            <input
-                              type="checkbox"
-                              checked={b.max == null}
-                              onChange={(e) =>
-                                updateBand(b.id, { max: e.target.checked ? null : (b.min ?? 0) + 1_000_000 })
-                              }
-                            />
-                            No upper limit
-                          </label>
-                        )}
-                      </div>
-
-                      {bandIssues.map((msg, i) => (
-                        <div key={i} className="dx-note dx-note-warn dx-note-inline">
-                          <AlertTriangle size={13} /> {msg}
-                        </div>
-                      ))}
-
-                      <div className="dx-stepper">
-                        {b.levels.map((l, i) => (
-                          <div key={l.id} className="dx-stepper-row">
-                            <div className="dx-stepper-node">
-                              <span className="dx-stepper-num">{i + 1}</span>
-                            </div>
-                            <div className="dx-stepper-card">
-                              <div className="dx-stepper-main">
-                                <select
-                                  className="dx-select"
-                                  disabled={!editable}
-                                  value={l.role}
-                                  onChange={(e) => updateLevel(b.id, l.id, { role: e.target.value })}
-                                >
-                                  {ROLES.map((o) => (
-                                    <option key={o.value} value={o.value}>
-                                      {o.label}
-                                    </option>
-                                  ))}
-                                </select>
-                                <input
-                                  className="dx-input"
-                                  disabled={!editable}
-                                  value={l.description}
-                                  placeholder={`What does ${roleName(l.role)} do at this step?`}
-                                  onChange={(e) => updateLevel(b.id, l.id, { description: e.target.value })}
-                                />
+                    <div className="wf-flow-scroll">
+                      <div className="wf-flow">
+                        <div className="wf-terminus is-start">START</div>
+                        {cells.map((cell, stepIndex) => (
+                          <div key={cell.key} className="wf-flow-step">
+                            <span className="wf-connector" />
+                            <div className="wf-step-card">
+                              <p className="wf-step-title">
+                                Level {stepIndex + 1} · {cell.name}
+                              </p>
+                              <p className="wf-step-sub">{cell.sub}</p>
+                              <div className="wf-step-tags">
+                                <Tag>SLA {cell.sla}h</Tag>
+                                {cell.tax && <Tag tone="info">Tax review</Tag>}
+                                {cell.escalationTo && <Tag tone="pending">Escalates to {displayRole(cell.escalationTo)}</Tag>}
                               </div>
-                              {editable && (
-                                <div className="dx-stepper-actions">
-                                  <button
-                                    type="button"
-                                    className="dx-icon-btn"
-                                    disabled={i === 0}
-                                    title="Move earlier"
-                                    onClick={() => moveLevel(b.id, l.id, -1)}
-                                  >
-                                    <ArrowUp size={13} />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="dx-icon-btn"
-                                    disabled={i === b.levels.length - 1}
-                                    title="Move later"
-                                    onClick={() => moveLevel(b.id, l.id, 1)}
-                                  >
-                                    <ArrowDown size={13} />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="dx-icon-btn dx-icon-danger"
-                                    title="Remove approver"
-                                    onClick={() => removeLevel(b.id, l.id)}
-                                  >
-                                    <Trash2 size={13} />
-                                  </button>
-                                </div>
-                              )}
                             </div>
                           </div>
                         ))}
-
-                        {editable && (
-                          <div className="dx-stepper-row dx-stepper-add">
-                            <div className="dx-stepper-node dx-stepper-node-add">
-                              <Plus size={14} />
-                            </div>
-                            <button type="button" className="dx-add-step" onClick={() => addLevel(b.id)}>
-                              Add approver to this band
-                            </button>
-                          </div>
-                        )}
+                        <span className="wf-connector" />
+                        <div className="wf-terminus is-end">SAP PARKING</div>
                       </div>
                     </div>
-                  )}
-                </div>
-              )
-            })}
+                  </div>
+                )
+              })}
+            </div>
+          </Card>
+
+          <div className="wf-split">
+            <Card
+              pad={false}
+              title={
+                <span className="wf-card-icon-title">
+                  <BellRing size={13} className="wf-green" /> Reminders
+                  <span className="wf-card-sub">If approver takes no action</span>
+                </span>
+              }
+            >
+              <DenseTable
+                columns={[
+                  { key: 'n', header: '#', align: 'center', render: (row) => <span className="wf-num">{row.n}</span> },
+                  { key: 'label', header: 'Reminder', render: (row) => <span className="wf-strong">{row.label}</span> },
+                  { key: 'after', header: 'Triggered after', render: (row) => <span className="wf-nowrap">{row.after}</span> },
+                  { key: 'recipient', header: 'Recipient', render: (row) => row.recipient },
+                  { key: 'channel', header: 'Channel', render: (row) => <ChannelTag value={row.channel} /> }
+                ]}
+                rows={REMINDER_SCHEDULE}
+                rowKey={(row) => String(row.n)}
+              />
+            </Card>
+
+            <Card
+              pad={false}
+              title={
+                <span className="wf-card-icon-title">
+                  <ShieldAlert size={13} className="wf-danger" /> Escalation ladder
+                  <span className="wf-card-sub">If SLA breached after all reminders</span>
+                </span>
+              }
+            >
+              <DenseTable
+                columns={[
+                  { key: 'n', header: '#', align: 'center', render: (row) => <span className="wf-num">{row.n}</span> },
+                  { key: 'trigger', header: 'Trigger', render: (row) => row.trigger },
+                  { key: 'action', header: 'Action', render: (row) => <span className="wf-strong">{row.action}</span> },
+                  { key: 'target', header: 'Target', render: (row) => row.target }
+                ]}
+                rows={ESCALATION_LADDER}
+                rowKey={(row) => String(row.n)}
+              />
+            </Card>
           </div>
 
-          {bands.length === 0 && loaded.current && (
-            <div className="dx-card" style={{ padding: 44, textAlign: 'center' }}>
-              <ShieldCheck size={28} style={{ color: 'var(--dx-text-mute)' }} />
-              <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600 }}>No amount bands yet</div>
-              <div className="text-xs text-muted" style={{ marginTop: 4 }}>
-                Add your first band to start routing invoices for approval.
+          <Card
+            pad={false}
+            title={
+              <span className="wf-card-icon-title">
+                <Mail size={13} className="wf-green" /> Vendor chase
+                <span className="wf-card-sub">Missing mandatory document</span>
+              </span>
+            }
+          >
+            <DenseTable
+              columns={[
+                { key: 'n', header: '#', align: 'center', render: (row) => <span className="wf-num">{row.n}</span> },
+                { key: 'label', header: 'Notification / Reminder', render: (row) => <span className="wf-strong">{row.label}</span> },
+                { key: 'trigger', header: 'Triggered', render: (row) => row.trigger },
+                { key: 'recipient', header: 'Recipient', render: (row) => row.recipient },
+                { key: 'channel', header: 'Channel', render: () => <ChannelTag value="Email" /> },
+                { key: 'drafter', header: 'Drafted by', render: (row) => <span className="wf-muted">{row.drafter}</span> }
+              ]}
+              rows={VENDOR_CHASE}
+              rowKey={(row) => String(row.n)}
+            />
+          </Card>
+        </div>
+
+        <Dialog
+          open={Boolean(editing)}
+          onClose={() => setEditing(null)}
+          width={768}
+          title={editing?.id ? 'Edit amount range' : 'Add amount range'}
+          footer={
+            <>
+              <Button variant="ghost" className="wf-dialog-btn" onClick={() => setEditing(null)}>
+                Cancel
+              </Button>
+              <Button className="wf-dialog-btn" disabled={!editing || !LEVELS.some((level) => editing.levelRoles[level]) || overlaps} onClick={saveBand}>
+                Save
+              </Button>
+            </>
+          }
+        >
+          {editing && (
+            <div className="wf-editor">
+              <div className="wf-editor-grid">
+                <label className="wf-field">
+                  <span className="wf-label">
+                    From amount <span className="wf-req">*</span>
+                  </span>
+                  <Input type="number" min={0} value={editing.minAmount} onChange={(e) => setEditing((prev) => prev && { ...prev, minAmount: Number(e.target.value) })} />
+                </label>
+                <label className="wf-field">
+                  <span className="wf-label">To amount</span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={editing.maxAmount ?? ''}
+                    onChange={(e) => setEditing((prev) => prev && { ...prev, maxAmount: e.target.value === '' ? null : Number(e.target.value) })}
+                  />
+                  <span className="wf-hint">Leave blank for no upper limit</span>
+                </label>
               </div>
-              {editable && (
-                <button
-                  type="button"
-                  className="dx-btn dx-btn-primary dx-btn-sm"
-                  style={{ marginTop: 16 }}
-                  onClick={addBand}
-                >
-                  <Plus size={13} /> Add amount band
-                </button>
+              {overlaps && (
+                <p className="wf-overlap">
+                  This amount range overlaps or touches another band. Bands must not share a boundary — set From at least 1 higher than the previous band’s To (e.g. 2,000,001, not 2,000,000) so every invoice amount falls in exactly one band.
+                </p>
               )}
+              <div className="wf-level-grid">
+                {LEVELS.map((level) => (
+                  <label key={level} className="wf-field">
+                    <span className="wf-label">Level {level}</span>
+                    <Select
+                      value={editing.levelRoles[level] ?? ''}
+                      className="wf-select"
+                      onChange={(e) => setEditing((prev) => prev && { ...prev, levelRoles: { ...prev.levelRoles, [level]: e.target.value } })}
+                    >
+                      <option value="">Not required</option>
+                      {DOA_ROLES.map((role) => (
+                        <option key={role.value} value={role.value}>
+                          {role.label}
+                        </option>
+                      ))}
+                    </Select>
+                    {level === 1 && <span className="wf-hint">Whoever holds this role can approve</span>}
+                  </label>
+                ))}
+              </div>
             </div>
           )}
-        </div>
+        </Dialog>
+
+        <Dialog
+          open={Boolean(deleting)}
+          onClose={() => setDeleting(null)}
+          width={480}
+          title="Delete amount range"
+          footer={
+            <>
+              <Button variant="ghost" className="wf-dialog-btn" onClick={() => setDeleting(null)}>
+                Cancel
+              </Button>
+              <Button variant="danger" className="wf-dialog-btn" onClick={deleteBand}>
+                Delete
+              </Button>
+            </>
+          }
+        >
+          <p className="wf-confirm">
+            The approval levels configured for invoices between {fmtMoney(deleting?.minAmount)} and {deleting?.maxAmount != null ? fmtMoney(deleting.maxAmount) : 'no limit'} are removed. Invoices already in approval are unaffected.
+          </p>
+        </Dialog>
       </div>
     </LeftPageContainer>
   )
 }
 
-const stepperCss = `
-.dx-note{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;font-size:13px;border:1px solid transparent;}
-.dx-note-warn{background:var(--dx-warn-50);border-color:var(--dx-warn-100);color:var(--dx-warn-700);}
-.dx-note-inline{padding:8px 12px;font-size:12px;margin-top:2px;}
-
-.dx-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.2px;}
-.dx-pill-ok{background:var(--dx-success-50);color:var(--dx-success-700);}
-.dx-pill-warn{background:var(--dx-warn-50);color:var(--dx-warn-700);}
-.dx-pill-soft{background:var(--brand-primary-color-light, var(--dx-primary-50));color:var(--brand-primary-color, var(--dx-primary-700));}
-
-.dx-rail{display:flex;gap:6px;align-items:stretch;}
-.dx-rail-seg{flex:1 1 0;min-width:0;text-align:center;}
-.dx-rail-bar{height:8px;border-radius:6px;background:var(--brand-primary-color, var(--dx-primary-600));}
-.dx-rail-cap{margin-top:7px;font-size:11.5px;font-weight:600;color:var(--dx-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.dx-rail-sub{font-size:10.5px;color:var(--dx-text-mute);}
-.dx-rail-gap{flex:0 0 86px;}
-.dx-rail-gap .dx-rail-bar{background:repeating-linear-gradient(45deg,var(--dx-error-100),var(--dx-error-100) 5px,#fff 5px,#fff 10px);border:1px solid var(--dx-error-500);}
-.dx-rail-gap .dx-rail-cap{color:var(--dx-error-600);}
-.dx-rail-overlap{flex:0 0 86px;}
-.dx-rail-overlap .dx-rail-bar{background:var(--dx-warn-500);}
-.dx-rail-overlap .dx-rail-cap{color:var(--dx-warn-700);}
-
-.dx-band{overflow:hidden;}
-.dx-band[data-issue="1"]{border-color:var(--dx-warn-100);box-shadow:inset 3px 0 0 var(--dx-warn-500);}
-.dx-band-head{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--dx-g-25);border-bottom:1px solid var(--dx-border-soft);}
-.dx-band-toggle{display:grid;place-items:center;width:28px;height:28px;border:none;background:transparent;border-radius:8px;cursor:pointer;color:var(--dx-text-soft);}
-.dx-band-toggle:hover{background:var(--dx-g-100);}
-.dx-band-title{font-size:14.5px;font-weight:700;color:var(--dx-text);}
-.dx-band-meta{margin-top:3px;font-size:11.5px;color:var(--dx-text-mute);display:flex;align-items:center;flex-wrap:wrap;}
-.dx-chip-mini{display:inline-block;padding:2px 8px;border-radius:6px;background:var(--brand-primary-color, var(--dx-primary-600));color:#fff;font-weight:700;font-size:10.5px;}
-.dx-arrow-mini{margin:0 5px;color:var(--brand-primary-color, var(--dx-primary-400));}
-.dx-band-body{padding:18px;}
-
-.dx-range{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px dashed var(--dx-border);margin-bottom:18px;}
-.dx-range-field{display:flex;flex-direction:column;gap:4px;}
-.dx-range-lbl{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--dx-text-mute);}
-.dx-range-hint{font-size:11px;color:var(--brand-primary-color, var(--dx-primary-600));font-weight:600;}
-.dx-range-dash{padding-bottom:24px;color:var(--dx-g-400);font-size:16px;}
-.dx-money{width:170px;text-align:right;font-variant-numeric:tabular-nums;}
-.dx-input-static{display:flex;align-items:center;color:var(--dx-text-mute);font-size:12.5px;background:var(--dx-g-50);width:300px;}
-.dx-range-toggle{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dx-text-soft);padding-bottom:9px;cursor:pointer;}
-
-.dx-stepper{position:relative;}
-.dx-stepper-row{display:flex;gap:14px;align-items:stretch;position:relative;}
-.dx-stepper-row:not(:last-child){padding-bottom:12px;}
-.dx-stepper-node{position:relative;flex:0 0 30px;display:flex;justify-content:center;}
-.dx-stepper-node::before{content:"";position:absolute;top:30px;bottom:-12px;width:2px;background:var(--brand-primary-color-light, var(--dx-primary-200));}
-.dx-stepper-row:last-child .dx-stepper-node::before{display:none;}
-.dx-stepper-num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--brand-primary-color, var(--dx-primary-600));color:#fff;font-weight:700;font-size:13px;z-index:1;box-shadow:0 0 0 3px var(--brand-primary-color-light, rgba(13,166,234,.12));}
-.dx-stepper-node-add{align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;background:var(--brand-primary-color, var(--dx-primary-600));box-shadow:0 0 0 3px var(--brand-primary-color-light, rgba(13,166,234,.12));}
-.dx-stepper-card{flex:1;display:flex;gap:10px;align-items:center;background:var(--dx-card);border:1px solid var(--dx-border);border-radius:12px;padding:10px;}
-.dx-stepper-main{flex:1;display:flex;gap:10px;align-items:center;min-width:0;}
-.dx-stepper-main .dx-select{flex:0 0 250px;}
-.dx-stepper-main .dx-input{flex:1;min-width:0;}
-.dx-stepper-actions{display:flex;gap:2px;}
-.dx-add-step{flex:1;border:1.5px dashed var(--brand-primary-color, var(--dx-primary-400));background:var(--brand-primary-color-light, var(--dx-primary-25));border-radius:12px;padding:11px;color:var(--brand-primary-color, var(--dx-primary-700));font-weight:600;font-size:13px;cursor:pointer;text-align:left;padding-left:14px;}
-.dx-add-step:hover{border-color:var(--brand-primary-color, var(--dx-primary-600));background:var(--brand-primary-color-light, var(--dx-primary-50));color:var(--brand-primary-color, var(--dx-primary-800));}
-.dx-stepper-add .dx-stepper-num{display:none;}
-
-.dx-icon-btn{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--dx-text-mute);cursor:pointer;}
-.dx-icon-btn:hover:not(:disabled){background:var(--brand-primary-color-light, var(--dx-primary-50));color:var(--brand-primary-color, var(--dx-primary-700));}
-.dx-icon-btn:disabled{opacity:.35;cursor:not-allowed;}
-.dx-icon-danger:hover:not(:disabled){background:var(--dx-error-50);color:var(--dx-error-600);}
-
-@media (max-width:720px){
-  .dx-stepper-card{flex-direction:column;align-items:stretch;}
-  .dx-stepper-main{flex-direction:column;align-items:stretch;}
-  .dx-stepper-main .dx-select{flex:1;}
+const pageCss = `
+.wf-page .wf-stack{display:flex;flex-direction:column;gap:16px;}
+.wf-page .wf-split{display:grid;gap:16px;grid-template-columns:1fr;}
+@media (min-width:1024px){.wf-page .wf-split{grid-template-columns:1fr 1fr;}}
+.wf-page .wf-card-sub{margin-left:8px;font-size:10px;line-height:14px;font-weight:400;color:#4b5563;}
+.wf-page .wf-card-icon-title{display:inline-flex;align-items:center;gap:8px;}
+.wf-page .wf-green{color:#2C9842;}
+.wf-page .wf-danger{color:#b91c1c;}
+.wf-page .wf-muted{color:#4b5563;}
+.wf-page .wf-strong{font-weight:500;color:#1f2937;}
+.wf-page .wf-num{font-weight:600;color:#4b5563;}
+.wf-page .wf-nowrap{white-space:nowrap;}
+.wf-page .wf-dash{font-size:10px;color:#d1d5db;}
+.wf-page .card-header .dx-btn{flex-shrink:0;}
+.wf-page .wf-add.dx-btn{height:28px;padding:0 10px;border-radius:6px;border:1px solid #2C9842;background:#fff;color:#247a35;font-size:12px;font-weight:500;box-shadow:none;}
+.wf-page .wf-add.dx-btn:hover{background:#eef8f0;filter:none;box-shadow:none;}
+.wf-page .wf-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px;border-bottom:1px solid #e5e7eb;background:#fff;padding:8px 16px;font-size:10px;color:#4b5563;}
+.wf-page .wf-legend-label{margin-right:4px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.wf-page .wf-legend-pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;border:1px solid #e5e7eb;background:#eef0f2;padding:2px 8px;}
+.wf-page .wf-legend-pill strong{color:#1f2937;font-weight:600;}
+.wf-page .wf-table-wrap{overflow-x:auto;}
+.wf-page .wf-table{width:100%;border-collapse:collapse;text-align:left;font-size:14px;color:#1f2937;}
+.wf-page .wf-table thead th{background:#2C9842;color:#fff;font-weight:700;font-size:14px;letter-spacing:0;text-transform:none;padding:8px 12px;white-space:nowrap;border:none;text-align:left;}
+.wf-page .wf-table thead th.is-right,.wf-page .wf-table tbody td.is-right{text-align:right;}
+.wf-page .wf-table thead th.is-center,.wf-page .wf-table tbody td.is-center{text-align:center;}
+.wf-page .wf-table tbody td{padding:6px 12px;border-bottom:1px solid #eef0f2;vertical-align:middle;background:#fff;font-size:14px;}
+.wf-page .wf-table tbody tr.is-zebra td{background:#f6f8f7;}
+.wf-page .wf-table tbody tr:last-child td{border-bottom:none;}
+.wf-page .wf-sort{display:inline-flex;align-items:center;gap:4px;background:transparent;border:none;color:#fff;font:inherit;font-weight:700;cursor:pointer;padding:0;}
+.wf-page .wf-sort:hover{text-decoration:underline;}
+.wf-page .wf-sort-idle{opacity:.75;}
+.wf-page .wf-table th.wf-sticky,.wf-page .wf-table td.wf-sticky{position:sticky;right:0;z-index:1;}
+.wf-page .wf-table th.wf-sticky{background:#2C9842;box-shadow:-6px 0 6px -6px rgba(16,24,40,.25);}
+.wf-page .wf-table td.wf-sticky{box-shadow:-6px 0 6px -6px rgba(16,24,40,.18);}
+.wf-page .wf-row-actions{display:inline-flex;justify-content:center;gap:4px;}
+.wf-page .wf-icon-btn.dx-btn{width:28px;height:28px;padding:0;border-radius:6px;border-color:transparent;background:transparent;color:#4b5563;box-shadow:none;}
+.wf-page .wf-icon-btn.dx-btn:hover{background:#f3f4f6;border-color:transparent;filter:none;box-shadow:none;}
+.wf-page .wf-icon-btn.is-danger.dx-btn{color:#b91c1c;}
+.wf-page .wf-icon-btn.is-danger.dx-btn:hover{background:#fdecec;}
+.wf-tag{display:inline-flex;align-items:center;gap:4px;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;line-height:14px;white-space:nowrap;}
+.wf-tag-neutral{background:#eef0f2;color:#374151;}
+.wf-tag-success{background:#e6f5ea;color:#2d9a47;}
+.wf-tag-info{background:#e5f2f9;color:#0075a9;}
+.wf-tag-pending{background:#f1ecfd;color:#6d28d9;}
+.wf-channels{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;}
+.wf-channel{display:inline-flex;align-items:center;gap:4px;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.wf-channel-teams{background:#f1ecfd;color:#6d28d9;}
+.wf-channel-email{background:#eef0f2;color:#374151;}
+.wf-channel-platform{background:#e6f5ea;color:#2d9a47;}
+.wf-page .wf-flows{display:flex;flex-direction:column;gap:16px;}
+.wf-page .wf-flow-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:6px;font-size:10px;}
+.wf-page .wf-band-pill{border-radius:4px;background:#eef8f0;padding:2px 8px;font-weight:600;color:#247a35;}
+.wf-page .wf-flow-scroll{overflow-x:auto;}
+.wf-page .wf-flow{display:flex;align-items:center;min-width:max-content;padding:4px 0;}
+.wf-page .wf-flow-step{display:flex;align-items:center;}
+.wf-page .wf-connector{width:24px;height:2px;background:#3aaa55;flex:0 0 24px;}
+.wf-page .wf-terminus{border:2px solid #2C9842;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;}
+.wf-page .wf-terminus.is-start{background:#2C9842;color:#fff;}
+.wf-page .wf-terminus.is-end{background:#fff;color:#247a35;}
+.wf-page .wf-step-card{width:176px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;padding:10px;box-shadow:0 1px 2px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.08);}
+.wf-page .wf-step-title{margin:0;font-size:12px;font-weight:600;color:#1f2937;}
+.wf-page .wf-step-sub{margin:2px 0 0;font-size:10px;color:#4b5563;}
+.wf-page .wf-step-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.wf-editor{display:flex;flex-direction:column;gap:12px;}
+.wf-editor-grid{display:grid;gap:12px;grid-template-columns:1fr;}
+.wf-level-grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:768px){
+  .wf-editor-grid{grid-template-columns:1fr 1fr;}
+  .wf-level-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
 }
+.wf-field{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.wf-label{font-size:12px;font-weight:600;color:#1f2937;}
+.wf-req{color:#b91c1c;}
+.wf-hint{font-size:10px;color:#4b5563;}
+.wf-editor .dx-input,.wf-editor .wf-select{height:36px;width:100%;padding:6px 10px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;font-size:14px;color:#1f2937;}
+.wf-editor .dx-input:focus,.wf-editor .wf-select:focus{border-color:#3aaa55;outline:none;box-shadow:0 0 0 2px #d8f0dd;}
+.wf-overlap{margin:0;border-radius:6px;background:#fef5e7;padding:6px 10px;font-size:10px;line-height:14px;color:#b45309;}
+.wf-confirm{margin:0;font-size:12px;line-height:18px;color:#374151;}
+.essa-dialog-root .wf-dialog-btn.dx-btn{height:36px;padding:0 14px;border-radius:6px;font-size:14px;font-weight:500;}
+.essa-dialog-root .wf-dialog-btn.dx-btn-ghost{border-color:transparent;background:transparent;color:#374151;}
+.essa-dialog-root .wf-dialog-btn.dx-btn-ghost:hover{background:#eef0f2;}
 `
 
 const mapStateToProps = (state) => ({

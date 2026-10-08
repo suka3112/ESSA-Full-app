@@ -4,7 +4,7 @@ import { ArrowRight, CheckCircle2, ChevronDown, ChevronRight, CircleDashed, Cloc
 
 import { getMatchRulesCached } from 'api/matchRules'
 import { evaluateInvoice } from '../lib/nWay/engine'
-import { sourceChannel, sourceLabel } from '../lib/nWay/catalog'
+import { isServerType, sourceChannel, sourceLabel } from '../lib/nWay/catalog'
 import { COMPARISON_META, FailChip, STATUS_META, StatusPill, TypeChip } from '../lib/nWay/NWayChips'
 import { criteriaSummary, requirementLabel } from '../lib/nWay/ruleText'
 import { mergeNonPoValidationChecklist, mergeValidationChecklist } from '../lib/validationRuleCatalog'
@@ -73,7 +73,7 @@ function ResultRow({ result, open, onToggle }) {
             const st = cellStatus(result, s.code)
             return (
               <span key={s.code} className={`nw-dotdoc nw-dotdoc--${st}`} title={`${s.label}: ${st === 'source' ? 'source (A)' : COMPARISON_META[st]?.label || 'not compared'}`}>
-                {s.code === rule.source ? <b>A</b> : s.role === 'EXTRACT' ? <b className="is-e">E</b> : null}
+                {s.code === rule.source ? <b>A</b> : s.role === 'EXTRACT' ? <b className="is-e">AV</b> : null}
                 {s.label}
               </span>
             )
@@ -124,14 +124,14 @@ function ResultRow({ result, open, onToggle }) {
             </table>
           ) : (
             <p className="nw-res__note">
-              {result.rule.ruleType === 'CALCULATION' || result.rule.ruleType === 'UNIQUENESS' || result.rule.ruleType === 'AUTHENTICITY'
+              {isServerType(result.rule.ruleType)
                 ? 'This rule is calculated by the server integration; its values are not compared field-by-field here.'
                 : 'No document comparisons for this rule on this invoice.'}
             </p>
           )}
           {extracts.length ? (
             <p className="nw-res__note">
-              Extract only (context): {extracts.map((s) => `${s.label}${s.value ? ` — ${truncate(s.value, 60)}` : ''}`).join(' · ')}
+              Available (context): {extracts.map((s) => `${s.label}${s.value ? ` — ${truncate(s.value, 60)}` : ''}`).join(' · ')}
             </p>
           ) : null}
           <dl className="nw-res__facts">
@@ -313,7 +313,7 @@ export default function NWayValidationPanel({ inv, sections, checks = [], valida
           <span className="nw-dotdoc nw-dotdoc--mismatch">Differs / missing</span>
           <span className="nw-dotdoc nw-dotdoc--not_found">Not captured</span>
           <span className="nw-dotdoc nw-dotdoc--unavailable">Not connected</span>
-          <span className="nw-dotdoc nw-dotdoc--extract">Extract only</span>
+          <span className="nw-dotdoc nw-dotdoc--extract">Available</span>
         </span>
         {configHref ? (
           <Link to={configHref} className="nw-link">
