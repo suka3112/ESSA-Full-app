@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
-export function Dialog({ open, onClose, title, description, children, footer, width = 560 }) {
+export function Dialog({ open, onClose, title, description, children, footer, width = 560, className }) {
   useEffect(() => {
     if (!open) return
     const onKey = (e) => e.key === 'Escape' && onClose()
@@ -30,7 +30,7 @@ export function Dialog({ open, onClose, title, description, children, footer, wi
             role="presentation"
           >
             <motion.div
-              className="dx-dialog"
+              className={className ? `dx-dialog ${className}` : 'dx-dialog'}
               style={{ maxWidth: width }}
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, y: 16, scale: 0.98 }}

@@ -93,7 +93,11 @@ const STATUS_GUIDE = [
 const PIPELINE_TYPE_LABELS = {
   MANPOWER_SERVICES: 'Manpower services',
   CAMP_SERVICE_AND_CATERING: 'Camp / catering',
+  LOGISTICS: 'Logistics',
+  HOUSEKEEPING: 'Housekeeping',
+  RENTAL_EQUIPMENT: 'Rental Equipment',
   CIVIL_CONTRACTOR: 'Civil contractor',
+  MATERIAL_LOCAL: 'Material local',
   MATERIAL_IMPORT: 'Material import',
   NON_PO: 'Non-PO',
   AUTO: 'Auto (OCR classifies)',

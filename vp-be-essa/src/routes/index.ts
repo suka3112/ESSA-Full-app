@@ -26,6 +26,8 @@ import essaAuditRoutes from "./v1/essaAudit.route";
 import slaRoutes from "./v1/sla.route";
 import essaVendorRoutes from "./v1/essaVendor.route";
 import essaUserRoutes from "./v1/essaUser.route";
+import essaExceptionCodeRoutes from "./v1/essaExceptionCode.route";
+import essaPurchaseOrderRoutes from "./v1/essaPurchaseOrder.route";
 
 const initializeRoutes = (app: Express) => {
   // Routes
@@ -56,6 +58,8 @@ const initializeRoutes = (app: Express) => {
   app.use("/vendor-portal/essa/sla", slaRoutes);
   app.use("/vendor-portal/essa/vendors", essaVendorRoutes);
   app.use("/vendor-portal/essa/users", essaUserRoutes);
+  app.use("/vendor-portal/essa/exception-codes", essaExceptionCodeRoutes);
+  app.use("/vendor-portal/essa/purchase-orders", essaPurchaseOrderRoutes);
 };
 
 export default initializeRoutes;

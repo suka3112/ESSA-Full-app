@@ -791,6 +791,20 @@
   color: var(--pc-text);
 }
 
+.prompt-config__fkind {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pc-text-soft);
+  border: 1px solid var(--pc-border);
+  border-radius: 999px;
+  padding: 1px 6px;
+  vertical-align: 1px;
+}
+
 .prompt-config__fdisplay {
   font-weight: 500;
 }
@@ -798,6 +812,8 @@
 .prompt-config__fhint {
   color: var(--pc-text-soft);
   font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .prompt-config__frow-actions {
@@ -949,6 +965,11 @@
   resize: vertical;
   min-height: 76px;
   line-height: 1.5;
+}
+
+.prompt-config__hint-input {
+  min-height: 96px;
+  white-space: pre-wrap;
 }
 
 .prompt-config__field-group textarea:disabled,

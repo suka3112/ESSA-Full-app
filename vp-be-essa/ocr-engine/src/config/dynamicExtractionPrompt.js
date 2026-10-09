@@ -46,32 +46,34 @@ function buildSchemaInstruction(categoryId) {
  * extraction system templates. The Prompt Builder text is the entire extraction
  * template, plus a fixed JSON response contract so downstream merging works.
  */
-function buildPromptBuilderOnlyPrompt(extractionPrompt) {
+function buildPromptBuilderOnlyPrompt(extractionPrompt, categoryLabel) {
+  const section = categoryLabel ? ` (${categoryLabel})` : "";
   return {
     system: [
       "You are a document OCR extraction engine.",
       "Use ONLY the extraction template below. Do not use any other built-in document schemas, field catalogs, or extraction hints.",
-      "Return valid JSON only. Use null for missing values. Do not invent values.",
+      "Return valid JSON only. Use null for missing single values, and [] for a missing table. Do not invent values.",
       "",
       "CRITICAL RESPONSE SHAPE:",
-      "Return ONE flat JSON object with top-level keys exactly:",
-      '- "header": object of ALL scalar fields from the template (exact field names as keys)',
-      '- "invoiceLineItems": array of line-item objects (use [] if none)',
-      '- "lineItems": mirror of invoiceLineItems (same rows, same order)',
-      "Do NOT nest fields under document names like \"Invoice\": { ... }.",
-      "Do NOT put scalar invoice fields only at the JSON root — put them under header.",
-      "Include every scalar key listed in the template inside header (null if absent).",
+      "Return ONE flat JSON object for the document in this request" + section + ".",
+      '- "header": the single-value fields from that document\'s section only. Use the exact key names. Use null when a value is not printed.',
+      "- Each table in that section is a top-level JSON array. The key is the exact field name from the template (for example timesheetItems, summaryCalculationManhourItems, attendanceList, poItems).",
+      "- One object per printed row. Read every page. Include every worker or row, not only the first.",
+      "- Do not rename a configured table to invoiceLineItems or lineItems.",
+      "- Copy rows into lineItems only when the template lists invoiceLineItems or lineItems.",
+      "Do NOT nest fields under the document title.",
+      "Do NOT put single-value fields only at the JSON root — put them under header.",
       "",
       extractionPrompt,
     ].join("\n"),
-    user: "Extract structured data from the document. Return JSON with header + invoiceLineItems + lineItems only.",
+    user: `Extract structured data from these pages only${section}. Return JSON with header and the table arrays named in the template for this document.`,
   };
 }
 
 export function getDynamicExtractionPrompt(categoryId, categoryLabel, options = {}) {
   const override = String(options.extractionPrompt || "").trim();
   if (override) {
-    return buildPromptBuilderOnlyPrompt(override);
+    return buildPromptBuilderOnlyPrompt(override, categoryLabel);
   }
 
   const prompts = getPromptsConfig().extraction;
@@ -85,7 +87,7 @@ export function getDynamicExtractionPrompt(categoryId, categoryLabel, options = 
 export function getVisionExtractionPrompt(categoryId, categoryLabel, options = {}) {
   const override = String(options.extractionPrompt || "").trim();
   if (override) {
-    return buildPromptBuilderOnlyPrompt(override);
+    return buildPromptBuilderOnlyPrompt(override, categoryLabel);
   }
 
   const prompts = getPromptsConfig().visionExtraction;

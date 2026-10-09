@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
 import {
   ShieldCheck,
-  Users,
-  Clock,
   FileSpreadsheet,
   Pencil,
   Save,
@@ -12,7 +9,10 @@ import {
   Calendar,
   FileText,
   ArrowLeft,
-  PanelLeftClose,
+  ArrowRight,
+  AlertTriangle,
+  PanelRightClose,
+  PanelRightOpen,
   ChevronDown,
   ChevronRight,
   Trash2,
@@ -44,7 +44,7 @@ import {
 } from 'api/essaDashboard'
 import { correctEssaInvoiceFields } from 'api/essaAudit'
 import { isPersistedOcrUploadId } from 'api/apInvoiceOcr'
-import { deleteUploadedInvoice, isDemoUploadId, isDemoSeedId, applyDemoInvoiceApproval, isDemoInvoiceId } from 'api/essaUploadedInvoices'
+import { deleteUploadedInvoice, isDemoUploadId, applyDemoInvoiceApproval, isDemoInvoiceId } from 'api/essaUploadedInvoices'
 import { isEssaDemoDeleteEnabled } from 'config/essaDemoConfig'
 import {
   showEssaSuccessToast,
@@ -62,6 +62,7 @@ import {
   advanceApprovalChain,
   isNonPoInvoiceWorkflow
 } from '../lib/poApprovalChain'
+import { resolveNextAction, resolveWorkflowStage } from '../lib/invoiceWorkflowStatus'
 import { formatNonPoDoaFlow } from '../lib/nonPoDoaApproval'
 import {
   resolveDefaultExtractPdfSrc,
@@ -95,7 +96,6 @@ import {
   buildValidationState,
   buildValidationMapOptions,
   validateApDocument,
-  needsBundleValidation,
   canRunBundleValidation,
   augmentRateValidationCheck,
   augmentPoValueValidationCheck,
@@ -112,6 +112,12 @@ import '../../../assets/scss/essa/dashboard.scss'
 /** Set false to hide the PDF side panel and "View document" topbar button. */
 const INVOICE_DOCUMENT_PREVIEW_ENABLED = true
 
+const idPanelStyle = {
+  borderRadius: 12,
+  border: '1px solid #e5e7eb',
+  boxShadow: '0 1px 2px 0 rgb(16 24 40 / 0.05)'
+}
+
 /** Demo invoices that should not show the Approval tab. */
 const APPROVAL_TAB_HIDDEN_INVOICE_NOS = new Set(['501/PT.ALE-PAU/07/2026'])
 
@@ -124,6 +130,30 @@ function shouldHideApprovalTab(inv) {
   return !isNonPoInvoice(inv)
 }
 
+const STAGE_LIST_LABEL = {
+  draft: 'Draft',
+  validated: 'Validated',
+  parked: 'Parked',
+  posted: 'Posted',
+  paid: 'Paid',
+  rejected: 'Rejected',
+  review: 'In review'
+}
+
+const STAGE_PILL_TONE = {
+  draft: 'draft',
+  validated: 'info',
+  parked: 'warning',
+  posted: 'success',
+  paid: 'success',
+  rejected: 'error',
+  review: 'pending'
+}
+
+function DetailStatusPill({ label, tone = 'neutral' }) {
+  return <span className={`dx-id-pill dx-id-pill--${tone}`}>{label}</span>
+}
+
 function DetailTopbar({
   backTo,
   backLabel,
@@ -131,8 +161,12 @@ function DetailTopbar({
   exportUrl,
   showDoc,
   onToggleDoc,
-  actions
+  actions,
+  inv
 }) {
+  const stage = inv ? resolveWorkflowStage(inv) : null
+  const next = inv ? resolveNextAction(inv) : null
+
   return (
     <header className="dx-topbar">
       <div className="dx-topbar-left">
@@ -140,26 +174,37 @@ function DetailTopbar({
           <ArrowLeft size={14} />
           <span>{backLabel}</span>
         </Link>
-        <div style={{ minWidth: 0 }}>
-          <div className="dx-topbar-title">{title}</div>
-        </div>
+        <h1 className="dx-topbar-title">{title}</h1>
+        {stage && next && (
+          <span className="dx-id-status">
+            <span className="dx-id-status-kicker">Current</span>
+            <DetailStatusPill
+              label={STAGE_LIST_LABEL[stage.key] || stage.shortLabel || stage.label}
+              tone={STAGE_PILL_TONE[stage.key] || 'neutral'}
+            />
+            <ArrowRight size={12} className="dx-id-status-arrow" aria-hidden />
+            <span className="dx-id-status-kicker">Next</span>
+            <DetailStatusPill label={next.label} tone="neutral" />
+          </span>
+        )}
       </div>
       <div className="dx-topbar-right">
         {actions}
         {onToggleDoc && (
           <Button
-            variant={showDoc ? 'ghost' : 'primary'}
+            variant="secondary"
             size="sm"
+            className="dx-id-btn"
             onClick={onToggleDoc}
             title={showDoc ? 'Hide document preview' : 'View document preview'}
           >
-            {showDoc ? <PanelLeftClose size={14} /> : <FileText size={14} />}
+            {showDoc ? <PanelRightClose size={14} /> : <PanelRightOpen size={14} />}
             {showDoc ? 'Hide document' : 'View document'}
           </Button>
         )}
         {exportUrl && (
           <a href={exportUrl}>
-            <Button variant="ghost" size="sm">
+            <Button variant="secondary" size="sm" className="dx-id-btn">
               <FileSpreadsheet size={14} /> Export
             </Button>
           </a>
@@ -167,6 +212,84 @@ function DetailTopbar({
       </div>
     </header>
   )
+}
+
+function mergeSavedExtractFields(invoice, sectionKey, fields = {}) {
+  if (!invoice || !sectionKey) return invoice
+  const next = { ...invoice }
+  const present = (value) => value != null && String(value).trim() !== ''
+
+  const setSection = (key, patch) => {
+    if (!Object.keys(patch).length) return
+    const extraction = { ...(next.validation_extraction || {}) }
+    const sections = { ...(extraction.sections || {}) }
+    sections[key] = { ...(sections[key] || {}), ...patch }
+    next.validation_extraction = { ...extraction, sections }
+  }
+
+  const setOcrHeader = (docType, patch) => {
+    if (!Object.keys(patch).length) return
+    const ocrByType = { ...(next.ocr_by_type || {}) }
+    const doc = { ...(ocrByType[docType] || {}) }
+    doc.header = { ...(doc.header || {}), ...patch }
+    ocrByType[docType] = doc
+    next.ocr_by_type = ocrByType
+  }
+
+  if (sectionKey === 'B_taxInvoice') {
+    const meta = { ...(next.tax_invoice_meta || {}) }
+    const sectionPatch = {}
+    const headerPatch = {}
+    if (present(fields.date)) {
+      meta.date = fields.date
+      sectionPatch.date = fields.date
+      headerPatch.invoiceDate = fields.date
+      headerPatch.date = fields.date
+    }
+    if (present(fields.taxInvoiceNumber)) {
+      meta.taxInvoiceNumber = fields.taxInvoiceNumber
+      sectionPatch.taxInvoiceNumber = fields.taxInvoiceNumber
+      headerPatch.taxInvoiceNumber = fields.taxInvoiceNumber
+    }
+    if (present(fields.taxVatAmount)) {
+      meta.vatAmount = fields.taxVatAmount
+      sectionPatch.vatAmount = fields.taxVatAmount
+      headerPatch.taxAmount = fields.taxVatAmount
+    }
+    next.tax_invoice_meta = meta
+    setSection('B_taxInvoice', sectionPatch)
+    setOcrHeader('tax_invoice', headerPatch)
+  }
+
+  if (sectionKey === 'A_invoice') {
+    const sectionPatch = {}
+    const headerPatch = {}
+    if (present(fields.date)) {
+      sectionPatch.date = fields.date
+      headerPatch.invoiceDate = fields.date
+      headerPatch.date = fields.date
+      next.invoice_date = fields.date
+    }
+    if (present(fields.invoiceNo)) {
+      sectionPatch.invoiceNo = fields.invoiceNo
+      headerPatch.invoiceNumber = fields.invoiceNo
+      next.invoice_no = fields.invoiceNo
+    }
+    if (present(fields.vendorName)) {
+      sectionPatch.vendorName = fields.vendorName
+      headerPatch.vendorName = fields.vendorName
+      next.vendor_name = fields.vendorName
+    }
+    if (present(fields.poNumber)) {
+      sectionPatch.poNumber = fields.poNumber
+      headerPatch.poNumber = fields.poNumber
+      next.po_number = fields.poNumber
+    }
+    setSection('A_invoice', sectionPatch)
+    setOcrHeader('invoice', headerPatch)
+  }
+
+  return next
 }
 
 function resolvePoDetailId(rawId) {
@@ -221,8 +344,7 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
   const [extractCorrections, setExtractCorrections] = useState({})
   const [timelineEvents, setTimelineEvents] = useState([])
   const [savingCorrections, setSavingCorrections] = useState(false)
-  const [showDoc, setShowDoc] = usePersistentBool('essa.invoiceDetail.showDoc', false)
-  const isNarrow = useIsNarrow()
+  const [showDoc, setShowDoc] = usePersistentBool('essa.invoiceDetail.showDoc', true)
 
   useEffect(() => {
     setExtractDocTab('')
@@ -284,11 +406,8 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
   }, [inv?.id, inv?.status, inv?.approvals])
 
   useEffect(() => {
-    if (inv) {
-      setValidationState(null)
-      setExtractCorrections({})
-    }
-  }, [inv])
+    setValidationState(null)
+  }, [inv?.id])
 
   const isNonPo = Boolean(displayInv) && isNonPoInvoice(displayInv)
   const nonPoValidation = isNonPo ? buildNonPoValidationState(displayInv) : null
@@ -300,7 +419,6 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
       }
       : displayInv?.validation || { checks: [] })
   const documentId = validation.documentId || displayInv?.validation?.documentId || displayInv?.ocr?.documentId
-  const canValidate = Boolean(documentId) || canRunBundleValidation(displayInv)
   const hasExtractDocTab = tab === 'extract-validate' && Boolean(extractDocTab)
   const viewerPdfSrc = hasExtractDocTab
     ? extractTabPdfSrc ||
@@ -383,40 +501,6 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
     displayInv?.extract_doc_pdfs,
     uploadedFile
   ])
-
-  useEffect(() => {
-    if (isNonPo || !canValidate || revalidating || validationState) return undefined
-
-    if ((isDemoSeedId(id) || inv?.demo_seed) && validation.checks?.length) return undefined
-
-    const bundleNeeded = needsBundleValidation(inv)
-    if (validation.checks?.length && !bundleNeeded) return undefined
-
-    let cancelled = false
-    setRevalidating(true)
-
-    validateApDocument(documentId, displayInv || inv)
-      .then((result) => {
-        if (cancelled || !result) return
-        setValidationState(
-          buildValidationState(result, {
-            confidence: validation.confidence ?? inv?.ocr_confidence,
-            documentId: documentId ?? null,
-            header: inv?.ocr?.header,
-            inv,
-            ...buildValidationMapOptions(inv, inv?.ocr?.header)
-          })
-        )
-      })
-      .catch(() => { })
-      .finally(() => {
-        if (!cancelled) setRevalidating(false)
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [canValidate, documentId, inv?.id, inv?.batch_document_types, validationState, isNonPo])
 
   useEffect(() => {
     if (!INVOICE_DOCUMENT_PREVIEW_ENABLED) {
@@ -544,15 +628,17 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
     ? 0
     : (validation.checks || []).filter((c) => c.status !== 'pass' && c.status !== 'na').length
 
+  const workflowStage = resolveWorkflowStage(inv)
+  const rejected = workflowStage.key === 'rejected'
+
   const tabs = [
     {
       value: 'extract-validate',
       label: 'Extract & Validate',
-      icon: ShieldCheck,
       badge: issueCount > 0 ? issueCount : null
     },
-    ...(!hideApprovalTab ? [{ value: 'approve', label: 'Approval', icon: Users }] : []),
-    { value: 'timeline', label: 'Timeline', icon: Clock }
+    { value: 'timeline', label: 'Timeline' },
+    ...(!hideApprovalTab ? [{ value: 'approve', label: 'Approval' }] : [])
   ]
 
   const exportUrl = !isPoInvoice && !isOcrPreview ? getEssaInvoiceExportUrl(id) : null
@@ -645,15 +731,18 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
     showApprovalToast()
   }
 
+  const docVisible = INVOICE_DOCUMENT_PREVIEW_ENABLED && showDoc && showPdfPanel
+
   return (
     <LeftPageContainer>
-      <div className="essa-dashboard">
+      <div className="essa-dashboard dx-invoice-page">
         <DetailTopbar
           backTo={invoicesPath}
           backLabel="Invoices"
           title={formatInvoiceCategoryLabel(inv)}
           exportUrl={exportUrl}
-          showDoc={INVOICE_DOCUMENT_PREVIEW_ENABLED && showDoc && showPdfPanel}
+          showDoc={docVisible}
+          inv={inv}
           onToggleDoc={
             INVOICE_DOCUMENT_PREVIEW_ENABLED && showPdfPanel
               ? () => setShowDoc((v) => !v)
@@ -668,57 +757,57 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
           }
         />
 
-        <div className="dx-page dx-page--after-topbar">
+        <div className="dx-page dx-page--after-topbar dx-invoice-page-body">
           <HeroStrip inv={inv} />
+
+          {rejected && (
+            <div className="dx-id-reject" role="status">
+              <AlertTriangle size={15} className="dx-id-reject-icon" aria-hidden />
+              <span>
+                <span className="dx-id-reject-title">This invoice was rejected.</span> It stays in
+                the system until corrected documents are received. When the vendor sends the
+                corrected documents they replace the ones on this invoice and processing continues
+                here. If the vendor issues a different invoice number, a new invoice record is
+                created and this one is closed — the Timeline tab records both sides of that change.
+              </span>
+            </div>
+          )}
+
           <SlaInvoiceClocks invoice={inv} />
 
           {(derived.ld_amount > 0 || derived.advance_recovery > 0) && (
             <PayableSummary inv={inv} derived={derived} />
           )}
 
-          <div
-            className="dx-doc-split"
-            style={{
-              marginTop: 18,
-              flexWrap: isNarrow ? 'wrap' : 'nowrap'
-            }}
-          >
-            <AnimatePresence initial={false}>
-              {INVOICE_DOCUMENT_PREVIEW_ENABLED && showDoc && showPdfPanel && (
-                <motion.div
-                  key="doc-panel"
-                  className="dx-doc-col"
-                  initial={isNarrow ? { opacity: 0 } : { width: 0, opacity: 0 }}
-                  animate={
-                    isNarrow
-                      ? { opacity: 1, width: '100%' }
-                      : { width: 'clamp(360px, 42%, 600px)', opacity: 1 }
-                  }
-                  exit={isNarrow ? { opacity: 0 } : { width: 0, opacity: 0 }}
-                  transition={{ type: 'spring', stiffness: 360, damping: 38 }}
-                  style={{
-                    flex: '0 0 auto',
-                    overflow: 'hidden',
-                    position: isNarrow ? 'static' : 'sticky',
-                    top: 16,
-                    alignSelf: 'flex-start'
-                  }}
-                >
-                  <Card pad={false} style={{ overflow: 'hidden', height: 760 }}>
-                    <PdfViewer
-                      src={viewerPdfSrc}
-                      onClose={() => setShowDoc(false)}
-                    />
-                  </Card>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <Card className="dx-doc-main" pad={false} style={{ overflow: 'hidden' }}>
-              <div style={{ padding: '14px 22px 0' }}>
-                <Tabs tabs={tabs} value={tab} onChange={setTab} />
+          <div className={docVisible ? 'dx-id-body dx-id-body--split' : 'dx-id-body'}>
+            {docVisible && (
+              <div className="dx-id-doc">
+                <Card pad={false} className="dx-id-doc-card" style={idPanelStyle}>
+                  <PdfViewer
+                    src={viewerPdfSrc}
+                    fileName={
+                      displayInv?.file_name || displayInv?.fileName || inv?.file_name || 'Invoice.pdf'
+                    }
+                  />
+                </Card>
               </div>
-              <div style={{ padding: '22px' }}>
+            )}
+
+            <Card className="dx-doc-main dx-id-panel" style={idPanelStyle}>
+              <div className="dx-id-tabbar">
+                <Tabs
+                  tabs={tabs}
+                  value={tab}
+                  onChange={setTab}
+                  actions={
+                    <DetailStatusPill
+                      label={STAGE_LIST_LABEL[workflowStage.key] || workflowStage.shortLabel}
+                      tone={STAGE_PILL_TONE[workflowStage.key] || 'neutral'}
+                    />
+                  }
+                />
+              </div>
+              <div className="dx-id-tab-body">
                 {tab === 'extract-validate' && (
                   <ExtractValidateTab
                     key={displayInv?.id || id}
@@ -748,8 +837,12 @@ function EssaInvoiceDetail({ userInfo: { userType } }) {
                           const result = await correctEssaInvoiceFields(id || displayInv.id, {
                             reasonRemarks,
                             fields,
+                            sectionKey,
                             source: 'PORTAL'
                           })
+                          setEnrichedInv(
+                            mergeSavedExtractFields(displayInv || inv, sectionKey, fields)
+                          )
                           const hint = result?.timeline_hint
                           if (hint) {
                             setTimelineEvents((prev) => [
@@ -853,12 +946,15 @@ function HeroStrip({ inv }) {
   const sourceLabel = isEmail ? 'Email' : isSharePoint ? 'SharePoint' : 'Upload'
   const sourceTone = isEmail || isSharePoint ? 'info' : 'neutral'
 
+  const slaDue = inv.sla_due || inv.due_date || inv.invoice_due_date || null
+  const slaBreached = Boolean(inv.sla_breached || inv.slaBreached)
+
   return (
     <div className="dx-invoice-hero">
-      <div className="dx-invoice-hero-row">
-        <div className="dx-invoice-hero-primary">
-          <HeroLabeledValue label="Invoice no.">
-            <h1 className="dx-invoice-hero-title">{invoiceNo || '—'}</h1>
+      <div className="dx-invoice-hero-copy">
+        <p className="dx-invoice-hero-line">
+          <HeroLabeledValue label="Invoice number">
+            <span className="dx-invoice-hero-title">{invoiceNo || '—'}</span>
           </HeroLabeledValue>
           <span className="dx-invoice-hero-dot" aria-hidden>
             ·
@@ -874,13 +970,9 @@ function HeroStrip({ inv }) {
               {sourceLabel}
             </Badge>
           </HeroLabeledValue>
-        </div>
-        <HeroLabeledValue label="Invoice amount" className="dx-invoice-hero-labeled--total">
-          <span className="dx-invoice-hero-total">{fmtMoney(totalAmount, currency)}</span>
-        </HeroLabeledValue>
-      </div>
-      <div className="dx-invoice-hero-meta">
-        <HeroLabeledValue label="PO no.">
+        </p>
+        <p className="dx-invoice-hero-meta">
+        <HeroLabeledValue label="PO number">
           <span
             className={`dx-invoice-hero-meta-value${nonPo ? ' dx-invoice-hero-meta-value--muted' : ' dx-invoice-hero-meta-value--mono'}`}
           >
@@ -895,6 +987,16 @@ function HeroStrip({ inv }) {
             <Calendar size={12} aria-hidden />
             {fmtDateOnly(invoiceDate) || '—'}
           </span>
+        </HeroLabeledValue>
+        <span className="dx-invoice-hero-dot" aria-hidden>
+          ·
+        </span>
+        <HeroLabeledValue label="SLA due">
+          {slaBreached ? (
+            <span className="dx-id-pill dx-id-pill--error">SLA Breached</span>
+          ) : (
+            <span className="dx-invoice-hero-meta-value">{fmtDateOnly(slaDue)}</span>
+          )}
         </HeroLabeledValue>
         {isEmail ? (
           <>
@@ -920,7 +1022,11 @@ function HeroStrip({ inv }) {
             ) : null}
           </>
         ) : null}
+        </p>
       </div>
+      <HeroLabeledValue label="Invoice amount" className="dx-invoice-hero-labeled--total">
+        <span className="dx-invoice-hero-total">{fmtMoney(totalAmount, currency)}</span>
+      </HeroLabeledValue>
     </div>
   )
 }
@@ -1233,26 +1339,15 @@ function ExtractValidateTab({
 
   return (
     <div className="dx-extract-validate">
-      <div className="dx-extract-validate-head">
-        <div className="dx-extract-validate-head-left">
-          <h3 className="dx-extract-validate-title">Extract &amp; validate</h3>
-          <span className="dx-extract-validate-sub">
-            {isNonPo
-              ? 'Non-PO invoice — review extracted fields and HCIS validation'
-              : 'Review OCR-extracted fields and validation results for this invoice'}
-          </span>
-        </div>
-      </div>
-
       {sections.length > 0 ? (
-        <div className="dx-ev-section">
+        <div className="dx-ev-section dx-ev-section--card">
           <ExtractValidateSectionHeader
             icon={FileText}
             title="Extraction"
             subtitle={
               isNonPo
                 ? 'Fields captured from the invoice document'
-                : 'Tabs follow enabled documents in Prompt Config · one tab per source document'
+                : 'Fields captured from each document · one tab per source document'
             }
             collapsible
             open={extractionOpen}
@@ -1294,9 +1389,7 @@ function ExtractValidateTab({
         </div>
       )}
 
-      <div className="dx-ev-section-divider" role="separator" aria-hidden="true" />
-
-      <div className="dx-ev-section">
+      <div className="dx-ev-section dx-ev-section--card">
         <ExtractValidateSectionHeader
           icon={ShieldCheck}
           title="Validation"
@@ -1336,9 +1429,7 @@ function ExtractValidateTab({
         />
       </div>
 
-      <div className="dx-ev-section-divider" role="separator" aria-hidden="true" />
-
-      <div className="dx-ev-section">
+      <div className="dx-ev-section dx-ev-section--card">
         <ExtractValidateSectionHeader
           icon={GitCompareArrows}
           title="N-Way validation"
@@ -1370,7 +1461,7 @@ function ExtractValidateTab({
   )
 }
 
-function ExtractDynamicTables({ tables, currency, scrollable = false }) {
+function ExtractDynamicTables({ tables, currency }) {
   if (!tables?.length) return null
 
   return (
@@ -1378,11 +1469,10 @@ function ExtractDynamicTables({ tables, currency, scrollable = false }) {
       {tables.map((table, tableIndex) => (
         <div
           key={`${table.title || 'table'}-${tableIndex}`}
-          className={`dx-val-section-table dx-val-section-table--lines dx-val-section-table--dynamic${
-            scrollable ? ' dx-extract-attendance-scroll' : ''
-          }`}
+          className="dx-val-section-table dx-val-section-table--lines dx-val-section-table--dynamic"
         >
           {table.title ? <h5 className="dx-extract-table-title">{table.title}</h5> : null}
+          <div className="dx-extract-table-scroll">
           <table className="dx-extract-lines-table">
             <thead>
               <tr>
@@ -1416,6 +1506,7 @@ function ExtractDynamicTables({ tables, currency, scrollable = false }) {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       ))}
     </>
@@ -1464,7 +1555,6 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
     section.lineColumns?.length > 0
   const hasTimesheetTable = section.manpowerSheets?.length > 0
   const hasEditableTable = hasHeaderTable || hasLineTable || hasTimesheetTable
-  const isAttendanceSection = section.key === 'G_attendance'
 
   useEffect(() => {
     setEditing(false)
@@ -1610,7 +1700,7 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
                 <Button size="sm" variant="primary" onClick={saveEditing} disabled={saving}>
                   <Save size={13} /> {saving ? 'Saving…' : 'Save'}
                 </Button>
-                <Button size="sm" variant="ghost" onClick={cancelEditing} disabled={saving}>
+                <Button size="sm" variant="secondary" className="dx-id-btn" onClick={cancelEditing} disabled={saving}>
                   <X size={13} /> Cancel
                 </Button>
               </>
@@ -1623,14 +1713,13 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
         )}
       </div>
       {editing && canEdit && (
-        <div style={{ padding: '0 0 12px' }}>
-          <label
-            className="text-xs"
-            style={{ display: 'block', fontWeight: 600, marginBottom: 6, color: 'var(--dx-text-soft)' }}
-          >
-            Reason for correction <span style={{ color: 'var(--dx-danger, #b91c1c)' }}>*</span>
+        <div className={`dx-extract-reason${reasonError ? ' dx-extract-reason--error' : ''}`}>
+          <label className="dx-extract-reason-label" htmlFor={`extract-reason-${section.key}`}>
+            Reason for correction <span aria-hidden="true">*</span>
           </label>
           <Input
+            id={`extract-reason-${section.key}`}
+            className="dx-extract-reason-input"
             value={reasonRemarks}
             onChange={(e) => {
               setReasonRemarks(e.target.value)
@@ -1638,17 +1727,17 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
             }}
             placeholder="e.g. Corrected based on invoice PDF"
             aria-label="Reason for correction"
+            aria-invalid={reasonError ? 'true' : undefined}
+            aria-describedby={`extract-reason-hint-${section.key}`}
             disabled={saving}
           />
-          {reasonError ? (
-            <p className="text-xs" style={{ color: 'var(--dx-danger, #b91c1c)', margin: '6px 0 0' }}>
-              {reasonError}
-            </p>
-          ) : (
-            <p className="text-xs text-muted" style={{ margin: '6px 0 0' }}>
-              Required for the audit log. Each changed field is recorded with before/after values.
-            </p>
-          )}
+          <p
+            id={`extract-reason-hint-${section.key}`}
+            className={`dx-extract-reason-hint${reasonError ? ' dx-extract-reason-hint--error' : ''}`}
+          >
+            {reasonError ||
+              'Required for the audit log. Each changed field is recorded with before and after values.'}
+          </p>
         </div>
       )}
       {hasHeaderTable && (
@@ -1699,11 +1788,7 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
       )}
 
       {hasExtractTables ? (
-        <ExtractDynamicTables
-          tables={section.extractTables}
-          currency={currency}
-          scrollable={isAttendanceSection}
-        />
+        <ExtractDynamicTables tables={section.extractTables} currency={currency} />
       ) : hasTimesheetTable ? (
         <TimesheetManpowerPanels
           sheets={section.manpowerSheets}
@@ -1714,11 +1799,8 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
         />
       ) : (
         hasLineTable && (
-          <div
-            className={`dx-val-section-table dx-val-section-table--lines${
-              isAttendanceSection ? ' dx-extract-attendance-scroll' : ''
-            }`}
-          >
+          <div className="dx-val-section-table dx-val-section-table--lines">
+            <div className="dx-extract-table-scroll">
             <table className="dx-extract-lines-table">
               <thead>
                 <tr>
@@ -1761,6 +1843,7 @@ function DocumentExtractSection({ section, currency, canEdit, saving = false, on
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )
       )}
@@ -1856,21 +1939,6 @@ function usePersistentBool(key, fallback) {
   }, [key, val])
 
   return [val, setVal]
-}
-
-function useIsNarrow() {
-  const [narrow, setNarrow] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1200px)').matches
-  )
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1200px)')
-    const fn = (e) => setNarrow(e.matches)
-    mq.addEventListener('change', fn)
-    return () => mq.removeEventListener('change', fn)
-  }, [])
-
-  return narrow
 }
 
 const mapStateToProps = (state) => ({

@@ -7,6 +7,7 @@ export class ApExtractionField extends Model {
   FieldName: string;
   DisplayName: string | null;
   Hint: string | null;
+  FieldKind: string;
   DisplayOrder: number;
   IsDeleted: boolean;
   CreatedAt: Date;
@@ -37,6 +38,11 @@ ApExtractionField.init(
     Hint: {
       type: DataTypes.TEXT,
       allowNull: true,
+    },
+    FieldKind: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: "scalar",
     },
     DisplayOrder: {
       type: DataTypes.INTEGER,

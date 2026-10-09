@@ -1,7 +1,9 @@
+import { QueryTypes } from "sequelize";
+import { sequelize } from "../config/sequelize";
 import { ApInboundSharePoint } from "../models/apInboundSharePoint";
+import { EssaInvoice } from "../models/essaInvoice";
 import apInvoiceExtractService from "./apInvoiceExtract.service";
 import {
-  formatSubjectRejectMessage,
   validateEmailSubject,
   type EmailSubjectValidationResult,
 } from "./apEmailSubjectValidation";
@@ -25,7 +27,6 @@ import { auditInboundExtractFailure } from "./essaInvoiceActions.service";
 import {
   auditDuplicateDetected,
   auditReceive,
-  auditRejectIntake,
 } from "./invoiceProcessAudit.service";
 import { mintCorrelationId } from "./auditEvent.service";
 
@@ -73,14 +74,7 @@ const describeQueueReason = (priorStatus: string | null): string => {
   return `retry_${status.toLowerCase()}`;
 };
 
-const subjectWorkflow = (
-  parsed: Extract<EmailSubjectValidationResult, { valid: true }>,
-): string => {
-  if (parsed.type === "DOCREQ") return "AUTO";
-  return parsed.invoiceWorkflow;
-};
-
-/** File name without extension used as the EAPA subject gate. */
+/** File name without extension. Used only to detect an email-only DOCREQ name. */
 export const fileNameToSubjectCandidate = (fileName: string | null | undefined): string => {
   const raw = String(fileName || "").trim();
   if (!raw) return "";
@@ -232,6 +226,15 @@ class ApSharePointIntakeService {
       }
     }
 
+    const documentIds = [
+      ...new Set(
+        rows
+          .map((row) => Number(row.DocumentId))
+          .filter((id) => Number.isInteger(id) && id > 0),
+      ),
+    ];
+    const resolved = await this.loadResolvedInvoiceTypes(documentIds);
+
     return rows.map((row) => {
       const subjectCandidate = fileNameToSubjectCandidate(row.FileName);
       const subjectCheck = validateEmailSubject(subjectCandidate);
@@ -259,6 +262,8 @@ class ApSharePointIntakeService {
               }
           : null;
       const statusUpper = String(row.Status || "").toUpperCase();
+      const documentId = row.DocumentId != null ? Number(row.DocumentId) : null;
+      const linked = documentId != null ? resolved.invoices.get(documentId) : undefined;
       return {
         inboundSharePointId: Number(row.InboundSharePointId),
         driveItemId: row.DriveItemId,
@@ -278,8 +283,61 @@ class ApSharePointIntakeService {
         statusAgeMs: ageMsFrom(row.UpdatedAt || row.CreatedAt),
         stale: isStalePendingStamp(statusUpper, row.UpdatedAt),
         subjectParse,
+        invoiceTypeId:
+          documentId != null ? resolved.typeIds.get(documentId) || null : null,
+        invoiceType: linked?.invoiceType || null,
+        invoiceWorkflow: linked?.invoiceWorkflow || null,
       };
     });
+  }
+
+  /**
+   * Filename subjects are not [EAPA] mail, so category comes from the invoice
+   * OCR already saved: snapshot meta.invoiceTypeId, then the ESSA invoice row.
+   */
+  private async loadResolvedInvoiceTypes(documentIds: number[]) {
+    const invoices = new Map<
+      number,
+      { invoiceType: string | null; invoiceWorkflow: string | null }
+    >();
+    const typeIds = new Map<number, string>();
+    if (!documentIds.length) return { invoices, typeIds };
+
+    const invoiceRows = await EssaInvoice.findAll({
+      where: { DocumentId: documentIds, IsDeleted: false },
+      attributes: ["DocumentId", "InvoiceType", "InvoiceWorkflow"],
+    });
+    for (const invoice of invoiceRows) {
+      invoices.set(Number(invoice.DocumentId), {
+        invoiceType: invoice.InvoiceType || null,
+        invoiceWorkflow: invoice.InvoiceWorkflow || null,
+      });
+    }
+
+    const snapshots = await sequelize.query<{
+      DocumentId: string;
+      invoiceTypeId: string | null;
+    }>(
+      `SELECT "DocumentId",
+              "FieldValue"::json->'meta'->>'invoiceTypeId' AS "invoiceTypeId"
+       FROM "AP_DOCUMENT_EXTRACTION"
+       WHERE "FieldName" = :fieldName
+         AND "DocumentId" IN (:documentIds)`,
+      {
+        replacements: {
+          fieldName: "__batchSnapshot__",
+          documentIds,
+        },
+        type: QueryTypes.SELECT,
+      },
+    );
+    for (const snapshot of snapshots) {
+      const typeId = String(snapshot.invoiceTypeId || "").trim().toUpperCase();
+      if (!typeId) continue;
+      typeIds.set(Number(snapshot.DocumentId), typeId);
+    }
+
+    return { invoices, typeIds };
   }
 
   async enqueueDriveItem(item: GraphDriveItem): Promise<{
@@ -370,36 +428,9 @@ class ApSharePointIntakeService {
     const fileName = String(item.name || "").trim();
     const subjectCandidate = fileNameToSubjectCandidate(fileName);
     const subjectCheck = validateEmailSubject(subjectCandidate);
-    if (subjectCheck.valid === false) {
-      logger.info(
-        `[SharePointIntake] Skipping file ${fileName}: ${subjectCheck.reason}`,
-      );
-      if (existing) {
-        await existing.update({
-          Status: "INVALID_NAME",
-          ErrorMessage: formatSubjectRejectMessage(subjectCheck.reason),
-          FileName: fileName || existing.FileName,
-          UpdatedAt: new Date(),
-        });
-        void auditRejectIntake({
-          objectId: fileName || `sp-${existing.InboundSharePointId}`,
-          source: "SHAREPOINT",
-          correlationId: mintCorrelationId(`sp${existing.InboundSharePointId}`),
-          reasonRemarks: formatSubjectRejectMessage(subjectCheck.reason),
-          details: { stage: "invalid_name", reason: subjectCheck.reason },
-        });
-      }
-      // Do not persist INVALID_NAME for every non-matching file in the folder (noise).
-      return {
-        skipped: true,
-        reason: subjectCheck.reason,
-        status: "INVALID_NAME",
-        shouldProcess: false,
-      };
-    }
-
-    // Document-request replies are email-only; do not create a new invoice from SP.
-    if (subjectCheck.type === "DOCREQ") {
+    // Document-request replies stay email-only. A normal PDF name is accepted
+    // and categorised the same way as a manual upload.
+    if (subjectCheck.valid === true && subjectCheck.type === "DOCREQ") {
       logger.info(
         `[SharePointIntake] Skipping DOCREQ file ${fileName} (email correlation only)`,
       );
@@ -511,20 +542,7 @@ class ApSharePointIntakeService {
     const archiveFileName = String(item.name || inbound.FileName || "invoice.pdf");
     const subjectCandidate = fileNameToSubjectCandidate(archiveFileName);
     const subjectCheck = validateEmailSubject(subjectCandidate);
-    if (subjectCheck.valid === false) {
-      await inbound.update({
-        Status: "INVALID_NAME",
-        ErrorMessage: formatSubjectRejectMessage(subjectCheck.reason),
-        UpdatedAt: new Date(),
-      });
-      return {
-        skipped: false,
-        status: "INVALID_NAME" as InboundSharePointStatus,
-        inboundSharePointId: Number(inbound.InboundSharePointId),
-      };
-    }
-
-    if (subjectCheck.type === "DOCREQ") {
+    if (subjectCheck.valid === true && subjectCheck.type === "DOCREQ") {
       await inbound.update({
         Status: "INVALID_NAME",
         ErrorMessage:
@@ -538,7 +556,7 @@ class ApSharePointIntakeService {
       };
     }
 
-    const workflow = subjectWorkflow(subjectCheck);
+    const workflow = "AUTO";
 
     await inbound.update({
       Status: "PENDING",
@@ -747,7 +765,7 @@ class ApSharePointIntakeService {
     pdfBuffer: Buffer;
     pdfFileName: string;
     subjectCandidate: string;
-    subjectCheck: Extract<EmailSubjectValidationResult, { valid: true }>;
+    subjectCheck: EmailSubjectValidationResult;
     workflow: string;
     extractReason?: string;
     driveItemId: string;
@@ -864,12 +882,15 @@ class ApSharePointIntakeService {
           buffer: pdfBuffer,
           fileName: file.originalname,
           contentType: file.mimetype,
-          subjectParse: subjectCheck,
+          subjectParse: subjectCheck.valid === true ? subjectCheck : null,
           asOfDate: item.lastModifiedDateTime || inbound.LastModifiedAt || new Date(),
           sourceChannel: "SHAREPOINT",
           documentId: extractResult.primaryDocumentId,
-          poNumber: subjectCheck.type === "PO" ? subjectCheck.poNumber : null,
-          vendorName: subjectCheck.vendorName,
+          poNumber:
+            subjectCheck.valid === true && subjectCheck.type === "PO"
+              ? subjectCheck.poNumber
+              : null,
+          vendorName: subjectCheck.valid === true ? subjectCheck.vendorName : null,
         });
     } catch (fileError) {
       logger.warn(
@@ -903,13 +924,7 @@ class ApSharePointIntakeService {
       input.fileName || input.file.originalname || "simulate-invoice.pdf";
     const subjectCandidate = fileNameToSubjectCandidate(fileName);
     const subjectCheck = validateEmailSubject(subjectCandidate);
-    if (subjectCheck.valid === false) {
-      throw new APIError(
-        formatSubjectRejectMessage(subjectCheck.reason),
-        StatusCodeEnum.HTTP_BAD_REQUEST,
-      );
-    }
-    if (subjectCheck.type === "DOCREQ") {
+    if (subjectCheck.valid === true && subjectCheck.type === "DOCREQ") {
       throw new APIError(
         "Document-request ([DOCREQ]) is email-only. Use email intake / simulate with a DOCREQ subject.",
         StatusCodeEnum.HTTP_BAD_REQUEST,
@@ -923,7 +938,8 @@ class ApSharePointIntakeService {
       input.invoiceWorkflow &&
       String(input.invoiceWorkflow).trim().toUpperCase() !== "AUTO"
         ? String(input.invoiceWorkflow).trim().toUpperCase()
-        : subjectWorkflow(subjectCheck);
+        : "AUTO";
+    const parsedSubject = subjectCheck.valid === true ? subjectCheck : null;
 
     const inbound = await ApInboundSharePoint.create({
       DriveItemId: driveItemId,
@@ -987,12 +1003,13 @@ class ApSharePointIntakeService {
           buffer: input.file.buffer,
           fileName,
           contentType: input.file.mimetype,
-          subjectParse: subjectCheck,
+          subjectParse: parsedSubject,
           asOfDate: new Date(),
           sourceChannel: "SHAREPOINT",
           documentId: extractResult.primaryDocumentId,
-          poNumber: subjectCheck.type === "PO" ? subjectCheck.poNumber : null,
-          vendorName: subjectCheck.vendorName,
+          poNumber:
+            parsedSubject?.type === "PO" ? parsedSubject.poNumber : null,
+          vendorName: parsedSubject?.vendorName || null,
         });
       } catch (fileError) {
         logger.warn(

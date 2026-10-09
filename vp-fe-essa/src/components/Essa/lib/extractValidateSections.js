@@ -493,7 +493,7 @@ export function buildExtractValidateSections(inv, checks = [], corrections = {})
 
   if (isNonPoContext) {
     const section = buildNonPoTravelExtractSection(inv, checks)
-    return [applySectionCorrections(section, corrections[section.key] || {})]
+    return [applySectionCorrections(section, corrections)]
   }
 
   const ve = inv?.validation_extraction || inv?.ocr?.validationExtraction
@@ -758,7 +758,7 @@ export function buildExtractValidateSections(inv, checks = [], corrections = {})
       {
         fieldKey: 'date',
         label: 'Tax Inv Date',
-        captured: fmtDateField(b.date),
+        captured: fmtDateField(b.date) || (b.date != null && b.date !== '' ? String(b.date) : null),
         optional: !taxSectionRequired,
         preferCaptured: true
       },

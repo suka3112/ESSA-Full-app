@@ -32,7 +32,7 @@ import { Select } from '../ui/Select'
 import { Tabs } from '../ui/Tabs'
 import { FilterBar, FilterField, FilterSearch, ListWorkbench, SortTh, WorkbenchTable } from '../ui/listPage'
 import { ADMIN_USER_TYPE } from 'constants/userType'
-import { INVOICE_DASHBOARD, SLA_MANAGEMENT } from 'constants/url'
+import { INVOICE_DASHBOARD, PROMPT_CONFIG } from 'constants/url'
 import { fmtDate } from 'api/essaDashboard'
 import { showEssaErrorToast, showEssaSuccessToast } from '../lib/essaToast'
 import { isSlaScenario, validateDraft } from '../lib/emailTemplatesStore'
@@ -672,7 +672,7 @@ function EssaEmailTemplates({ userType, userName }) {
           <PageHeader
             breadcrumb={[
               { label: 'Home', to: `/${ADMIN_USER_TYPE}${INVOICE_DASHBOARD}` },
-              { label: 'Administration', to: `/${ADMIN_USER_TYPE}${SLA_MANAGEMENT}` },
+              { label: 'Administration', to: `/${ADMIN_USER_TYPE}${PROMPT_CONFIG}` },
               { label: 'Email Templates' }
             ]}
             title="Email Templates"

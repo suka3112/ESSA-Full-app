@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Copy, Mail, Send, ShieldAlert, Upload } from 'lucide-react'
-import { Badge } from '../ui/Badge'
+import { AlertTriangle, CheckCircle2, Mail, ShieldAlert, Upload, XCircle } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { Dialog } from '../ui/Dialog'
 import { Tabs } from '../ui/Tabs'
@@ -42,12 +41,6 @@ import {
   resolveRateValidationStatus,
   resolveBankValidationStatus
 } from './validationRuleCatalog'
-
-const OVERALL_TONE = {
-  PASS: 'pass',
-  FAIL: 'fail',
-  BLOCKED: 'fail'
-}
 
 const ROW_STATUS_CLASS = {
   pass: 'dx-checklist-row--pass',
@@ -927,6 +920,7 @@ function buildVendorReportEmail(invoice = {}, checklist = [], validation = {}) {
   const extra = buildVendorReportExtraBody(invoice, checklist, validation)
   return {
     to: resolveVendorReportEmail(invoice),
+    cc: '',
     subject: `[EAPA][DOCREQ][INV:…][REQ:…] ${vendorName} - ${invoiceNo}`,
     body: [
       `Dear ${vendorName},`,
@@ -953,121 +947,123 @@ function VendorReportDialog({
   loading = false,
   sending = false,
   canSend = false,
+  hasFailures = false,
   onSend
 }) {
-  const handleCopy = async () => {
-    const text = [`To: ${draft.to || '(add vendor email)'}`, `Subject: ${draft.subject}`, '', draft.body].join(
-      '\n'
-    )
-    try {
-      await navigator.clipboard.writeText(text)
-      showEssaSuccessToast('Copied to clipboard', 'Email draft is ready to paste into your mail client.')
-    } catch {
-      showEssaSuccessToast('Copy failed', 'Select the message body and copy manually.')
-    }
-  }
-
   const handleSend = async () => {
     if (typeof onSend !== 'function') return
     await onSend()
   }
 
   const sendDisabled =
-    loading || sending || !canSend || !draft.subject || !String(draft.to || '').trim()
+    loading || sending || !canSend || !String(draft.to || '').trim() || !String(draft.body || '').trim()
+
+  const subtitle = hasFailures
+    ? 'Draft email with validation failures pre-filled. Edit before sending.'
+    : 'Draft email with the validation report pre-filled. Edit before sending.'
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
+      className="dx-report-modal"
       title="Report to vendor"
-      description="Subject uses [DOCREQ] correlation tokens and cannot be edited. Ask the vendor to Reply without changing it."
-      width={680}
+      description={subtitle}
+      width={768}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose} disabled={sending}>
+          <Button variant="ghost" className="dx-report-cancel" onClick={onClose} disabled={sending}>
             Cancel
           </Button>
-          <Button variant="secondary" onClick={handleCopy} disabled={loading || sending}>
-            <Copy size={14} /> Copy draft
-          </Button>
-          <Button variant="primary" onClick={handleSend} disabled={sendDisabled}>
-            <Send size={14} /> {sending ? 'Sending…' : 'Send email'}
+          <Button variant="primary" className="dx-report-send" onClick={handleSend} disabled={sendDisabled}>
+            <Mail size={13} /> {sending ? 'Sending…' : 'Send'}
           </Button>
         </>
       }
     >
-      <div className="dx-vendor-email-compose">
-        {loading && (
-          <p className="text-sm text-muted" style={{ marginBottom: 12 }}>
-            Creating document request and locking [DOCREQ] subject…
-          </p>
-        )}
-        <div className="dx-field">
-          <label className="dx-label" htmlFor="vendor-report-to">
-            To
-          </label>
+      <div className="dx-report-form">
+        {loading ? (
+          <p className="dx-report-loading">Creating document request and locking the subject…</p>
+        ) : null}
+        <label className="dx-report-field" htmlFor="vendor-report-to">
+          <span>To</span>
           <input
             id="vendor-report-to"
-            className="dx-input"
+            className="dx-report-input"
             type="email"
-            placeholder={DEMO_VENDOR_EMAIL_FALLBACK}
+            placeholder="vendor@company.com"
             value={draft.to}
             onChange={(e) => onDraftChange({ ...draft, to: e.target.value })}
             disabled={sending}
           />
-        </div>
-        <div className="dx-field">
-          <label className="dx-label" htmlFor="vendor-report-subject">
-            Subject (locked)
-          </label>
+        </label>
+        <label className="dx-report-field" htmlFor="vendor-report-cc">
+          <span>CC</span>
+          <input
+            id="vendor-report-cc"
+            className="dx-report-input"
+            type="email"
+            placeholder="ap.team@essa.co.in"
+            value={draft.cc || ''}
+            onChange={(e) => onDraftChange({ ...draft, cc: e.target.value })}
+            disabled={sending}
+          />
+        </label>
+        <label className="dx-report-field" htmlFor="vendor-report-subject">
+          <span>Subject (non-editable)</span>
           <input
             id="vendor-report-subject"
-            className="dx-input"
+            className="dx-report-input"
             value={draft.subject}
-            readOnly
-            aria-readonly="true"
+            disabled
           />
-        </div>
-        <div className="dx-field">
-          <label className="dx-label" htmlFor="vendor-report-body">
-            Message
-          </label>
+        </label>
+        <label className="dx-report-field" htmlFor="vendor-report-body">
+          <span>Message</span>
           <Textarea
             id="vendor-report-body"
-            rows={14}
-            className="dx-vendor-email-body"
+            rows={11}
+            maxLength={2000}
+            className="dx-report-message"
             value={draft.body}
             onChange={(e) => onDraftChange({ ...draft, body: e.target.value })}
             disabled={sending}
           />
-        </div>
+        </label>
       </div>
     </Dialog>
   )
 }
 
-function CommercialFooter({ validation }) {
+function CommercialFooter({ validation, invoice }) {
   const ld = validation?.ld_amount ?? 0
   const advance = validation?.advance_recovery ?? 0
   const retention = validation?.retention_held ?? 0
-  const net = validation?.net_payable
-
-  if (!ld && !advance && !retention && net == null) return null
+  const net =
+    validation?.net_payable ?? invoice?.net_payable ?? invoice?.total_amount ?? null
 
   return (
     <div className="dx-checklist-commercial">
       <div className="dx-checklist-commercial-title">Commercial impact</div>
-      <div className="dx-checklist-commercial-grid">
-        {validation?.ld_pct > 0 && <span>LD: {validation.ld_pct}% (− applicable)</span>}
-        {ld > 0 && <span>Late delivery deduction: applied</span>}
-        {advance > 0 && <span>Advance recovery: deducted</span>}
-        {retention > 0 && <span>Retention held: applied</span>}
-        {net != null && (
-          <span className="dx-checklist-net">Net payable: {formatIdrPrefix(net)}</span>
-        )}
-      </div>
+      <p className="dx-checklist-net">
+        Net payable: {net != null ? formatIdrPrefix(net) : '—'}
+      </p>
+      {(validation?.ld_pct > 0 || ld > 0 || advance > 0 || retention > 0) && (
+        <div className="dx-checklist-commercial-grid">
+          {validation?.ld_pct > 0 && <span>LD: {validation.ld_pct}%</span>}
+          {ld > 0 && <span>Late delivery deduction: applied</span>}
+          {advance > 0 && <span>Advance recovery: deducted</span>}
+          {retention > 0 && <span>Retention held: applied</span>}
+        </div>
+      )}
     </div>
   )
+}
+
+function ValidationTabIcon({ status }) {
+  if (status === 'fail') return <XCircle size={12} />
+  if (status === 'warn') return <AlertTriangle size={12} />
+  return <CheckCircle2 size={12} className="dx-check-icon-pass" />
 }
 
 export function PoValidationPanel({
@@ -1105,6 +1101,14 @@ export function PoValidationPanel({
   const overallStatus = getChecklistOverallStatusFromMerged(checklist)
   const overallBadgeLabel =
     formatChecklistPassBadgeText(checklistPassed, checklistTotal) || overallStatus
+  const warnCount = checklist.filter((rule) => rule.status === 'warn').length
+  const overall = !hasResults
+    ? { label: 'Not validated yet', tone: 'warn' }
+    : failedCount > 0
+      ? { label: `Failed · ${failedCount} check${failedCount === 1 ? '' : 's'}`, tone: 'fail' }
+      : warnCount > 0
+        ? { label: 'Passed with exceptions', tone: 'warn' }
+        : { label: 'Passed', tone: 'pass' }
   const poNumber = validation?.po_number
   const sesNo = validation?.ses_no
 
@@ -1112,7 +1116,7 @@ export function PoValidationPanel({
   const [reportOpen, setReportOpen] = useState(false)
   const [reportLoading, setReportLoading] = useState(false)
   const [reportSending, setReportSending] = useState(false)
-  const [reportDraft, setReportDraft] = useState({ to: '', subject: '', body: '' })
+  const [reportDraft, setReportDraft] = useState({ to: '', cc: '', subject: '', body: '' })
   const [openRequestInfo, setOpenRequestInfo] = useState(null)
 
   const defaultReportDraft = useMemo(
@@ -1155,6 +1159,7 @@ export function PoValidationPanel({
       })
       setReportDraft({
         to: result?.to || fallback.to,
+        cc: fallback.cc || '',
         subject: result?.subject || fallback.subject,
         body: result?.body || fallback.body,
         subjectLocked: true
@@ -1196,6 +1201,7 @@ export function PoValidationPanel({
     try {
       const result = await sendDocumentRequestEmail(requestId, {
         to,
+        cc: String(reportDraft.cc || '').trim() || undefined,
         body: reportDraft.body
       })
       showEssaSuccessToast(
@@ -1224,11 +1230,15 @@ export function PoValidationPanel({
         : rule.ruleCode === 'BANK_VENDOR_MASTER'
           ? resolveBankValidationStatus(rule)
           : rule.status
+    const status = tabStatus || 'fail'
     return {
       value: rule.ruleCode,
       label: `${rule.sequence}. ${rule.tabLabel || rule.title}`,
       title: rule.title,
-      tabClassName: TAB_STATUS_CLASS[tabStatus] || TAB_STATUS_CLASS.fail
+      tabClassName: TAB_STATUS_CLASS[status] || TAB_STATUS_CLASS.fail,
+      icon: function TabIcon() {
+        return <ValidationTabIcon status={status} />
+      }
     }
   })
 
@@ -1239,21 +1249,29 @@ export function PoValidationPanel({
     <section className="dx-val-section dx-po-validation dx-validation-checklist">
       <div className="dx-po-validation-toolbar">
         <div className="dx-po-validation-meta">
+          <span className={`dx-val-overall dx-val-overall--${overall.tone}`}>
+            {overall.tone === 'fail' ? (
+              <XCircle size={13} />
+            ) : overall.tone === 'warn' ? (
+              <AlertTriangle size={13} />
+            ) : (
+              <CheckCircle2 size={13} />
+            )}
+            {overall.label}
+          </span>
           {overallStatus && (
-            <Badge tone={OVERALL_TONE[overallStatus] || 'neutral'} dot={false}>
-              {overallBadgeLabel}
-            </Badge>
+            <span className={`dx-val-passed${failedCount ? '' : ' dx-val-passed--ok'}`}>
+              • {overallBadgeLabel}
+            </span>
           )}
           {poNumber && <span className="dx-po-meta-chip">PO {poNumber}</span>}
           {sesNo && <span className="dx-po-meta-chip dx-po-meta-chip--ok">SES {sesNo}</span>}
         </div>
 
         <div className="dx-po-validation-actions">
-          {failedCount > 0 && (
-            <Button size="sm" variant="ghost" onClick={openVendorReport}>
-              <Mail size={13} /> Report to vendor
-            </Button>
-          )}
+          <Button size="sm" variant="secondary" className="dx-id-btn" onClick={openVendorReport}>
+            <Mail size={13} /> Report to vendor
+          </Button>
         </div>
       </div>
 
@@ -1272,6 +1290,7 @@ export function PoValidationPanel({
         loading={reportLoading}
         sending={reportSending}
         canSend={Boolean(openRequestInfo?.requestId)}
+        hasFailures={failedCount > 0}
         onSend={sendVendorReport}
       />
 
@@ -1304,7 +1323,7 @@ export function PoValidationPanel({
               />
             )}
           </div>
-          <CommercialFooter validation={validation} />
+          <CommercialFooter validation={validation} invoice={invoice} />
         </div>
       )}
     </section>

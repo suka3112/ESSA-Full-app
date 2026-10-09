@@ -63,8 +63,10 @@ export const describeRule = (rule) => {
     return `Check that the ${sourceLabel(rule.source)} is present in the invoice package.`
   }
   const targets = (rule.targets || []).filter((t) => t.requirement !== 'EXTRACT')
-  const req = targets.filter((t) => t.requirement !== 'IF_PRESENT').map((t) => sourceLabel(t.doc))
-  const opt = targets.filter((t) => t.requirement === 'IF_PRESENT').map((t) => sourceLabel(t.doc))
+  // A target compared on a differently named field reads “PO (vendor name)”.
+  const docText = (t) => (t.fieldLabel && t.fieldLabel.toLowerCase() !== String(rule.dataPoint || '').toLowerCase() ? `${sourceLabel(t.doc)} (${t.fieldLabel.toLowerCase()})` : sourceLabel(t.doc))
+  const req = targets.filter((t) => t.requirement !== 'IF_PRESENT').map(docText)
+  const opt = targets.filter((t) => t.requirement === 'IF_PRESENT').map(docText)
   let body
   if (rule.compareMode === 'STEPWISE' && targets.length) {
     const chain = [rule.source, ...targets.map((t) => t.doc)].map(sourceLabel)

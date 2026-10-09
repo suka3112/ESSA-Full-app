@@ -7,16 +7,24 @@
 export const INVOICE_TYPE_CODE_TO_LABEL = {
   MANPOWER_SERVICES: 'Manpower',
   CIVIL_CONTRACTOR: 'Civil Contractor',
+  MATERIAL_LOCAL: 'Material Local',
   MATERIAL_IMPORT: 'Material Import',
   CAMP_SERVICE_AND_CATERING: 'Camp Service and Catering',
+  LOGISTICS: 'Logistics',
+  HOUSEKEEPING: 'Housekeeping',
+  RENTAL_EQUIPMENT: 'Rental Equipment',
   NON_PO: 'Non-PO'
 }
 
 export const INVOICE_TYPE_LABEL_TO_CODE = {
   Manpower: 'MANPOWER_SERVICES',
   'Civil Contractor': 'CIVIL_CONTRACTOR',
+  'Material Local': 'MATERIAL_LOCAL',
   'Material Import': 'MATERIAL_IMPORT',
   'Camp Service and Catering': 'CAMP_SERVICE_AND_CATERING',
+  Logistics: 'LOGISTICS',
+  Housekeeping: 'HOUSEKEEPING',
+  'Rental Equipment': 'RENTAL_EQUIPMENT',
   'Non-PO': 'NON_PO'
 }
 
@@ -64,10 +72,14 @@ export function normalizeInvoiceTypeLabel(value) {
     return 'Civil Contractor'
   }
   if (lower === 'manpower' || lower.includes('manpower')) return 'Manpower'
+  if (lower.includes('material local') || lower === 'local') return 'Material Local'
   if (lower.includes('material import') || lower === 'import') return 'Material Import'
   if (lower.includes('catering') || lower.includes('camp service')) {
     return 'Camp Service and Catering'
   }
+  if (lower === 'logistics' || lower.includes('logistics')) return 'Logistics'
+  if (lower === 'housekeeping' || lower.includes('housekeeping')) return 'Housekeeping'
+  if (lower.includes('rental')) return 'Rental Equipment'
   if (lower === 'non-po' || lower === 'non_po' || lower === 'nonpo') return 'Non-PO'
   if (INVOICE_TYPE_LABEL_TO_CODE[raw]) return raw
   return null

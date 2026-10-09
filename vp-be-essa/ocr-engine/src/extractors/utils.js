@@ -214,6 +214,15 @@ export function mergeDynamicAiResult(base, aiResult) {
     }
   }
 
+  // Any other top-level array of row objects is a configured table field.
+  for (const [key, value] of Object.entries(aiResult)) {
+    if (RESERVED.has(key) || key === "lineItems" || merged[key] != null) continue;
+    if (!Array.isArray(value) || value.length === 0) continue;
+    const rows = value.filter((row) => row && typeof row === "object" && !Array.isArray(row));
+    if (rows.length === 0) continue;
+    merged[key] = rows;
+  }
+
   if (coerceNull(aiResult.summary)) {
     merged.summary = coerceNull(aiResult.summary);
   }

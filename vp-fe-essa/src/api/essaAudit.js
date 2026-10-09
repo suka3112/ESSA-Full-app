@@ -26,7 +26,7 @@ export async function fetchEssaAuditLogs(params = {}) {
 /**
  * Persist field corrections and write CORRECT / MANUAL_ENTER audit events.
  * @param {string} invoiceId ocr-{documentId} or invoice number
- * @param {{ reasonRemarks: string, fields: Record<string, string|null>|Array, source?: string }} body
+ * @param {{ reasonRemarks: string, fields: Record<string, string|null>|Array, source?: string, sectionKey?: string }} body
  */
 export async function correctEssaInvoiceFields(invoiceId, body) {
   const response = await axiosInstance.patch(ESSA_INVOICE_FIELDS(invoiceId), body)

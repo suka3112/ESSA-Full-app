@@ -1,7 +1,7 @@
 /**
  * N-way match rules ("check A against B") — admin CRUD.
  *
- * Table: AP_MATCH_RULE (db/migrations/030_AP_MATCH_RULE_PG.sql).
+ * Table: AP_MATCH_RULE (db/migrations/032_AP_MATCH_RULE_PG.sql).
  * The table is seeded from src/json/matchRulesSeed.json on first read, so a fresh
  * environment always has the rule set agreed on the 25 Sep 2026 requirement call.
  * The seed file is generated from the frontend catalog
@@ -179,16 +179,28 @@ function toAttributes(body: Json, partial = false): Json {
 
 /**
  * Make sure AP_MATCH_RULE exists, so the admin screen works right after a pull
- * without a manual migration. Runs migration 030 (idempotent: CREATE … IF NOT EXISTS)
- * once per process; falls back to Sequelize sync if the SQL file is not shipped.
+ * without a manual migration. Runs migration 032 once per process; falls back to
+ * Sequelize sync if the SQL file is not shipped.
  */
+const MATCH_RULE_MIGRATION = "032_AP_MATCH_RULE_PG.sql";
+
+function sqlStatements(script: string): string[] {
+  return script
+    .replace(/--.*$/gm, "")
+    .split(";")
+    .map((statement) => statement.trim())
+    .filter(Boolean);
+}
+
 let tableReady: Promise<void> | null = null;
 export function ensureMatchRuleTable(): Promise<void> {
   if (!tableReady) {
     tableReady = (async () => {
-      const file = path.resolve(__dirname, "../../db/migrations/030_AP_MATCH_RULE_PG.sql");
+      const file = path.resolve(__dirname, "../../db/migrations", MATCH_RULE_MIGRATION);
       if (fs.existsSync(file)) {
-        await sequelize.query(fs.readFileSync(file, "utf8"));
+        for (const statement of sqlStatements(fs.readFileSync(file, "utf8"))) {
+          await sequelize.query(statement);
+        }
       } else {
         await ApMatchRule.sync();
       }

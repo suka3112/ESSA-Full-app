@@ -19,6 +19,75 @@ function getStoredControls(): Record<string, any> {
   return {};
 }
 
+/** Same folding as invoice validation name matching: drop punctuation and legal-form tokens. */
+function vendorNameKey(columnRef: string): string {
+  return `trim(regexp_replace(
+    regexp_replace(
+      regexp_replace(
+        regexp_replace(upper(coalesce(${columnRef}, '')), '[.,]', ' ', 'g'),
+        '(^|[^A-Z0-9])P[[:space:]]+T([^A-Z0-9]|$)', E'\\\\1 \\\\2', 'g'
+      ),
+      '(^|[^A-Z0-9])(PT|CV|TBK|PERSERO|UD)([^A-Z0-9]|$)', E'\\\\1 \\\\3', 'g'
+    ),
+    '[[:space:]]+', ' ', 'g'
+  ))`;
+}
+
+function invoiceCurrency(columnRef: string): string {
+  return `CASE
+    WHEN upper(btrim(coalesce(${columnRef}, ''))) IN ('RP', 'IDR')
+      OR ${columnRef} ILIKE '%rupiah%' THEN 'IDR'
+    WHEN upper(coalesce(${columnRef}, '')) LIKE '%USD%'
+      OR upper(coalesce(${columnRef}, '')) LIKE 'US%' THEN 'USD'
+    ELSE COALESCE(NULLIF(upper(left(btrim(${columnRef}), 3)), ''), 'IDR')
+  END`;
+}
+
+const ESSA_INVOICE_STATS_SQL = `
+  WITH invoice_keys AS (
+    SELECT
+      i."Id",
+      NULLIF(btrim(i."VendorCode"), '') AS vendor_code,
+      ${vendorNameKey('i."VendorName"')} AS name_key,
+      lower(i."WorkflowStage") AS stage,
+      CAST(i."TotalAmount" AS NUMERIC) AS amount,
+      ${invoiceCurrency('i."Currency"')} AS currency
+    FROM "ESSA_INVOICE" i
+    WHERE i."IsDeleted" = false
+  )
+  SELECT
+    vk.vendor_id,
+    count(ik."Id")::int AS "invoiceCount",
+    count(ik."Id") FILTER (
+      WHERE ik.stage NOT IN ('parked', 'posted', 'paid', 'rejected')
+    )::int AS "openInvoiceCount",
+    COALESCE(sum(ik.amount) FILTER (WHERE ik.currency = 'IDR'), 0) AS "idrTotal",
+    COALESCE(sum(ik.amount) FILTER (WHERE ik.currency <> 'IDR'), 0) AS "otherTotal",
+    count(ik."Id") FILTER (WHERE ik.currency = 'IDR')::int AS "idrCount",
+    MAX(ik.currency) FILTER (WHERE ik.currency <> 'IDR') AS "otherCurrency"
+  FROM (
+    SELECT
+      v."ID" AS vendor_id,
+      NULLIF(btrim(v."Vendor_SAP_Code"), '') AS sap_code,
+      ${vendorNameKey('v."Vendor_Name_EN"')} AS name_key
+    FROM "VENDOR" v
+    WHERE v."Is_Deleted" = false
+  ) vk
+  JOIN invoice_keys ik
+    ON (ik.vendor_code IS NOT NULL AND ik.vendor_code = vk.sap_code)
+    OR (ik.name_key <> '' AND ik.name_key = vk.name_key)
+  GROUP BY vk.vendor_id
+`;
+
+function billedFromStats(stats: any) {
+  const idrCount = Number(stats?.idrCount) || 0;
+  const currency = idrCount > 0 ? "IDR" : stats?.otherCurrency || "IDR";
+  const totalBilled = currency === "IDR"
+    ? Number(stats?.idrTotal) || 0
+    : Number(stats?.otherTotal) || 0;
+  return { currency, totalBilled };
+}
+
 function saveStoredControl(code: string, patch: any): any {
   try {
     const dir = path.dirname(CONTROL_STORE_PATH);
@@ -68,10 +137,14 @@ class EssaVendorController extends BaseController {
           v."Phone" as phone,
           v."Industry_Type" as classification,
           v."CreatedDt" as "lastSyncAt",
-          (SELECT count(*) FROM "INVOICE_HEADER" WHERE "Vendor_id" = v."ID" AND "Is_Deleted" = false) as "invoiceCount",
-          (SELECT count(*) FROM "INVOICE_HEADER" WHERE "Vendor_id" = v."ID" AND "Is_Deleted" = false AND "Is_Paid" = false) as "openInvoiceCount",
-          (SELECT COALESCE(sum(CAST("InvAmt" AS NUMERIC)), 0) FROM "INVOICE_HEADER" WHERE "Vendor_id" = v."ID" AND "Is_Deleted" = false) as "totalBilled"
+          COALESCE(s."invoiceCount", 0) as "invoiceCount",
+          COALESCE(s."openInvoiceCount", 0) as "openInvoiceCount",
+          COALESCE(s."idrTotal", 0) as "idrTotal",
+          COALESCE(s."otherTotal", 0) as "otherTotal",
+          COALESCE(s."idrCount", 0) as "idrCount",
+          s."otherCurrency" as "otherCurrency"
         FROM "VENDOR" v
+        LEFT JOIN (${ESSA_INVOICE_STATS_SQL}) s ON s.vendor_id = v."ID"
         WHERE v."Is_Deleted" = false
       `);
 
@@ -88,6 +161,7 @@ class EssaVendorController extends BaseController {
             : "Enabled";
         const derivedSapStatus = v.active ? "ACTIVE" : "INACTIVE";
         const location = [v.city, v.state || v.country].filter(Boolean).join(", ");
+        const billed = billedFromStats(v);
 
         return {
           id: v.id,
@@ -102,9 +176,9 @@ class EssaVendorController extends BaseController {
           control: ctrl,
           invoiceCount: Number(v.invoiceCount) || 0,
           openInvoiceCount: Number(v.openInvoiceCount) || 0,
-          totalBilled: Number(v.totalBilled) || 0,
+          totalBilled: billed.totalBilled,
           taxStatus: derivedTax,
-          currency: "AED",
+          currency: billed.currency,
           lastSyncAt: v.lastSyncAt
         };
       });
@@ -277,24 +351,30 @@ class EssaVendorController extends BaseController {
         LIMIT 25;
       `, { replacements: { id: v.id, code: v.code } });
 
-      // Recent invoices
+      // Recent extracted ESSA invoices for this vendor
       const [invoices]: [any[], any] = await sequelize.query(`
-        SELECT 
-          "ID" as id,
-          "InvNo" as "invoiceNumber",
-          "InvDt" as "invoiceDate",
-          CAST("InvAmt" AS NUMERIC) as amount,
-          COALESCE("InvCurr", 'AED') as currency,
-          CASE WHEN "Is_Paid" = true THEN 'PAID' ELSE 'POSTED' END as lifecycle,
-          CASE WHEN "Is_Paid" = true THEN 'Paid' ELSE 'Posted to SAP' END as status,
-          COALESCE(NULLIF("Nature_Of_Expense", ''), 'General Expense') as "categoryName",
-          "PONo" as "poNumber"
-        FROM "INVOICE_HEADER"
-        WHERE "Vendor_id" = :id
-          AND "Is_Deleted" = false
-        ORDER BY "InvDt" DESC NULLS LAST
+        SELECT
+          'ocr-' || CAST(i."DocumentId" AS text) as id,
+          COALESCE(NULLIF(btrim(i."InvoiceNo"), ''), 'ocr-' || CAST(i."DocumentId" AS text)) as "invoiceNumber",
+          i."InvoiceDate" as "invoiceDate",
+          CAST(i."TotalAmount" AS NUMERIC) as amount,
+          ${invoiceCurrency('i."Currency"')} as currency,
+          i."WorkflowStage" as lifecycle,
+          initcap(i."WorkflowStage") as status,
+          COALESCE(NULLIF(btrim(i."InvoiceType"), ''), 'General') as "categoryName",
+          i."PoNumber" as "poNumber"
+        FROM "ESSA_INVOICE" i
+        WHERE i."IsDeleted" = false
+          AND (
+            (NULLIF(btrim(i."VendorCode"), '') IS NOT NULL AND NULLIF(btrim(i."VendorCode"), '') = NULLIF(btrim(:code), ''))
+            OR (
+              ${vendorNameKey('i."VendorName"')} <> ''
+              AND ${vendorNameKey('i."VendorName"')} = ${vendorNameKey(":name")}
+            )
+          )
+        ORDER BY i."InvoiceDate" DESC NULLS LAST, i."Id" DESC
         LIMIT 25;
-      `, { replacements: { id: v.id } });
+      `, { replacements: { code: v.code, name: v.name } });
 
       const detailData = {
         vendor: {

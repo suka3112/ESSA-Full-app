@@ -34,18 +34,22 @@ const STATUS_FILTERS = [
   { key: 'IGNORED', label: 'Ignored' }
 ]
 
-const STATUS_LEGEND = [
-  { key: 'QUEUED', label: 'Queued', tone: 'neutral', description: 'Waiting — OCR not started' },
-  { key: 'PENDING', label: 'Pending', tone: 'info', description: 'OCR / save in progress (shows age)' },
-  { key: 'PROCESSED', label: 'Processed', tone: 'success', description: 'Saved after OCR' },
-  { key: 'FAILED', label: 'Failed', tone: 'danger', description: 'OCR error or stalled (>15m) — poll to retry' },
-  { key: 'INVALID_NAME', label: 'Invalid name', tone: 'danger', description: 'Bad [EAPA] file name' }
+const STATS = [
+  { key: 'ALL', label: 'Total', hint: 'All files seen' },
+  { key: 'QUEUED', label: 'Queued', hint: 'Waiting for OCR' },
+  { key: 'PENDING', label: 'Pending', hint: 'OCR in progress' },
+  { key: 'FAILED', label: 'Failed', hint: 'Poll to retry' },
+  { key: 'PROCESSED', label: 'Processed', hint: 'Saved after OCR' }
 ]
 
 const PIPELINE_TYPE_LABELS = {
   MANPOWER_SERVICES: 'Manpower services',
   CAMP_SERVICE_AND_CATERING: 'Camp / catering',
+  LOGISTICS: 'Logistics',
+  HOUSEKEEPING: 'Housekeeping',
+  RENTAL_EQUIPMENT: 'Rental Equipment',
   CIVIL_CONTRACTOR: 'Civil contractor',
+  MATERIAL_LOCAL: 'Material local',
   MATERIAL_IMPORT: 'Material import',
   NON_PO: 'Non-PO',
   AUTO: 'Auto (OCR classifies)',
@@ -95,14 +99,25 @@ function formatStatus(status) {
 
 function formatCategory(row) {
   const parse = row?.subjectParse
-  if (!parse?.category) return null
-  const type = String(parse.type || '').toUpperCase()
-  const category = String(parse.category).replace(/_/g, ' ')
-  if (type === 'NON_PO') return `NONPO · ${category}`
-  return category
+  if (parse?.category) {
+    const type = String(parse.type || '').toUpperCase()
+    const category = String(parse.category).replace(/_/g, ' ')
+    if (type === 'NON_PO') return `NONPO · ${category}`
+    return category
+  }
+  const workflow = String(row?.invoiceWorkflow || '').toUpperCase()
+  if (workflow === 'NON_PO' || workflow === 'NONPO') return 'Non-PO'
+  if (workflow === 'PO') return 'PO'
+  const typeId = String(row?.invoiceTypeId || '').toUpperCase()
+  if (typeId === 'NON_PO') return 'Non-PO'
+  if (typeId) return 'PO'
+  return null
 }
 
 function formatPipelineType(row) {
+  const resolvedId = String(row?.invoiceTypeId || '').trim().toUpperCase()
+  if (resolvedId) return PIPELINE_TYPE_LABELS[resolvedId] || resolvedId.replace(/_/g, ' ')
+  if (row?.invoiceType) return row.invoiceType
   const id = String(row?.subjectParse?.invoiceTypeId || row?.subjectParse?.invoiceWorkflow || '')
     .trim()
     .toUpperCase()
@@ -246,7 +261,7 @@ function EssaInboundSharePoint({ userInfo: { userType } }) {
     setPolling(true)
     setError('')
     setPollNote(
-      'Scanning SharePoint folder… matching [EAPA] PDFs are queued, then OCR runs one by one.'
+      'Scanning the Incoming folder… new PDFs are queued, then OCR runs one by one.'
     )
     try {
       const result = await pollSharePointIntake()
@@ -304,15 +319,15 @@ function EssaInboundSharePoint({ userInfo: { userType } }) {
 
   return (
     <LeftPageContainer>
-      <div className="essa-dashboard">
+      <div className="essa-dashboard inbound-sharepoint-page">
         <div className="dx-page dx-stack">
           <header className="dx-topbar">
             <div className="dx-topbar-left">
               <div>
                 <div className="dx-topbar-title">Inbound SharePoint</div>
                 <div className="dx-topbar-sub">
-                  Only [EAPA] PO / Non-PO PDF file names are processed. Files are left in the
-                  folder after intake.
+                  PDFs in Incoming are processed here. The original stays in the folder; a copy
+                  is placed in Filed.
                 </div>
               </div>
             </div>
@@ -337,11 +352,7 @@ function EssaInboundSharePoint({ userInfo: { userType } }) {
                     ? 'Polling and OCR in progress — please wait'
                     : 'Scan the SharePoint folder and process matching invoices'
                 }
-                style={
-                  polling
-                    ? { opacity: 0.75, cursor: 'wait', minWidth: 148 }
-                    : { minWidth: 148 }
-                }
+                style={polling ? { opacity: 0.75, cursor: 'wait' } : undefined}
               >
                 {polling ? (
                   <Loader2 size={14} className="dx-spin" aria-hidden />
@@ -400,142 +411,36 @@ function EssaInboundSharePoint({ userInfo: { userType } }) {
             </div>
           ) : null}
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: 12
-            }}
-          >
-            {[
-              { key: 'ALL', label: 'Total', tone: 'neutral' },
-              { key: 'QUEUED', label: 'Queued', tone: 'neutral' },
-              { key: 'PENDING', label: 'Pending', tone: 'info' },
-              { key: 'FAILED', label: 'Failed', tone: 'danger' },
-              { key: 'PROCESSED', label: 'Processed', tone: 'success' }
-            ].map((stat) => (
+          <div className="sp-stats">
+            {STATS.map((stat) => (
               <button
                 key={stat.key}
                 type="button"
+                className={`sp-stat${statusFilter === stat.key ? ' is-active' : ''}`}
                 onClick={() => setStatusFilter(stat.key)}
-                style={{
-                  textAlign: 'left',
-                  padding: '14px 16px',
-                  borderRadius: 14,
-                  border:
-                    statusFilter === stat.key
-                      ? '1px solid var(--dx-primary-400, #4ade80)'
-                      : '1px solid var(--dx-border)',
-                  background:
-                    statusFilter === stat.key
-                      ? 'var(--dx-primary-50, #E7F6EB)'
-                      : 'var(--dx-card, #fff)',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  boxShadow: statusFilter === stat.key ? 'var(--dx-shadow-xs)' : 'none'
-                }}
               >
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    letterSpacing: 0.4,
-                    textTransform: 'uppercase',
-                    color: 'var(--dx-text-mute)',
-                    marginBottom: 6
-                  }}
-                >
-                  {stat.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 700,
-                    color: 'var(--dx-text)',
-                    fontVariantNumeric: 'tabular-nums'
-                  }}
-                >
-                  {loading ? '—' : counts[stat.key] ?? 0}
-                </div>
+                <div className="sp-stat-label">{stat.label}</div>
+                <div className="sp-stat-value">{loading ? '—' : counts[stat.key] ?? 0}</div>
+                <div className="sp-stat-hint">{stat.hint}</div>
               </button>
             ))}
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              gap: '6px 4px',
-              fontSize: 12,
-              color: 'var(--dx-text-mute)',
-              lineHeight: 1.4
-            }}
-          >
-            <span style={{ fontWeight: 600, color: 'var(--dx-text)', marginRight: 4 }}>
-              Status
-            </span>
-            {STATUS_LEGEND.map((item, index) => (
-              <span
-                key={item.key}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-              >
-                {index > 0 ? (
-                  <span aria-hidden="true" style={{ opacity: 0.35, margin: '0 2px' }}>
-                    ·
-                  </span>
-                ) : null}
-                <Badge tone={item.tone} dot={false}>
-                  {item.label}
-                </Badge>
-                <span>{item.description}</span>
-              </span>
-            ))}
-          </div>
+          <Card pad={false}>
+            <CardHeader className="sp-log-head">
+              <div className="sp-log-title-row">
+                <FolderOpen size={18} style={{ color: 'var(--dx-primary-600)' }} />
+                <CardTitle>SharePoint intake log · {filtered.length}</CardTitle>
+              </div>
 
-          <Card>
-            <CardHeader style={{ flexWrap: 'wrap', gap: 12 }}>
-              <FolderOpen size={18} style={{ color: 'var(--dx-primary-600)' }} />
-              <CardTitle>SharePoint intake log · {filtered.length}</CardTitle>
-
-              <div
-                className="dx-row"
-                style={{
-                  marginLeft: 'auto',
-                  gap: 8,
-                  flexWrap: 'wrap',
-                  alignItems: 'center'
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    padding: 4,
-                    borderRadius: 999,
-                    background: 'var(--dx-g-100)',
-                    border: '1px solid var(--dx-border)'
-                  }}
-                >
+              <div className="sp-log-tools">
+                <div className="sp-filters" role="tablist" aria-label="Filter by status">
                   {STATUS_FILTERS.map((f) => (
                     <button
                       key={f.key}
                       type="button"
+                      className={`sp-filter${statusFilter === f.key ? ' is-active' : ''}`}
                       onClick={() => setStatusFilter(f.key)}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: 999,
-                        border: 'none',
-                        cursor: 'pointer',
-                        font: 'inherit',
-                        fontSize: 12,
-                        fontWeight: 500,
-                        background: statusFilter === f.key ? 'var(--dx-card)' : 'transparent',
-                        color:
-                          statusFilter === f.key ? 'var(--dx-text)' : 'var(--dx-text-mute)',
-                        boxShadow: statusFilter === f.key ? 'var(--dx-shadow-xs)' : 'none',
-                        transition: 'all .15s ease'
-                      }}
                     >
                       {f.label}
                       {!loading && f.key !== 'ALL' && counts[f.key] > 0
@@ -545,53 +450,29 @@ function EssaInboundSharePoint({ userInfo: { userType } }) {
                   ))}
                 </div>
 
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '8px 14px',
-                    borderRadius: 999,
-                    background: 'var(--dx-card)',
-                    border: '1px solid var(--dx-border)',
-                    width: 280,
-                    maxWidth: '100%'
-                  }}
-                >
+                <div className="sp-search">
                   <Search size={14} style={{ color: 'var(--dx-text-mute)', flexShrink: 0 }} />
                   <input
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     placeholder="Search file name, category…"
-                    style={{
-                      flex: 1,
-                      border: 'none',
-                      outline: 'none',
-                      background: 'transparent',
-                      fontSize: 13,
-                      color: 'var(--dx-text)',
-                      fontFamily: 'inherit',
-                      minWidth: 0
-                    }}
+                    aria-label="Search the intake log"
                   />
                 </div>
               </div>
             </CardHeader>
 
-            <div
-              className="dx-table-wrap dx-table-wrap-scroll"
-              style={{ maxHeight: 'calc(100vh - 380px)', minHeight: 320 }}
-            >
+            <div className="dx-table-wrap dx-table-wrap-scroll sp-table-wrap">
               <table className="dx-table dx-table-compact">
                 <thead>
                   <tr>
-                    <th style={{ width: 140 }}>Modified</th>
-                    <th style={{ minWidth: 120 }}>Category</th>
-                    <th style={{ minWidth: 140 }}>Pipeline type</th>
-                    <th style={{ minWidth: 220 }}>File name</th>
-                    <th style={{ width: 130 }}>Status</th>
-                    <th style={{ minWidth: 140 }}>Document</th>
-                    <th style={{ minWidth: 220 }}>Error</th>
+                    <th style={{ width: '12%' }}>Modified</th>
+                    <th style={{ width: '14%' }}>Category</th>
+                    <th style={{ width: '14%' }}>Pipeline type</th>
+                    <th>File name</th>
+                    <th style={{ width: '12%' }}>Status</th>
+                    <th style={{ width: '10%' }}>Document</th>
+                    <th style={{ width: '18%' }}>Error</th>
                   </tr>
                 </thead>
                 <tbody>

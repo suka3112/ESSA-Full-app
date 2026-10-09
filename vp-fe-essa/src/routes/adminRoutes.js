@@ -53,6 +53,7 @@ import {
   INVOICE_PO_BASED_VIEW,
   INVOICE_NON_PO_BASED_VIEW,
   EMAIL_TEMPLATES,
+  EXCEPTION_CODES,
   SLA_MANAGEMENT,
   SLA_CREATE,
   SLA_EDIT,
@@ -200,6 +201,11 @@ export const adminRoutes = [
       {
         component: 'AuditLogsPage',
         path: AUDIT_LOGS,
+        exact: true
+      },
+      {
+        component: 'ExceptionCodesPage',
+        path: EXCEPTION_CODES,
         exact: true
       },
       {

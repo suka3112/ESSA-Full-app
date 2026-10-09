@@ -91,6 +91,17 @@ export function aggregateExtractionResults(
           entries[key] = result[key];
         }
       }
+      for (const [key, value] of Object.entries(result)) {
+        if (key in entries || key === "lineItems" || key === "header" || key === "fields") {
+          continue;
+        }
+        if (key === "pages" || key === "tables") continue;
+        if (!Array.isArray(value) || value.length === 0) continue;
+        if (!value.every((row) => row && typeof row === "object" && !Array.isArray(row))) {
+          continue;
+        }
+        entries[key] = value;
+      }
       if (Array.isArray(result.lineItems) && result.lineItems.length > 0) {
         entries.invoiceLineItems = entries.invoiceLineItems?.length
           ? entries.invoiceLineItems

@@ -15,7 +15,7 @@ import {
   USER_MANAGEMENT,
   EDIT_USER,
   INVOICE_DASHBOARD,
-  SLA_MANAGEMENT
+  PROMPT_CONFIG
 } from 'constants/url'
 import { PageHeader } from 'components/Essa/PageShell'
 import {
@@ -422,7 +422,7 @@ const UserManagementListComp = ({ showToast }) => {
           <PageHeader
             breadcrumb={[
               { label: t('dashboard:home'), to: `/${ADMIN_USER_TYPE}${INVOICE_DASHBOARD}` },
-              { label: 'Administration', to: `/${ADMIN_USER_TYPE}${SLA_MANAGEMENT}` },
+              { label: 'Administration', to: `/${ADMIN_USER_TYPE}${PROMPT_CONFIG}` },
               { label: t('sidebar:userManagement') }
             ]}
             title={t('sidebar:userManagement')}

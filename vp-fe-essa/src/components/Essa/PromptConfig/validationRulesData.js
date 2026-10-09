@@ -46,8 +46,12 @@ const nonPoRules = [
 const CATEGORY_LABEL = {
   MANPOWER_SERVICES: 'Manpower',
   CIVIL_CONTRACTOR: 'Civil',
-  MATERIAL_IMPORT: 'Materials',
+  MATERIAL_LOCAL: 'Material Local',
+  MATERIAL_IMPORT: 'Material Import',
   CAMP_SERVICE_AND_CATERING: 'Catering',
+  LOGISTICS: 'Logistics',
+  HOUSEKEEPING: 'Housekeeping',
+  RENTAL_EQUIPMENT: 'Rental Equipment',
   NON_PO: 'Non-PO'
 }
 

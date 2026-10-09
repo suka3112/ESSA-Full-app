@@ -85,6 +85,24 @@ export function mergeExtractionChunks(chunks) {
         mergeArrays(merged[key], chunk[key]);
       }
     }
+    const skipRowArrays = new Set([
+      "lineItems",
+      "fields",
+      "tables",
+      "pages",
+      "header",
+      "timesheets",
+      ...ENTRY_ARRAY_KEYS,
+    ]);
+    for (const [key, value] of Object.entries(chunk)) {
+      if (skipRowArrays.has(key) || key.startsWith("__")) continue;
+      if (!Array.isArray(value) || value.length === 0) continue;
+      if (!value.every((row) => row && typeof row === "object" && !Array.isArray(row))) {
+        continue;
+      }
+      merged[key] = merged[key] || [];
+      mergeArrays(merged[key], value);
+    }
     if (Array.isArray(chunk.timesheets)) {
       merged.timesheets = merged.timesheets || [];
       mergeArrays(merged.timesheets, chunk.timesheets);

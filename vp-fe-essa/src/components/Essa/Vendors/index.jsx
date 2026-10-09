@@ -33,12 +33,6 @@ function StatusBadge({ value }) {
   return <Badge tone={tone}>{value || 'â€”'}</Badge>
 }
 
-function ControlBadge({ state }) {
-  if (state === 'Negative') return <Badge tone="error">Negative</Badge>
-  if (state === 'Disabled') return <Badge tone="warning">Disabled</Badge>
-  return <Badge tone="success">Enabled</Badge>
-}
-
 function FilterField({ label, children }) {
   return (
     <span className="vm-field">
@@ -200,7 +194,6 @@ function VendorMasterList({ userInfo: { userType = 'finance' } }) {
     { key: 'location', header: 'Location' },
     { key: 'gstin', header: 'Tax Number' },
     { key: 'sapStatus', header: 'SAP Status' },
-    { key: 'controlState', header: 'AP Control' },
     { key: 'invoiceCount', header: 'Invoices', align: 'center' },
     { key: 'totalBilled', header: 'Total Billed', align: 'right' }
   ]
@@ -305,7 +298,7 @@ function VendorMasterList({ userInfo: { userType = 'finance' } }) {
                 <tbody>
                   {loading ? (
                     <tr className="vm-state-row">
-                      <td colSpan={9}>
+                      <td colSpan={columns.length + 1}>
                         <div className="vm-state">
                           <Loader2 size={22} className="vm-spin" />
                           <span>Loading…</span>
@@ -314,7 +307,7 @@ function VendorMasterList({ userInfo: { userType = 'finance' } }) {
                     </tr>
                   ) : items.length === 0 ? (
                     <tr className="vm-state-row">
-                      <td colSpan={9}>
+                      <td colSpan={columns.length + 1}>
                         <div className="vm-state">
                           <SearchX size={28} />
                           <p className="vm-state-title">No matching results</p>
@@ -343,9 +336,6 @@ function VendorMasterList({ userInfo: { userType = 'finance' } }) {
                         </td>
                         <td>
                           <StatusBadge value={v.sapStatus} />
-                        </td>
-                        <td>
-                          <ControlBadge state={v.controlState} />
                         </td>
                         <td className="is-center">
                           <span className="vm-location">

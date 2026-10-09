@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowDown, ArrowRight, ArrowUp, ChevronsUpDown, Loader2, Search } from 'lucide-react'
 import { connect } from 'react-redux'
@@ -8,27 +8,10 @@ import { PageHeader } from '../PageShell'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
-import { usePoBasedInvoices } from 'hooks/usePoBasedInvoices'
+import { getEssaExceptionCodes } from 'api/essaDashboard'
+import { useEssaInvoices } from 'hooks/useEssaInvoices'
 import { DASHBOARD, INVOICE_DETAIL } from 'constants/url'
 import '../../../assets/scss/essa/dashboard.scss'
-
-const EXCEPTION_TYPES = [
-  'MISSING_DOCUMENT',
-  'EXTRACTION_FAILURE',
-  'LOW_CONFIDENCE',
-  'VALIDATION_FAILURE',
-  'MISSING_SAP_REFERENCE',
-  'VENDOR_ISSUE',
-  'TAX_ISSUE',
-  'APPROVAL_ISSUE',
-  'INTEGRATION_FAILURE',
-  'TECHNICAL_FAILURE'
-]
-
-const TYPE_BY_OVERALL = {
-  rejected: 'VALIDATION_FAILURE',
-  review: 'APPROVAL_ISSUE'
-}
 
 function titleCase(value) {
   if (!value) return '—'
@@ -115,30 +98,71 @@ function SortTh({ label, column, sortBy, sortDir, onSort }) {
   )
 }
 
+function formatExceptionCodes(codes) {
+  if (!codes.length) return '—'
+  if (codes.length <= 2) return codes.join(', ')
+  return `${codes[0]} +${codes.length - 1}`
+}
+
+function catalogueHits(rules) {
+  const codes = []
+  const types = []
+  const names = []
+  rules.forEach((rule) => {
+    const hits = Array.isArray(rule.exceptionCodes) ? rule.exceptionCodes : []
+    if (hits.length) {
+      hits.forEach((hit) => {
+        if (hit.code && !codes.includes(hit.code)) codes.push(hit.code)
+        if (hit.exceptionType && !types.includes(hit.exceptionType)) types.push(hit.exceptionType)
+        if (hit.name && !names.includes(hit.name)) names.push(hit.name)
+      })
+      return
+    }
+    if (rule.ruleCode && !codes.includes(rule.ruleCode)) codes.push(rule.ruleCode)
+  })
+  return { codes, types, names }
+}
+
 function toException(row) {
-  const type = TYPE_BY_OVERALL[row.overall] || 'TECHNICAL_FAILURE'
+  const rules = Array.isArray(row.failed_rules) ? row.failed_rules : []
+  const { codes, types, names } = catalogueHits(rules)
+  const raisedTimes = rules.map((rule) => rule.raisedAt).filter(Boolean).sort()
+  const raisedAt = raisedTimes.length ? raisedTimes[raisedTimes.length - 1] : ''
+  const documentId = row.documentId || String(row.id || '').replace(/^ocr-/, '')
   return {
     id: row.id,
-    code: `EX-${row.rawId}`,
+    code: `EX-${documentId}`,
     invoiceId: row.id,
     invoiceNumber: row.invoice_no || '',
     vendorName: row.vendor_name || '',
-    type,
-    title: row.status_label || titleCase(type),
-    detail: row.status_label || '',
-    exceptionCode: '—',
-    createdAt: row.uploaded_at || '',
-    slaDueAt: '',
-    slaBreached: false,
-    isDummy: row.isDummy
+    type: types.join(', ') || '—',
+    exceptionTypes: types,
+    title: names.join(', ') || rules.map((rule) => rule.ruleName).filter(Boolean).join(', ') || 'Validation failure',
+    detail: rules.map((rule) => rule.message).filter(Boolean).join(' · '),
+    exceptionCode: codes.join(', ') || '—',
+    exceptionCodes: codes,
+    createdAt: raisedAt || row.uploaded_at || '',
+    slaDueAt: row.sla_due || row.slaDue || '',
+    slaBreached: Boolean(row.sla_breached || row.slaBreached)
   }
 }
 
 function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
-  const { data: poRows = [], isLoading } = usePoBasedInvoices()
+  const { data: extractedInvoices = [], isLoading } = useEssaInvoices({ attention: 'exc' })
+  const [catalogue, setCatalogue] = useState([])
   const [searchDraft, setSearchDraft] = useState(params.get('search') || '')
+
+  useEffect(() => {
+    let cancelled = false
+    getEssaExceptionCodes().then((rows) => {
+      if (!cancelled) setCatalogue(Array.isArray(rows) ? rows : [])
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const setParam = (key, value) => {
     const next = new URLSearchParams(params)
@@ -156,16 +180,46 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
   const sortBy = params.get('sortBy') || ''
   const sortDir = params.get('sortDir') === 'desc' ? 'desc' : params.get('sortBy') ? 'asc' : ''
 
+  const typeOptions = useMemo(() => {
+    const seen = []
+    catalogue.forEach((row) => {
+      if (row.exceptionType && !seen.includes(row.exceptionType)) seen.push(row.exceptionType)
+    })
+    return seen
+  }, [catalogue])
+
+  const codeOptions = useMemo(() => {
+    if (catalogue.length) {
+      return catalogue.map((row) => ({
+        code: row.code,
+        label: row.name ? `${row.code} · ${row.name}` : row.code
+      }))
+    }
+    const codes = new Set()
+    extractedInvoices.forEach((row) => {
+      const rules = Array.isArray(row.failed_rules) ? row.failed_rules : []
+      rules.forEach((rule) => {
+        const hits = Array.isArray(rule.exceptionCodes) ? rule.exceptionCodes : []
+        hits.forEach((hit) => {
+          if (hit.code) codes.add(hit.code)
+        })
+      })
+    })
+    return [...codes].sort().map((code) => ({ code, label: code }))
+  }, [catalogue, extractedInvoices])
+
   const rows = useMemo(() => {
-    const open = poRows
-      .filter((row) => row.overall === 'review' || row.overall === 'rejected')
+    const open = extractedInvoices
+      .filter((row) => Number(row.failed_checks) > 0 || Number(row.openExceptions) > 0)
       .map(toException)
     const needle = search.trim().toLowerCase()
     const filtered = open.filter((row) => {
-      if (typeFilter && row.type !== typeFilter) return false
-      if (codeFilter && row.exceptionCode !== codeFilter) return false
+      if (typeFilter && !row.exceptionTypes.includes(typeFilter)) return false
+      if (codeFilter && !row.exceptionCodes.includes(codeFilter)) return false
       if (!needle) return true
-      return [row.code, row.invoiceNumber, row.vendorName].some((value) => String(value).toLowerCase().includes(needle))
+      return [row.code, row.invoiceNumber, row.vendorName, row.exceptionCode].some((value) =>
+        String(value).toLowerCase().includes(needle)
+      )
     })
     if (!sortBy) return filtered
     const valueOf = (row) => {
@@ -182,7 +236,7 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
       const result = String(valueOf(a) ?? '').localeCompare(String(valueOf(b) ?? ''), undefined, { numeric: true, sensitivity: 'base' })
       return sortDir === 'desc' ? -result : result
     })
-  }, [poRows, search, typeFilter, codeFilter, sortBy, sortDir])
+  }, [extractedInvoices, search, typeFilter, codeFilter, sortBy, sortDir])
 
   const total = rows.length
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
@@ -205,7 +259,7 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
   }
 
   const openInvoice = (row) => {
-    if (!row?.invoiceId || row.isDummy) return
+    if (!row?.invoiceId) return
     navigate(`/${userType}${INVOICE_DETAIL.replace(':id', encodeURIComponent(row.invoiceId))}`)
   }
 
@@ -221,7 +275,7 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
               { label: 'Exception Workbench' }
             ]}
             title="Exception Workbench"
-            description="Invoices that could not be processed. Open an invoice to correct the failed fields and revalidate."
+            description="Extracted invoices with failed validation checks. Open an invoice to correct the failed fields and revalidate."
           />
 
           <Card pad={false}>
@@ -249,8 +303,8 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
                 <span className="ew-field-label">Exception Type</span>
                 <select className="ew-select" value={typeFilter} onChange={(event) => setParam('type', event.target.value || undefined)} aria-label="Exception type filter">
                   <option value="">Any type</option>
-                  {EXCEPTION_TYPES.map((type) => (
-                    <option key={type} value={type}>{titleCase(type)}</option>
+                  {typeOptions.map((type) => (
+                    <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
               </span>
@@ -258,6 +312,9 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
                 <span className="ew-field-label">Exception Code</span>
                 <select className="ew-select" value={codeFilter} onChange={(event) => setParam('exceptionCode', event.target.value || undefined)} aria-label="Exception code filter">
                   <option value="">Any code</option>
+                  {codeOptions.map((option) => (
+                    <option key={option.code} value={option.code}>{option.label}</option>
+                  ))}
                 </select>
               </span>
               {activeFilters > 0 && (
@@ -319,9 +376,13 @@ function EssaExceptionWorkbench({ userInfo: { userType = 'admin' } = {} }) {
                         <td><span className="ew-strong">{row.invoiceNumber || '—'}</span></td>
                         <td><span className="ew-vendor">{row.vendorName || '—'}</span></td>
                         <td>
-                          <span className="ew-type" title={row.detail || row.title}>{titleCase(row.type)}</span>
+                          <span className="ew-type" title={row.exceptionTypes.join(', ') || row.detail || row.title}>{formatExceptionCodes(row.exceptionTypes)}</span>
                         </td>
-                        <td><span className="ew-code">{row.exceptionCode}</span></td>
+                        <td>
+                          <span className="ew-code" title={row.title || row.detail}>
+                            {formatExceptionCodes(row.exceptionCodes)}
+                          </span>
+                        </td>
                         <td><span className="ew-time">{fmtDateTime(row.createdAt)}</span></td>
                         <td>
                           {row.slaBreached ? (

@@ -1,6 +1,8 @@
 /**
- * Resolve invoice type from PO series, then (when a series is shared) from
- * a lightweight content-classification pass. Runs before page classification.
+ * Resolve invoice type before page classification.
+ * A unique PO series locks the type. A shared series (4203) is classified from
+ * keywords on the PO appendix pages. No match goes to manual review.
+ * Email/subject overrides still win when invoiceWorkflow is a known type id.
  */
 
 import { getPromptsConfig } from "../config/loadConfig.js";
@@ -22,30 +24,11 @@ const CONTENT_CHARS_PER_PAGE = 4000;
 const MIN_PAGE_TEXT_CHARS = 40;
 
 const LABELED_PO_RE =
-  /(?:contract\s+order\s+no\.?\s*)?\bpo\s*(?:no\.?|number)?[:\s#-|]*\s*(\d{10,})\b/gi;
+  /(?:contract\s+order\s+no\.?\s*)?(?<![A-Za-z0-9])po\s*(?:no\.?|number)?[:\s#.|-]*\s*(\d{10,})(?!\d)/gi;
 
-const FILENAME_TYPE_HINTS = [
-  {
-    invoiceTypeId: "MANPOWER_SERVICES",
-    re: /\bmpo\b|\bmps\b|manpower|amanah|ale-pau|cleaning for production/i,
-    signal: "filename_mpo_or_manpower",
-  },
-  {
-    invoiceTypeId: "CIVIL_CONTRACTOR",
-    re: /\bcivil\b|kontraktor|berca|bbs-bap|buana\s+sakti/i,
-    signal: "filename_civil",
-  },
-  {
-    invoiceTypeId: "MATERIAL_IMPORT",
-    re: /material\s*import|packing\s*list|bill\s*of\s*lading/i,
-    signal: "filename_materials",
-  },
-  {
-    invoiceTypeId: "CAMP_SERVICE_AND_CATERING",
-    re: /catering|camp\s*service/i,
-    signal: "filename_catering",
-  },
-];
+/** PO printed as the document header ("PO Number" / "PO No."), not a mention inside a line. */
+const HEADER_PO_RE =
+  /(?<![A-Za-z0-9])po\s*(?:no\.?|number)\b[:\s#.|-]*\s*(\d{10,})(?!\d)/gi;
 
 function uniqueStrings(values) {
   return [...new Set(values.filter(Boolean))];
@@ -65,18 +48,6 @@ function collectPageSlice(pageTexts, pageLimit = CONTENT_PAGES) {
 
   const tail = nonEmpty.slice(-Math.min(2, nonEmpty.length - head.length));
   return [...head, ...tail].map((text) => text.slice(0, CONTENT_CHARS_PER_PAGE));
-}
-
-function matchFilenameTypeHint(fileName, invoiceTypes) {
-  const name = String(fileName || "");
-  if (!name.trim()) return null;
-  const allowed = new Set(
-    (invoiceTypes || []).map((type) => type.invoiceTypeId).filter(Boolean),
-  );
-  const hits = FILENAME_TYPE_HINTS.filter(
-    (hint) => hint.re.test(name) && allowed.has(hint.invoiceTypeId),
-  );
-  return hits.length === 1 ? hits[0] : null;
 }
 
 function joinSearchText(fileName, pageTexts) {
@@ -112,12 +83,98 @@ export function extractPoNumbersFromText(text, prefixes = []) {
   }
 
   for (const prefix of prefixList) {
-    const bare = new RegExp(`\\b(${prefix}\\d{6,})\\b`, "g");
+    const bare = new RegExp(`\\b(${prefix}\\d{6,})(?!\\d)`, "g");
     for (const match of source.matchAll(bare)) {
       found.add(match[1]);
     }
   }
 
+  return [...found];
+}
+
+/**
+ * Price-breakdown appendix pages, including table pages that follow the heading
+ * until another document (SES, invoice, faktur, berita acara) starts.
+ * Terms-and-conditions pages are not used for category keywords.
+ * @param {Array<{ pageNumber?: number, text?: string }>} pageTexts
+ * @returns {string[]}
+ */
+export function collectPoAppendixTexts(pageTexts) {
+  const pages = (pageTexts || [])
+    .map((entry) => String(entry?.text || ""))
+    .filter((text) => text.trim().length >= MIN_PAGE_TEXT_CHARS);
+
+  const isAppendix = (text) =>
+    /appendix\s*[-–]?\s*\d/i.test(text) ||
+    /price\s*breakdown\s+and\s+description\s+of\s+purchase\s+order/i.test(text);
+
+  const isOtherDocument = (text) => {
+    const head = text.slice(0, 400);
+    return (
+      /\bservice\s+entry\b/i.test(head) ||
+      /\bses\s*no\b/i.test(head) ||
+      /\bfaktur\s+pajak\b/i.test(head) ||
+      /\bberita\s+acara\b/i.test(head) ||
+      /\bkwitansi\b/i.test(head) ||
+      /general\s+terms\s*(&|and)\s*conditions/i.test(head) ||
+      /specific\s*\/\s*special\s+terms/i.test(head)
+    );
+  };
+
+  const texts = [];
+  let inAppendix = false;
+  for (const text of pages) {
+    if (isAppendix(text)) {
+      inAppendix = true;
+      texts.push(text);
+      continue;
+    }
+    if (!inAppendix) continue;
+    if (isOtherDocument(text)) {
+      inAppendix = false;
+      continue;
+    }
+    texts.push(text);
+  }
+  return texts;
+}
+
+/**
+ * PO numbers next to a "PO Number" or "PO No." label, restricted to catalog series.
+ * A line that only says "PO 4203…" is not a header.
+ * @param {string} text
+ * @param {string[]} prefixes
+ * @returns {string[]}
+ */
+export function extractHeaderPoNumbers(text, prefixes = []) {
+  const source = String(text || "");
+  const found = new Set();
+  const prefixList = (prefixes || [])
+    .map((prefix) => String(prefix || "").replace(/\D/g, ""))
+    .filter(Boolean);
+  const header = new RegExp(HEADER_PO_RE.source, "gi");
+  for (const match of source.matchAll(header)) {
+    const digits = String(match[1] || "").replace(/\D/g, "").slice(0, 10);
+    if (digits.length < 10) continue;
+    if (prefixList.some((series) => digits.startsWith(series))) found.add(digits.slice(0, 10));
+  }
+  return [...found];
+}
+
+/**
+ * 10-digit PO numbers printed next to a PO label, including prefixes that are
+ * not in the catalog. Series matching uses extractPoNumbersFromText.
+ * @param {string} text
+ * @returns {string[]}
+ */
+export function extractLabeledPoNumbers(text) {
+  const source = String(text || "");
+  const found = new Set();
+  const labeled = new RegExp(LABELED_PO_RE.source, "gi");
+  for (const match of source.matchAll(labeled)) {
+    const digits = String(match[1] || "").replace(/\D/g, "");
+    if (digits.length >= 10) found.add(digits.slice(0, 10));
+  }
   return [...found];
 }
 
@@ -356,6 +413,13 @@ function buildResult({
  *   pageTexts?: Array<{ pageNumber?: number, text?: string }>,
  *   catalog?: object,
  *   override?: string,
+ *   overrideSource?: string,
+ *   classifySharedPoSeries?: (poNumbers: string[], appendixTexts: string[]) => Promise<{
+ *     invoiceTypeId?: string | null,
+ *     needsReview?: boolean,
+ *     confidence?: number,
+ *     signals?: string[],
+ *   }>,
  *   traceId?: string,
  * }} input
  */
@@ -372,9 +436,10 @@ export async function resolveInvoiceType(input = {}) {
         (isKnownInvoiceTypeId(override) ? { invoiceTypeId: override } : null)
       : null;
   if (overrideType) {
+    const source = String(input.overrideSource || "").trim() || "manual_confirm";
     return buildResult({
       invoiceTypeId: overrideType.invoiceTypeId,
-      source: "manual_confirm",
+      source,
       confidence: 1,
       signals: [`override:${overrideType.invoiceTypeId}`],
       candidates: [overrideType.invoiceTypeId],
@@ -411,32 +476,37 @@ export async function resolveInvoiceType(input = {}) {
   const matches = skipPoNumberStep
     ? []
     : matchTypesByPoSeries(poNumbers, poTypes);
+  const headerPoNumbers = skipPoNumberStep
+    ? []
+    : extractHeaderPoNumbers(searchText, allPrefixes);
+  const headerMatches = headerPoNumbers.length
+    ? matchTypesByPoSeries(headerPoNumbers, poTypes)
+    : [];
+  // Filename PO, then a labeled "PO Number" / "PO No.", then any other series hit.
+  // A PO inside a line description must not override those.
+  const fileNamePoNumbers = skipPoNumberStep
+    ? []
+    : extractPoNumbersFromText(input.fileName || "", allPrefixes);
+  const fileNameMatches = fileNamePoNumbers.length
+    ? matchTypesByPoSeries(fileNamePoNumbers, poTypes)
+    : [];
+  const decisionNumbers = fileNameMatches.length
+    ? fileNamePoNumbers
+    : headerMatches.length
+      ? headerPoNumbers
+      : poNumbers;
+  const decisionMatches = fileNameMatches.length
+    ? fileNameMatches
+    : headerMatches.length
+      ? headerMatches
+      : matches;
 
   const uniqueMatchedTypes = [
-    ...new Map(matches.map((hit) => [hit.type.invoiceTypeId, hit])).values(),
+    ...new Map(decisionMatches.map((hit) => [hit.type.invoiceTypeId, hit])).values(),
   ];
 
   if (!skipPoNumberStep && uniqueMatchedTypes.length === 1) {
     const hit = uniqueMatchedTypes[0];
-    const filenameOverride = matchFilenameTypeHint(input.fileName, types);
-    if (
-      filenameOverride &&
-      filenameOverride.invoiceTypeId !== hit.type.invoiceTypeId
-    ) {
-      return buildResult({
-        invoiceTypeId: filenameOverride.invoiceTypeId,
-        source: "po_series+filename",
-        confidence: 0.95,
-        signals: [
-          filenameOverride.signal,
-          `poSeries:${hit.prefix}`,
-          `poNumber:${hit.poNumber}`,
-        ],
-        poNumber: hit.poNumber,
-        matchedSeries: [hit.prefix],
-        candidates: [hit.type.invoiceTypeId, filenameOverride.invoiceTypeId],
-      });
-    }
     return buildResult({
       invoiceTypeId: hit.type.invoiceTypeId,
       source: "po_series",
@@ -448,86 +518,69 @@ export async function resolveInvoiceType(input = {}) {
     });
   }
 
-  const seriesCandidates = uniqueMatchedTypes.map((hit) => hit.type);
-  const filenameHint = matchFilenameTypeHint(
-    input.fileName,
-    seriesCandidates.length ? seriesCandidates : types,
-  );
-  if (filenameHint && uniqueMatchedTypes.length > 1) {
-    const hit = uniqueMatchedTypes.find(
-      (row) => row.type.invoiceTypeId === filenameHint.invoiceTypeId,
-    );
-    return buildResult({
-      invoiceTypeId: filenameHint.invoiceTypeId,
-      source: "po_series+filename",
-      confidence: 0.95,
-      signals: [
-        filenameHint.signal,
-        hit ? `poSeries:${hit.prefix}` : null,
-        hit ? `poNumber:${hit.poNumber}` : null,
-      ].filter(Boolean),
-      poNumber: hit?.poNumber || poNumbers[0] || null,
-      matchedSeries: uniqueStrings(uniqueMatchedTypes.map((row) => row.prefix)),
-      candidates: seriesCandidates.map((type) => type.invoiceTypeId),
-    });
-  }
-  if (filenameHint && uniqueMatchedTypes.length === 0 && !skipPoNumberStep) {
-    return buildResult({
-      invoiceTypeId: filenameHint.invoiceTypeId,
-      source: "filename_hint",
-      confidence: 0.9,
-      signals: [filenameHint.signal, poNumbers.length ? null : "no_po_number_in_text"],
-      poNumber: poNumbers[0] || null,
-      candidates: [filenameHint.invoiceTypeId],
-    });
-  }
+  if (!skipPoNumberStep && uniqueMatchedTypes.length > 1) {
+    const poNumber = uniqueMatchedTypes[0]?.poNumber || decisionNumbers[0] || null;
+    const matchedSeries = uniqueStrings(uniqueMatchedTypes.map((hit) => hit.prefix));
+    const sharedPoNumbers = uniqueStrings([
+      ...uniqueMatchedTypes.map((hit) => hit.poNumber),
+      ...decisionNumbers,
+    ]);
 
-  const sparseContent = collectPageSlice(input.pageTexts).length === 0;
-  if (uniqueMatchedTypes.length > 1 && sparseContent) {
-    const civilHint =
-      matchFilenameTypeHint(input.fileName, types) ||
-      (/\bcivil\b|kontraktor|berca|buana\s+sakti|progress\s+claim|transmittal/i.test(
-        searchText,
-      )
-        ? { invoiceTypeId: "CIVIL_CONTRACTOR", signal: "sparse_text_civil" }
-        : null);
-    if (civilHint) {
-      const hit =
-        uniqueMatchedTypes.find(
-          (row) => row.type.invoiceTypeId === civilHint.invoiceTypeId,
-        ) || uniqueMatchedTypes[0];
+    if (typeof input.classifySharedPoSeries === "function") {
+      const appendixTexts = collectPoAppendixTexts(input.pageTexts);
+      let classified = null;
+      try {
+        classified = await input.classifySharedPoSeries(sharedPoNumbers, appendixTexts);
+      } catch (error) {
+        console.warn(
+          `[extract][${input.traceId || "-"}] INVOICE_TYPE_PO_APPENDIX_LOOKUP_FAILED`,
+          { message: error instanceof Error ? error.message : String(error) },
+        );
+        classified = { needsReview: true, signals: ["po_appendix_lookup_failed"] };
+      }
+
+      if (classified?.invoiceTypeId && !classified.needsReview) {
+        return buildResult({
+          invoiceTypeId: classified.invoiceTypeId,
+          source: "po_line_keywords",
+          confidence: classified.confidence ?? 1,
+          signals: [
+            `poSeries:${matchedSeries[0] || ""}`,
+            ...(classified.signals || []),
+          ],
+          poNumber,
+          matchedSeries,
+          candidates: [classified.invoiceTypeId],
+        });
+      }
+
       return buildResult({
-        invoiceTypeId: civilHint.invoiceTypeId,
-        source: "po_series+sparse_civil",
-        confidence: 0.9,
+        invoiceTypeId: null,
+        source: "po_line_keywords",
+        confidence: 0,
         signals: [
-          civilHint.signal,
-          hit ? `poSeries:${hit.prefix}` : null,
-          hit ? `poNumber:${hit.poNumber}` : null,
-        ].filter(Boolean),
-        poNumber: hit?.poNumber || poNumbers[0] || null,
-        matchedSeries: uniqueStrings(uniqueMatchedTypes.map((row) => row.prefix)),
-        candidates: seriesCandidates.map((type) => type.invoiceTypeId),
-      });
-    }
-    const manpower = uniqueMatchedTypes.find(
-      (hit) => hit.type.invoiceTypeId === "MANPOWER_SERVICES",
-    );
-    if (manpower) {
-      return buildResult({
-        invoiceTypeId: manpower.type.invoiceTypeId,
-        source: "po_series+sparse_default_manpower",
-        confidence: 0.86,
-        signals: [
-          `poSeries:${manpower.prefix}`,
-          `poNumber:${manpower.poNumber}`,
-          "sparse_text_default_manpower",
+          "shared_po_series",
+          ...(classified?.signals || ["po_line_keywords_unresolved"]),
         ],
-        poNumber: manpower.poNumber,
-        matchedSeries: uniqueStrings(uniqueMatchedTypes.map((row) => row.prefix)),
-        candidates: seriesCandidates.map((type) => type.invoiceTypeId),
+        poNumber,
+        matchedSeries,
+        candidates: [],
+        lowConfidence: true,
+        needsReview: true,
       });
     }
+
+    return buildResult({
+      invoiceTypeId: null,
+      source: "po_series_ambiguous",
+      confidence: 0,
+      signals: ["shared_po_series", "no_line_classifier"],
+      poNumber,
+      matchedSeries,
+      candidates: [],
+      lowConfidence: true,
+      needsReview: true,
+    });
   }
 
   let contentCandidates;
@@ -537,17 +590,39 @@ export async function resolveInvoiceType(input = {}) {
 
   if (skipPoNumberStep) {
     contentCandidates = poTypes.length ? poTypes : types.filter((type) => type.invoiceTypeId !== "NON_PO");
-  } else if (uniqueMatchedTypes.length > 1) {
-    contentCandidates = uniqueMatchedTypes.map((hit) => hit.type);
   } else if (poNumbers.length > 0) {
-    console.warn(
-      `[extract][${input.traceId || "-"}] INVOICE_TYPE_PO_SERIES_UNMATCHED — ` +
-        "labeled PO found but no configured series matched; content-classifying PO types",
-      { poNumbers },
-    );
-    contentCandidates = poTypes.length ? poTypes : types;
-    source = "content_classification";
+    return buildResult({
+      invoiceTypeId: null,
+      source: "po_prefix_unmatched",
+      confidence: 0,
+      signals: ["po_prefix_unmatched", ...poNumbers.map((num) => `poNumber:${num}`)],
+      poNumber: poNumbers[0],
+      matchedSeries,
+      candidates: [],
+      lowConfidence: true,
+      needsReview: true,
+    });
   } else {
+    const labeled = extractLabeledPoNumbers(searchText);
+    const unmatched = labeled.filter(
+      (num) => !allPrefixes.some((prefix) => String(num).startsWith(String(prefix))),
+    );
+    if (unmatched.length) {
+      return buildResult({
+        invoiceTypeId: null,
+        source: "po_prefix_unmatched",
+        confidence: 0,
+        signals: [
+          "po_prefix_unmatched",
+          ...unmatched.map((num) => `poNumber:${num}`),
+        ],
+        poNumber: unmatched[0],
+        candidates: [],
+        lowConfidence: true,
+        needsReview: true,
+      });
+    }
+
     const emptySeries = types.filter((type) => type.poSeries.length === 0);
     if (emptySeries.length <= 1) {
       const invoiceTypeId = getNonPoInvoiceTypeId(catalog);
@@ -585,20 +660,6 @@ export async function resolveInvoiceType(input = {}) {
   });
 
   const belowThreshold = classified.confidence < threshold;
-  if (belowThreshold && filenameHint) {
-    return buildResult({
-      invoiceTypeId: filenameHint.invoiceTypeId,
-      source: `${source}+filename`,
-      confidence: Math.max(classified.confidence, 0.85),
-      signals: [...classified.signals, filenameHint.signal, "filename_override_low_confidence"],
-      poNumber,
-      matchedSeries,
-      candidates: contentCandidates.map((type) => type.invoiceTypeId),
-      candidateScores: classified.candidateScores,
-      lowConfidence: false,
-      needsReview: false,
-    });
-  }
   if (belowThreshold && !poNumber) {
     const invoiceTypeId = getNonPoInvoiceTypeId(catalog);
     return buildResult({
@@ -652,12 +713,19 @@ export async function resolveInvoiceType(input = {}) {
 
 export function logInvoiceTypeResolution(traceId, resolution, extra = {}) {
   const source = resolution?.source ?? null;
-  const note =
-    source === "manual_confirm"
-      ? "Invoice type was forced by the email/SharePoint subject (not classified from PDF content)."
-      : source === "unresolved"
-        ? "Invoice type could not be resolved from the PDF."
-        : "Invoice type resolved from document content / PO series.";
+  const note = resolution?.needsReview
+    ? "Invoice type needs manual review. Extraction was not started."
+    : source === "manual_confirm"
+      ? "Invoice type was forced by the email subject."
+      : source === "po_line_keywords"
+        ? "Invoice type was taken from keywords on the PO appendix."
+        : source === "po_series"
+          ? "Invoice type was taken from the PO number prefix."
+          : source === "no_po_number"
+            ? "No PO number was found. Invoice type is Non-PO."
+            : source === "unresolved"
+              ? "Invoice type could not be resolved from the PDF."
+              : "Invoice type resolved before extraction.";
   console.info(
     `[extract][${traceId || "-"}] INVOICE_TYPE_RESOLVED ${resolution?.invoiceTypeId || "unknown"} ` +
       `via ${source || "unknown"}. ${note}`,

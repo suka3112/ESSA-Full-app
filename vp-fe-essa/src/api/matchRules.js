@@ -3,7 +3,7 @@ import { SEED_MATCH_RULES } from '../components/Essa/lib/nWay/seedRules'
 
 /**
  * N-way match rules ("check A against B").
- * Backend: /invoice-config/match-rules (table AP_MATCH_RULE, migration 030).
+ * Backend: /invoice-config/match-rules (table AP_MATCH_RULE, migration 032).
  */
 export const MATCH_RULES = '/invoice-config/match-rules'
 export const MATCH_RULE = (ruleId) => `${MATCH_RULES}/${ruleId}`

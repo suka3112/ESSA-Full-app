@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Pause, Play } from 'lucide-react'
+import { ChevronDown, Pause, Play } from 'lucide-react'
 
 import { pauseSlaInstance, resumeSlaInstance } from 'api/sla'
 import { Button } from '../ui/Button'
-import { Card } from '../ui/Card'
 import { Dialog } from '../ui/Dialog'
 import { Select } from '../ui/Select'
 import { Textarea } from '../ui/Textarea'
@@ -19,6 +18,46 @@ import {
 import { showEssaErrorToast, showEssaSuccessToast } from '../lib/essaToast'
 
 const PAUSABLE = ['PENDING', 'RUNNING', 'WARNING']
+
+const SEVERITY = ['BREACHED', 'WARNING', 'RUNNING', 'PAUSED', 'PENDING', 'COMPLETED', 'CANCELLED']
+
+function identityKeys(invoice) {
+  const values = [invoice?.id, invoice?.documentId, invoice?.ocrId, invoice?.ocr_id]
+    .filter((value) => value != null && String(value).trim() !== '')
+    .map((value) => String(value))
+  const keys = new Set(values)
+  values.forEach((value) => {
+    const match = value.match(/(\d+)$/)
+    if (match && match[1] !== value) keys.add(match[1])
+  })
+  return keys
+}
+
+function clockBelongsToInvoice(row, invoiceNumber, keys) {
+  const idMatch = [row.invoiceId, row.objectId].some((value) => value != null && keys.has(String(value)))
+  if (!idMatch) return false
+  if (!invoiceNumber) return true
+  return row.invoiceNumber === invoiceNumber || row.reference === invoiceNumber || !row.invoiceNumber
+}
+
+function collapseClocks(rows) {
+  const grouped = new Map()
+  rows.forEach((row) => {
+    const dueDay = String(row.dueAt || '').slice(0, 10)
+    const key = [row.policyCode, row.policyVersion, row.status, dueDay].join('|')
+    const current = grouped.get(key)
+    if (!current) {
+      grouped.set(key, { row, count: 1 })
+      return
+    }
+    current.count += 1
+  })
+  return [...grouped.values()].sort((a, b) => {
+    const ai = SEVERITY.indexOf(String(a.row.status || '').toUpperCase())
+    const bi = SEVERITY.indexOf(String(b.row.status || '').toUpperCase())
+    return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi)
+  })
+}
 
 function pauseChoices(policy, meta) {
   const rules = (policy?.pauseRules || []).filter((r) => r.pause)
@@ -54,6 +93,37 @@ function pauseChoices(policy, meta) {
   return fromMeta
 }
 
+function SlaClockLine({ clock, meta, busy, onPause, onResume, trailing = null }) {
+  const row = clock.row
+  const over = row.remainingMs < 0
+  return (
+    <div className="dx-sla-strip-line">
+      <span className="dx-sla-strip-kicker">SLA</span>
+      <RuntimeStatusBadge status={row.status} meta={meta} />
+      <span className="dx-sla-strip-policy" title={row.policyCode}>
+        {row.policyCode}
+        {row.policyVersion != null ? <span className="dx-sla-strip-version"> v{row.policyVersion}</span> : null}
+      </span>
+      {clock.count > 1 ? <span className="dx-sla-strip-count">{clock.count} clocks</span> : null}
+      <span className="dx-sla-strip-meta">Due {slaDate(row.dueAt)}</span>
+      <span className={`dx-sla-strip-remain${over ? ' is-over' : ''}`}>{remainingLabel(row.remainingMs)}</span>
+      <span className="dx-sla-strip-actions">
+        {PAUSABLE.includes(row.status) ? (
+          <Button size="sm" variant="secondary" className="dx-id-btn" disabled={busy} onClick={onPause}>
+            <Pause size={12} /> Pause
+          </Button>
+        ) : null}
+        {row.status === 'PAUSED' ? (
+          <Button size="sm" disabled={busy} onClick={onResume}>
+            <Play size={12} /> Resume
+          </Button>
+        ) : null}
+        {trailing}
+      </span>
+    </div>
+  )
+}
+
 function resumeEventFor(instance, policy, meta) {
   const lastPause = [...(instance.events || [])]
     .reverse()
@@ -78,6 +148,11 @@ export default function SlaInvoiceClocks({ invoice }) {
   )
 
   const rows = useMemo(() => {
+    const keys = identityKeys(invoice)
+    const owned = keys.size
+      ? instances.filter((row) => clockBelongsToInvoice(row, invoiceNumber, keys))
+      : []
+    if (owned.length) return owned
     return instances.filter((row) => {
       if (invoiceNumber && (row.invoiceNumber === invoiceNumber || row.reference === invoiceNumber)) {
         return true
@@ -85,8 +160,10 @@ export default function SlaInvoiceClocks({ invoice }) {
       if (invoiceId && String(row.invoiceId || '') === invoiceId) return true
       return false
     })
-  }, [instances, invoiceNumber, invoiceId])
+  }, [instances, invoice, invoiceNumber, invoiceId])
+  const clocks = useMemo(() => collapseClocks(rows), [rows])
 
+  const [open, setOpen] = useState(false)
   const [pausing, setPausing] = useState(null)
   const [pauseCode, setPauseCode] = useState('')
   const [pauseReason, setPauseReason] = useState('')
@@ -136,73 +213,59 @@ export default function SlaInvoiceClocks({ invoice }) {
   }
 
   if (!invoiceNumber && !invoiceId) return null
-  if (!rows.length) return null
+  if (!clocks.length) return null
+
+  const lead = clocks[0]
+  const rest = clocks.slice(1)
 
   return (
     <>
-      <Card className="mt-3 overflow-hidden p-0">
-        <div className="border-b border-line-soft px-4 py-2.5">
-          <p className="mb-0 text-xs font-semibold uppercase tracking-wide text-ink-muted">SLA clocks</p>
-        </div>
-        <div className="email-templates-table">
-          <div className="dx-table-wrap">
-            <table className="dx-table">
-              <thead>
-                <tr>
-                  <th>Policy</th>
-                  <th>Status</th>
-                  <th>Due</th>
-                  <th>Remaining</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <tr key={row.id}>
-                    <td>
-                      <span className="text-xs font-semibold">{row.policyCode}</span>
-                      {row.policyVersion != null ? (
-                        <span className="ml-1 text-2xs text-ink-muted">v{row.policyVersion}</span>
-                      ) : null}
-                    </td>
-                    <td>
-                      <RuntimeStatusBadge status={row.status} meta={meta} />
-                    </td>
-                    <td className="whitespace-nowrap text-xs">{slaDate(row.dueAt)}</td>
-                    <td className={row.remainingMs < 0 ? 'font-semibold text-red-600' : ''}>
-                      {remainingLabel(row.remainingMs)}
-                    </td>
-                    <td>
-                      <div className="flex justify-end gap-1">
-                        {PAUSABLE.includes(row.status) ? (
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            disabled={busy}
-                            onClick={() => {
-                              const nextChoices = pauseChoices(policyOf(row), meta)
-                              setPauseCode(nextChoices[0]?.code || 'ON_HOLD')
-                              setPauseReason('')
-                              setPausing(row)
-                            }}
-                          >
-                            <Pause size={12} /> Pause
-                          </Button>
-                        ) : null}
-                        {row.status === 'PAUSED' ? (
-                          <Button size="sm" disabled={busy} onClick={() => resume(row)}>
-                            <Play size={12} /> Resume
-                          </Button>
-                        ) : null}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      <section className="dx-sla-strip" aria-label="SLA clocks">
+        <SlaClockLine
+          clock={lead}
+          meta={meta}
+          busy={busy}
+          onPause={() => {
+            const nextChoices = pauseChoices(policyOf(lead.row), meta)
+            setPauseCode(nextChoices[0]?.code || 'ON_HOLD')
+            setPauseReason('')
+            setPausing(lead.row)
+          }}
+          onResume={() => resume(lead.row)}
+          trailing={
+            rest.length > 0 ? (
+              <button
+                type="button"
+                className={`dx-sla-strip-more${open ? ' is-open' : ''}`}
+                aria-expanded={open}
+                onClick={() => setOpen((value) => !value)}
+              >
+                {open ? 'Hide' : `${rest.length} more`}
+                <ChevronDown size={14} />
+              </button>
+            ) : null
+          }
+        />
+        {open && rest.length > 0 ? (
+          <div className="dx-sla-strip-list">
+            {rest.map((clock) => (
+              <SlaClockLine
+                key={`${clock.row.policyCode}-${clock.row.status}-${clock.row.dueAt}`}
+                clock={clock}
+                meta={meta}
+                busy={busy}
+                onPause={() => {
+                  const nextChoices = pauseChoices(policyOf(clock.row), meta)
+                  setPauseCode(nextChoices[0]?.code || 'ON_HOLD')
+                  setPauseReason('')
+                  setPausing(clock.row)
+                }}
+                onResume={() => resume(clock.row)}
+              />
+            ))}
           </div>
-        </div>
-      </Card>
+        ) : null}
+      </section>
 
       <Dialog
         open={Boolean(pausing)}

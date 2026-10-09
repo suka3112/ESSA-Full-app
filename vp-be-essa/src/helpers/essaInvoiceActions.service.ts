@@ -31,6 +31,164 @@ export type ActionActor = {
   ip?: string | null;
 };
 
+const BATCH_SNAPSHOT_FIELD = "__batchSnapshot__";
+
+const SECTION_HEADER_KEYS: Record<string, Record<string, string>> = {
+  A_invoice: {
+    invoiceNo: "invoiceNumber",
+    date: "invoiceDate",
+    vendorName: "vendorName",
+    poNumber: "poNumber",
+    paymentTerms: "paymentTerms",
+  },
+  B_taxInvoice: {
+    date: "invoiceDate",
+    taxInvoiceNumber: "taxInvoiceNumber",
+    taxVatAmount: "taxAmount",
+  },
+};
+
+function snapshotDocType(doc: Record<string, unknown>): string {
+  const data = doc.data && typeof doc.data === "object" ? (doc.data as Record<string, unknown>) : null;
+  return String(
+    doc.type ||
+      doc.documentType ||
+      doc.schemaId ||
+      data?.type ||
+      data?.documentType ||
+      data?.schemaId ||
+      data?.detectedDocumentType ||
+      "",
+  )
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+}
+
+function snapshotDocMatchesSection(record: Record<string, unknown>, sectionKey: string): boolean {
+  const type = snapshotDocType(record);
+  if (sectionKey === "B_taxInvoice") {
+    if (type.includes("tax_invoice") || type.includes("faktur") || type.includes("vat_invoice") || type === "tax") {
+      return true;
+    }
+    const data = record.data && typeof record.data === "object" ? (record.data as Record<string, unknown>) : null;
+    const header = (data?.header || record.header) as Record<string, unknown> | undefined;
+    return Boolean(header && ("taxInvoiceNumber" in header || "nomorSeriFakturPajak" in header));
+  }
+  if (sectionKey === "A_invoice") {
+    return type === "invoice" || type === "commercial_invoice";
+  }
+  return false;
+}
+
+function headerValueFor(headerKey: string, value: string | null): string | null {
+  if (value == null || String(value).trim() === "") return null;
+  if (headerKey === "taxAmount" || headerKey === "vatAmount" || headerKey === "totalAmount") {
+    const numeric = Number(String(value).replace(/[^0-9.-]/g, ""));
+    return Number.isFinite(numeric) ? String(numeric) : value;
+  }
+  return value;
+}
+
+function fieldNameMatches(name: string, headerKey: string): boolean {
+  const normalized = name.toLowerCase().replace(/[\s_-]+/g, "");
+  if (normalized === headerKey.toLowerCase()) return true;
+  if (headerKey === "invoiceDate") return normalized === "date" || normalized === "invoicedate";
+  if (headerKey === "taxAmount") return normalized === "vatamount" || normalized === "taxvatamount";
+  if (headerKey === "taxInvoiceNumber") return normalized === "taxinvoicenumber" || normalized === "taxinvno";
+  return false;
+}
+
+function writeHeaderValue(target: Record<string, unknown>, headerKey: string, value: string | null) {
+  const header =
+    target.header && typeof target.header === "object"
+      ? { ...(target.header as Record<string, unknown>) }
+      : {};
+  header[headerKey] = value;
+  if (headerKey === "invoiceDate") header.date = value;
+  if (headerKey === "taxAmount") header.vatAmount = value;
+  target.header = header;
+
+  if (Array.isArray(target.fields)) {
+    target.fields = (target.fields as Array<Record<string, unknown>>).map((field) => {
+      const name = String(field.fieldName || field.name || "");
+      if (!fieldNameMatches(name, headerKey)) return field;
+      return { ...field, fieldValue: value, value };
+    });
+    return;
+  }
+
+  if (target.fields && typeof target.fields === "object") {
+    const fields = { ...(target.fields as Record<string, unknown>) };
+    let matched = false;
+    for (const key of Object.keys(fields)) {
+      if (!fieldNameMatches(key, headerKey)) continue;
+      fields[key] = value;
+      matched = true;
+    }
+    if (!matched) fields[headerKey === "invoiceDate" ? "date" : headerKey] = value;
+    target.fields = fields;
+  }
+}
+
+async function findBatchSnapshotRow(documentId: number) {
+  const direct = await ApDocumentExtraction.findOne({
+    where: { DocumentId: documentId, FieldName: BATCH_SNAPSHOT_FIELD },
+    order: [["ExtractionId", "DESC"]],
+  });
+  if (direct?.FieldValue) return direct;
+
+  const primaryLink = await ApDocumentExtraction.findOne({
+    where: { DocumentId: documentId, FieldName: "__batchPrimaryId__" },
+    order: [["ExtractionId", "DESC"]],
+  });
+  const primaryId = Number(primaryLink?.FieldValue);
+  if (!Number.isInteger(primaryId) || primaryId <= 0) return null;
+  return ApDocumentExtraction.findOne({
+    where: { DocumentId: primaryId, FieldName: BATCH_SNAPSHOT_FIELD },
+    order: [["ExtractionId", "DESC"]],
+  });
+}
+
+async function patchBatchSnapshotFields(
+  documentId: number,
+  sectionKey: string | undefined,
+  fields: Array<{ fieldName: string; value: string | null }>,
+) {
+  const headerMap = sectionKey ? SECTION_HEADER_KEYS[sectionKey] : null;
+  if (!headerMap) return;
+
+  const snapshotRow = await findBatchSnapshotRow(documentId);
+  if (!snapshotRow?.FieldValue) return;
+
+  let snapshot: Record<string, unknown>;
+  try {
+    snapshot = JSON.parse(snapshotRow.FieldValue);
+  } catch {
+    return;
+  }
+
+  const documents = Array.isArray(snapshot.documents) ? snapshot.documents : [];
+  let changed = false;
+  for (const entry of fields) {
+    const headerKey = headerMap[entry.fieldName];
+    if (!headerKey) continue;
+    const stored = headerValueFor(headerKey, entry.value);
+    for (const doc of documents) {
+      if (!doc || typeof doc !== "object") continue;
+      const record = doc as Record<string, unknown>;
+      if (!snapshotDocMatchesSection(record, sectionKey!)) continue;
+      writeHeaderValue(record, headerKey, stored);
+      if (record.data && typeof record.data === "object") {
+        writeHeaderValue(record.data as Record<string, unknown>, headerKey, stored);
+      }
+      changed = true;
+    }
+  }
+
+  if (!changed) return;
+  await snapshotRow.update({ FieldValue: JSON.stringify(snapshot) });
+}
+
 const toFieldCode = (raw: string): string =>
   String(raw || "")
     .trim()
@@ -296,6 +454,7 @@ export async function correctExtractedFields(
     reasonRemarks?: string;
     fields?: Array<{ fieldName?: string; fieldCode?: string; value?: string | null }> | Record<string, string | null>;
     source?: string;
+    sectionKey?: string;
   },
   actor: ActionActor,
 ) {
@@ -389,6 +548,8 @@ export async function correctExtractedFields(
     });
     events.push(audit);
   }
+
+  await patchBatchSnapshotFields(Number(row.DocumentId), body.sectionKey, fieldEntries);
 
   // Keep header denormalised columns in sync for common fields
   const headerPatch: Record<string, unknown> = { ModifiedDt: new Date(), ModifiedBy: actor.userId || null };

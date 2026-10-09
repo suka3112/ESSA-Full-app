@@ -414,6 +414,7 @@ class ApDocumentRequestService {
   async sendRequestEmail(input: {
     requestId: number;
     to?: string | null;
+    cc?: string | null;
     body?: string | null;
   }) {
     const requestId = Number(input.requestId);
@@ -468,12 +469,20 @@ class ApDocumentRequestService {
       );
     }
 
+    const cc = String(input.cc || "").trim();
+    if (cc && !isValidEmail(cc)) {
+      throw new APIError(
+        "CC must be a valid email address",
+        StatusCodeEnum.HTTP_BAD_REQUEST,
+      );
+    }
+
     await row.update({ VendorEmail: to });
 
     const html = plainTextToHtml(body);
     let sendResult: { messageId?: string; previewUrl?: string } = {};
     try {
-      sendResult = await mail.sendEmail(to, subject, html);
+      sendResult = await mail.sendEmail(to, subject, html, [], cc || undefined);
     } catch (error) {
       logger.error(`[DocReq] Failed to send request ${requestId} to ${to}:`, error);
       throw new APIError(

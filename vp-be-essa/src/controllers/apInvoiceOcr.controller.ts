@@ -893,6 +893,7 @@ class ApInvoiceOcrController extends BaseController {
       const result = await apDocumentRequestService.sendRequestEmail({
         requestId,
         to: req.body?.to ?? req.body?.vendorEmail ?? null,
+        cc: req.body?.cc ?? null,
         body: req.body?.body ?? null,
       });
       return await this.success(

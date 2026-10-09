@@ -3781,6 +3781,40 @@ const flattenPoLineItems = (lineItems = []) => {
   return flat.filter(Boolean)
 }
 
+const ROW_ENTRY_SKIP_KEYS = new Set([
+  'header',
+  'lineItems',
+  'fields',
+  'pages',
+  'tables',
+  'entries',
+  'validation',
+  'data',
+  'timesheets',
+  'summary',
+  'meta'
+])
+
+const isRowObjectArray = (value) =>
+  Array.isArray(value) &&
+  value.length > 0 &&
+  value.every((row) => row && typeof row === 'object' && !Array.isArray(row))
+
+/** Keep configured table arrays (timesheetItems, and any other JSON row list). */
+const collectConfiguredRowEntries = (raw, source) => {
+  const out = {}
+  const bags = [raw?.entries, source?.entries, source, raw]
+  for (const bag of bags) {
+    if (!bag || typeof bag !== 'object' || Array.isArray(bag)) continue
+    for (const [key, value] of Object.entries(bag)) {
+      if (ROW_ENTRY_SKIP_KEYS.has(key) || out[key]) continue
+      if (!isRowObjectArray(value)) continue
+      out[key] = value
+    }
+  }
+  return out
+}
+
 const flattenExtractApiDocument = (raw, fileName, { includeSkipped = false } = {}) => {
   if (!raw || typeof raw !== 'object') return null
 
@@ -3914,10 +3948,13 @@ const flattenExtractApiDocument = (raw, fileName, { includeSkipped = false } = {
     header = reconcileInvoiceFields(header, corpus, lineItems)
   }
 
+  const rowEntries = collectConfiguredRowEntries(raw, source)
+
   return {
     documentType: resolvedType,
     rawType: String(rawType || resolvedType),
     documentTypeLabel: source.documentTypeLabel || source.detectedDocumentType || null,
+    entries: rowEntries,
     fileName: source.fileName || fileName,
     fileType: source.fileType || null,
     status: source.status || raw.status || 'extracted',
@@ -6966,6 +7003,7 @@ export const mapApiClassifiedDocumentToBatchRow = (apiDoc, { file, fileName, cla
       attendanceEntries: apiDoc.attendanceEntries || [],
       appendixItems: apiDoc.appendixItems || [],
       tables: apiDoc.tables || [],
+      entries: apiDoc.entries || null,
       fileName: apiDoc.fileName || fileName,
       configHash: apiDoc.configHash || null
     },
@@ -8362,11 +8400,11 @@ export const cancelDocumentRequest = async (requestId) => {
 
 export const sendDocumentRequestEmail = async (
   requestId,
-  { to, body } = {}
+  { to, cc, body } = {}
 ) => {
   const response = await axiosInstance.post(
     `${AP_INVOICE_OCR_DOCUMENT_REQUESTS}/${encodeURIComponent(requestId)}/send`,
-    { to, body }
+    { to, cc, body }
   )
   return response?.data?.data || response?.data || null
 }

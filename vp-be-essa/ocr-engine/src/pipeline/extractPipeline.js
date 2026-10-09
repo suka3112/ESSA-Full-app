@@ -178,6 +178,8 @@ function buildMissingMandatoryPayload({
  *   extractionPrompts?: Record<string, string>,
  *   invoiceTypeCatalog?: object,
  *   invoiceWorkflow?: string,
+ *   invoiceTypeSource?: string,
+ *   classifySharedPoSeries?: (poNumbers: string[], appendixTexts: string[]) => Promise<object>,
  *   skipMandatoryDocuments?: boolean,
  *   requestedDocumentTypes?: string[],
  *   traceId?: string,
@@ -203,6 +205,8 @@ export async function runExtractPipeline(pdfBuffer, sourceFile, options = {}) {
       pageTexts,
       catalog,
       override: options.invoiceWorkflow,
+      overrideSource: options.invoiceTypeSource,
+      classifySharedPoSeries: options.classifySharedPoSeries,
       traceId: options.traceId,
     });
     recordPhase(timing, "invoiceTypeResolutionMs", phaseStartedAt);
@@ -210,6 +214,45 @@ export async function runExtractPipeline(pdfBuffer, sourceFile, options = {}) {
       lowConfidenceAction: catalog?.lowConfidenceAction || "manual_review",
       confidenceThreshold: catalog?.confidenceThreshold ?? 0.7,
     });
+
+    const unreadScan =
+      typeResolution.needsReview || typeResolution.source === "no_po_number";
+    if (unreadScan) {
+      const { pageTextsLackEmbeddedText, readScannedPagesForInvoiceType } =
+        await import("../services/scannedInvoiceTypeRead.js");
+      if (pageTextsLackEmbeddedText(pageTexts)) {
+        const transcribed = await readScannedPagesForInvoiceType(pdfBuffer, {
+          traceId: options.traceId,
+          pageCount: pageTexts.length,
+        });
+        if (transcribed.length) {
+          const byPage = new Map(
+            transcribed.map((page) => [page.pageNumber, page.text]),
+          );
+          const merged = pageTexts.map((page) => {
+            const text = byPage.get(page.pageNumber);
+            if (text && text.length > String(page.text || "").trim().length) {
+              return { pageNumber: page.pageNumber, text };
+            }
+            return page;
+          });
+          typeResolution = await resolveInvoiceType({
+            fileName: sourceFile.originalname,
+            pageTexts: merged,
+            catalog,
+            override: options.invoiceWorkflow,
+            overrideSource: options.invoiceTypeSource,
+            classifySharedPoSeries: options.classifySharedPoSeries,
+            traceId: options.traceId,
+          });
+          logInvoiceTypeResolution(options.traceId, typeResolution, {
+            lowConfidenceAction: catalog?.lowConfidenceAction || "manual_review",
+            confidenceThreshold: catalog?.confidenceThreshold ?? 0.7,
+            scannedRead: true,
+          });
+        }
+      }
+    }
 
     if (typeResolution.needsReview) {
       const reviewFallback =

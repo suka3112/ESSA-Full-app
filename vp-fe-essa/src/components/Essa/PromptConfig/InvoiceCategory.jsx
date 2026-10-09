@@ -12,11 +12,19 @@ const inferTypeMeta = (type) => {
     }
   }
 
-  if (/material/i.test(subtype)) {
+  if (/material/i.test(subtype) && /local/i.test(subtype)) {
     return {
       categoryLabel: type?.category || 'PO',
-      poSeries: ['4201', '4202'],
-      contentSignals: 'Resolved from PO number series alone.'
+      poSeries: ['4201', '4101'],
+      contentSignals: 'Resolved from PO number series 4201 or 4101.'
+    }
+  }
+
+  if (/material/i.test(subtype) && /import/i.test(subtype)) {
+    return {
+      categoryLabel: type?.category || 'PO',
+      poSeries: ['4202', '4102'],
+      contentSignals: 'Resolved from PO number series 4202 or 4102.'
     }
   }
 
@@ -35,6 +43,31 @@ const inferTypeMeta = (type) => {
       poSeries: ['4203'],
       contentSignals:
         'Construction/civil work progress claim (not manpower timesheets). WBS stages such as Infrastructure, Sport Hall, Shared Block; Contract Value / Retention / Advance Payment Recovery; Work Progress Certificate with Work Package STR/ARS/MEP; Sertifikat Badan Usaha or Izin Usaha Jasa Konstruksi; vendors such as PT Berca Buana Sakti.'
+    }
+  }
+
+  if (/rental/i.test(subtype)) {
+    return {
+      categoryLabel: type?.category || 'PO',
+      poSeries: ['4203'],
+      contentSignals:
+        'PO appendix or service invoice mentions Rental or HRG-LIFT_EQP. MPWR_SVC operator lines on that rental PO stay rental equipment.'
+    }
+  }
+
+  if (/housekeeping/i.test(subtype)) {
+    return {
+      categoryLabel: type?.category || 'PO',
+      poSeries: ['4203'],
+      contentSignals: 'PO appendix line contains MPWR_SVC-SUP.'
+    }
+  }
+
+  if (/logistics/i.test(subtype)) {
+    return {
+      categoryLabel: type?.category || 'PO',
+      poSeries: ['4205'],
+      contentSignals: 'Resolved from PO number series 4205.'
     }
   }
 

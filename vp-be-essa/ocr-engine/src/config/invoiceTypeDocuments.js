@@ -35,6 +35,12 @@ export const MOCKUP_CATEGORIES = {
       "PO",
       "PO Appendix",
     ],
+    "Material Local": [
+      "Invoice",
+      "Tax Invoice (VAT)",
+      "PO",
+      "PO Appendix",
+    ],
     "Material Import": [
       "PO",
       "PO Appendix",
@@ -53,6 +59,31 @@ export const MOCKUP_CATEGORIES = {
       "Proforma Invoice",
       "Attendance Statistics Table",
       "Monthly Meal Summary (PoB Report)",
+      "PO",
+      "PO Appendix",
+    ],
+    Logistics: [
+      "Invoice",
+      "Tax Invoice",
+      "PO",
+      "PO Appendix",
+      "Logistics Invoice",
+      "Bill of Lading / AWB",
+      "Packing List",
+    ],
+    Housekeeping: [
+      "Invoice",
+      "Tax Invoice (VAT)",
+      "Work Progress Certificate (Berita Acara)",
+      "Summary Calculation Manhour (Monthly Man-days Summary)",
+      "Daily Time Sheet",
+      "Daily Attendance (biometrics)",
+      "PO",
+      "PO Appendix",
+    ],
+    "Rental Equipment": [
+      "Invoice",
+      "Tax Invoice (VAT)",
       "PO",
       "PO Appendix",
     ],
@@ -83,16 +114,38 @@ export const MOCKUP_TYPE_CONFIGS = {
     contentSignals:
       "Construction/civil work progress claim (not manpower timesheets). WBS stages such as Infrastructure, Sport Hall, Shared Block; Contract Value / Retention / Advance Payment Recovery; Work Progress Certificate with Work Package STR/ARS/MEP; Sertifikat Badan Usaha or Izin Usaha Jasa Konstruksi; vendors such as PT Berca Buana Sakti.",
   },
+  "Material Local": {
+    invoiceTypeId: "MATERIAL_LOCAL",
+    poSeries: ["4201", "4101"],
+    contentSignals: "Resolved from PO number series 4201 or 4101.",
+  },
   "Material Import": {
     invoiceTypeId: "MATERIAL_IMPORT",
-    poSeries: ["4201", "4202"],
-    contentSignals: "",
+    poSeries: ["4202", "4102"],
+    contentSignals: "Resolved from PO number series 4202 or 4102.",
   },
   "Camp Service and Catering": {
     invoiceTypeId: "CAMP_SERVICE_AND_CATERING",
     poSeries: ["4203"],
     contentSignals:
       "Catering/meal service language, meal counts by type (breakfast, lunch, dinner, supper), attendance/headcount at a camp or site facility.",
+  },
+  Logistics: {
+    invoiceTypeId: "LOGISTICS",
+    poSeries: ["4205"],
+    contentSignals: "Resolved from PO number series 4205.",
+  },
+  Housekeeping: {
+    invoiceTypeId: "HOUSEKEEPING",
+    poSeries: ["4203"],
+    contentSignals:
+      "PO appendix line contains MPWR_SVC-SUP. Other 4203 lines such as MPWR_SVC stay manpower.",
+  },
+  "Rental Equipment": {
+    invoiceTypeId: "RENTAL_EQUIPMENT",
+    poSeries: ["4203"],
+    contentSignals:
+      "PO appendix or service invoice mentions Rental or HRG-LIFT_EQP. MPWR_SVC operator lines on that same rental PO stay rental equipment.",
   },
   "Non-PO": {
     invoiceTypeId: "NON_PO",

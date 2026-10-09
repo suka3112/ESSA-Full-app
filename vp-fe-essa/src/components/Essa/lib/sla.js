@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Badge } from '../ui/Badge'
 import {
   INVOICE_DASHBOARD,
+  PROMPT_CONFIG,
   SLA_MANAGEMENT,
   SLA_CREATE,
   slaEditPath,
@@ -41,7 +42,7 @@ export const slaEditTo = (id, tab) => {
 export function adminCrumbs(...trail) {
   return [
     { label: 'Home', to: slaTo(INVOICE_DASHBOARD) },
-    { label: 'Administration', to: slaTo(SLA_MANAGEMENT) },
+    { label: 'Administration', to: slaTo(PROMPT_CONFIG) },
     ...trail
   ]
 }

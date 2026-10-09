@@ -97,14 +97,14 @@ export const sourceChannel = (code) => CHANNELS[SOURCE_BY_CODE[code]?.channel] |
  * this business category (see api/essaInvoiceType.js).
  */
 export const CATEGORIES = [
-  { code: 'MATERIAL', label: 'Material', group: 'PO', services: false, receipt: 'GRN', poSeries: '4201, 4202', invoiceTypeCodes: ['MATERIAL_IMPORT'] },
+  { code: 'MATERIAL', label: 'Material', group: 'PO', services: false, receipt: 'GRN', poSeries: '4201, 4202', invoiceTypeCodes: ['MATERIAL_IMPORT', 'MATERIAL_LOCAL'] },
   { code: 'MANPOWER', label: 'Manpower outsourcing', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['MANPOWER_SERVICES'] },
   { code: 'CATERING', label: 'Catering', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['CAMP_SERVICE_AND_CATERING'] },
   { code: 'CIVIL', label: 'Civil works', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['CIVIL_CONTRACTOR'] },
-  { code: 'HOUSEKEEPING', label: 'Housekeeping', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: [] },
-  { code: 'RENTAL_EQUIPMENT', label: 'Rental equipment', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: [] },
+  { code: 'HOUSEKEEPING', label: 'Housekeeping', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['HOUSEKEEPING'] },
+  { code: 'RENTAL_EQUIPMENT', label: 'Rental equipment', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['RENTAL_EQUIPMENT'] },
   { code: 'IMPORT_LOGISTICS', label: 'Import logistics (PIB)', group: 'PO', services: false, receipt: 'GRN', poSeries: '', invoiceTypeCodes: [] },
-  { code: 'DOMESTIC_LOGISTICS', label: 'Domestic logistics', group: 'PO', services: false, receipt: 'GRN', poSeries: '', invoiceTypeCodes: [] },
+  { code: 'DOMESTIC_LOGISTICS', label: 'Domestic logistics', group: 'PO', services: false, receipt: 'GRN', poSeries: '', invoiceTypeCodes: ['LOGISTICS'] },
   { code: 'CONSULTANT_TIME', label: 'Consultants · time based', group: 'PO', services: true, receipt: 'SES', poSeries: '', invoiceTypeCodes: [] },
   { code: 'CONSULTANT_MILESTONE', label: 'Consultants · milestone', group: 'PO', services: true, receipt: 'SES', poSeries: '', invoiceTypeCodes: [] },
   { code: 'MEDICAL', label: 'Medical services', group: 'PO', services: true, receipt: 'SES', poSeries: '', invoiceTypeCodes: [] },

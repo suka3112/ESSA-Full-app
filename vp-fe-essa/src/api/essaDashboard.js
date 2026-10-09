@@ -707,6 +707,19 @@ async function fetchAllEssaInvoicePages(params) {
   }
 }
 
+export const getEssaExceptionCodes = async () => {
+  if (!essaBackendEnabled()) return []
+  try {
+    const response = await axiosInstance.get(`${ESSA_API}/exception-codes`, {
+      headers: essaHeaders()
+    })
+    const payload = response.data?.data ?? response.data
+    return Array.isArray(payload) ? payload : []
+  } catch {
+    return []
+  }
+}
+
 export const getEssaInvoices = async (params = {}) => {
   if (essaBackendEnabled()) {
     try {

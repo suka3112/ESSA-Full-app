@@ -9,6 +9,10 @@ import logger from "../utils/logger";
 import slaEngine from "./slaEngine.service";
 import slaService, { remainingMsOf } from "./sla.service";
 import { mintCorrelationId } from "./auditEvent.service";
+import {
+  loadExceptionCatalogue,
+  resolveRuleExceptions,
+} from "./exceptionCode.service";
 import { auditInvoiceCreated } from "./essaInvoiceActions.service";
 import {
   auditDocAssociated,
@@ -341,8 +345,12 @@ const TERMINAL_STAGES = new Set(["parked", "posted", "paid", "rejected"]);
 const INVOICE_TYPE_CODE_TO_LABEL: Record<string, string> = {
   MANPOWER_SERVICES: "Manpower",
   CIVIL_CONTRACTOR: "Civil Contractor",
+  MATERIAL_LOCAL: "Material Local",
   MATERIAL_IMPORT: "Material Import",
   CAMP_SERVICE_AND_CATERING: "Camp Service and Catering",
+  LOGISTICS: "Logistics",
+  HOUSEKEEPING: "Housekeeping",
+  RENTAL_EQUIPMENT: "Rental Equipment",
   NON_PO: "Non-PO",
 };
 
@@ -373,6 +381,7 @@ const classifyEssaInvoiceType = (
     .join(" ")
     .toLowerCase();
   const fromMeta = labelFromInvoiceTypeId(invoiceTypeId);
+  if (fromMeta) return fromMeta;
   const inferred = /\bcivil\b|contractor|konstruksi|berca|buana\s+sakti|bbs-bap|progress\s+claim|transmittal|sertifikat\s+badan\s+usaha|izin\s+usaha\s+jasa/.test(
     blob,
   )
@@ -388,10 +397,8 @@ const classifyEssaInvoiceType = (
         : null;
 
   if (inferred) return inferred;
-  if (fromMeta && fromMeta !== "Manpower" && fromMeta !== "Non-PO") return fromMeta;
-  if (fromMeta === "Manpower") return "Manpower";
-  if (!poNumber) return fromMeta === "Non-PO" || !fromMeta ? "Non-PO" : fromMeta;
-  return fromMeta || inferred || "Manpower";
+  if (!poNumber) return "Non-PO";
+  return "Manpower";
 };
 
 const parseInvoiceDate = (value: string | null): string | null => {
@@ -1108,6 +1115,18 @@ const normalizeOcrDocument = (raw: Record<string, unknown>): NormalizedOcrDocume
     manpower: nested.manpower,
   };
 
+  const entriesBag =
+    nested.entries && typeof nested.entries === "object" && !Array.isArray(nested.entries)
+      ? (nested.entries as Record<string, unknown>)
+      : null;
+  if (entriesBag) {
+    for (const [key, value] of Object.entries(entriesBag)) {
+      if (Array.isArray(value) && value.length > 0 && rawPayload[key] == null) {
+        rawPayload[key] = value;
+      }
+    }
+  }
+
   const trimmedRaw = trimStructuredArrays(documentType, rawPayload);
   const header = canonicalizeExtractionFields(documentType, headerSource, trimmedRaw);
   const lineItems = Array.isArray(nested.lineItems)
@@ -1392,6 +1411,27 @@ class ApInvoiceDocumentService {
           FieldValue: JSON.stringify(value),
         });
       }
+    }
+
+    const skipGenericArrays = new Set<string>([
+      "lineItems",
+      "fields",
+      "pages",
+      "header",
+      "tables",
+      ...Object.keys(STRUCTURED_ARRAY_FIELDS),
+    ]);
+    for (const [key, value] of Object.entries(rawPayload)) {
+      if (skipGenericArrays.has(key) || key.startsWith("__")) continue;
+      if (!Array.isArray(value) || value.length === 0) continue;
+      if (!value.every((row) => row && typeof row === "object" && !Array.isArray(row))) {
+        continue;
+      }
+      rows.push({
+        DocumentId: documentId,
+        FieldName: `__table__${key}`,
+        FieldValue: JSON.stringify(value),
+      });
     }
 
     rows.push({
@@ -1819,12 +1859,7 @@ class ApInvoiceDocumentService {
     let lineItems: Array<Record<string, string | null>> = [];
 
     for (const row of extractionRows) {
-      if (
-        RESERVED_FIELD_NAMES.has(row.FieldName) ||
-        row.FieldName === BATCH_SNAPSHOT_FIELD ||
-        row.FieldName === BATCH_PRIMARY_FIELD ||
-        row.FieldName === BATCH_PRIMARY_ID_FIELD
-      ) {
+      if (row.FieldName.startsWith("__") || RESERVED_FIELD_NAMES.has(row.FieldName)) {
         if (row.FieldName === LINE_ITEMS_FIELD) {
           try {
             const parsed = JSON.parse(row.FieldValue || "[]");
@@ -2540,6 +2575,98 @@ class ApInvoiceDocumentService {
     }
   }
 
+  /** Latest FAIL/BLOCKED rules per extracted document, from the current validation run. */
+  private async failedRulesForDocuments(documentIds: number[]) {
+    const unique = [
+      ...new Set(documentIds.filter((id) => Number.isInteger(id) && id > 0)),
+    ];
+    const byDoc = new Map<
+      number,
+      Array<{
+        ruleCode: string;
+        ruleName: string;
+        severity: string;
+        message: string | null;
+        raisedAt: string | null;
+        exceptionCodes: Array<{
+          code: string;
+          exceptionType: string;
+          name: string;
+          meaning: string;
+          documentName: string | null;
+        }>;
+      }>
+    >();
+    if (!unique.length) return byDoc;
+
+    let failures: ApValidationResult[] = [];
+    try {
+      failures = await ApValidationResult.findAll({
+        where: {
+          DocumentId: { [Op.in]: unique },
+          Severity: { [Op.in]: ["FAIL", "BLOCKED"] },
+        },
+        attributes: [
+          "DocumentId",
+          "RuleCode",
+          "RuleName",
+          "Severity",
+          "Message",
+          "CreatedAt",
+          "ValidationRunId",
+          "ValidationId",
+        ],
+        order: [
+          ["ValidationRunId", "DESC"],
+          ["ValidationId", "ASC"],
+        ],
+      });
+    } catch (error) {
+      logger.warn("Failed to load validation failures for invoice list", error);
+      return byDoc;
+    }
+
+    let catalogueCodes: Awaited<ReturnType<typeof loadExceptionCatalogue>>["codes"] = [];
+    let catalogueMaps: Awaited<ReturnType<typeof loadExceptionCatalogue>>["maps"] = [];
+    try {
+      const catalogue = await loadExceptionCatalogue();
+      catalogueCodes = catalogue.codes;
+      catalogueMaps = catalogue.maps;
+    } catch (error) {
+      logger.warn("Failed to load exception code catalogue", error);
+    }
+    const exceptionByCode = new Map(catalogueCodes.map((row) => [row.code, row]));
+
+    const latestRun = new Map<number, number>();
+    for (const row of failures) {
+      const docId = Number(row.DocumentId);
+      const runId = Number(row.get("ValidationRunId")) || 0;
+      if (runId > (latestRun.get(docId) ?? -1)) latestRun.set(docId, runId);
+    }
+
+    for (const row of failures) {
+      const docId = Number(row.DocumentId);
+      const runId = Number(row.get("ValidationRunId")) || 0;
+      if (runId !== (latestRun.get(docId) ?? 0)) continue;
+      const code = String(row.RuleCode || "").trim();
+      if (/did not evaluate this rule/i.test(String(row.Message || ""))) continue;
+      const list = byDoc.get(docId) || [];
+      if (code && list.some((item) => item.ruleCode === code)) continue;
+      const createdAt = row.get("CreatedAt") as Date | string | null;
+      const message = row.Message ? String(row.Message) : null;
+      list.push({
+        ruleCode: code,
+        ruleName: String(row.RuleName || "").trim(),
+        severity: String(row.Severity || ""),
+        message,
+        raisedAt: createdAt ? new Date(createdAt).toISOString() : null,
+        exceptionCodes: resolveRuleExceptions(code, message, catalogueMaps, exceptionByCode),
+      });
+      byDoc.set(docId, list);
+    }
+    return byDoc;
+  }
+
   async listEssaInvoices(query: Record<string, unknown>) {
     await this.backfillEssaInvoices();
     await EssaInvoice.update(
@@ -2632,6 +2759,11 @@ class ApInvoiceDocumentService {
       if (!instanceByObject.has(inst.ObjectId)) instanceByObject.set(inst.ObjectId, inst);
     }
     const now = Date.now();
+    const failedRulesByDocument = await this.failedRulesForDocuments(
+      rows
+        .filter((row) => Number(row.FailedChecks) > 0)
+        .map((row) => Number(row.DocumentId)),
+    );
 
     const data = await Promise.all(
       rows.map(async (row) => {
@@ -2660,6 +2792,7 @@ class ApInvoiceDocumentService {
           status: row.WorkflowStage,
           workflow_stage: row.WorkflowStage,
           failed_checks: Number(row.FailedChecks) || 0,
+          failed_rules: failedRulesByDocument.get(Number(row.DocumentId)) || [],
           openExceptions: Number(row.OpenExceptions) || 0,
           sla_due: slaDueIso,
           slaDue: slaDueIso,

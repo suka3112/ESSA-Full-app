@@ -24,6 +24,7 @@ import {
   type OcrExtractHttpLikeResponse,
 } from "./ocrEngine.adapter";
 import { EssaInvoice } from "../models/essaInvoice";
+import { classifySharedPoSeries } from "./poInvoiceCategory.service";
 
 export type ExtractSourceChannel = "UPLOAD" | "EMAIL" | "SHAREPOINT";
 
@@ -34,6 +35,7 @@ const isReviewPersistChannel = (channel: ExtractSourceChannel): boolean =>
 const INVOICE_TYPE_LABEL_TO_CODE: Record<string, string> = {
   Manpower: "MANPOWER_SERVICES",
   "Civil Contractor": "CIVIL_CONTRACTOR",
+  "Material Local": "MATERIAL_LOCAL",
   "Material Import": "MATERIAL_IMPORT",
   "Camp Service and Catering": "CAMP_SERVICE_AND_CATERING",
   "Non-PO": "NON_PO",
@@ -340,6 +342,8 @@ class ApInvoiceExtractService {
             extractionPrompts,
             invoiceTypeCatalog: catalog,
             invoiceWorkflow,
+            classifySharedPoSeries:
+              sourceChannel === "EMAIL" ? undefined : classifySharedPoSeries,
             skipMandatoryDocuments,
             requestedDocumentTypes: input.requestedDocumentTypes || [],
           },
@@ -523,12 +527,16 @@ class ApInvoiceExtractService {
     };
 
     if (response.data?.data?.status === "needs_invoice_type_review") {
-      // Email/SharePoint already set workflow; still allow persist so finance can review
-      if (!isReviewPersistChannel(sourceChannel)) {
+      const reviewMessage =
+        String(response.data?.message || "").trim() ||
+        "Invoice type needs manual review before extraction.";
+      // Upload and SharePoint share this gate. Email already has a subject category.
+      if (sourceChannel !== "EMAIL") {
         return {
-          httpStatus: response.status,
+          httpStatus: 422,
           body: {
             ...response.data,
+            message: reviewMessage,
             extractionTrace: {
               ...extractionTrace,
               needsInvoiceTypeReview: true,

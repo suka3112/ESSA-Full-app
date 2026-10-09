@@ -1,7 +1,15 @@
 import { fmtMoney, formatInvoiceDate } from 'api/essaDashboard'
 import { detectInvoiceWorkflow, hasPoWorkflowSignals, parseAmount, resolveInvoiceExtractedTotals } from 'api/apInvoiceOcr'
-import { coerceEssaPoNumber } from 'api/essaPoNumber'
 import { NON_PO_VALIDATION_RULE_CATALOG } from './validationRuleCatalog'
+
+// Local copy of the 4203 check. Importing api/essaPoNumber from here is captured
+// as undefined when apInvoiceOcr is still initializing (circular import).
+const ESSA_PO_RE = /^4203\d{6}$/
+const coerceEssaPoNumber = (value) => {
+  if (value == null) return null
+  const digits = String(value).replace(/\D/g, '')
+  return ESSA_PO_RE.test(digits) ? digits : null
+}
 
 const fmtDate = (raw) => formatInvoiceDate(raw, { withTime: false })
 

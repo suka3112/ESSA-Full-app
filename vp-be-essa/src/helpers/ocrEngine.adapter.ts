@@ -16,6 +16,18 @@ export type OcrExtractOptions = {
   extractionPrompts?: Record<string, string>;
   invoiceTypeCatalog?: unknown;
   invoiceWorkflow?: string;
+  /** How invoiceWorkflow was chosen: email subject, po_series, po_line_keywords, no_po_number. */
+  invoiceTypeSource?: string;
+  /**
+   * Upload and SharePoint: shared PO series (4203) is classified from PO appendix text.
+   * Return needsReview when the appendix lines do not agree on one category.
+   */
+  classifySharedPoSeries?: (poNumbers: string[], appendixTexts: string[]) => Promise<{
+    invoiceTypeId?: string | null;
+    needsReview?: boolean;
+    confidence?: number;
+    signals?: string[];
+  }>;
   /** When true, classify/extract even if catalog-mandatory docs are absent. */
   skipMandatoryDocuments?: boolean;
   /** DOCREQ: requested supporting-doc types (faktur_pajak, berita_acara, …). */
@@ -136,9 +148,15 @@ const buildSuccessBody = (
   const statusFlag = String(result.status || "");
 
   if (statusFlag === "needs_invoice_type_review") {
+    const resolution =
+      result.invoiceTypeResolution &&
+      typeof result.invoiceTypeResolution === "object"
+        ? (result.invoiceTypeResolution as { poNumber?: string | null })
+        : {};
+    const po = resolution.poNumber ? ` PO ${resolution.poNumber}.` : "";
     return {
       status: 200,
-      message: "Invoice type needs manual review before classification",
+      message: `Invoice type needs manual review before extraction.${po} The PO prefix or PO appendix did not match a single category.`,
       extractionTrace: {
         traceId,
         totalMs: Date.now() - startedAt,

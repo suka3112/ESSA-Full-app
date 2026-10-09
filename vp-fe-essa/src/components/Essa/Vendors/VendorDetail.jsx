@@ -8,6 +8,7 @@ import { LeftPageContainer } from 'pages/vendor/dashboard/dashboard.styles'
 import { PageHeader } from '../PageShell'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
+import { EmptyState } from '../ui/EmptyState'
 import { Dialog } from '../ui/Dialog'
 import { Textarea } from '../ui/Textarea'
 import { ADMIN_USER_TYPE, FINANCE_USER_TYPE } from 'constants/userType'
@@ -149,9 +150,14 @@ function VendorDetailView({ userInfo: { userType = 'finance' } }) {
   if (loading) {
     return (
       <LeftPageContainer>
-        <div className="vd-state">
-          <Loader2 size={22} className="vd-spin" />
-          <span>Loading vendor…</span>
+        <div className="essa-dashboard vd-missing">
+          <style>{pageCss}</style>
+          <Card className="vd-missing-card">
+            <div className="vd-state">
+              <Loader2 size={22} className="vd-spin" />
+              <span>Loading vendor…</span>
+            </div>
+          </Card>
         </div>
       </LeftPageContainer>
     )
@@ -160,12 +166,20 @@ function VendorDetailView({ userInfo: { userType = 'finance' } }) {
   if (!vendorData?.vendor) {
     return (
       <LeftPageContainer>
-        <div className="vd-state">
-          <p className="vd-state-title">Vendor not found</p>
-          <p>Could not find a vendor snapshot for “{code}”.</p>
-          <Link to={`/${userType}${VENDORS_LIST}`} className="vd-back">
-            Back to Vendor Master
-          </Link>
+        <div className="essa-dashboard vd-missing">
+          <style>{pageCss}</style>
+          <Card className="vd-missing-card">
+            <EmptyState
+              icon="search"
+              title="Vendor not found"
+              description={`Could not find a vendor snapshot for “${code}”. The code may be wrong, or this vendor is no longer in the master.`}
+              action={
+                <Link to={`/${userType}${VENDORS_LIST}`} className="dx-btn dx-btn-primary">
+                  Back to Vendor Master
+                </Link>
+              }
+            />
+          </Card>
         </div>
       </LeftPageContainer>
     )
@@ -299,9 +313,6 @@ function VendorDetailView({ userInfo: { userType = 'finance' } }) {
               <dl className="vd-control">
                 <KeyValue label="Negative Vendor Flag">
                   {c?.negativeFlag ? <Badge tone="error">Enabled</Badge> : <Badge tone="success">Disabled</Badge>}
-                </KeyValue>
-                <KeyValue label="AP Automation Enabled">
-                  {c?.apEnabled === false ? <Badge tone="warning">No — EAPA disabled</Badge> : <Badge tone="success">Yes</Badge>}
                 </KeyValue>
                 {c?.reason && <KeyValue label="Reason">{c.reason}</KeyValue>}
                 {c?.remarks && <KeyValue label="Remarks">{c.remarks}</KeyValue>}
@@ -444,6 +455,11 @@ const pageCss = `
 .vd-page .vd-small{font-size:12px;}
 .vd-page .vd-link{font-weight:500;color:#247a35;text-decoration:none;}
 .vd-page .vd-link:hover{text-decoration:underline;}
+.vd-missing{display:flex;align-items:stretch;min-height:calc(100vh - 132px);}
+.vd-missing .vd-missing-card{flex:1;min-height:0;}
+.vd-missing .vd-missing-card>.card-body{display:flex;align-items:center;justify-content:center;min-height:320px;}
+.vd-missing .dx-empty-state{padding:32px 24px;}
+.vd-missing .vd-state{min-height:0;}
 .vd-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:240px;color:#6b7280;text-align:center;}
 .vd-state-title{margin:0;font-size:16px;font-weight:600;color:#1f2937;}
 .vd-state p{margin:0;font-size:13px;}

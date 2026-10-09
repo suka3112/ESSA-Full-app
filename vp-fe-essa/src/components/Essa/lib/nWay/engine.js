@@ -361,8 +361,15 @@ export const evaluateRule = (rule, ctx) => {
 
   const docs = [rule.source, ...(rule.targets || []).map((t) => t.doc)]
   const valueCache = {}
+  // A check-against document can be read on its own field (e.g. PO “Vendor name” for Faktur Pajak “Seller name”).
+  const keyFor = (code) => {
+    if (code === rule.source) return rule.dataKey
+    const field = (rule.targets || []).find((t) => t.doc === code)?.field
+    // Seeded rules keep the matrix note (“#52 Seller NPWP”) here — not a field, so read the rule's data point.
+    return field && !/[\s#(&+]/.test(field) ? field : rule.dataKey
+  }
   const valueOf = (code) => {
-    if (!valueCache[code]) valueCache[code] = resolveSourceValue(code, rule.dataKey, ctx)
+    if (!valueCache[code]) valueCache[code] = resolveSourceValue(code, keyFor(code), ctx)
     return valueCache[code]
   }
 

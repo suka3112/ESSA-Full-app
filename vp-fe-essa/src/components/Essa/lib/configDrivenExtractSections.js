@@ -15,9 +15,7 @@ import {
   normalizeValidationDocumentType
 } from 'api/apInvoiceOcr'
 import { resolveInvoiceTypeCode } from 'api/essaInvoiceType'
-
-const ENTRY_FIELD_RE =
-  /^(invoiceLineItems|lineItems|manpower|manhourSummary|timesheets|timesheetEntries|attendanceEntries|poLineItems|appendixItems|sesLineItems)$/i
+import { columnKeysFromHint, resolveFieldKind } from '../PromptConfig/extractionPromptText'
 
 /** Prompt Config / OCR documentType → legacy Extract & Validate section key. */
 export const OCR_TYPE_TO_SECTION_KEY = {
@@ -52,7 +50,44 @@ const FIELD_LOOKUP_ALIASES = {
   bankAccountNumber: ['bankAccount', 'bankAccountNumber']
 }
 
-const isEntryField = (name) => ENTRY_FIELD_RE.test(String(name || '').trim())
+const readRowArray = (ocr, fieldName) => {
+  if (!ocr || !fieldName) return []
+  const entries = ocr.entries && typeof ocr.entries === 'object' ? ocr.entries : null
+  const raw = ocr.raw && typeof ocr.raw === 'object' ? ocr.raw : null
+  const rawEntries = raw?.entries && typeof raw.entries === 'object' ? raw.entries : null
+  const candidates = [ocr[fieldName], entries?.[fieldName], raw?.[fieldName], rawEntries?.[fieldName]]
+  for (const value of candidates) {
+    if (Array.isArray(value) && value.length) return value
+  }
+  return []
+}
+
+const columnLabel = (key, fields) => {
+  const match = (fields || []).find((field) => field.fieldName === key && field.displayName)
+  if (match) return match.displayName
+  return String(key || '')
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .trim()
+}
+
+const configExtractTable = (field, ocr, fields) => {
+  const rows = readRowArray(ocr, field.fieldName).filter(
+    (row) => row && typeof row === 'object' && !Array.isArray(row)
+  )
+  if (!rows.length) return null
+  const hinted = columnKeysFromHint(field.hint)
+  const keys = hinted.length
+    ? hinted
+    : [...new Set(rows.flatMap((row) => Object.keys(row).filter((key) => !key.startsWith('_'))))]
+  if (!keys.length) return null
+  return {
+    title: field.displayName || field.fieldName,
+    columns: keys.map((key) => ({ key, label: columnLabel(key, fields) })),
+    rows
+  }
+}
 
 const isEmpty = (v) => v == null || v === '' || v === '—'
 
@@ -220,10 +255,27 @@ export function buildConfigDrivenExtractSections(
       ? enrichOcrPayload({ ...rawOcr, documentType: canonType }) || rawOcr
       : null
 
-    const scalarDefs = (doc.fields || []).filter((f) => !isEntryField(f.fieldName))
-    const fields = scalarDefs.map((f) =>
-      buildConfigField(f, lookupExtractedValue(f.fieldName, ocr, legacy?.fields || []))
+    const configTables = (doc.fields || [])
+      .filter((f) => resolveFieldKind(f) === 'table')
+      .map((f) => configExtractTable(f, ocr, doc.fields))
+      .filter(Boolean)
+    const tableColumnKeys = new Set(configTables.flatMap((table) => table.columns.map((col) => col.key)))
+    const scalarDefs = (doc.fields || []).filter(
+      (f) => resolveFieldKind(f) !== 'table' && !tableColumnKeys.has(f.fieldName)
     )
+    const savedFields = corrections?.[sectionKey]?.fields || {}
+    const fields = scalarDefs.map((f) => {
+      const saved = Object.prototype.hasOwnProperty.call(savedFields, f.fieldName)
+        ? savedFields[f.fieldName]
+        : undefined
+      const captured =
+        saved !== undefined
+          ? saved === ''
+            ? null
+            : saved
+          : lookupExtractedValue(f.fieldName, ocr, legacy?.fields || [])
+      return buildConfigField(f, captured)
+    })
 
     const storedHash = ocr?.configHash || rawOcr?.configHash || null
     const currentHash = doc.configHash || null
@@ -251,7 +303,9 @@ export function buildConfigDrivenExtractSections(
       fields,
       lineItems: legacy?.lineItems || [],
       lineColumns: legacy?.lineColumns,
-      extractTables: legacy?.extractTables || [],
+      extractTables: configTables.length
+        ? configTables
+        : legacy?.extractTables || [],
       manpowerSheets: legacy?.manpowerSheets || [],
       hideHeaderFields: legacy?.hideHeaderFields && fields.length === 0,
       visible: true

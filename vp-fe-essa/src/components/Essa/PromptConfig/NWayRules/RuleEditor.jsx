@@ -15,7 +15,15 @@ import {
   sourceLabel
 } from '../../lib/nWay/catalog'
 import { describeRule } from '../../lib/nWay/ruleText'
-import { fieldOptionsForSource, sourceOptionsForScope, useCaptureTypes } from '../../lib/nWay/captureFields'
+import {
+  fieldGroupsForTarget,
+  fieldOptionsForSource,
+  isFieldRef,
+  sourceOptionsForScope,
+  suggestTargetField,
+  targetDataKey,
+  useCaptureTypes
+} from '../../lib/nWay/captureFields'
 
 export const emptyMatchRule = (categoryCode) => ({
   id: null,
@@ -89,6 +97,27 @@ function SourceSelect({ value, onChange, options = SOURCES, exclude = [], ariaLa
           </optgroup>
         ) : null
       })}
+    </select>
+  )
+}
+
+/** Field on a check-against document that the source data point is compared with. */
+function TargetFieldSelect({ value, groups, loading, dataPoint, onChange, ariaLabel }) {
+  const known = groups.some((g) => g.options.some((o) => o.value === value))
+  return (
+    <select className="dx-select nw-select" aria-label={ariaLabel} value={value} disabled={loading} onChange={(e) => onChange(e.target.value)}>
+      {loading ? <option value={value}>Loading fields…</option> : null}
+      {!loading ? <option value="">{dataPoint ? `Same data point (${dataPoint})` : 'Select a field…'}</option> : null}
+      {!loading && value && !known ? <option value={value}>{isFieldRef(value) ? `${value} (current)` : `Matrix note: ${value}`}</option> : null}
+      {!loading
+        ? groups.map((g) => (
+            <optgroup key={g.label} label={g.label}>
+              {g.options.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </optgroup>
+          ))
+        : null}
     </select>
   )
 }
@@ -212,8 +241,15 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
     setDraft((d) => {
       const used = new Set([d.source, ...d.targets.map((t) => t.doc)])
       const next = SOURCES.find((s) => !used.has(s.code))
-      return next ? { ...d, targets: [...d.targets, { doc: next.code, requirement: 'REQUIRED', field: '' }] } : d
+      if (!next) return d
+      const field = suggestTargetField(fieldGroupsForTarget(types, d.scope, d.categories, next.code), d.dataKey)
+      return { ...d, targets: [...d.targets, { doc: next.code, requirement: 'REQUIRED', field }] }
     })
+  // Each check-against document lists its own fields; a new document starts on its field for the same data point.
+  const targetGroups = (doc) => fieldGroupsForTarget(types, draft.scope, draft.categories, doc)
+  const pickTargetDoc = (i, doc) => setTarget(i, { doc, field: suggestTargetField(targetGroups(doc), draft.dataKey) })
+  const targetFieldLabel = (t) =>
+    isFieldRef(t.field) ? targetGroups(t.doc).flatMap((g) => g.options).find((o) => o.value === t.field)?.label || t.field : ''
 
   // Invoice Category → Source Document → Data Point
   const sourceOptions = useMemo(() => sourceOptionsForScope(types, draft.scope, draft.categories), [types, draft.scope, draft.categories])
@@ -230,12 +266,17 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
   const pickDataPoint = (value) => {
     if (value.startsWith('f:')) {
       const f = fieldOptions.find((x) => x.fieldName === value.slice(2))
-      if (f) set({ dataPoint: f.label, sourceField: f.fieldName, dataKey: f.dataKey })
+      if (f) set({ dataPoint: f.label, sourceField: f.fieldName, dataKey: f.dataKey, targets: refollowTargets(f.dataKey) })
     } else if (value.startsWith('k:')) {
       const o = DATA_POINT_OPTIONS.find((x) => x.value === value.slice(2))
-      if (o) set({ dataPoint: o.label, sourceField: '', dataKey: o.value })
+      if (o) set({ dataPoint: o.label, sourceField: '', dataKey: o.value, targets: refollowTargets(o.value) })
     }
   }
+  // Targets still on the old data point's field (or none) move to the new data point's field.
+  const refollowTargets = (dataKey) =>
+    (draft.targets || []).map((t) =>
+      !isFieldRef(t.field) || targetDataKey(t.field) === draft.dataKey ? { ...t, field: suggestTargetField(targetGroups(t.doc), dataKey) } : t
+    )
   const pickSource = (code) => {
     // A new source has its own fields: clear a data point that came from the previous source's Fields to Capture.
     set({ source: code, ...(draft.sourceField ? { dataPoint: '', sourceField: '', dataKey: '' } : {}) })
@@ -283,7 +324,7 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
       <div className="nw-editor">
         <div className="nw-reads-as" aria-live="polite">
           <span className="nw-label">Reads as</span>
-          <p>{draft.dataPoint || availability ? describeRule({ ...draft, dataPoint: draft.dataPoint || 'value' }) : 'Pick the invoice category, source document and data point to see the rule in plain English.'}</p>
+          <p>{draft.dataPoint || availability ? describeRule({ ...draft, dataPoint: draft.dataPoint || 'value', targets: (draft.targets || []).map((t) => ({ ...t, fieldLabel: targetFieldLabel(t) })) }) : 'Pick the invoice category, source document and data point to see the rule in plain English.'}</p>
         </div>
 
         {/* 1 · Source */}
@@ -343,6 +384,15 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
                     <small>{draft.dataPoint || 'data point not set'} · {sourceChannel(draft.source).long}</small>
                   </span>
                 </div>
+                {(draft.targets || []).length ? (
+                  <div className="nw-targets__head" aria-hidden>
+                    <span />
+                    <span>Document</span>
+                    <span>Field to compare</span>
+                    <span>Role</span>
+                    <span />
+                  </div>
+                ) : null}
                 {(draft.targets || []).map((t, i) => {
                   const isCompare = t.requirement !== 'EXTRACT'
                   if (isCompare) stepNo += 1
@@ -356,7 +406,15 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
                           </small>
                         ) : null}
                       </span>
-                      <SourceSelect value={t.doc} onChange={(v) => setTarget(i, { doc: v })} exclude={[draft.source, ...draft.targets.map((x) => x.doc)]} ariaLabel={`Check against document ${i + 1}`} />
+                      <SourceSelect value={t.doc} onChange={(v) => pickTargetDoc(i, v)} exclude={[draft.source, ...draft.targets.map((x) => x.doc)]} ariaLabel={`Check against document ${i + 1}`} />
+                      <TargetFieldSelect
+                        value={t.field || ''}
+                        groups={targetGroups(t.doc)}
+                        loading={fieldsLoading}
+                        dataPoint={draft.dataPoint}
+                        onChange={(v) => setTarget(i, { field: v })}
+                        ariaLabel={`Field on ${sourceLabel(t.doc)}`}
+                      />
                       <select className="dx-select nw-select" aria-label={`Role of ${sourceLabel(t.doc)}`} value={t.requirement} onChange={(e) => setTarget(i, { requirement: e.target.value })}>
                         {REQUIREMENT_LIST.map((r) => (
                           <option key={r.code} value={r.code}>{r.label}</option>

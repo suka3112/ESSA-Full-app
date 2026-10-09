@@ -27,8 +27,12 @@ export const INVOICE_CONFIG_TAB_IDS = INVOICE_CONFIG_TABS.filter((t) => t.enable
 export const INVOICE_CATEGORY_OPTIONS = [
   { value: 'MANPOWER_SERVICES', label: 'Manpower' },
   { value: 'CIVIL_CONTRACTOR', label: 'Civil' },
-  { value: 'MATERIAL_IMPORT', label: 'Materials' },
+  { value: 'MATERIAL_LOCAL', label: 'Material Local' },
+  { value: 'MATERIAL_IMPORT', label: 'Material Import' },
   { value: 'CAMP_SERVICE_AND_CATERING', label: 'Catering' },
+  { value: 'LOGISTICS', label: 'Logistics' },
+  { value: 'HOUSEKEEPING', label: 'Housekeeping' },
+  { value: 'RENTAL_EQUIPMENT', label: 'Rental Equipment' },
   { value: 'NON_PO', label: 'Non-PO' }
 ]
 

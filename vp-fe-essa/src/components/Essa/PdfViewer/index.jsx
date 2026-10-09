@@ -5,11 +5,9 @@ import {
   ZoomOut,
   ChevronLeft,
   ChevronRight,
-  FileX,
-  Maximize2,
-  Minimize2,
-  RotateCcw,
-  PanelLeftClose
+  Download,
+  ExternalLink,
+  FileX
 } from 'lucide-react'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
@@ -62,70 +60,36 @@ function PdfEmptyState({ title, description }) {
   )
 }
 
-export default function PdfViewer({ src, overlays = [], onFieldClick, onClose }) {
+export default function PdfViewer({ src, fileName = 'Document', overlays = [], onFieldClick }) {
   const file = resolvePdfSrc(src)
   const rootRef = useRef(null)
   const [numPages, setNumPages] = useState(0)
   const [pageNum, setPageNum] = useState(1)
-  const [scale, setScale] = useState(1.0)
+  const [scale, setScale] = useState(1)
   const [loadFailed, setLoadFailed] = useState(false)
-  const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
     setLoadFailed(false)
     setPageNum(1)
-    setIsFullscreen(false)
   }, [file])
-
-  useEffect(() => {
-    if (!isFullscreen) return undefined
-
-    const onKey = (e) => {
-      if (e.key === 'Escape') setIsFullscreen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [isFullscreen])
 
   const overlaysForPage = overlays.filter((o) => (o.page || 1) === pageNum)
 
-  const toggleFullscreen = async () => {
-    if (isFullscreen) {
-      if (document.fullscreenElement) {
-        try {
-          await document.exitFullscreen()
-        } catch {
-          /* ignore */
-        }
-      }
-      setIsFullscreen(false)
-      return
-    }
-
-    setIsFullscreen(true)
-
-    const el = rootRef.current
-    if (el?.requestFullscreen) {
-      try {
-        await el.requestFullscreen()
-      } catch {
-        /* fixed overlay fallback is already active */
-      }
-    }
+  const openPdf = () => {
+    if (typeof file !== 'string') return
+    window.open(file, '_blank', 'noopener,noreferrer')
   }
 
-  useEffect(() => {
-    const onFsChange = () => {
-      if (!document.fullscreenElement) setIsFullscreen(false)
-    }
-    document.addEventListener('fullscreenchange', onFsChange)
-    return () => document.removeEventListener('fullscreenchange', onFsChange)
-  }, [])
+  const downloadPdf = () => {
+    if (typeof file !== 'string') return
+    const link = document.createElement('a')
+    link.href = file
+    link.download = fileName || 'document.pdf'
+    link.rel = 'noopener'
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  }
 
   if (!file) {
     return (
@@ -145,100 +109,64 @@ export default function PdfViewer({ src, overlays = [], onFieldClick, onClose })
     )
   }
 
-  const shellStyle = isFullscreen
-    ? {
-      position: 'fixed',
-      inset: 0,
-      zIndex: 9999,
-      height: '100vh',
-      background: 'var(--dx-card)'
-    }
-    : { height: '100%' }
-
   return (
-    <div ref={rootRef} className={isFullscreen ? 'dx-pdf-fullscreen' : undefined} style={shellStyle}>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '10px 14px',
-            borderBottom: '1px solid var(--dx-border-soft)',
-            background: 'var(--dx-card)',
-            flexShrink: 0
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            {onClose && !isFullscreen && (
-              <ToolBtn onClick={onClose} title="Hide document">
-                <PanelLeftClose size={15} />
-              </ToolBtn>
-            )}
-            <ToolBtn onClick={() => setPageNum((p) => Math.max(1, p - 1))} disabled={pageNum <= 1}>
-              <ChevronLeft size={15} />
-            </ToolBtn>
-            <div
-              style={{
-                fontSize: 12,
-                color: 'var(--dx-text-soft)',
-                minWidth: 56,
-                textAlign: 'center',
-                fontVariantNumeric: 'tabular-nums',
-                fontWeight: 500
-              }}
-            >
-              {numPages ? `${pageNum} / ${numPages}` : '—'}
-            </div>
+    <div ref={rootRef} className="dx-doc-viewer" style={{ height: '100%' }}>
+      <div className="dx-doc-viewer-frame">
+        <div className="dx-doc-toolbar">
+          <span className="dx-doc-toolbar-file">
+            <span className="dx-doc-toolbar-name" title={fileName}>
+              {fileName}
+            </span>
+          </span>
+          <span className="dx-doc-toolbar-group">
             <ToolBtn
+              aria-label="Zoom out"
+              onClick={() => setScale((z) => Math.max(0.6, Number((z - 0.15).toFixed(2))))}
+              disabled={scale <= 0.6}
+            >
+              <ZoomOut size={14} />
+            </ToolBtn>
+            <span className="dx-doc-toolbar-zoom">{Math.round(scale * 100)}%</span>
+            <ToolBtn
+              aria-label="Zoom in"
+              onClick={() => setScale((z) => Math.min(1.8, Number((z + 0.15).toFixed(2))))}
+              disabled={scale >= 1.8}
+            >
+              <ZoomIn size={14} />
+            </ToolBtn>
+          </span>
+          <span className="dx-doc-toolbar-rule" aria-hidden="true" />
+          <span className="dx-doc-toolbar-group">
+            <ToolBtn
+              aria-label="Previous page"
+              onClick={() => setPageNum((p) => Math.max(1, p - 1))}
+              disabled={pageNum <= 1}
+            >
+              <ChevronLeft size={14} />
+            </ToolBtn>
+            <span className="dx-doc-toolbar-page">
+              Page {pageNum}/{numPages || '—'}
+            </span>
+            <ToolBtn
+              aria-label="Next page"
               onClick={() => setPageNum((p) => Math.min(numPages || p + 1, p + 1))}
-              disabled={pageNum >= numPages}
+              disabled={!numPages || pageNum >= numPages}
             >
-              <ChevronRight size={15} />
+              <ChevronRight size={14} />
             </ToolBtn>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <ToolBtn onClick={() => setScale((s) => Math.max(0.5, s - 0.1))} disabled={scale <= 0.5}>
-              <ZoomOut size={15} />
+          </span>
+          <span className="dx-doc-toolbar-rule" aria-hidden="true" />
+          <span className="dx-doc-toolbar-group">
+            <ToolBtn title="Open in new tab" aria-label="Open in new tab" onClick={openPdf}>
+              <ExternalLink size={14} />
             </ToolBtn>
-            <div
-              style={{
-                fontSize: 12,
-                color: 'var(--dx-text-soft)',
-                minWidth: 44,
-                textAlign: 'center',
-                fontVariantNumeric: 'tabular-nums',
-                fontWeight: 500
-              }}
-            >
-              {Math.round(scale * 100)}%
-            </div>
-            <ToolBtn onClick={() => setScale((s) => Math.min(2.5, s + 0.1))} disabled={scale >= 2.5}>
-              <ZoomIn size={15} />
+            <ToolBtn title="Download PDF" aria-label="Download PDF" onClick={downloadPdf}>
+              <Download size={14} />
             </ToolBtn>
-            <ToolBtn onClick={() => setScale(1.0)} title="Reset zoom">
-              <RotateCcw size={14} />
-            </ToolBtn>
-            <ToolBtn
-              onClick={toggleFullscreen}
-              title={isFullscreen ? 'Exit full screen' : 'Full screen'}
-            >
-              {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-            </ToolBtn>
-          </div>
+          </span>
         </div>
 
-        <div
-          style={{
-            flex: 1,
-            overflow: 'auto',
-            background: 'var(--dx-bg)',
-            padding: 16,
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
+        <div className="dx-doc-stage">
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <Document
               file={file}
@@ -336,29 +264,7 @@ export default function PdfViewer({ src, overlays = [], onFieldClick, onClose })
 
 function ToolBtn({ children, ...props }) {
   return (
-    <button
-      type="button"
-      {...props}
-      style={{
-        width: 30,
-        height: 30,
-        borderRadius: 6,
-        border: 'none',
-        background: 'transparent',
-        color: 'var(--dx-text-soft)',
-        cursor: 'pointer',
-        display: 'grid',
-        placeItems: 'center',
-        transition: 'all .15s ease',
-        opacity: props.disabled ? 0.4 : 1
-      }}
-      onMouseEnter={(e) => {
-        if (!props.disabled) e.currentTarget.style.background = 'var(--dx-bg)'
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent'
-      }}
-    >
+    <button type="button" className="dx-doc-tool" {...props}>
       {children}
     </button>
   )

@@ -28,6 +28,7 @@ import {
   PURCHASE_ORDER,
   EMAIL_TEMPLATES,
   SLA_MANAGEMENT,
+  EXCEPTION_CODES,
   PROMPT_CONFIG
 } from 'constants/url'
 import OutsideClickHandler from '../OutsideClickHandler'
@@ -74,10 +75,11 @@ export const getSidebarMenuItems = ({ t, isAdmin, isVendor }) => {
         {
           name: t('administration'),
           icon: Settings,
-          path: SLA_MANAGEMENT,
+          path: PROMPT_CONFIG,
           matchPaths: [
             EMAIL_TEMPLATES,
             SLA_MANAGEMENT,
+            EXCEPTION_CODES,
             APPROVAL_MATRIX,
             USER_MANAGEMENT,
             PROMPT_CONFIG
@@ -85,7 +87,7 @@ export const getSidebarMenuItems = ({ t, isAdmin, isVendor }) => {
           subItems: [
             { name: t('invoiceConfiguration'), path: PROMPT_CONFIG },
             { name: t('slaManagement'), path: SLA_MANAGEMENT },
-            { name: t('exceptionCodes'), dummy: true },
+            { name: t('exceptionCodes'), path: EXCEPTION_CODES },
             { name: t('workflowsAndApproval'), path: APPROVAL_MATRIX },
             { name: t('emailTemplates'), path: EMAIL_TEMPLATES },
             { name: t('usersAndRoles'), path: USER_MANAGEMENT }
@@ -136,6 +138,7 @@ const SidebarContainer = ({ userInfo: { userType } }) => {
               <div key={item.name} className="sidebar-nav-item">
                 <NavLink
                   to={itemTo}
+                  state={item.path === PROMPT_CONFIG ? { openInvoiceCategory: true } : undefined}
                   end={item.path === '/'}
                   className={clsx('sidebar-nav-link', parentActive && 'active')}>
                   <Icon size={16} strokeWidth={1.75} />
@@ -152,6 +155,7 @@ const SidebarContainer = ({ userInfo: { userType } }) => {
                         <NavLink
                           key={c.path}
                           to={`/${userType}${c.path}`}
+                          state={c.path === PROMPT_CONFIG ? { openInvoiceCategory: true } : undefined}
                           end={c.path !== SLA_MANAGEMENT}
                           className={({ isActive }) =>
                             clsx('sidebar-subnav-link', isActive && 'active')

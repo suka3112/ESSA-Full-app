@@ -120,3 +120,117 @@ export const fieldOptionsForSource = (types, scope, categories, sourceCode) => {
     .map((e) => ({ ...e, docs: Array.from(e.docs), types: Array.from(e.types), dataKey: dataKeyForField(e.fieldName, e.label) }))
     .sort((a, b) => a.label.localeCompare(b.label))
 }
+
+/**
+ * Fields SAP / ESSA systems / external portals expose for a check-against document.
+ * These sources have no Fields to Capture setup, so their fields are listed here.
+ * value = DATA_POINTS key the matching engine reads; label = what the business calls it on that source.
+ */
+const SYSTEM_FIELDS = {
+  PO: [
+    ['po_number', 'PO number'],
+    ['vendor_name', 'Vendor name'],
+    ['company_name', 'ESSA company (buyer)'],
+    ['currency', 'Currency'],
+    ['payment_terms', 'Payment terms'],
+    ['item_description', 'Item / service description'],
+    ['quantity', 'Ordered quantity'],
+    ['uom', 'Unit of measure'],
+    ['unit_rate', 'Unit price'],
+    ['invoice_amount', 'PO value'],
+    ['service_period', 'Service period'],
+    ['wht_code', 'Withholding tax code']
+  ],
+  GRN_SES: [
+    ['ses_reference', 'GRN / SES number'],
+    ['po_number', 'PO number'],
+    ['item_description', 'Item / service description'],
+    ['quantity', 'Received quantity'],
+    ['uom', 'Unit of measure'],
+    ['claim_value', 'GRN / SES value'],
+    ['service_period', 'Service period']
+  ],
+  VENDOR_MASTER: [
+    ['vendor_name', 'Vendor name'],
+    ['npwp', 'Vendor NPWP'],
+    ['bank_account', 'Bank account'],
+    ['currency', 'Order currency'],
+    ['payment_terms', 'Payment terms'],
+    ['wht_code', 'Withholding tax code'],
+    ['vendor_status', 'Block indicator'],
+    ['debit_balance', 'Debit balance']
+  ],
+  INVOICE_HISTORY: [
+    ['invoice_number', 'Invoice number'],
+    ['fp_number', 'Faktur Pajak number'],
+    ['vendor_name', 'Vendor name'],
+    ['invoice_date', 'Invoice date'],
+    ['invoice_amount', 'Invoice amount']
+  ],
+  CORETAX: [
+    ['fp_number', 'Faktur Pajak number'],
+    ['fp_date', 'Faktur Pajak date'],
+    ['npwp', 'Seller NPWP'],
+    ['vendor_name', 'Seller name'],
+    ['dpp', 'DPP (taxable base)'],
+    ['fp_value', 'PPN (VAT) amount']
+  ],
+  FACE_ID: [
+    ['worker_id', 'Worker name & ID'],
+    ['man_days', 'Days present'],
+    ['manhours', 'Hours on site'],
+    ['overtime_hours', 'Overtime hours']
+  ],
+  HCIS: [
+    ['worker_id', 'Employee name & ID'],
+    ['invoice_amount', 'Cleared amount']
+  ],
+  DOA_APPROVAL: [
+    ['invoice_amount', 'Approved amount'],
+    ['vendor_name', 'Vendor name']
+  ]
+}
+
+/**
+ * A target field is either a field reference (captured field name or catalog key, e.g. “poNumber”, “vendor_name”)
+ * or, on rules seeded from the Data Point × Doc matrix, the matrix's free-text note (e.g. “#52 Seller NPWP”).
+ */
+export const isFieldRef = (field) => Boolean(field) && !/[\s#(&+]/.test(field)
+
+/** Engine data key for a check-against field: catalog keys stay as they are, captured field names are mapped. */
+export const targetDataKey = (field) => (DATA_POINTS[field] ? field : dataKeyForField(field))
+
+/**
+ * Field dropdown for one “Check against” document, as option groups:
+ * fields captured from that document (Fields to Capture), then the fields its system exposes.
+ * Documents with neither fall back to the standard data points.
+ */
+export const fieldGroupsForTarget = (types, scope, categories, docCode) => {
+  const label = SOURCES.find((s) => s.code === docCode)?.label || docCode
+  const groups = []
+  const captured = fieldOptionsForSource(types, scope, categories, docCode)
+  if (captured.length) {
+    groups.push({
+      label: `Captured from ${label}`,
+      options: captured.map((f) => ({ value: f.fieldName, label: f.label, dataKey: f.dataKey }))
+    })
+  }
+  const system = SYSTEM_FIELDS[docCode]
+  if (system) {
+    const taken = new Set(captured.map((f) => f.dataKey))
+    const options = system.filter(([key]) => !taken.has(key)).map(([key, text]) => ({ value: key, label: text, dataKey: key }))
+    const channel = SOURCES.find((s) => s.code === docCode)?.channel
+    if (options.length) groups.push({ label: channel === 'SAP' ? `SAP · ${label}` : label, options })
+  }
+  if (!groups.length) {
+    groups.push({
+      label: `${label} has no Fields to Capture — standard data points`,
+      options: Object.entries(DATA_POINTS).map(([key, dp]) => ({ value: key, label: dp.label, dataKey: key }))
+    })
+  }
+  return groups
+}
+
+/** Option in the target's field list that holds the same data point as the rule, if any. */
+export const suggestTargetField = (groups, dataKey) =>
+  (dataKey && groups.flatMap((g) => g.options).find((o) => o.dataKey === dataKey)?.value) || ''

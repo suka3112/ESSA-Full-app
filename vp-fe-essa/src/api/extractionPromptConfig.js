@@ -1,5 +1,6 @@
 import axiosInstance from '../services/axiosSetup'
 import { resolveDocumentTypeDefaults } from '../components/Essa/PromptConfig/documentTypeDefaults'
+import { resolveFieldKind } from '../components/Essa/PromptConfig/extractionPromptText'
 
 export const EXTRACTION_PROMPT_CONFIG = '/extraction-prompt-config/prompt-config'
 export const EXTRACTION_PROMPT_CATEGORIES = '/extraction-prompt-config/prompt-config/categories'
@@ -178,7 +179,8 @@ export function mapPromptConfigToUiState(tree) {
               fieldId: f.fieldId,
               name: f.fieldName || '',
               displayName: f.displayName || '',
-              hint: f.hint || ''
+              hint: f.hint || '',
+              kind: resolveFieldKind(f)
             })),
           ...extras
         }
@@ -212,6 +214,7 @@ export function buildDocumentsPayload(type, typeConfig) {
         fieldName: f.name || '',
         displayName: f.displayName || '',
         hint: f.hint || '',
+        fieldKind: resolveFieldKind(f),
         displayOrder: fieldIndex + 1
       }))
     }
@@ -245,7 +248,8 @@ export function applyInvoiceTypeDetail(prevConfigs, prevPromptMeta, detail) {
         fieldId: f.fieldId,
         name: f.fieldName || '',
         displayName: f.displayName || '',
-        hint: f.hint || ''
+        hint: f.hint || '',
+        kind: resolveFieldKind(f)
       })),
       ...extras
     }

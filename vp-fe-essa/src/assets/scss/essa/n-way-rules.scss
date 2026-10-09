@@ -1102,7 +1102,7 @@ $nw-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   &__head,
   &__row--grid {
     display: grid;
-    grid-template-columns: 70px minmax(0, 1fr) 160px 88px;
+    grid-template-columns: 60px minmax(0, 1fr) minmax(0, 1.2fr) 130px 88px;
     gap: 8px;
     align-items: center;
   }

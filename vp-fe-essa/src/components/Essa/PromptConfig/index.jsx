@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Check, ChevronRight, Copy, Plus, X } from 'lucide-react'
 
 import { LeftPageContainer } from 'pages/vendor/dashboard/dashboard.styles'
@@ -30,6 +31,7 @@ import {
 import DocumentTypes, { MandatoryHelp, MandatoryToggleRow } from './DocumentTypes'
 import InvoiceCategory from './InvoiceCategory'
 import { defaultCategoryId } from './documentTypeDefaults'
+import { buildPrompt, fieldSnippet, resolveFieldKind } from './extractionPromptText'
 import SapFieldMapping from './SapFieldMapping'
 import ValidationRules from './ValidationRules'
 import MatchRules from './NWayRules'
@@ -51,86 +53,6 @@ const countConfigured = (type, configs) => {
 }
 
 const typeFieldCount = (type, configs) => countConfigured(type, configs).fields
-
-const buildPrompt = (type, configs) => {
-  if (!type) return ''
-  const cfg = configs[type.id] || {}
-  const activeDocs = type.documents.filter((doc) => cfg[doc]?.enabled)
-  const lines = [
-    `You are extracting structured data from documents belonging to a "${type.subtype}" invoice (${type.category}).`,
-    '',
-    'Scan the ENTIRE page (header, body tables, passenger/ticket detail blocks, bank footer, signature).',
-    'Match labels by meaning (English / Bahasa Indonesia). Preserve printed values exactly (including thousand separators).',
-    'Never invent values. Use null when a field is not present after a full-page scan.',
-    ''
-  ]
-
-  if (activeDocs.length === 0) {
-    lines.push('No documents selected yet — toggle on the documents you want this prompt to cover.')
-    return lines.join('\n')
-  }
-
-  const isEntryField = (name) =>
-    /^(invoiceLineItems|lineItems|manpower|manhourSummary|timesheetEntries|timesheets|attendanceEntries|poLineItems|appendixItems|transmittalItems|progressLineItems|classifications)$/i.test(
-      String(name || '').trim()
-    )
-
-  activeDocs.forEach((doc) => {
-    const fields = cfg[doc]?.fields || []
-    const scalars = fields.filter((f) => !isEntryField(f.name))
-    const entries = fields.filter((f) => isEntryField(f.name))
-
-    lines.push(`## ${doc}`)
-    lines.push('### header (scalars — put all of these under JSON key "header")')
-    if (scalars.length === 0) {
-      lines.push('- (no scalar fields defined yet)')
-    } else {
-      scalars.forEach((f) => {
-        const name = f.name.trim() || '{{field}}'
-        const hint = f.hint.trim()
-        lines.push(`- ${name}${hint ? `  // ${hint}` : ''}`)
-      })
-    }
-
-    if (entries.length > 0) {
-      lines.push('')
-      lines.push('### entries (arrays at JSON top level)')
-      entries.forEach((f) => {
-        const name = f.name.trim() || '{{field}}'
-        const hint = f.hint.trim()
-        lines.push(`- ${name}${hint ? `  // ${hint}` : ''}`)
-      })
-    } else {
-      lines.push('')
-      lines.push('### entries')
-      lines.push(
-        '- invoiceLineItems  // array of row objects with description, quantity, unitPrice, amount, and any travel keys also present in header'
-      )
-    }
-    lines.push('')
-  })
-
-  lines.push(
-    'OUTPUT RULES:',
-    '1. Return ONE JSON object with top-level keys: "header", "invoiceLineItems", "lineItems".',
-    '2. Do NOT wrap fields under the document section title (e.g. do not return { "Invoice": { ... } }).',
-    '3. Put every scalar field listed above inside header with the exact key names; null if absent.',
-    '4. Mirror invoiceLineItems into lineItems (identical rows/order).',
-    '5. Do NOT put summary/tax rows (Subtotal, Total, VAT/PPN, Grand Total) inside invoiceLineItems — map those to header.subtotal / vatAmount / totalAmount / grandTotal.',
-    '6. Travel / ticket agency invoices: copy passengerName, ticketClass, routeFrom, routeTo, bookingRef (Confirm No / PNR), ticketNo, airline, flightNo, routeCodeFrom, routeCodeTo into header AND into invoiceLineItems[0] when a passenger/ticket detail block exists.',
-    '7. Bank lines like "Bank BCA : 6970747999" → bankName + bankAccountNumber (split carefully).',
-    '8. For Non-PO invoices with no printed contract/PO reference, header.poNumber must be null.',
-    '',
-    'Example shape:',
-    '{',
-    '  "header": { "invNo": null, "vendorName": null, "bookingRef": null, "vatAmount": null, "grandTotal": null },',
-    '  "invoiceLineItems": [{ "description": null, "quantity": null, "unitPrice": null, "amount": null, "passengerName": null, "bookingRef": null }],',
-    '  "lineItems": [{ "description": null, "quantity": null, "unitPrice": null, "amount": null, "passengerName": null, "bookingRef": null }]',
-    '}'
-  )
-
-  return lines.join('\n')
-}
 
 const CLASSIFICATION_SYNONYMS = [
   ['tax_invoice', 'faktur_pajak'],
@@ -210,12 +132,6 @@ const buildClassificationPrompt = (type, configs) => {
   return lines.join('\n')
 }
 
-const fieldSnippet = (field) => {
-  const name = String(field?.name || '').trim() || '{{field}}'
-  const hint = String(field?.hint || '').trim()
-  return `- ${name}${hint ? `  // ${hint}` : ''}`
-}
-
 const PromptConfig = () => {
   const [invoiceTypes, setInvoiceTypes] = useState([])
   const [configs, setConfigs] = useState({})
@@ -239,11 +155,22 @@ const PromptConfig = () => {
   const [docPendingDelete, setDocPendingDelete] = useState(null)
   const [docNameDrafts, setDocNameDrafts] = useState({})
   const [renamingDocId, setRenamingDocId] = useState(null)
+  const location = useLocation()
   const [activeTab, setActiveTab] = useState(() => {
-    // Deep link, e.g. …/prompt-config?tab=n-way-matching (used by the invoice N-Way panel)
-    const fromUrl = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('tab') : null
-    return fromUrl && INVOICE_CONFIG_TAB_IDS.includes(fromUrl) ? fromUrl : TAB_FIELDS
+    const fromUrl = new URLSearchParams(location.search).get('tab')
+    return fromUrl && INVOICE_CONFIG_TAB_IDS.includes(fromUrl) ? fromUrl : TAB_INVOICE_CATEGORY
   })
+
+  useEffect(() => {
+    if (location.state?.openInvoiceCategory) {
+      setActiveTab(TAB_INVOICE_CATEGORY)
+      return
+    }
+    const fromUrl = new URLSearchParams(location.search).get('tab')
+    if (fromUrl && INVOICE_CONFIG_TAB_IDS.includes(fromUrl)) {
+      setActiveTab(fromUrl)
+    }
+  }, [location.key, location.state, location.search])
 
   const loadConfig = useCallback(async () => {
     setLoading(true)
@@ -281,9 +208,6 @@ const PromptConfig = () => {
       if (meta?.isManuallyEdited && meta.promptText) {
         setPromptText(meta.promptText)
         setEdited(true)
-      } else if (meta?.promptText) {
-        setPromptText(meta.promptText)
-        setEdited(false)
       } else {
         setPromptText(buildPrompt(type, nextConfigs))
         setEdited(false)
@@ -462,12 +386,17 @@ const PromptConfig = () => {
     }
   }
 
-  const updateField = (docName, index, key, value) => {
+  const updateField = (docName, index, key, value, { refreshPrompt = false } = {}) => {
     if (!activeType) return
-    updateDocConfig(activeType, docName, (current) => ({
-      ...current,
-      fields: current.fields.map((f, i) => (i === index ? { ...f, [key]: value } : f))
-    }))
+    updateDocConfig(
+      activeType,
+      docName,
+      (current) => ({
+        ...current,
+        fields: current.fields.map((f, i) => (i === index ? { ...f, [key]: value } : f))
+      }),
+      { refreshPrompt }
+    )
   }
 
   const refreshPreviewFromConfigs = () => {
@@ -499,7 +428,7 @@ const PromptConfig = () => {
     const currentLen = configs[activeType.id]?.[docName]?.fields.length || 0
     updateDocConfig(activeType, docName, (current) => ({
       ...current,
-      fields: [...current.fields, { name: '', displayName: '', hint: '' }]
+      fields: [...current.fields, { name: '', displayName: '', hint: '', kind: 'scalar' }]
     }))
     setSelectedFieldIdx(currentLen)
   }
@@ -1125,6 +1054,9 @@ const PromptConfig = () => {
                               <td className="prompt-config__fields-index">{index + 1}</td>
                               <td>
                                 <span className="prompt-config__fname">{field.name || '—'}</span>
+                                {resolveFieldKind(field) === 'table' ? (
+                                  <span className="prompt-config__fkind">Table</span>
+                                ) : null}
                               </td>
                               <td>
                                 <span className="prompt-config__fdisplay">
@@ -1240,11 +1172,37 @@ const PromptConfig = () => {
                       />
                     </div>
                     <div className="prompt-config__field-group">
-                      <label htmlFor="pc-field-hint">Hint</label>
-                      <input
+                      <label htmlFor="pc-field-kind">Extract as</label>
+                      <select
+                        id="pc-field-kind"
+                        value={resolveFieldKind(selectedField)}
+                        onChange={(e) =>
+                          updateField(activeDoc, selectedFieldIdx, 'kind', e.target.value, {
+                            refreshPrompt: true
+                          })
+                        }>
+                        <option value="scalar">Single value</option>
+                        <option value="table">Table (JSON array of rows)</option>
+                      </select>
+                      <p className="prompt-config__field-help">
+                        A single value is stored under header. A table is one JSON array at the
+                        top level, named with this field key. Put the row column keys in Hint,
+                        separated by commas, and do not also add those columns as separate fields.
+                      </p>
+                    </div>
+                    <div className="prompt-config__field-group">
+                      <label htmlFor="pc-field-hint">
+                        {resolveFieldKind(selectedField) === 'table' ? 'Row columns' : 'Hint'}
+                      </label>
+                      <textarea
                         id="pc-field-hint"
-                        type="text"
-                        placeholder="format, location, or aliases"
+                        className="prompt-config__hint-input"
+                        rows={resolveFieldKind(selectedField) === 'table' ? 8 : 4}
+                        placeholder={
+                          resolveFieldKind(selectedField) === 'table'
+                            ? 'date, workerName, regularHours, overtimeHours'
+                            : 'format, location, or aliases'
+                        }
                         value={selectedField.hint}
                         onChange={(e) =>
                           updateField(activeDoc, selectedFieldIdx, 'hint', e.target.value)

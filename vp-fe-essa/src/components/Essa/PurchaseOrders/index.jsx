@@ -8,8 +8,7 @@ import { PageHeader } from '../PageShell'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
-import { getPOList } from '../../../api/PurchaseOrder'
-import { getEntityId } from '../../../services/utilities'
+import { getEssaPurchaseOrders } from '../../../api/essaPurchaseOrders'
 import { DASHBOARD, INVOICES } from '../../../constants/url'
 import '../../../assets/scss/essa/dashboard.scss'
 
@@ -183,18 +182,17 @@ const PurchaseOrdersComp = ({ userInfo }) => {
   const fetchPOs = useCallback(async () => {
     setLoading(true)
     try {
-      const entityId = getEntityId()
       const query = {
-        entity_id: entityId,
         page,
         limit: pageSize,
         search: searchQuery.trim(),
         ...(apiSort ? { sort_column: apiSort, sort: sortDir === 'desc' ? 'DESC' : 'ASC' } : {}),
         ...(statusFilter ? { poStatus: statusFilter } : {}),
-        ...(openOnlyFilter === 'true' ? { outstandingPo: true } : {})
+        ...(poTypeFilter ? { poType: poTypeFilter } : {}),
+        ...(openOnlyFilter ? { openOnly: openOnlyFilter } : {})
       }
 
-      const res = await getPOList(query)
+      const res = await getEssaPurchaseOrders(query)
       const data = res?.data?.data
       if (data) {
         setPoList(data.results || [])
@@ -212,7 +210,7 @@ const PurchaseOrdersComp = ({ userInfo }) => {
     } finally {
       setLoading(false)
     }
-  }, [page, pageSize, searchQuery, statusFilter, openOnlyFilter, apiSort, sortDir])
+  }, [page, pageSize, searchQuery, statusFilter, poTypeFilter, openOnlyFilter, apiSort, sortDir])
 
   useEffect(() => {
     fetchPOs()
@@ -232,22 +230,21 @@ const PurchaseOrdersComp = ({ userInfo }) => {
   const exportCsv = async () => {
     setExporting(true)
     try {
-      const entityId = getEntityId()
-      const res = await getPOList({
-        entity_id: entityId,
+      const res = await getEssaPurchaseOrders({
         page: 1,
         limit: 1000,
         search: searchQuery.trim(),
         ...(apiSort ? { sort_column: apiSort, sort: sortDir === 'desc' ? 'DESC' : 'ASC' } : {}),
         ...(statusFilter ? { poStatus: statusFilter } : {}),
-        ...(openOnlyFilter === 'true' ? { outstandingPo: true } : {})
+        ...(poTypeFilter ? { poType: poTypeFilter } : {}),
+        ...(openOnlyFilter ? { openOnly: openOnlyFilter } : {})
       })
       const items = res?.data?.data?.results || []
       const header = 'PO Number,Vendor Code,Vendor,Type,Total Amount,Open Amount,Currency,Valid To,Status'
       const rows = items.map((p) => {
-        const total = Number(p.POValue || p.totalAmount || 0)
+        const total = p.POValue == null || p.POValue === '' ? '' : Number(p.POValue)
         const inv = Number(p.InvValue || 0)
-        const open = Math.max(0, total - inv)
+        const open = total === '' ? '' : Math.max(0, total - inv)
         const poType = p.poType || (p.OurRef?.startsWith('SRV') ? 'Service PO' : 'Standard PO')
         return [
           p.PONo,
@@ -256,7 +253,7 @@ const PurchaseOrdersComp = ({ userInfo }) => {
           poType,
           total,
           open,
-          p.PO_currency || 'AED',
+          p.PO_currency || 'IDR',
           p.PO_date || '',
           p.POStatus || 'OPEN'
         ]
@@ -285,7 +282,7 @@ const PurchaseOrdersComp = ({ userInfo }) => {
           <PageHeader
             breadcrumb={[{ label: 'Home', to: `/${userType}${DASHBOARD}` }, { label: 'Purchase Orders' }]}
             title="Purchase Orders"
-            description="All purchase orders from the SAP reference data, with open value against each. PO invoices match against these — no approval workflow applies to PO invoices."
+            description="Purchase orders referenced by extracted ESSA invoices. The total and the open value come from the SAP purchase order when that order is on file."
             actions={
               <Button
                 variant="secondary"
@@ -357,7 +354,7 @@ const PurchaseOrdersComp = ({ userInfo }) => {
                   <RotateCcw size={13} /> Reset
                 </Button>
               )}
-              <span className="po-count">{totalCount.toLocaleString('en-US')} purchase orders · SAP reference data</span>
+              <span className="po-count">{totalCount.toLocaleString('en-US')} purchase orders · extracted invoices</span>
             </div>
 
             <div className="po-table-wrap">
@@ -402,10 +399,11 @@ const PurchaseOrdersComp = ({ userInfo }) => {
                       const vendorCode = po.Vendor_SAP_Code || po.Vendor_id || po.vendorCode || ''
                       const vendorName = po.vendor?.Vendor_Name_EN || po.Vendor_Name_EN || (vendorCode ? `Vendor ${vendorCode}` : '—')
                       const poType = po.poType || (po.OurRef?.startsWith('SRV') ? 'Service PO' : 'Standard PO')
-                      const totalAmount = Number(po.POValue || po.totalAmount || 0)
+                      const hasValue = po.POValue != null && po.POValue !== ''
+                      const totalAmount = hasValue ? Number(po.POValue) : null
                       const invAmount = Number(po.InvValue || 0)
-                      const openAmount = Math.max(0, totalAmount - invAmount)
-                      const currency = po.PO_currency || po.currency || 'AED'
+                      const openAmount = totalAmount == null ? null : Math.max(0, totalAmount - invAmount)
+                      const currency = po.PO_currency || po.currency || 'IDR'
                       const validTo = po.PO_date || po.validTo
                       const status = po.POStatus || po.status || 'OPEN'
 
@@ -417,11 +415,13 @@ const PurchaseOrdersComp = ({ userInfo }) => {
                             {vendorCode ? <span className="po-sub">{vendorCode}</span> : null}
                           </td>
                           <td><span className="po-badge po-badge-neutral">{poType}</span></td>
-                          <td className="is-right"><span className="po-money">{fmtMoney(totalAmount, currency)}</span></td>
+                          <td className="is-right"><span className="po-money">{totalAmount == null ? '—' : fmtMoney(totalAmount, currency)}</span></td>
                           <td className="is-right">
-                            {openAmount > 0
-                              ? <span className="po-money po-open">{fmtMoney(openAmount, currency)}</span>
-                              : <span className="po-badge po-badge-neutral">Fully invoiced</span>}
+                            {openAmount == null
+                              ? '—'
+                              : openAmount > 0
+                                ? <span className="po-money po-open">{fmtMoney(openAmount, currency)}</span>
+                                : <span className="po-badge po-badge-neutral">Fully invoiced</span>}
                           </td>
                           <td><span className="po-date">{fmtDate(validTo)}</span></td>
                           <td><StatusBadge status={status} /></td>

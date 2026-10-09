@@ -26,6 +26,7 @@ export function computeDocumentConfigHash(input: {
     fieldName?: string | null;
     displayName?: string | null;
     hint?: string | null;
+    fieldKind?: string | null;
   }>;
 }): string {
   const payload = {
@@ -34,6 +35,7 @@ export function computeDocumentConfigHash(input: {
       name: String(f.fieldName || "").trim(),
       displayName: String(f.displayName || "").trim(),
       hint: String(f.hint || "").trim(),
+      fieldKind: normalizeFieldKind(f.fieldKind, f.fieldName),
     })),
   };
   return createHash("sha256").update(JSON.stringify(payload)).digest("hex").slice(0, 32);
@@ -91,22 +93,57 @@ export function slugifyDocumentCode(name: string): string {
   return base || "CUSTOM_DOCUMENT";
 }
 
+const LEGACY_TABLE_FIELD_RE =
+  /^(invoiceLineItems|lineItems|manpower|manhourSummary|timesheetEntries|timesheets|attendanceEntries|poLineItems|appendixItems|transmittalItems|progressLineItems|classifications|sesLineItems)$/i;
+
+const COLUMN_KEY_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+/** scalar = one header value. table = JSON array of row objects. Unset kind falls back to legacy names. */
+export function normalizeFieldKind(value: unknown, fieldName?: string | null): "scalar" | "table" {
+  const token = String(value ?? "")
+    .trim()
+    .toLowerCase();
+  if (token === "table" || token === "array" || token === "json") return "table";
+  if (token === "scalar" || token === "single") return "scalar";
+  if (LEGACY_TABLE_FIELD_RE.test(String(fieldName || "").trim())) return "table";
+  return "scalar";
+}
+
+export function columnKeysFromHint(hint: unknown): string[] {
+  const parts = String(hint || "")
+    .split(/[,;]/)
+    .map((part) => part.trim().replace(/^["']|["']$/g, ""))
+    .filter(Boolean);
+  if (parts.length < 2) return [];
+  if (!parts.every((part) => COLUMN_KEY_RE.test(part))) return [];
+  return parts;
+}
+
+function tablePromptLine(name: string, hint: string): string {
+  const columns = columnKeysFromHint(hint);
+  if (columns.length) {
+    return `- ${name}  // JSON array. Each row uses keys: ${columns.join(", ")}`;
+  }
+  if (hint) return `- ${name}  // JSON array of row objects. ${hint}`;
+  return `- ${name}  // JSON array of row objects. Use the printed column headers as keys.`;
+}
+
 export function buildExtractionPromptText(input: {
   categoryName: string;
   invoiceTypeName: string;
   documents: Array<{
     name: string;
     isEnabled: boolean;
-    fields: Array<{ fieldName: string; hint?: string | null }>;
+    fields: Array<{ fieldName: string; hint?: string | null; fieldKind?: string | null }>;
   }>;
 }): string {
   const activeDocs = input.documents.filter((d) => d.isEnabled);
   const lines = [
     `You are extracting structured data from documents belonging to a "${input.invoiceTypeName}" invoice (${input.categoryName}).`,
     "",
-    "Scan the ENTIRE page (header, body tables, passenger/ticket detail blocks, bank footer, signature).",
-    "Match labels by meaning (English / Bahasa Indonesia). Preserve printed values exactly (including thousand separators).",
-    "Never invent values. Use null when a field is not present after a full-page scan.",
+    "Scan the ENTIRE page (headings, body tables, footers, stamps, and signature blocks).",
+    "Match labels by meaning (including English and Bahasa Indonesia). Preserve printed values exactly (including thousand separators).",
+    "Never invent values. Use null when a single value is absent, and [] when a table is absent.",
     "",
   ];
 
@@ -117,64 +154,87 @@ export function buildExtractionPromptText(input: {
     return lines.join("\n");
   }
 
-  const isEntryField = (name: string) =>
-    /^(invoiceLineItems|lineItems|manpower|manhourSummary|timesheetEntries|timesheets|attendanceEntries|poLineItems|appendixItems|transmittalItems|progressLineItems|classifications)$/i.test(
-      String(name || "").trim(),
-    );
+  const headerKeys: string[] = [];
+  const seenHeader = new Set<string>();
+  const tableKeys = new Map<string, string[]>();
 
   for (const doc of activeDocs) {
     const fields = doc.fields || [];
-    const scalars = fields.filter((f) => !isEntryField(f.fieldName));
-    const entries = fields.filter((f) => isEntryField(f.fieldName));
+    const scalars = fields.filter(
+      (f) => normalizeFieldKind(f.fieldKind, f.fieldName) !== "table",
+    );
+    const tables = fields.filter(
+      (f) => normalizeFieldKind(f.fieldKind, f.fieldName) === "table",
+    );
 
     lines.push(`## ${doc.name}`);
-    lines.push("### header (scalars — put all of these under JSON key \"header\")");
+    lines.push('### header (single values — put these under JSON key "header")');
     if (scalars.length === 0) {
-      lines.push("- (no scalar fields defined yet)");
+      lines.push("- (no single-value fields)");
     } else {
       for (const f of scalars) {
         const name = String(f.fieldName || "").trim() || "{{field}}";
         const hint = String(f.hint || "").trim();
         lines.push(`- ${name}${hint ? `  // ${hint}` : ""}`);
+        if (name !== "{{field}}" && !seenHeader.has(name) && headerKeys.length < 8) {
+          seenHeader.add(name);
+          headerKeys.push(name);
+        }
       }
     }
 
-    if (entries.length > 0) {
-      lines.push("");
-      lines.push("### entries (arrays at JSON top level)");
-      for (const f of entries) {
+    lines.push("");
+    lines.push("### tables (JSON arrays at the top level — one object per printed row)");
+    if (tables.length === 0) {
+      lines.push("- (none for this document — do not invent a line-item array)");
+    } else {
+      for (const f of tables) {
         const name = String(f.fieldName || "").trim() || "{{field}}";
         const hint = String(f.hint || "").trim();
-        lines.push(`- ${name}${hint ? `  // ${hint}` : ""}`);
+        if (!tableKeys.has(name)) tableKeys.set(name, columnKeysFromHint(hint));
+        lines.push(tablePromptLine(name, hint));
       }
-    } else {
-      lines.push("");
-      lines.push(
-        '### entries',
-        '- invoiceLineItems  // array of row objects with description, quantity, unitPrice, amount, and any travel keys also present in header',
-      );
     }
     lines.push("");
   }
 
-  lines.push(
+  const rules = [
     "OUTPUT RULES:",
-    '1. Return ONE JSON object with top-level keys: "header", "invoiceLineItems", "lineItems".',
-    "2. Do NOT wrap fields under the document section title (e.g. do not return { \"Invoice\": { ... } }).",
-    "3. Put every scalar field listed above inside header with the exact key names; null if absent.",
-    "4. Mirror invoiceLineItems into lineItems (identical rows/order).",
-    "5. Do NOT put summary/tax rows (Subtotal, Total, VAT/PPN, Grand Total) inside invoiceLineItems — map those to header.subtotal / vatAmount / totalAmount / grandTotal.",
-    "6. Travel / ticket agency invoices: copy passengerName, ticketClass, routeFrom, routeTo, bookingRef (Confirm No / PNR), ticketNo, airline, flightNo, routeCodeFrom, routeCodeTo into header AND into invoiceLineItems[0] when a passenger/ticket detail block exists.",
-    "7. Bank lines like \"Bank BCA : 6970747999\" → bankName + bankAccountNumber (split carefully).",
-    "8. For Non-PO invoices with no printed contract/PO reference, header.poNumber must be null.",
-    "",
-    "Example shape:",
-    "{",
-    '  "header": { "invNo": null, "vendorName": null, "bookingRef": null, "vatAmount": null, "grandTotal": null },',
-    '  "invoiceLineItems": [{ "description": null, "quantity": null, "unitPrice": null, "amount": null, "passengerName": null, "bookingRef": null }],',
-    '  "lineItems": [{ "description": null, "quantity": null, "unitPrice": null, "amount": null, "passengerName": null, "bookingRef": null }]',
-    "}",
+    "1. Return ONE JSON object. Do not wrap fields under the document section title.",
+    '2. Put every header field inside "header" using the exact key names. Use null when a value is not printed.',
+    "3. Put every table field at the top level as a JSON array of row objects, using the exact field name as the key. Use [] when that table is not on the page.",
+    "4. A table row uses only the columns listed for that field. Do not add columns that are not listed, and do not repeat header totals inside the rows.",
+    "5. Never invent values.",
+  ];
+  if (tableKeys.has("invoiceLineItems") || tableKeys.has("lineItems")) {
+    rules.push(
+      '6. When invoiceLineItems is listed, copy the same rows into "lineItems" (same order, same values).',
+    );
+  }
+
+  const headerBody = headerKeys.map((key) => `"${key}": null`).join(", ");
+  const tableLines = [...tableKeys.entries()].map(([name, columns]) => {
+    const row = columns.length
+      ? `{ ${columns.map((column) => `"${column}": null`).join(", ")} }`
+      : "{}";
+    return `  "${name}": [${row}]`;
+  });
+  if (tableKeys.has("invoiceLineItems") && !tableKeys.has("lineItems")) {
+    const columns = tableKeys.get("invoiceLineItems") || [];
+    const row = columns.length
+      ? `{ ${columns.map((column) => `"${column}": null`).join(", ")} }`
+      : "{}";
+    tableLines.push(`  "lineItems": [${row}]`);
+  }
+
+  lines.push(...rules, "", "Example shape:", "{");
+  lines.push(
+    `  "header": {${headerBody ? ` ${headerBody} ` : ""}}${tableLines.length ? "," : ""}`,
   );
+  tableLines.forEach((line, index) => {
+    lines.push(`${line}${index === tableLines.length - 1 ? "" : ","}`);
+  });
+  lines.push("}");
 
   return lines.join("\n");
 }
@@ -185,6 +245,7 @@ function mapField(field: ApExtractionField) {
     fieldName: field.FieldName,
     displayName: field.DisplayName ?? "",
     hint: field.Hint ?? "",
+    fieldKind: normalizeFieldKind(field.FieldKind, field.FieldName),
     displayOrder: field.DisplayOrder,
   };
 }
@@ -236,6 +297,7 @@ function mapTypeDocument(td: ApExtractionTypeDocument) {
         fieldName: f.fieldName,
         displayName: f.displayName,
         hint: f.hint,
+        fieldKind: f.fieldKind,
       })),
     }),
     fields,
@@ -373,6 +435,8 @@ class ExtractionPromptConfigService {
         fieldName: string;
         displayName?: string | null;
         hint?: string | null;
+        fieldKind?: string | null;
+        kind?: string | null;
         displayOrder?: number;
       }>;
     }>,
@@ -465,6 +529,13 @@ class ExtractionPromptConfigService {
           const displayName =
             field.displayName != null ? String(field.displayName).trim() : "";
           const hint = field.hint != null ? String(field.hint) : null;
+          const rawKind = field.fieldKind !== undefined ? field.fieldKind : field.kind;
+          const fieldKind = normalizeFieldKind(
+            rawKind === undefined || rawKind === null || String(rawKind).trim() === ""
+              ? undefined
+              : rawKind,
+            fieldName,
+          );
 
           if (field.fieldId != null && !Number.isNaN(Number(field.fieldId))) {
             const existing = existingFields.find(
@@ -476,6 +547,7 @@ class ExtractionPromptConfigService {
                   FieldName: fieldName,
                   DisplayName: displayName || null,
                   Hint: hint,
+                  FieldKind: fieldKind,
                   DisplayOrder: displayOrder,
                   UpdatedAt: sqlNow(),
                   UpdatedBy: userId ?? null,
@@ -493,6 +565,7 @@ class ExtractionPromptConfigService {
               FieldName: fieldName,
               DisplayName: displayName || null,
               Hint: hint,
+              FieldKind: fieldKind,
               DisplayOrder: displayOrder,
               IsDeleted: false,
               CreatedBy: userId ?? null,
@@ -825,6 +898,7 @@ class ExtractionPromptConfigService {
         fields: d.fields.map((f) => ({
           fieldName: f.fieldName,
           hint: f.hint,
+          fieldKind: f.fieldKind,
         })),
       })),
     });
