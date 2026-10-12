@@ -88,7 +88,21 @@ export const SOURCES = [
 
 export const SOURCE_BY_CODE = Object.fromEntries(SOURCES.map((s) => [s.code, s]))
 
-export const sourceLabel = (code) => SOURCE_BY_CODE[code]?.label || code || '—'
+/** Names of document types loaded from Invoice Configuration. */
+const captureSourceLabels = {}
+
+export const registerSourceLabels = (items = []) => {
+  items.forEach((item) => {
+    const code = String(item?.code || '').toUpperCase()
+    const label = String(item?.label || '').trim()
+    if (code && label) captureSourceLabels[code] = label
+  })
+}
+
+export const sourceLabel = (code) => {
+  const upper = String(code || '').toUpperCase()
+  return captureSourceLabels[upper] || SOURCE_BY_CODE[code]?.label || SOURCE_BY_CODE[upper]?.label || code || '—'
+}
 export const sourceChannel = (code) => CHANNELS[SOURCE_BY_CODE[code]?.channel] || CHANNELS.VENDOR_PDF
 
 /* ── Categories ───────────────────────────────────────────────────────── */
@@ -123,14 +137,60 @@ export const CATEGORY_BY_CODE = Object.fromEntries(CATEGORIES.map((c) => [c.code
 export const SERVICE_CATEGORY_CODES = CATEGORIES.filter((c) => c.services).map((c) => c.code)
 export const COMMON = 'COMMON'
 
-export const categoryLabel = (code) =>
-  code === COMMON ? 'Common rules' : CATEGORY_BY_CODE[code]?.label || code
+/** Labels for invoice types loaded from Invoice Category. */
+const invoiceCategoryLabels = {}
+
+export const registerInvoiceCategoryLabels = (items = []) => {
+  items.forEach((item) => {
+    const code = String(item?.code || '').toUpperCase()
+    const label = String(item?.label || '').trim()
+    if (code && label) invoiceCategoryLabels[code] = label
+  })
+}
 
 /** Business category for an invoice-type code detected by the app. */
 export const categoryForInvoiceType = (invoiceTypeCode) => {
   const code = String(invoiceTypeCode || '').toUpperCase()
   const hit = CATEGORIES.find((c) => c.invoiceTypeCodes.includes(code))
   return hit ? hit.code : null
+}
+
+export const categoryLabel = (code) => {
+  if (!code || code === COMMON) return 'Common rules'
+  const upper = String(code).toUpperCase()
+  if (invoiceCategoryLabels[upper]) return invoiceCategoryLabels[upper]
+  if (CATEGORY_BY_CODE[upper]?.label) return CATEGORY_BY_CODE[upper].label
+  const catalog = categoryForInvoiceType(upper)
+  if (catalog && CATEGORY_BY_CODE[catalog]?.label) return CATEGORY_BY_CODE[catalog].label
+  return code
+}
+
+/** The code itself plus the catalog bucket it belongs to (MANPOWER_SERVICES and MANPOWER). */
+export const categoryAliases = (code) => {
+  const upper = String(code || '').toUpperCase()
+  if (!upper) return []
+  const aliases = new Set([upper])
+  const catalog = CATEGORY_BY_CODE[upper] ? upper : categoryForInvoiceType(upper)
+  if (catalog) aliases.add(catalog)
+  return [...aliases]
+}
+
+/** A category rule is listed for this invoice type when it names the type or its catalog bucket. */
+export const ruleListsCategory = (rule, categoryCode) => {
+  const selected = String(categoryCode || '').toUpperCase()
+  if (!selected) return false
+  const aliases = new Set(categoryAliases(selected))
+  const selectedIsCatalog = Boolean(CATEGORY_BY_CODE[selected])
+  return (rule?.categories || []).some((c) => {
+    const upper = String(c).toUpperCase()
+    if (aliases.has(upper)) return true
+    return selectedIsCatalog && categoryForInvoiceType(upper) === selected
+  })
+}
+
+export const isRuleDisabledFor = (rule, categoryCode) => {
+  const disabled = new Set((rule?.disabledCategories || []).map((c) => String(c).toUpperCase()))
+  return categoryAliases(categoryCode).some((c) => disabled.has(c))
 }
 
 /* ── Comparison types ─────────────────────────────────────────────────── */

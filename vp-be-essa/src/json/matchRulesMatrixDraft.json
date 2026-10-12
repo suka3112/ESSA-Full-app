@@ -1,0 +1,6645 @@
+[
+  {
+    "ruleKey": "1.01",
+    "dataPoint": "Vendor name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "BANK_GUARANTEE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "QUALITY_CERT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "FAT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BAST",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "OVERTIME_APPROVAL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "BOQ",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "INSPECTION_REPORT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "TEST_REPORT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "SIUJK",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "GUARANTEE_LETTER",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "ROOM_RESERVATION",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "SPPB",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "MILESTONE_CERT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "BILLING_STATEMENT",
+        "requirement": "PARTIAL",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. BPD V-002: invoice vendor name must equal SAP Vendor Master exactly (hard block). PO / FP / Contract are secondary targets.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": "V-002 (candidate)",
+    "serverSide": false,
+    "group": null,
+    "refs": "1.01",
+    "displayOrder": 1000
+  },
+  {
+    "ruleKey": "1.02",
+    "dataPoint": "Vendor bank account number",
+    "dataKey": "vendor_bank_account_number",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. BPD V-003: mismatch vs Vendor Master hard-blocks and alerts Finance by email.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": "V-003 (candidate)",
+    "serverSide": false,
+    "group": null,
+    "refs": "1.02",
+    "displayOrder": 1001
+  },
+  {
+    "ruleKey": "1.03",
+    "dataPoint": "Invoice date",
+    "dataKey": "invoice_date",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.03",
+    "displayOrder": 1002
+  },
+  {
+    "ruleKey": "1.04",
+    "dataPoint": "PO number",
+    "dataKey": "po_number",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BAST",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "OVERTIME_APPROVAL",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "BOQ",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "INSPECTION_REPORT",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "MATERIAL_LIST",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT_DELIVERABLE",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "MILESTONE_CERT",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.04",
+    "displayOrder": 1003
+  },
+  {
+    "ruleKey": "1.05",
+    "dataPoint": "Invoice number",
+    "dataKey": "invoice_number",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.05",
+    "displayOrder": 1004
+  },
+  {
+    "ruleKey": "1.06",
+    "dataPoint": "Unit rate",
+    "dataKey": "unit_rate",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.06",
+    "displayOrder": 1005
+  },
+  {
+    "ruleKey": "1.07",
+    "dataPoint": "Payment terms",
+    "dataKey": "payment_terms",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.07",
+    "displayOrder": 1006
+  },
+  {
+    "ruleKey": "1.08",
+    "dataPoint": "Invoice Amount",
+    "dataKey": "invoice_amount",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BILLING_STATEMENT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix review comment: arithmetic (Qty x Unit rate + PPN - retention - LD - advance recovery), so Calculation not Exact. State the Invoice-PO-GRN 3-way match explicitly.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.08",
+    "displayOrder": 1007
+  },
+  {
+    "ruleKey": "1.09",
+    "dataPoint": "Item description",
+    "dataKey": "item_description",
+    "ruleType": "LOGICAL",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "BOQ",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MATERIAL_LIST",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Any word of the PO item description may appear as part of the invoice description; PO and GRN item text both come from SAP MM. Preset AI prompt.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.09",
+    "displayOrder": 1008
+  },
+  {
+    "ruleKey": "1.10",
+    "dataPoint": "Quantity",
+    "dataKey": "quantity",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FACE_ID",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOQ",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MATERIAL_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.10",
+    "displayOrder": 1009
+  },
+  {
+    "ruleKey": "1.11",
+    "dataPoint": "ESSA Company Name",
+    "dataKey": "essa_company_name",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "BANK_GUARANTEE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "QUALITY_CERT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BAST",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "INSPECTION_REPORT",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "GUARANTEE_LETTER",
+        "requirement": "PARTIAL",
+        "field": ""
+      },
+      {
+        "doc": "MILESTONE_CERT",
+        "requirement": "PARTIAL",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.11",
+    "displayOrder": 1010
+  },
+  {
+    "ruleKey": "1.12",
+    "dataPoint": "Vendor NPWP number",
+    "dataKey": "vendor_npwp_number",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CORETAX",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.12",
+    "displayOrder": 1011
+  },
+  {
+    "ruleKey": "1.13",
+    "dataPoint": "Faktur Pajak value",
+    "dataKey": "faktur_pajak_value",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.13",
+    "displayOrder": 1012
+  },
+  {
+    "ruleKey": "1.14",
+    "dataPoint": "Faktur Pajak date",
+    "dataKey": "faktur_pajak_date",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. BPD V-005 age rule (3 months from FP issue date to draft creation) is still TO BE CONFIRMED by Tax Team.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": "V-005 (candidate)",
+    "serverSide": false,
+    "group": null,
+    "refs": "1.14",
+    "displayOrder": 1013
+  },
+  {
+    "ruleKey": "1.15",
+    "dataPoint": "Faktur Pajak vendor name",
+    "dataKey": "faktur_pajak_vendor_name",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CORETAX",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.15",
+    "displayOrder": 1014
+  },
+  {
+    "ruleKey": "1.17",
+    "dataPoint": "Faktur Pajak Bar Code",
+    "dataKey": "faktur_pajak_bar_code",
+    "ruleType": "AUTHENTICITY",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "FAKTUR_PAJAK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CORETAX",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Open item: is Coretax (DJP portal) integration in scope? Evaluator needs that source before this rule can run.",
+    "noteBy": "",
+    "confirmWith": "Pranay / Tax Team",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.17",
+    "displayOrder": 1015
+  },
+  {
+    "ruleKey": "1.18",
+    "dataPoint": "Negative Vendor List",
+    "dataKey": "negative_vendor_list",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "BLOCK",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. BPD V-010: negative-listed vendor is a hard block. List is ingested from Tax Team Excel.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": "V-010 (candidate)",
+    "serverSide": false,
+    "group": null,
+    "refs": "1.18",
+    "displayOrder": 1016
+  },
+  {
+    "ruleKey": "1.20",
+    "dataPoint": "Liquidated Clause",
+    "dataKey": "liquidated_clause",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "LD clause not found in PO -> refer to Contract"
+    },
+    "onFail": "APPROVAL",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Calculate LD and send to user queue for approval. LD / 17-incoterm logic is a CRITICAL open item (BPD item 5).",
+    "noteBy": "",
+    "confirmWith": "Nitish (LD matrix)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.20",
+    "displayOrder": 1017
+  },
+  {
+    "ruleKey": "1.21",
+    "dataPoint": "Retention Clause",
+    "dataKey": "retention_clause",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Retention tracked and deducted per invoice (BPD scope). Contract flavour to be recorded.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Finance",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.21",
+    "displayOrder": 1018
+  },
+  {
+    "ruleKey": "1.22",
+    "dataPoint": "Advance recovery Clause",
+    "dataKey": "advance_recovery_clause",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Advance recovery not stated on the invoice"
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix col E: if advance recovery is not mentioned in the invoice, calculate it and send to the user.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Finance",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.22",
+    "displayOrder": 1019
+  },
+  {
+    "ruleKey": "1.23",
+    "dataPoint": "Percentage Completion (BAST & SES)",
+    "dataKey": "percentage_completion_bast_ses",
+    "ruleType": "TOLERANCE",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "BAST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT_DELIVERABLE",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "MILESTONE_CERT",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "DOA_APPROVAL",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "STEPWISE",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Chain: BAST vs SES, then Invoice vs SES"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix col D lists two steps: 1) BAST vs SES 2) Invoice vs SES. Deliverables per contract / proof of completion per PO. Tolerance % not yet specified.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.23",
+    "displayOrder": 1020
+  },
+  {
+    "ruleKey": "1.26",
+    "dataPoint": "Currency",
+    "dataKey": "currency",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.26",
+    "displayOrder": 1021
+  },
+  {
+    "ruleKey": "1.27",
+    "dataPoint": "Exchange rate applied",
+    "dataKey": "exchange_rate_applied",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Exchange-rate tolerance is a placeholder (open item 1.27).",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.27",
+    "displayOrder": 1022
+  },
+  {
+    "ruleKey": "1.28",
+    "dataPoint": "PPN rate and DPP (taxable base)",
+    "dataKey": "ppn_rate_and_dpp_taxable_base",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. BPD sec.8: DPP on FP must equal invoice subtotal before VAT; FP VAT amount must equal invoice VAT.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.28",
+    "displayOrder": 1023
+  },
+  {
+    "ruleKey": "1.29",
+    "dataPoint": "WHT type and rate (PPh 21 / 23 / 4(2))",
+    "dataKey": "wht_type_and_rate_pph_21_23_4_2",
+    "ruleType": "EXACT",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. WHT contract is optional (open item 1.29). Rate derived from WHT matrix.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": "V-008 (candidate)",
+    "serverSide": false,
+    "group": null,
+    "refs": "1.29",
+    "displayOrder": 1024
+  },
+  {
+    "ruleKey": "1.30",
+    "dataPoint": "Payment baseline date and due date",
+    "dataKey": "payment_baseline_date_and_due_date",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REPORT",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Non-blocking: invoice is still processed even if the baseline date is not met (matrix col E).",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.30",
+    "displayOrder": 1025
+  },
+  {
+    "ruleKey": "1.31",
+    "dataPoint": "Date sequence (service period - GRN - invoice - FP)",
+    "dataKey": "date_sequence_service_period_grn_invoice_fp",
+    "ruleType": "LOGICAL",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "BAST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FAKTUR_PAJAK",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Matrix type is Logical, but a date-order check is deterministic; recommend generic date rule instead of AI. Service period < GRN/SES < invoice; FP validity.",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "1.31",
+    "displayOrder": 1026
+  },
+  {
+    "ruleKey": "1.32",
+    "dataPoint": "PO remaining balance (quantity and value)",
+    "dataKey": "po_remaining_balance_quantity_and_value",
+    "ruleType": "CALCULATION",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GRN_SES",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Invoice qty / value must not exceed open PO balance (Architecture sec.14.1).",
+    "noteBy": "",
+    "confirmWith": "AP Team",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "1.32",
+    "displayOrder": 1027
+  },
+  {
+    "ruleKey": "1.33",
+    "dataPoint": "Vendor bank account changed",
+    "dataKey": "vendor_bank_account_changed",
+    "ruleType": "LOGICAL",
+    "scope": "COMMON",
+    "categories": [],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "VENDOR_MASTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "INVOICE_HISTORY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Compare invoice bank account with Vendor Master and prior invoices; BPD V-003 alerts Finance on mismatch. Consider deterministic compare.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": "V-003 (candidate)",
+    "serverSide": false,
+    "group": null,
+    "refs": "1.33",
+    "displayOrder": 1028
+  },
+  {
+    "ruleKey": "2.01",
+    "dataPoint": "Airway Bill / Shipping Bill Date",
+    "dataKey": "airway_bill_shipping_bill_date",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "IF_PRESENT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Airway Bill if air shipment; Shipping Bill if sea shipment"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Execution date must equal the date in the PO. Airway / Shipping bill are alternatives (cell comments) so role = If present.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "2.01",
+    "displayOrder": 1029
+  },
+  {
+    "ruleKey": "2.02",
+    "dataPoint": "Airway Bill / Shipping Bill Name",
+    "dataKey": "airway_bill_shipping_bill_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "AIRWAY_BILL",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "2.02",
+    "displayOrder": 1030
+  },
+  {
+    "ruleKey": "2.03",
+    "dataPoint": "Bank Guarantee / Performance Bond Expiry Date",
+    "dataKey": "bank_guarantee_performance_bond_expiry_date",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_GUARANTEE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix: document not available as of now.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "2.03",
+    "displayOrder": 1031
+  },
+  {
+    "ruleKey": "2.04",
+    "dataPoint": "Bank Guarantee / Performance Bond Amt.",
+    "dataKey": "bank_guarantee_performance_bond_amt",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MATERIAL"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_GUARANTEE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix: document not available as of now.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "2.04",
+    "displayOrder": 1032
+  },
+  {
+    "ruleKey": "3.01",
+    "dataPoint": "Man-hours Qty.",
+    "dataKey": "man_hours_qty",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BAST",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Architecture sec.14.3: Timesheet SUM = Manhour Summary = BAST = SES (+ biometric); zero tolerance. Custom N-way plugin.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "3.01",
+    "displayOrder": 1033
+  },
+  {
+    "ruleKey": "3.02",
+    "dataPoint": "Man-hours Unit Rate",
+    "dataKey": "man_hours_unit_rate",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. BPD: if unit rate absent, derive Total / Total Qty per role and compare to PO appendix rate; invoice without unit rate always goes to exception.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "3.02",
+    "displayOrder": 1034
+  },
+  {
+    "ruleKey": "3.03",
+    "dataPoint": "Overtime Qty.",
+    "dataKey": "overtime_qty",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BAST",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "OVERTIME_APPROVAL",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Overtime hours; same N-way plugin as 3.01.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "3.03",
+    "displayOrder": 1035
+  },
+  {
+    "ruleKey": "3.04",
+    "dataPoint": "Overtime unit rate",
+    "dataKey": "overtime_unit_rate",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MANPOWER"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "OVERTIME_APPROVAL",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Overtime unit rate; derive if absent (see 3.02).",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "3.04",
+    "displayOrder": 1036
+  },
+  {
+    "ruleKey": "4.01",
+    "dataPoint": "Daily POB count",
+    "dataKey": "daily_pob_count",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "FACE_ID",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MEAL_ATTENDANCE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Biometric POB vs vendor / camp counts. Architecture sec.14.3 models catering as LEFT <= RIGHT.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.01",
+    "displayOrder": 1037
+  },
+  {
+    "ruleKey": "4.02",
+    "dataPoint": "Meal Sheet - Attendance",
+    "dataKey": "meal_sheet_attendance",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MEAL_ATTENDANCE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Supporting doc name 'monthly meal summary'. Architecture sec.14.3: SUM daily meals <= biometric eligible + valid manual/guest count; confirm <= vs equality.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.02",
+    "displayOrder": 1038
+  },
+  {
+    "ruleKey": "4.03",
+    "dataPoint": "Packed Meal Sheet - Attendance",
+    "dataKey": "packed_meal_sheet_attendance",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MEAL_ATTENDANCE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Packed-meal attendance; same logic as 4.02.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.03",
+    "displayOrder": 1039
+  },
+  {
+    "ruleKey": "4.04",
+    "dataPoint": "Snack back-charge Qty.",
+    "dataKey": "snack_back_charge_qty",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BACK_CHARGE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. ESSA to confirm the exact separate summary sheet.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.04",
+    "displayOrder": 1040
+  },
+  {
+    "ruleKey": "4.05",
+    "dataPoint": "Special-meal back-charge Qty.",
+    "dataKey": "special_meal_back_charge_qty",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BACK_CHARGE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FACE_ID",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. ESSA to confirm the exact separate summary sheet.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.05",
+    "displayOrder": 1041
+  },
+  {
+    "ruleKey": "4.06",
+    "dataPoint": "Special dinners Qty.",
+    "dataKey": "special_dinners_qty",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BACK_CHARGE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FACE_ID",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. ESSA to confirm the exact separate summary sheet.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.06",
+    "displayOrder": 1042
+  },
+  {
+    "ruleKey": "4.07",
+    "dataPoint": "Special lunches Qty.",
+    "dataKey": "special_lunches_qty",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BACK_CHARGE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "FACE_ID",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. ESSA to confirm the exact separate summary sheet.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.07",
+    "displayOrder": 1043
+  },
+  {
+    "ruleKey": "4.08",
+    "dataPoint": "Employee Name",
+    "dataKey": "employee_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "FACE_ID",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MEAL_ATTENDANCE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Run once a month; one invoice can span 1000s of pages -> process in batch / async.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.08",
+    "displayOrder": 1044
+  },
+  {
+    "ruleKey": "4.09",
+    "dataPoint": "Date",
+    "dataKey": "date",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "FACE_ID",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MEAL_ATTENDANCE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Same volume note as 4.08.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.09",
+    "displayOrder": 1045
+  },
+  {
+    "ruleKey": "4.11",
+    "dataPoint": "Indian Cook - Attendance",
+    "dataKey": "indian_cook_attendance",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "TIMESHEET",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Separate reimbursable invoice"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.11",
+    "displayOrder": 1046
+  },
+  {
+    "ruleKey": "4.12",
+    "dataPoint": "Flight ticket - Employee Name",
+    "dataKey": "flight_ticket_employee_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CATERING_REIMB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Separate reimbursable invoice"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.12",
+    "displayOrder": 1047
+  },
+  {
+    "ruleKey": "4.13",
+    "dataPoint": "ITAS - Employee Name",
+    "dataKey": "itas_employee_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CATERING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CATERING_REIMB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Separate reimbursable invoice"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "4.13",
+    "displayOrder": 1048
+  },
+  {
+    "ruleKey": "5.01",
+    "dataPoint": "Number of Rooms",
+    "dataKey": "number_of_rooms",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "HOUSEKEEPING"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CAMP_POB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. BPD Housekeeping: 3-level chain Daily -> Monthly -> Invoice -> SES, at grand-total level per location (PAU / Porta) and laundry. Room numbers are not validated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "5.01",
+    "displayOrder": 1049
+  },
+  {
+    "ruleKey": "6.01",
+    "dataPoint": "Equipment Hours/ month",
+    "dataKey": "equipment_hours_month",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "RENTAL_EQUIPMENT"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "6.01",
+    "displayOrder": 1050
+  },
+  {
+    "ruleKey": "6.02",
+    "dataPoint": "Equipment overtime",
+    "dataKey": "equipment_overtime",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "RENTAL_EQUIPMENT"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "6.02",
+    "displayOrder": 1051
+  },
+  {
+    "ruleKey": "6.03",
+    "dataPoint": "Equipment unit rate",
+    "dataKey": "equipment_unit_rate",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "RENTAL_EQUIPMENT"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "6.03",
+    "displayOrder": 1052
+  },
+  {
+    "ruleKey": "6.04",
+    "dataPoint": "Operator Manhours",
+    "dataKey": "operator_manhours",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "RENTAL_EQUIPMENT"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MANPOWER_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "6.04",
+    "displayOrder": 1053
+  },
+  {
+    "ruleKey": "7.01",
+    "dataPoint": "Quantity - BOQ/Prev.%, Curr.%, Cumu%",
+    "dataKey": "quantity_boq_prev_curr_cumu",
+    "ruleType": "TOLERANCE",
+    "scope": "CATEGORY",
+    "categories": [
+      "CIVIL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOQ",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "INSPECTION_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "Tolerance applies to BoQ lines only"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Prev % / Curr % / Cumulative % vs progress report, BAST, SES (Architecture sec.14.3: ALL_EQUAL / configured tolerance).",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "7.01",
+    "displayOrder": 1054
+  },
+  {
+    "ruleKey": "7.03",
+    "dataPoint": "SIUJK expiry date",
+    "dataKey": "siujk_expiry_date",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CIVIL"
+    ],
+    "disabledCategories": [],
+    "source": "SIUJK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "7.03",
+    "displayOrder": 1055
+  },
+  {
+    "ruleKey": "7.04",
+    "dataPoint": "SIUJK WHT rate",
+    "dataKey": "siujk_wht_rate",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "CIVIL"
+    ],
+    "disabledCategories": [],
+    "source": "SIUJK",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INVOICE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Matrix: rate is derived from the WHT matrix and must be exact; recommend deterministic compare to the matrix instead of AI.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "7.04",
+    "displayOrder": 1056
+  },
+  {
+    "ruleKey": "8.01",
+    "dataPoint": "ESSA Company Name",
+    "dataKey": "essa_company_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "PIB"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PIB_DOC",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "8.01",
+    "displayOrder": 1057
+  },
+  {
+    "ruleKey": "8.02",
+    "dataPoint": "PIB Amount",
+    "dataKey": "pib_amount",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "PIB"
+    ],
+    "disabledCategories": [],
+    "source": "IMPORT_PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PIB_DOC",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_FORM",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "8.02",
+    "displayOrder": 1058
+  },
+  {
+    "ruleKey": "8.03",
+    "dataPoint": "Item Description",
+    "dataKey": "item_description",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "PIB"
+    ],
+    "disabledCategories": [],
+    "source": "PACKING_LIST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "IMPORT_PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PIB_DOC",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "8.03",
+    "displayOrder": 1059
+  },
+  {
+    "ruleKey": "9.01",
+    "dataPoint": "Trip ID",
+    "dataKey": "trip_id",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.01",
+    "displayOrder": 1060
+  },
+  {
+    "ruleKey": "9.02",
+    "dataPoint": "Airline",
+    "dataKey": "airline",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.02",
+    "displayOrder": 1061
+  },
+  {
+    "ruleKey": "9.03",
+    "dataPoint": "Route",
+    "dataKey": "route",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.03",
+    "displayOrder": 1062
+  },
+  {
+    "ruleKey": "9.04",
+    "dataPoint": "Travel dates",
+    "dataKey": "travel_dates",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.04",
+    "displayOrder": 1063
+  },
+  {
+    "ruleKey": "9.05",
+    "dataPoint": "Passenger name",
+    "dataKey": "passenger_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.05",
+    "displayOrder": 1064
+  },
+  {
+    "ruleKey": "9.06",
+    "dataPoint": "Travel class",
+    "dataKey": "travel_class",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.06",
+    "displayOrder": 1065
+  },
+  {
+    "ruleKey": "9.07",
+    "dataPoint": "HCIS Ledger amount",
+    "dataKey": "hcis_ledger_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "TRAVEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "9.07",
+    "displayOrder": 1066
+  },
+  {
+    "ruleKey": "10.01",
+    "dataPoint": "Hotel Trip ID",
+    "dataKey": "hotel_trip_id",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "HOTEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GUARANTEE_LETTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "ROOM_RESERVATION",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "10.01",
+    "displayOrder": 1067
+  },
+  {
+    "ruleKey": "10.02",
+    "dataPoint": "Hotel dates",
+    "dataKey": "hotel_dates",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "HOTEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GUARANTEE_LETTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "ROOM_RESERVATION",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "10.02",
+    "displayOrder": 1068
+  },
+  {
+    "ruleKey": "10.03",
+    "dataPoint": "Guest name",
+    "dataKey": "guest_name",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "HOTEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GUARANTEE_LETTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "ROOM_RESERVATION",
+        "requirement": "EXTRACT",
+        "field": ""
+      },
+      {
+        "doc": "BOOKING_CONFIRM",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Guest verified against the approved guest list (aligned to Authenticity 4 Sep).",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "10.03",
+    "displayOrder": 1069
+  },
+  {
+    "ruleKey": "10.04",
+    "dataPoint": "HCIS Ledger amount",
+    "dataKey": "hcis_ledger_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "HOTEL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BILLING_SUMMARY",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "HCIS",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GUARANTEE_LETTER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Nitish / Lalu",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "10.04",
+    "displayOrder": 1070
+  },
+  {
+    "ruleKey": "11.01",
+    "dataPoint": "Item Description",
+    "dataKey": "item_description",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "IMPORT_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "PACKING_LIST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "IMPORT_PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SPPB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "11.01",
+    "displayOrder": 1071
+  },
+  {
+    "ruleKey": "11.02",
+    "dataPoint": "Airway / Shipping Bill - Vendor name",
+    "dataKey": "airway_shipping_bill_vendor_name",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "IMPORT_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "VENDOR_MASTER",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PACKING_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "IMPORT_PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SPPB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "11.02",
+    "displayOrder": 1072
+  },
+  {
+    "ruleKey": "11.03",
+    "dataPoint": "Consignee Name",
+    "dataKey": "consignee_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "IMPORT_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "PACKING_LIST",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "AIRWAY_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SHIPPING_BILL",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "IMPORT_PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "PIB_DOC",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SPPB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "11.03",
+    "displayOrder": 1073
+  },
+  {
+    "ruleKey": "11.04",
+    "dataPoint": "PIB",
+    "dataKey": "pib",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "IMPORT_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "IMPORT_PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PIB_DOC",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SPPB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "11.04",
+    "displayOrder": 1074
+  },
+  {
+    "ruleKey": "11.05",
+    "dataPoint": "Forwarder Name",
+    "dataKey": "forwarder_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "IMPORT_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SPPB",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "11.05",
+    "displayOrder": 1075
+  },
+  {
+    "ruleKey": "12.01",
+    "dataPoint": "Delivery Date",
+    "dataKey": "delivery_date",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "DOMESTIC_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "12.01",
+    "displayOrder": 1076
+  },
+  {
+    "ruleKey": "12.02",
+    "dataPoint": "Delivery confirmation",
+    "dataKey": "delivery_confirmation",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "DOMESTIC_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "PHOTO_EVIDENCE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MATERIAL_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "12.02",
+    "displayOrder": 1077
+  },
+  {
+    "ruleKey": "12.03",
+    "dataPoint": "Item description",
+    "dataKey": "item_description",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "DOMESTIC_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "DELIVERY_NOTE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MATERIAL_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "12.03",
+    "displayOrder": 1078
+  },
+  {
+    "ruleKey": "12.04",
+    "dataPoint": "PO number - Transported Goods",
+    "dataKey": "po_number_transported_goods",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "DOMESTIC_LOGISTICS"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "DELIVERY_NOTE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MATERIAL_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "12.04",
+    "displayOrder": 1079
+  },
+  {
+    "ruleKey": "13.01",
+    "dataPoint": "Man-hours / Man-months",
+    "dataKey": "man_hours_man_months",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CONSULTANT_TIME"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "13.01",
+    "displayOrder": 1080
+  },
+  {
+    "ruleKey": "13.02",
+    "dataPoint": "Unit Price",
+    "dataKey": "unit_price",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CONSULTANT_TIME"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "13.02",
+    "displayOrder": 1081
+  },
+  {
+    "ruleKey": "13.03",
+    "dataPoint": "Terms & Conditions",
+    "dataKey": "terms_conditions",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "CONSULTANT_TIME"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "13.03",
+    "displayOrder": 1082
+  },
+  {
+    "ruleKey": "13.04",
+    "dataPoint": "Contract deliverables",
+    "dataKey": "contract_deliverables",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "CONSULTANT_TIME"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT_DELIVERABLE",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "13.04",
+    "displayOrder": 1083
+  },
+  {
+    "ruleKey": "14.01-A",
+    "dataPoint": "Terms, Conditions",
+    "dataKey": "terms_conditions",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "CONSULTANT_MILESTONE"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT_DELIVERABLE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MILESTONE_CERT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "14.01-A",
+    "displayOrder": 1084
+  },
+  {
+    "ruleKey": "14.01-B",
+    "dataPoint": "Milestones",
+    "dataKey": "milestones",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "CONSULTANT_MILESTONE"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT_DELIVERABLE",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MILESTONE_CERT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "14.01-B",
+    "displayOrder": 1085
+  },
+  {
+    "ruleKey": "15.01",
+    "dataPoint": "Man-hours / Man-months",
+    "dataKey": "man_hours_man_months",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MEDICAL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "15.01",
+    "displayOrder": 1086
+  },
+  {
+    "ruleKey": "15.02",
+    "dataPoint": "Unit Price",
+    "dataKey": "unit_price",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MEDICAL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "15.02",
+    "displayOrder": 1087
+  },
+  {
+    "ruleKey": "15.03",
+    "dataPoint": "Equipment Hours / Months",
+    "dataKey": "equipment_hours_months",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MEDICAL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "TIMESHEET",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "15.03",
+    "displayOrder": 1088
+  },
+  {
+    "ruleKey": "15.04",
+    "dataPoint": "Equipment Unit Price",
+    "dataKey": "equipment_unit_price",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MEDICAL"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "CONTRACT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "15.04",
+    "displayOrder": 1089
+  },
+  {
+    "ruleKey": "16.01",
+    "dataPoint": "Inspection Report quantity/Qty",
+    "dataKey": "inspection_report_quantity_qty",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "SURVEILLANCE"
+    ],
+    "disabledCategories": [],
+    "source": "INVOICE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INSPECTION_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "LINE",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "16.01",
+    "displayOrder": 1090
+  },
+  {
+    "ruleKey": "16.02",
+    "dataPoint": "SLA confirmation",
+    "dataKey": "sla_confirmation",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "SURVEILLANCE"
+    ],
+    "disabledCategories": [],
+    "source": "QUALITY_CERT",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "PO",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SLA_REPORT",
+        "requirement": "EXTRACT",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "16.02",
+    "displayOrder": 1091
+  },
+  {
+    "ruleKey": "17.01",
+    "dataPoint": "DOA approval",
+    "dataKey": "doa_approval",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "TELECOM"
+    ],
+    "disabledCategories": [],
+    "source": "BILLING_STATEMENT",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "DOA_APPROVAL",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "17.01",
+    "displayOrder": 1092
+  },
+  {
+    "ruleKey": "17.02",
+    "dataPoint": "SLA confirmation",
+    "dataKey": "sla_confirmation",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "TELECOM"
+    ],
+    "disabledCategories": [],
+    "source": "CONTRACT",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SLA_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Category owner (ESSA)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "17.02",
+    "displayOrder": 1093
+  },
+  {
+    "ruleKey": "18.01",
+    "dataPoint": "Settlement Amount",
+    "dataKey": "settlement_amount",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "CSR"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_TRANSFER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "REFUND_SLIP",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "18.01",
+    "displayOrder": 1094
+  },
+  {
+    "ruleKey": "18.02",
+    "dataPoint": "Beneficiary Name",
+    "dataKey": "beneficiary_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CSR"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_TRANSFER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "MOU",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "18.02",
+    "displayOrder": 1095
+  },
+  {
+    "ruleKey": "18.03",
+    "dataPoint": "Payment Amount",
+    "dataKey": "payment_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CSR"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "BANK_TRANSFER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "18.03",
+    "displayOrder": 1096
+  },
+  {
+    "ruleKey": "18.04",
+    "dataPoint": "Guest Name",
+    "dataKey": "guest_name",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "CSR"
+    ],
+    "disabledCategories": [],
+    "source": "PHOTO_EVIDENCE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_FORM",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "GUEST_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "18.04",
+    "displayOrder": 1097
+  },
+  {
+    "ruleKey": "18.05",
+    "dataPoint": "WHT Amount (if applicable)",
+    "dataKey": "wht_amount_if_applicable",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CSR"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "18.05",
+    "displayOrder": 1098
+  },
+  {
+    "ruleKey": "18.06",
+    "dataPoint": "MOU",
+    "dataKey": "mou",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "CSR"
+    ],
+    "disabledCategories": [],
+    "source": "PHOTO_EVIDENCE",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "MOU",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "18.06",
+    "displayOrder": 1099
+  },
+  {
+    "ruleKey": "19.01",
+    "dataPoint": "Settlement Amount",
+    "dataKey": "settlement_amount",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "EXPENSE_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "19.01",
+    "displayOrder": 1100
+  },
+  {
+    "ruleKey": "19.02",
+    "dataPoint": "Payment Amount",
+    "dataKey": "payment_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "EXPENSE_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "19.02",
+    "displayOrder": 1101
+  },
+  {
+    "ruleKey": "19.03",
+    "dataPoint": "Card Holder Name",
+    "dataKey": "card_holder_name",
+    "ruleType": "AVAILABILITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "EXPENSE_REPORT",
+    "sourceField": "",
+    "targets": [],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REPORT",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "19.03",
+    "displayOrder": 1102
+  },
+  {
+    "ruleKey": "19.04",
+    "dataPoint": "Merchant Name",
+    "dataKey": "merchant_name",
+    "ruleType": "LOGICAL",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "EXPENSE_REPORT",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "19.04",
+    "displayOrder": 1103
+  },
+  {
+    "ruleKey": "19.05",
+    "dataPoint": "Internal Order Number",
+    "dataKey": "internal_order_number",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INTERNAL_ORDER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "19.05",
+    "displayOrder": 1104
+  },
+  {
+    "ruleKey": "19.06",
+    "dataPoint": "WHT Amount (if applicable)",
+    "dataKey": "wht_amount_if_applicable",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "19.06",
+    "displayOrder": 1105
+  },
+  {
+    "ruleKey": "19.07",
+    "dataPoint": "PO Number (If applicable)",
+    "dataKey": "po_number_if_applicable",
+    "ruleType": "AVAILABILITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "CORPORATE_CARD"
+    ],
+    "disabledCategories": [],
+    "source": "EXPENSE_REPORT",
+    "sourceField": "",
+    "targets": [],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REPORT",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated. Matrix: PDF statement amount matched directly against the Excel.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "19.07",
+    "displayOrder": 1106
+  },
+  {
+    "ruleKey": "20.01",
+    "dataPoint": "Settlement Amount",
+    "dataKey": "settlement_amount",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "MISC_EXPENSES"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "20.01",
+    "displayOrder": 1107
+  },
+  {
+    "ruleKey": "20.02",
+    "dataPoint": "Payment Amount",
+    "dataKey": "payment_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MISC_EXPENSES"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "20.02",
+    "displayOrder": 1108
+  },
+  {
+    "ruleKey": "20.03",
+    "dataPoint": "Internal Order Number",
+    "dataKey": "internal_order_number",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MISC_EXPENSES"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INTERNAL_ORDER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "20.03",
+    "displayOrder": 1109
+  },
+  {
+    "ruleKey": "20.04",
+    "dataPoint": "Vendor Name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MISC_EXPENSES"
+    ],
+    "disabledCategories": [],
+    "source": "VENDOR_MASTER",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_FORM",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "20.04",
+    "displayOrder": 1110
+  },
+  {
+    "ruleKey": "20.05",
+    "dataPoint": "WHT Amount (if applicable)",
+    "dataKey": "wht_amount_if_applicable",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "MISC_EXPENSES"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "20.05",
+    "displayOrder": 1111
+  },
+  {
+    "ruleKey": "21.01",
+    "dataPoint": "Settlement Amount",
+    "dataKey": "settlement_amount",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "21.01",
+    "displayOrder": 1112
+  },
+  {
+    "ruleKey": "21.02",
+    "dataPoint": "Payment Amount",
+    "dataKey": "payment_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "21.02",
+    "displayOrder": 1113
+  },
+  {
+    "ruleKey": "21.03",
+    "dataPoint": "Internal Order Number",
+    "dataKey": "internal_order_number",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INTERNAL_ORDER",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "21.03",
+    "displayOrder": 1114
+  },
+  {
+    "ruleKey": "21.04",
+    "dataPoint": "Guest Name",
+    "dataKey": "guest_name",
+    "ruleType": "AUTHENTICITY",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "GUEST_LIST",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "WORKER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "21.04",
+    "displayOrder": 1115
+  },
+  {
+    "ruleKey": "21.05",
+    "dataPoint": "Vendor Name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "VENDOR_MASTER",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_FORM",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "21.05",
+    "displayOrder": 1116
+  },
+  {
+    "ruleKey": "21.06",
+    "dataPoint": "PO Number (If applicable)",
+    "dataKey": "po_number_if_applicable",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "PO",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_FORM",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "21.06",
+    "displayOrder": 1117
+  },
+  {
+    "ruleKey": "21.07",
+    "dataPoint": "WHT Amount (if applicable)",
+    "dataKey": "wht_amount_if_applicable",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EVENTS"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "21.07",
+    "displayOrder": 1118
+  },
+  {
+    "ruleKey": "22.01",
+    "dataPoint": "Settlement Amount",
+    "dataKey": "settlement_amount",
+    "ruleType": "CALCULATION",
+    "scope": "CATEGORY",
+    "categories": [
+      "EMPLOYEE_SETTLEMENT"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "EXPENSE_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "CALCULATE",
+    "status": "DRAFT",
+    "businessNote": "Register: Needs confirmation. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": true,
+    "group": null,
+    "refs": "22.01",
+    "displayOrder": 1119
+  },
+  {
+    "ruleKey": "22.02",
+    "dataPoint": "Payment Amount",
+    "dataKey": "payment_amount",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EMPLOYEE_SETTLEMENT"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "EXPENSE_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "22.02",
+    "displayOrder": 1120
+  },
+  {
+    "ruleKey": "22.03",
+    "dataPoint": "Vendor Name",
+    "dataKey": "vendor_name",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EMPLOYEE_SETTLEMENT"
+    ],
+    "disabledCategories": [],
+    "source": "VENDOR_MASTER",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "AP / Finance",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "22.03",
+    "displayOrder": 1121
+  },
+  {
+    "ruleKey": "22.04",
+    "dataPoint": "Internal Order Number",
+    "dataKey": "internal_order_number",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EMPLOYEE_SETTLEMENT"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "INTERNAL_ORDER",
+        "requirement": "REQUIRED",
+        "field": ""
+      },
+      {
+        "doc": "EXPENSE_REPORT",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "ALWAYS",
+      "text": ""
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "ESSA Finance (TBC)",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "22.04",
+    "displayOrder": 1122
+  },
+  {
+    "ruleKey": "22.05",
+    "dataPoint": "WHT Amount (if applicable)",
+    "dataKey": "wht_amount_if_applicable",
+    "ruleType": "EXACT",
+    "scope": "CATEGORY",
+    "categories": [
+      "EMPLOYEE_SETTLEMENT"
+    ],
+    "disabledCategories": [],
+    "source": "SETTLEMENT_FORM",
+    "sourceField": "",
+    "targets": [
+      {
+        "doc": "SETTLEMENT_DOCS",
+        "requirement": "REQUIRED",
+        "field": ""
+      }
+    ],
+    "compareMode": "ONE_TO_ALL",
+    "matchLevel": "HEADER",
+    "mandatory": true,
+    "criteria": {
+      "similarity": null,
+      "aiConfidence": null,
+      "tolerancePct": null,
+      "toleranceAmount": null,
+      "combine": "HIGHER",
+      "measuredOn": "TARGET",
+      "uniqueKey": []
+    },
+    "criteriaText": "",
+    "runCondition": {
+      "type": "CUSTOM",
+      "text": "When applicable (WHT / PO exists)"
+    },
+    "onFail": "REVIEW",
+    "status": "DRAFT",
+    "businessNote": "Register: Draft. Not evaluated until activated.",
+    "noteBy": "",
+    "confirmWith": "Tax Team",
+    "linkedCheck": null,
+    "serverSide": false,
+    "group": null,
+    "refs": "22.05",
+    "displayOrder": 1123
+  }
+]

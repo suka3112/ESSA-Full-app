@@ -6,7 +6,8 @@ import {
   Download,
   Trash2,
   X,
-  ArrowRight
+  ArrowRight,
+  RotateCcw
 } from 'lucide-react'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -38,8 +39,9 @@ import {
 } from 'api/essaDashboard'
 import { INVOICES, INVOICE_DETAIL, INVOICE_DASHBOARD } from 'constants/url'
 import { deleteUploadedInvoice } from 'api/essaUploadedInvoices'
+import { reprocessApInvoiceUpload } from 'api/apInvoiceOcr'
 import { isEssaDemoDeleteEnabled } from 'config/essaDemoConfig'
-import { showEssaSuccessToast } from '../lib/essaToast'
+import { showEssaErrorToast, showEssaSuccessToast } from '../lib/essaToast'
 import { ACTIONS, bulkActionsFor } from '../lib/invoiceActions'
 import { NextActionBadge } from '../ui/NextActionBadge'
 import { WorkflowStageBadge } from '../ui/WorkflowStageBadge'
@@ -282,6 +284,32 @@ function EssaInvoices({ userInfo: { userType } }) {
       )
     },
     [refresh]
+  )
+
+  const [rerunningId, setRerunningId] = useState(null)
+
+  const handleRerun = useCallback(
+    async (row) => {
+      const documentId = row.documentId || String(row.id || '').replace(/^ocr-/i, '')
+      if (!documentId) return
+      setRerunningId(row.id)
+      try {
+        await reprocessApInvoiceUpload(documentId)
+        showEssaSuccessToast(
+          'Re-run queued',
+          'The invoice is processing again. Status will update when validation finishes.'
+        )
+        refetchEssa()
+      } catch (error) {
+        showEssaErrorToast(
+          'Re-run failed',
+          error?.response?.data?.message || error?.message || 'The invoice could not be queued again.'
+        )
+      } finally {
+        setRerunningId(null)
+      }
+    },
+    [refetchEssa]
   )
 
   const allRows = useMemo(() => {
@@ -721,6 +749,8 @@ function EssaInvoices({ userInfo: { userType } }) {
                         role={role}
                         invoicesPath={invoicesPath}
                         onOpen={() => openInvoice(r)}
+                        onRerun={() => handleRerun(r)}
+                        rerunning={rerunningId === r.id}
                         onDeleteDemo={handleDeleteDemoUpload}
                       />
                     ))
@@ -798,6 +828,8 @@ function EssaInvoices({ userInfo: { userType } }) {
 
 const STAGE_LIST_LABEL = {
   draft: 'Draft',
+  processing: 'Processing',
+  failed: 'Failed',
   validated: 'Validated',
   parked: 'Parked',
   posted: 'Posted',
@@ -806,10 +838,11 @@ const STAGE_LIST_LABEL = {
   review: 'In review'
 }
 
-function Row({ r, role, invoicesPath, onOpen, onDeleteDemo }) {
+function Row({ r, role, invoicesPath, onOpen, onRerun, rerunning, onDeleteDemo }) {
   const sla = r.due_date || r.invoice_due_date || r.sla_due
   const exceptions = Number(r.failed_checks || r.openExceptions || 0)
   const stage = resolveWorkflowStage(r)
+  const failed = stage.key === 'failed'
   return (
     <tr>
       <td onClick={onOpen} style={{ cursor: 'pointer' }}>
@@ -843,7 +876,11 @@ function Row({ r, role, invoicesPath, onOpen, onDeleteDemo }) {
         )}
       </td>
       <td onClick={onOpen} style={{ cursor: 'pointer' }}>
-        <WorkflowStageBadge inv={r} label={STAGE_LIST_LABEL[stage.key] || stage.shortLabel} />
+        <WorkflowStageBadge
+          inv={r}
+          label={STAGE_LIST_LABEL[stage.key] || stage.shortLabel}
+          title={r.status_detail || undefined}
+        />
       </td>
       <td onClick={onOpen} style={{ cursor: 'pointer' }}>
         <NextActionCell inv={r} role={role} />
@@ -856,9 +893,21 @@ function Row({ r, role, invoicesPath, onOpen, onDeleteDemo }) {
       </td>
       <td onClick={(e) => e.stopPropagation()}>
         <div className="dx-invoice-row-actions">
-          <Button size="sm" variant="ghost" title={`Open invoice ${r.invoice_no || ''}`} onClick={onOpen}>
-            Open <ArrowRight size={12} />
-          </Button>
+          {failed ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              title={r.status_detail || 'Re-run processing for this invoice'}
+              onClick={onRerun}
+              disabled={rerunning}
+            >
+              {rerunning ? 'Re-running' : 'Re-run'} <RotateCcw size={12} />
+            </Button>
+          ) : (
+            <Button size="sm" variant="ghost" title={`Open invoice ${r.invoice_no || ''}`} onClick={onOpen}>
+              Open <ArrowRight size={12} />
+            </Button>
+          )}
           {r.is_demo_upload && isEssaDemoDeleteEnabled() && (
             <button
               type="button"

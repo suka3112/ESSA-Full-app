@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { AlertTriangle, Info } from 'lucide-react'
-import { RULE_GROUP_LIST, SOURCES, groupForRule, sourceChannel, sourceLabel } from '../../lib/nWay/catalog'
+import { RULE_GROUP_LIST, SOURCES, groupForRule, isRuleDisabledFor, sourceChannel, sourceLabel } from '../../lib/nWay/catalog'
 import { Marker, TypeChip } from '../../lib/nWay/NWayChips'
 import { scopeLabel } from '../../lib/nWay/ruleText'
 import CellRoleMenu, { roleFromKey } from './CellRoleMenu'
@@ -134,7 +134,7 @@ export default function RuleMatrix({ rules, categoryCode, selectedId, onSelect, 
         </thead>
         <tbody>
             {ordered.map((r) => {
-              const off = categoryCode && (r.disabledCategories || []).includes(categoryCode)
+              const off = categoryCode && isRuleDisabledFor(r, categoryCode)
               const warn = warningFor(r)
               return (
                 <tr

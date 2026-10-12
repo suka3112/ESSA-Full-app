@@ -26,6 +26,10 @@ import {
 } from "./invoiceConfig.service";
 import sapFieldMappingValidationService from "./sapFieldMappingValidation.service";
 import {
+  evaluateReadyMatchRules,
+  type MatchRuleCheckResult,
+} from "./matchRuleEvaluation.service";
+import {
   auditRuleFail,
   auditRuleHardFail,
   auditRuleWarn,
@@ -87,6 +91,8 @@ export interface InvoiceValidationResult {
   net_payable?: number;
   configVersionId?: number | null;
   validationRunId?: number | null;
+  /** Active Exact / Logical match rules evaluated with this run. */
+  matchRules?: MatchRuleCheckResult[];
 }
 
 interface ExtractedHeader {
@@ -957,6 +963,9 @@ class ApInvoiceValidationService {
       triggerEvent?: ValidationTriggerEvent;
       /** Extra FAIL count from SAP mapping (not in results[]). */
       extraFailedChecks?: number;
+      matchRules?: MatchRuleCheckResult[];
+      /** Exact mismatch with OnFail BLOCK stops the workflow. */
+      matchBlocked?: boolean;
     },
     result: InvoiceValidationResult,
   ): Promise<void> {
@@ -982,9 +991,27 @@ class ApInvoiceValidationService {
         });
       }
 
+      const matchRows = (keys.matchRules || []).filter((rule) => rule.severity !== "SKIP");
       await ApValidationResult.bulkCreate(
-        result.results
-          .filter((rule) => rule.severity !== "SKIP")
+        [
+          ...result.results.filter((rule) => rule.severity !== "SKIP"),
+          ...matchRows.map((rule) => ({
+            sequence: 0,
+            ruleCode: rule.ruleKey,
+            ruleName: rule.ruleName,
+            severity: rule.severity,
+            expectedValue: rule.expectedValue,
+            actualValue: rule.actualValue,
+            variance: null as number | null,
+            message: rule.message,
+            sourceTable: "AP_MATCH_RULE",
+            sourceRecordId: rule.ruleKey,
+            outcomeCode: rule.exceptionCode,
+            configVersionId: null as number | null,
+            mappingId: null as number | null,
+            documentRuleId: null as number | null,
+          })),
+        ]
           .map((rule) => ({
             DocumentId: keys.documentId ?? null,
             InvoiceHeaderId: keys.invoiceHeaderId ?? null,
@@ -1019,7 +1046,22 @@ class ApInvoiceValidationService {
           const objectId = essa?.InvoiceNo || `ocr-${keys.documentId}`;
           const correlationId =
             essa?.CorrelationId || mintCorrelationId(`doc${keys.documentId}`);
-          const material = result.results.filter(
+          const material = [
+            ...result.results,
+            ...(keys.matchRules || []).map((rule) => ({
+              ruleCode: rule.ruleKey,
+              ruleName: rule.ruleName,
+              severity: rule.severity,
+              expectedValue: rule.expectedValue,
+              actualValue: rule.actualValue,
+              message: rule.message,
+              variance: null as number | null,
+              outcomeCode: rule.exceptionCode,
+              details: undefined as ValidationRuleDetail[] | undefined,
+              sourceTable: "AP_MATCH_RULE",
+              sourceRecordId: rule.ruleKey,
+            })),
+          ].filter(
             (rule) =>
               rule.severity === "FAIL" ||
               rule.severity === "WARNING" ||
@@ -1080,15 +1122,22 @@ class ApInvoiceValidationService {
           );
         }
 
+        const matchBusinessFails = (keys.matchRules || []).filter(
+          (rule) => rule.severity === "FAIL" || rule.severity === "BLOCKED",
+        ).length;
         const failedChecks =
           result.results.filter((rule) => rule.severity === "FAIL").length +
-          (Number(keys.extraFailedChecks) > 0 ? Number(keys.extraFailedChecks) : 0);
+          (Number(keys.extraFailedChecks) > 0 ? Number(keys.extraFailedChecks) : 0) +
+          matchBusinessFails;
         const blockedMissing = blockedMissingDocumentItems(result);
         await apInvoiceDocumentService.updateEssaInvoiceAfterValidation(
           keys.documentId,
           failedChecks,
           result.overallStatus,
-          { workflowStage: blockedMissing.length ? "draft" : null },
+          {
+            workflowStage: blockedMissing.length || keys.matchBlocked ? "draft" : null,
+            openExceptions: matchBusinessFails,
+          },
         );
         if (
           blockedMissing.length &&
@@ -2149,6 +2198,33 @@ class ApInvoiceValidationService {
       };
     }
 
+    let matchRules: MatchRuleCheckResult[] = [];
+    try {
+      matchRules = await evaluateReadyMatchRules({
+        invoiceTypeCode: payload.invoiceTypeCode,
+        header: payload.header as Record<string, unknown> | undefined,
+        supportingDocs: payload.supportingDocs as Record<
+          string,
+          { header?: Record<string, unknown> | null }
+        >,
+        checklist: ordered.map((rule) => ({
+          ruleCode: rule.ruleCode,
+          expectedValue: rule.expectedValue,
+          actualValue: rule.actualValue,
+        })),
+      });
+    } catch (error) {
+      logger.error("Match-rule evaluation failed", error);
+      matchRules = [];
+    }
+    finalResult.matchRules = matchRules;
+    const matchBusinessFails = matchRules.filter(
+      (rule) => rule.severity === "FAIL" || rule.severity === "BLOCKED",
+    );
+    if (matchBusinessFails.length && finalResult.overallStatus === "PASS") {
+      finalResult.overallStatus = "FAIL";
+    }
+
     if (payload.documentId || payload.invoiceHeaderId) {
       await this.persistResults(
         {
@@ -2157,6 +2233,8 @@ class ApInvoiceValidationService {
           createdBy: payload.createdBy,
           triggerEvent: payload.triggerEvent || "INITIAL_VALIDATION",
           extraFailedChecks,
+          matchRules,
+          matchBlocked: matchRules.some((rule) => rule.severity === "BLOCKED"),
         },
         finalResult,
       );

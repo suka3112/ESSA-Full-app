@@ -756,10 +756,14 @@ export const getEssaPOMatch = async (po, invId) => {
 export const getEssaInvoice = async (id) => {
   const decodedId = decodeURIComponent(String(id || '')).trim()
   const local = resolveLocalEssaInvoice(decodedId)
-  if (local) return ensureInvoiceTimeline(local)
+  if (local && !isPersistedOcrUploadId(decodedId)) return ensureInvoiceTimeline(local)
 
   const persisted = await resolvePersistedEssaInvoice(decodedId)
+  if (persisted && local) {
+    return ensureInvoiceTimeline({ ...local, matrixUnread: persisted.matrixUnread || [] })
+  }
   if (persisted) return ensureInvoiceTimeline(persisted)
+  if (local) return ensureInvoiceTimeline(local)
 
   if (essaBackendEnabled()) {
     try {

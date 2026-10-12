@@ -23,8 +23,6 @@ import {
   TAB_INVOICE_CATEGORY,
   TAB_DOCUMENT_TYPES,
   TAB_FIELDS,
-  TAB_SAP_MAPPING,
-  TAB_VALIDATION_RULES,
   TAB_NWAY_MATCHING,
   INVOICE_CONFIG_TAB_IDS
 } from './invoiceConfigTabs'
@@ -32,8 +30,6 @@ import DocumentTypes, { MandatoryHelp, MandatoryToggleRow } from './DocumentType
 import InvoiceCategory from './InvoiceCategory'
 import { defaultCategoryId } from './documentTypeDefaults'
 import { buildPrompt, fieldSnippet, resolveFieldKind } from './extractionPromptText'
-import SapFieldMapping from './SapFieldMapping'
-import ValidationRules from './ValidationRules'
 import MatchRules from './NWayRules'
 import '../../../assets/scss/essa/dashboard.scss'
 import '../../../assets/scss/essa/prompt-config.scss'
@@ -787,12 +783,6 @@ const PromptConfig = () => {
                 }}
               />
             ) : null}
-          </div>
-          <div className={`ic-tab-panel${activeTab === TAB_SAP_MAPPING ? ' is-visible' : ''}`}>
-            <SapFieldMapping onViewRules={() => setActiveTab(TAB_VALIDATION_RULES)} />
-          </div>
-          <div className={`ic-tab-panel${activeTab === TAB_VALIDATION_RULES ? ' is-visible' : ''}`}>
-            <ValidationRules />
           </div>
           <div className={`ic-tab-panel${activeTab === TAB_NWAY_MATCHING ? ' is-visible' : ''}`}>
             {activeTab === TAB_NWAY_MATCHING ? <MatchRules /> : null}

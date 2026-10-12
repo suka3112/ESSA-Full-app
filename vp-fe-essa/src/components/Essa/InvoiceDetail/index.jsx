@@ -31,6 +31,7 @@ import { Skeleton } from '../ui/Skeleton'
 import { Tabs } from '../ui/Tabs'
 import { Input } from '../ui/Input'
 import { Badge } from '../ui/Badge'
+import { MatrixUnreadFields } from './MatrixUnreadFields'
 import { useEssaInvoice } from 'hooks/useEssaInvoice'
 import { usePoBasedInvoice } from 'hooks/usePoBasedInvoice'
 import { useEssaApproveInvoice } from 'hooks/useEssaInvoiceMutations'
@@ -85,7 +86,7 @@ import { fetchInvoiceTypePromptConfigByCode } from 'api/extractionPromptConfig'
 import { TimesheetManpowerPanels, hydrateTimesheetRow } from '../lib/TimesheetManpowerPanels'
 import { formatDynamicExtractCell } from '../lib/extractTables'
 import { PoValidationPanel } from '../lib/poValidationPanel'
-import NWayValidationPanel, { NWayViewToggle } from './NWayValidationPanel'
+import NWayValidationPanel from './NWayValidationPanel'
 import { formatChecklistPassBadgeText, getChecklistPassSummary } from '../lib/validationRuleCatalog'
 import {
   isNonPoInvoice,
@@ -1249,8 +1250,8 @@ function ExtractValidateTab({
   const firstSectionKey = sections[0]?.key ?? ''
   const [docTab, setDocTab] = useState('')
   const [extractionOpen, setExtractionOpen] = useState(true)
-  const [nWayView, setNWayView] = useState('list')
   const [nWaySummary, setNWaySummary] = useState(null)
+  const nWayOpen = nWaySummary ? (nWaySummary.fail || 0) + (nWaySummary.incomplete || 0) + (nWaySummary.pending || 0) : 0
   const nWayConfigHref =
     typeof window !== 'undefined' && window.location.pathname.startsWith(`/${ADMIN_USER_TYPE}`)
       ? `/${ADMIN_USER_TYPE}${PROMPT_CONFIG}?tab=n-way-matching`
@@ -1339,6 +1340,23 @@ function ExtractValidateTab({
 
   return (
     <div className="dx-extract-validate">
+      <div className="dx-extract-validate-head">
+        <div className="dx-extract-validate-head-left">
+          <h3 className="dx-extract-validate-title">Extract &amp; validate</h3>
+          <span className="dx-extract-validate-sub">
+            {isNonPo
+              ? 'Non-PO invoice — review extracted fields and HCIS validation'
+              : 'Review OCR-extracted fields and validation results for this invoice'}
+          </span>
+        </div>
+      </div>
+
+      <MatrixUnreadFields items={inv?.matrixUnread} />
+
+      {Array.isArray(inv?.matrixUnread) && inv.matrixUnread.length > 0 ? (
+        <div className="dx-ev-section-divider" role="separator" aria-hidden="true" />
+      ) : null}
+
       {sections.length > 0 ? (
         <div className="dx-ev-section dx-ev-section--card">
           <ExtractValidateSectionHeader
@@ -1437,13 +1455,12 @@ function ExtractValidateTab({
           badge={
             nWaySummary
               ? {
-                  text: `${nWaySummary.pass}/${nWaySummary.total - (nWaySummary.na || 0)} MATCHED`,
-                  label: `${nWaySummary.pass} matched, ${nWaySummary.fail} mismatched, ${nWaySummary.incomplete} not captured, ${nWaySummary.pending} awaiting source`,
-                  tone: nWaySummary.fail ? 'fail' : nWaySummary.incomplete ? 'neutral' : 'pass'
+                  text: nWayOpen ? `${nWayOpen} TO REVIEW` : 'ALL CLEAR',
+                  label: `${nWaySummary.fail || 0} mismatched, ${nWaySummary.incomplete || 0} not captured, ${nWaySummary.pending || 0} awaiting source`,
+                  tone: nWaySummary.fail ? 'fail' : nWayOpen ? 'neutral' : 'pass'
                 }
               : undefined
           }
-          actions={<NWayViewToggle view={nWayView} onChange={setNWayView} />}
         />
         <NWayValidationPanel
           inv={inv}
@@ -1453,7 +1470,6 @@ function ExtractValidateTab({
           isNonPo={isNonPo}
           invoiceTypeCode={resolvePromptConfigTypeCode(inv)}
           configHref={nWayConfigHref}
-          view={nWayView}
           onSummary={setNWaySummary}
         />
       </div>

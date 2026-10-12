@@ -1,10 +1,10 @@
 import {
-  CATEGORY_BY_CODE,
   COMPARE_MODES,
   FAIL_ACTIONS,
   REQUIREMENTS,
   RULE_TYPES,
   SERVICE_CATEGORY_CODES,
+  categoryLabel,
   sourceLabel
 } from './catalog'
 
@@ -20,7 +20,7 @@ export const scopeLabel = (rule) => {
   const isServices =
     cats.length === SERVICE_CATEGORY_CODES.length && SERVICE_CATEGORY_CODES.every((c) => cats.includes(c))
   if (isServices) return 'All service categories'
-  if (cats.length <= 2) return cats.map((c) => CATEGORY_BY_CODE[c]?.label || c).join(', ')
+  if (cats.length <= 2) return cats.map((c) => categoryLabel(c)).join(', ')
   return `${cats.length} categories`
 }
 

@@ -6,19 +6,25 @@ import {
 import logger from "../utils/logger";
 import {
   executeInvoiceApprovalMail,
+  executeInvoiceOcr,
+  executeInvoiceOcrInline,
   executeSlaTick,
   executeVendorSync,
 } from "./jobHandlers";
 import {
   INVOICE_APPROVAL_MAIL,
+  INVOICE_OCR_PROCESS,
   SLA_TICK,
   VENDOR_SYNC,
 } from "./jobs";
 import { registerQueuesAndSchedules } from "./register";
+import { bindInlineInvoiceOcr, bindInvoiceOcrBoss } from "./invoiceOcrQueue";
 
 let boss: PgBossInstance | null = null;
 let shuttingDown = false;
 let signalsWired = false;
+
+bindInlineInvoiceOcr(executeInvoiceOcrInline);
 
 function wrapWork(name: string, run: () => Promise<unknown>) {
   return async () => {
@@ -38,6 +44,20 @@ async function registerWorkers(instance: PgBossInstance): Promise<void> {
   await instance.work(
     INVOICE_APPROVAL_MAIL,
     wrapWork(INVOICE_APPROVAL_MAIL, executeInvoiceApprovalMail),
+  );
+  await instance.work(
+    INVOICE_OCR_PROCESS,
+    { includeMetadata: true, batchSize: 1 },
+    async (jobs) => {
+      for (const job of jobs) {
+        try {
+          await executeInvoiceOcr(job);
+        } catch (error) {
+          logger.error(`[scheduler] ${INVOICE_OCR_PROCESS} failed`, error);
+          throw error;
+        }
+      }
+    },
   );
 }
 
@@ -65,6 +85,7 @@ export async function startScheduler(): Promise<void> {
       logger.error("[scheduler] pg-boss error", err);
     });
     await boss.start();
+    bindInvoiceOcrBoss(boss);
     await registerQueuesAndSchedules(boss);
     await registerWorkers(boss);
     wireShutdownSignals();
@@ -87,5 +108,6 @@ export async function stopScheduler(): Promise<void> {
     logger.error("Scheduler stop failed", err);
   } finally {
     boss = null;
+    bindInvoiceOcrBoss(null);
   }
 }

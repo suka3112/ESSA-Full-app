@@ -7,6 +7,8 @@ import apInvoiceDocumentService, {
   DuplicateInvoiceError,
 } from "../helpers/apInvoiceDocument.service";
 import apInvoiceExtractService from "../helpers/apInvoiceExtract.service";
+import apInvoiceAsyncUploadService from "../helpers/apInvoiceAsyncUpload.service";
+import matrixDocumentReadService from "../helpers/matrixDocumentRead.service";
 import apEmailIntakeService from "../helpers/apEmailIntake.service";
 import apSharePointIntakeService from "../helpers/apSharePointIntake.service";
 import apDocumentRequestService from "../helpers/apDocumentRequest.service";
@@ -576,6 +578,51 @@ class ApInvoiceOcrController extends BaseController {
     }
   }
 
+  async acceptUploadedInvoice(req: any, res: any, next: NextFunction) {
+    try {
+      if (!req.file) {
+        throw new APIError(
+          "Invoice document is required",
+          StatusCodeEnum.HTTP_BAD_REQUEST,
+        );
+      }
+      const accepted = await apInvoiceAsyncUploadService.acceptUpload({
+        file: req.file,
+        documentType: req.body?.documentType,
+        invoiceWorkflow: req.body?.invoiceWorkflow,
+        uploadedBy: req.user?.id ?? null,
+      });
+      return await this.success(
+        req,
+        res,
+        this.status.HTTP_ACCEPTED,
+        accepted,
+        "Invoice accepted and queued for processing",
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async reprocessUploadedInvoice(req: any, res: any, next: NextFunction) {
+    try {
+      const documentId = Number(req.params?.documentId);
+      const accepted = await apInvoiceAsyncUploadService.reprocessFailedUpload(
+        documentId,
+        req.user?.id ?? null,
+      );
+      return await this.success(
+        req,
+        res,
+        this.status.HTTP_ACCEPTED,
+        accepted,
+        "Invoice queued for processing again",
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async listUploadedInvoices(req: any, res: any, next: NextFunction) {
     try {
       const rows = await apInvoiceDocumentService.listUploadedInvoices();
@@ -613,12 +660,18 @@ class ApInvoiceOcrController extends BaseController {
 
       const enrichedSnapshot =
         await apSesDocumentService.enrichExtractResponse(snapshot);
+      const primaryDocumentId = Number(enrichedSnapshot.primaryDocumentId);
+      const matrixUnread = await matrixDocumentReadService.listForDocument(
+        Number.isInteger(primaryDocumentId) && primaryDocumentId > 0
+          ? primaryDocumentId
+          : documentId,
+      );
 
       return await this.success(
         req,
         res,
         this.status.HTTP_OK,
-        enrichedSnapshot,
+        { ...enrichedSnapshot, matrixUnread },
         "Uploaded invoice retrieved successfully",
       );
     } catch (error) {

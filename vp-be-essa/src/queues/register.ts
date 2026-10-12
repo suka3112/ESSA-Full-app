@@ -4,6 +4,7 @@ import {
 } from "../config/scheduler";
 import {
   INVOICE_APPROVAL_MAIL,
+  INVOICE_OCR_PROCESS,
   SLA_TICK,
   VENDOR_SYNC,
 } from "./jobs";
@@ -60,4 +61,16 @@ export async function registerQueuesAndSchedules(
     await ensureExclusiveQueue(boss, queue.name, queue.retry);
     await boss.schedule(queue.name, queue.cron, null, { tz });
   }
+
+  const ocrRetry = {
+    retryLimit: 2,
+    retryDelay: 30,
+    retryBackoff: true,
+    expireInSeconds: 45 * 60,
+  };
+  const existingOcr = await boss.getQueue(INVOICE_OCR_PROCESS);
+  if (!existingOcr) {
+    await boss.createQueue(INVOICE_OCR_PROCESS, ocrRetry);
+  }
+  await boss.updateQueue(INVOICE_OCR_PROCESS, ocrRetry);
 }

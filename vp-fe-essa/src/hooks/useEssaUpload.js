@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-import { extractApDocument } from 'api/apInvoiceOcr'
+import { acceptApInvoiceUpload } from 'api/apInvoiceOcr'
 import { getEssaInvoiceSamples } from 'api/essaDashboard'
 
 export function useEssaUploadInvoice() {
   const [isPending, setIsPending] = useState(false)
 
-  const mutateAsync = useCallback(async ({ file, documentType = 'invoice', onProgress, invoiceWorkflow } = {}) => {
+  const mutateAsync = useCallback(async ({ file, documentType = 'invoice', invoiceWorkflow } = {}) => {
     setIsPending(true)
     try {
-      return await extractApDocument(file, documentType, { onProgress, invoiceWorkflow })
+      return await acceptApInvoiceUpload(file, documentType, { invoiceWorkflow })
     } finally {
       setIsPending(false)
     }

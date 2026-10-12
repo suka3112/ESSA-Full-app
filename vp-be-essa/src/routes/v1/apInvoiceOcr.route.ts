@@ -221,6 +221,34 @@ apInvoiceOcrRoutes.get(
     apInvoiceOcrController.getOcrSectionFile(req, res, next),
 );
 
+apInvoiceOcrRoutes.post(
+  "/uploads",
+  Authenticate.isValidateUser([
+    UserRole.VENDOR,
+    UserRole.FINANCE,
+    UserRole.BUSINESS,
+    UserRole.ADMIN,
+  ]),
+  (req, res, next) => {
+    apDocumentUpload.single("document")(req, res, (err) => {
+      if (err) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res.status(400).json({
+            success: false,
+            message: `File too large. Maximum upload size is ${getApDocumentMaxSizeMb()} MB.`,
+          });
+        }
+        return res.status(400).json({
+          success: false,
+          message: err.message || "File upload failed.",
+        });
+      }
+      next();
+    });
+  },
+  (req, res, next) => apInvoiceOcrController.acceptUploadedInvoice(req, res, next),
+);
+
 apInvoiceOcrRoutes.get(
   "/uploads",
   Authenticate.isValidateUser([
@@ -230,6 +258,18 @@ apInvoiceOcrRoutes.get(
     UserRole.ADMIN,
   ]),
   (req, res, next) => apInvoiceOcrController.listUploadedInvoices(req, res, next),
+);
+
+apInvoiceOcrRoutes.post(
+  "/uploads/:documentId/reprocess",
+  Authenticate.isValidateUser([
+    UserRole.VENDOR,
+    UserRole.FINANCE,
+    UserRole.BUSINESS,
+    UserRole.ADMIN,
+  ]),
+  (req, res, next) =>
+    apInvoiceOcrController.reprocessUploadedInvoice(req, res, next),
 );
 
 apInvoiceOcrRoutes.get(

@@ -1,23 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowDown, ArrowRight, ArrowUp, Check, ChevronDown, Plus, X } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUp, Check, Plus, X } from 'lucide-react'
 
 import { Drawer } from '../../ui/Drawer'
 import { Button } from '../../ui/Button'
 import {
-  CATEGORIES,
-  CATEGORY_BY_CODE,
-  DATA_POINT_OPTIONS,
   REQUIREMENT_LIST,
   RULE_TYPE_LIST,
-  SOURCES,
+  categoryLabel,
   isServerType,
   sourceChannel,
   sourceLabel
 } from '../../lib/nWay/catalog'
 import { describeRule } from '../../lib/nWay/ruleText'
 import {
+  dataPointOptionsForSource,
   fieldGroupsForTarget,
-  fieldOptionsForSource,
+  invoiceCategoryOptions,
   isFieldRef,
   sourceOptionsForScope,
   suggestTargetField,
@@ -74,15 +72,16 @@ const nextRuleKey = (allRules, scope) => {
   return `${major}.${String((used.length ? Math.max(...used) : 0) + 1).padStart(2, '0')}`
 }
 
-/** Documents first, then SAP master (DB), then other systems. */
+/** Document types for the invoice category first, then SAP and other systems. */
 const SOURCE_GROUPS = [
-  { label: 'Documents (invoice package / user upload)', channels: ['VENDOR_PDF', 'USER'] },
-  { label: 'DB — SAP master on the AP platform', channels: ['SAP'] },
+  { label: 'Document types', channels: ['VENDOR_PDF', 'USER'] },
+  { label: 'SAP', channels: ['SAP'] },
   { label: 'Other systems', channels: ['EXTERNAL', 'ESSA_SYSTEM'] }
 ]
 
-function SourceSelect({ value, onChange, options = SOURCES, exclude = [], ariaLabel }) {
-  const list = options.some((s) => s.code === value) ? options : [...options, ...SOURCES.filter((s) => s.code === value)]
+function SourceSelect({ value, onChange, options = [], exclude = [], ariaLabel }) {
+  const known = options.some((s) => s.code === value)
+  const list = known || !value ? options : [...options, { code: value, label: sourceLabel(value), channel: sourceChannel(value).code }]
   return (
     <select aria-label={ariaLabel} className="dx-select nw-select" value={value} onChange={(e) => onChange(e.target.value)}>
       {SOURCE_GROUPS.map((g) => {
@@ -123,7 +122,7 @@ function TargetFieldSelect({ value, groups, loading, dataPoint, onChange, ariaLa
 }
 
 /** Single dropdown, multi-select: “Common rule” or one or more invoice categories. */
-function CategorySelect({ scope, categories, onChange }) {
+function CategorySelect({ scope, categories, options = [], onChange }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
   useEffect(() => {
@@ -145,7 +144,7 @@ function CategorySelect({ scope, categories, onChange }) {
   const summary = common
     ? 'Common rule — all invoice categories'
     : picked.length
-      ? `${picked.slice(0, 2).map((c) => CATEGORY_BY_CODE[c]?.label || c).join(', ')}${picked.length > 2 ? ` +${picked.length - 2}` : ''}`
+      ? `${picked.slice(0, 2).map((c) => options.find((o) => o.code === c)?.label || categoryLabel(c)).join(', ')}${picked.length > 2 ? ` +${picked.length - 2}` : ''}`
       : 'Select categories…'
   const toggle = (code) => {
     const next = picked.includes(code) ? picked.filter((c) => c !== code) : [...picked, code]
@@ -156,7 +155,6 @@ function CategorySelect({ scope, categories, onChange }) {
     <div className="nw-multiselect" ref={ref}>
       <button type="button" className="dx-select nw-select nw-multiselect__btn" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
         <span>{summary}</span>
-        <ChevronDown size={14} aria-hidden />
       </button>
       {open ? (
         <div className="nw-multiselect__menu" role="listbox" aria-multiselectable="true" aria-label="Invoice category">
@@ -167,20 +165,37 @@ function CategorySelect({ scope, categories, onChange }) {
               <small>Applies to all invoice categories</small>
             </span>
           </button>
-          {['PO', 'NON_PO'].map((grp) => (
-            <div key={grp} className="nw-multiselect__group">
-              <span className="nw-multiselect__glabel">{grp === 'PO' ? 'PO invoices' : 'Non-PO invoices'}</span>
-              {CATEGORIES.filter((c) => c.group === grp).map((c) => {
-                const on = !common && picked.includes(c.code)
-                return (
-                  <button key={c.code} type="button" role="option" aria-selected={on} className={`nw-multiselect__opt${on ? ' is-on' : ''}`} onClick={() => toggle(c.code)}>
-                    <span className="nw-multiselect__box">{on ? <Check size={12} aria-hidden /> : null}</span>
-                    <span>{c.label}</span>
+          {picked.filter((code) => !options.some((o) => o.code === code)).length ? (
+            <div className="nw-multiselect__group">
+              <span className="nw-multiselect__glabel">Saved on this rule</span>
+              {picked
+                .filter((code) => !options.some((o) => o.code === code))
+                .map((code) => (
+                  <button key={code} type="button" role="option" aria-selected className="nw-multiselect__opt is-on" onClick={() => toggle(code)}>
+                    <span className="nw-multiselect__box"><Check size={12} aria-hidden /></span>
+                    <span>{categoryLabel(code)}</span>
                   </button>
-                )
-              })}
+                ))}
             </div>
-          ))}
+          ) : null}
+          {['PO', 'NON_PO'].map((grp) => {
+            const items = options.filter((c) => c.group === grp)
+            if (!items.length) return null
+            return (
+              <div key={grp} className="nw-multiselect__group">
+                <span className="nw-multiselect__glabel">{grp === 'PO' ? 'PO invoices' : 'Non-PO invoices'}</span>
+                {items.map((c) => {
+                  const on = !common && picked.includes(c.code)
+                  return (
+                    <button key={c.code} type="button" role="option" aria-selected={on} className={`nw-multiselect__opt${on ? ' is-on' : ''}`} onClick={() => toggle(c.code)}>
+                      <span className="nw-multiselect__box">{on ? <Check size={12} aria-hidden /> : null}</span>
+                      <span>{c.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          })}
         </div>
       ) : null}
     </div>
@@ -211,6 +226,7 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
   const [draft, setDraft] = useState(() => clone(rule || emptyMatchRule()))
   const [touched, setTouched] = useState(false)
   const { types, loading: fieldsLoading } = useCaptureTypes()
+  const categoryOptions = useMemo(() => invoiceCategoryOptions(types), [types])
 
   useEffect(() => {
     if (open) {
@@ -240,7 +256,7 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
   const addTarget = () =>
     setDraft((d) => {
       const used = new Set([d.source, ...d.targets.map((t) => t.doc)])
-      const next = SOURCES.find((s) => !used.has(s.code))
+      const next = (sourceOptions.length ? sourceOptions : []).find((s) => !used.has(s.code))
       if (!next) return d
       const field = suggestTargetField(fieldGroupsForTarget(types, d.scope, d.categories, next.code), d.dataKey)
       return { ...d, targets: [...d.targets, { doc: next.code, requirement: 'REQUIRED', field }] }
@@ -253,24 +269,28 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
 
   // Invoice Category → Source Document → Data Point
   const sourceOptions = useMemo(() => sourceOptionsForScope(types, draft.scope, draft.categories), [types, draft.scope, draft.categories])
+  useEffect(() => {
+    if (!open || fieldsLoading || draft.id) return
+    if (sourceOptions.some((s) => s.code === draft.source)) return
+    const next = sourceOptions.find((s) => s.fromCapture) || sourceOptions[0]
+    if (!next) return
+    setDraft((d) => ({ ...d, source: next.code, dataPoint: '', sourceField: '', dataKey: '' }))
+  }, [open, fieldsLoading, sourceOptions, draft.id, draft.source])
   const fieldOptions = useMemo(
-    () => fieldOptionsForSource(types, draft.scope, draft.categories, draft.source),
+    () => dataPointOptionsForSource(types, draft.scope, draft.categories, draft.source),
     [types, draft.scope, draft.categories, draft.source]
   )
   const dpValue = (() => {
     const byName = fieldOptions.find((f) => f.fieldName === draft.sourceField)
     if (byName) return `f:${byName.fieldName}`
-    if (!fieldOptions.length && DATA_POINT_OPTIONS.some((o) => o.value === draft.dataKey)) return `k:${draft.dataKey}`
+    const byKey = fieldOptions.find((f) => f.fieldName === draft.dataKey || f.dataKey === draft.dataKey)
+    if (byKey) return `f:${byKey.fieldName}`
     return draft.dataPoint ? 'current' : ''
   })()
   const pickDataPoint = (value) => {
-    if (value.startsWith('f:')) {
-      const f = fieldOptions.find((x) => x.fieldName === value.slice(2))
-      if (f) set({ dataPoint: f.label, sourceField: f.fieldName, dataKey: f.dataKey, targets: refollowTargets(f.dataKey) })
-    } else if (value.startsWith('k:')) {
-      const o = DATA_POINT_OPTIONS.find((x) => x.value === value.slice(2))
-      if (o) set({ dataPoint: o.label, sourceField: '', dataKey: o.value, targets: refollowTargets(o.value) })
-    }
+    if (!value.startsWith('f:')) return
+    const f = fieldOptions.find((x) => x.fieldName === value.slice(2))
+    if (f) set({ dataPoint: f.label, sourceField: f.fieldName, dataKey: f.dataKey, targets: refollowTargets(f.dataKey) })
   }
   // Targets still on the old data point's field (or none) move to the new data point's field.
   const refollowTargets = (dataKey) =>
@@ -333,7 +353,7 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
           <div className="nw-grid nw-grid--3">
             <div className="nw-field">
               <span>Invoice category</span>
-              <CategorySelect scope={draft.scope} categories={draft.categories} onChange={(patch) => set(patch)} />
+              <CategorySelect scope={draft.scope} categories={draft.categories} options={categoryOptions} onChange={(patch) => set(patch)} />
               {err('categories')}
             </div>
             <label className="nw-field">
@@ -349,17 +369,13 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
                 {!fieldsLoading && dpValue === 'current' ? <option value="current">{draft.dataPoint} (current)</option> : null}
                 {!fieldsLoading && fieldOptions.length
                   ? fieldOptions.map((f) => (
-                      <option key={f.fieldName} value={`f:${f.fieldName}`} title={`${f.docs.join(', ')} · ${f.types.join(', ')}`}>
+                      <option key={f.fieldName} value={`f:${f.fieldName}`} title={[f.docs.join(', '), f.types.join(', ')].filter(Boolean).join(' · ')}>
                         {f.label}
                       </option>
                     ))
                   : null}
                 {!fieldsLoading && !fieldOptions.length ? (
-                  <optgroup label={`${sourceLabel(draft.source)} has no Fields to Capture — standard data points`}>
-                    {DATA_POINT_OPTIONS.map((o) => (
-                      <option key={o.value} value={`k:${o.value}`}>{o.label}</option>
-                    ))}
-                  </optgroup>
+                  <option value="" disabled>No fields to capture on this document</option>
                 ) : null}
               </select>
               {err('dataPoint')}
@@ -406,7 +422,7 @@ export default function RuleEditor({ open, rule, allRules, saving, readOnly, onC
                           </small>
                         ) : null}
                       </span>
-                      <SourceSelect value={t.doc} onChange={(v) => pickTargetDoc(i, v)} exclude={[draft.source, ...draft.targets.map((x) => x.doc)]} ariaLabel={`Check against document ${i + 1}`} />
+                      <SourceSelect value={t.doc} options={sourceOptions} onChange={(v) => pickTargetDoc(i, v)} exclude={[draft.source, ...draft.targets.map((x) => x.doc)]} ariaLabel={`Check against document ${i + 1}`} />
                       <TargetFieldSelect
                         value={t.field || ''}
                         groups={targetGroups(t.doc)}

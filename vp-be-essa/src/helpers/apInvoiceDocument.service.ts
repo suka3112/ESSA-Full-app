@@ -25,9 +25,11 @@ import {
   inferDocTypeFromFileName,
   normalizeDocTypeKey,
 } from "./apDocumentTypeCanon";
+import { ASYNC_STATUS_DETAIL_FIELD } from "./apInvoiceAsyncUpload.logic";
 
 const LINE_ITEMS_FIELD = "__lineItems__";
 const PAYLOAD_FIELD = "__payload__";
+const EXTRACTED_DATA_FIELD = "extractedData";
 const BATCH_PRIMARY_FIELD = "__batchPrimary__";
 const BATCH_PRIMARY_ID_FIELD = "__batchPrimaryId__";
 const BATCH_SNAPSHOT_FIELD = "__batchSnapshot__";
@@ -78,6 +80,7 @@ const RESERVED_FIELD_NAMES = new Set([
   EMAIL_RECEIVED_AT_FIELD,
   EMAIL_VENDOR_ID_FIELD,
   EMAIL_VENDOR_MATCHED_FIELD,
+  EXTRACTED_DATA_FIELD,
   ...Object.values(STRUCTURED_ARRAY_FIELDS),
 ]);
 
@@ -174,6 +177,8 @@ type PersistExtractOptions = {
   sourceChannel?: "UPLOAD" | "EMAIL" | "SHAREPOINT";
   emailMeta?: PersistExtractEmailMeta;
   storedFilePath?: string | null;
+  /** Background upload already inserted ESSA_INVOICE for this package. */
+  skipEssaInvoiceUpsert?: boolean;
 };
 
 const PO_NUMBER_PATTERN = /\b(4203\d{6})\b/;
@@ -333,6 +338,8 @@ const INVOICE_TYPES = new Set([
 ]);
 const WORKFLOW_STAGES = new Set([
   "draft",
+  "processing",
+  "failed",
   "validated",
   "parked",
   "posted",
@@ -466,6 +473,7 @@ const applyLabelValueFields = (
     const label = asString(row.fieldName || row.name || row.label);
     const value = asString(row.fieldValue ?? row.value);
     if (!label || !value) continue;
+    if (!target[label]) target[label] = value;
 
     const lower = label.toLowerCase();
     if (
@@ -603,6 +611,17 @@ const extractManpowerNames = (raw: Record<string, unknown>): string | null => {
   return null;
 };
 
+/** Scalar cells from an extracted row, plus a few known aliases. Extra columns are kept. */
+const scalarRow = (record: Record<string, unknown>): Record<string, string | null> => {
+  const out: Record<string, string | null> = {};
+  for (const [key, value] of Object.entries(record)) {
+    if (value && typeof value === "object") continue;
+    const text = pickHeader(value);
+    if (text) out[key] = text;
+  }
+  return out;
+};
+
 const trimManhourSummaryRows = (
   rows: unknown[],
 ): Array<Record<string, string | null>> => {
@@ -611,6 +630,7 @@ const trimManhourSummaryRows = (
   return rows
     .map((row) => {
       const record = row as Record<string, unknown>;
+      const out = scalarRow(record);
       const overtime =
         pickHeader(record.overtimeManhour) ||
         [
@@ -620,13 +640,14 @@ const trimManhourSummaryRows = (
           .filter(Boolean)
           .join(" + ") ||
         null;
-
-      return {
-        name: pickHeader(record.name, record.manpowerName, record.employeeName),
-        role: pickHeader(record.role, record.position, record.manpowerRole),
-        regularManhour: pickHeader(record.regularManhour, record.regularManHour),
-        overtimeManhour: overtime,
-      };
+      const name = pickHeader(record.name, record.manpowerName, record.employeeName);
+      const role = pickHeader(record.role, record.position, record.manpowerRole);
+      const regular = pickHeader(record.regularManhour, record.regularManHour);
+      if (name) out.name = name;
+      if (role) out.role = role;
+      if (regular) out.regularManhour = regular;
+      if (overtime) out.overtimeManhour = overtime;
+      return out;
     })
     .filter((row) => Object.values(row).some(Boolean));
 };
@@ -639,14 +660,18 @@ const trimTimesheetRows = (
   return rows
     .map((row) => {
       const record = row as Record<string, unknown>;
-      return {
-        date: pickHeader(record.date),
-        username: pickHeader(record.username, record.employeeID, record.employeeId),
-        regularManhour: pickHeader(record.regularManhour, record.regularManHour),
-        overtimeManhour: pickHeader(record.overtimeManhour, record.overtimeManHour),
-        role: pickHeader(record.role, record.position),
-        name: pickHeader(record.name, record.manpowerName, record.employeeName),
-      };
+      const out = scalarRow(record);
+      const username = pickHeader(record.username, record.employeeID, record.employeeId);
+      const regular = pickHeader(record.regularManhour, record.regularManHour);
+      const overtime = pickHeader(record.overtimeManhour, record.overtimeManHour);
+      const role = pickHeader(record.role, record.position);
+      const name = pickHeader(record.name, record.manpowerName, record.employeeName);
+      if (username) out.username = username;
+      if (regular) out.regularManhour = regular;
+      if (overtime) out.overtimeManhour = overtime;
+      if (role) out.role = role;
+      if (name) out.name = name;
+      return out;
     })
     .filter((row) => Object.values(row).some(Boolean));
 };
@@ -659,11 +684,10 @@ const trimAttendanceRows = (
   return rows
     .map((row) => {
       const record = row as Record<string, unknown>;
-      return {
-        date: pickHeader(record.date),
-        username: pickHeader(record.username, record.employeeID, record.employeeId),
-        event: pickHeader(record.event),
-      };
+      const out = scalarRow(record);
+      const username = pickHeader(record.username, record.employeeID, record.employeeId);
+      if (username) out.username = username;
+      return out;
     })
     .filter((row) => Object.values(row).some(Boolean));
 };
@@ -676,15 +700,12 @@ const trimAppendixRows = (
   return rows
     .map((row) => {
       const record = row as Record<string, unknown>;
-      return {
-        unitPrice: pickHeader(record.unitPrice),
-        qty: pickHeader(record.qty, record.quantity),
-        roleOfManpower: pickHeader(
-          record.roleOfManpower,
-          record.role,
-          record.description,
-        ),
-      };
+      const out = scalarRow(record);
+      const qty = pickHeader(record.qty, record.quantity);
+      const role = pickHeader(record.roleOfManpower, record.role, record.description);
+      if (qty) out.qty = qty;
+      if (role) out.roleOfManpower = role;
+      return out;
     })
     .filter((row) => Object.values(row).some(Boolean));
 };
@@ -777,6 +798,13 @@ const canonicalizeExtractionFields = (
       break;
   }
 
+  for (const [key, value] of Object.entries(headerSource)) {
+    if (out[key] || RESERVED_FIELD_NAMES.has(key)) continue;
+    if (value && typeof value === "object") continue;
+    const text = pickHeader(value);
+    if (text) out[key] = text;
+  }
+
   return out;
 };
 
@@ -815,6 +843,33 @@ const trimStructuredArrays = (
   return trimmed;
 };
 
+const collectExtractedTables = (
+  raw: Record<string, unknown>,
+): Record<string, unknown[]> => {
+  const tables: Record<string, unknown[]> = {};
+  const skip = new Set(["pages", "fields", "header"]);
+  for (const [key, value] of Object.entries(raw)) {
+    if (skip.has(key) || key.startsWith("__")) continue;
+    if (!Array.isArray(value) || value.length === 0) continue;
+    if (!value.every((row) => row && typeof row === "object" && !Array.isArray(row))) {
+      continue;
+    }
+    tables[key] = value;
+  }
+  return tables;
+};
+
+/** Header scalars plus extracted tables, keyed by the Fields to Capture field name. */
+const buildExtractedData = (
+  result: NormalizedOcrDocument,
+): Record<string, unknown> => {
+  const raw = (result.raw || {}) as Record<string, unknown>;
+  return {
+    ...result.header,
+    ...collectExtractedTables(raw),
+  };
+};
+
 const buildSlimPayload = (result: NormalizedOcrDocument): Record<string, unknown> => {
   const raw = (result.raw || {}) as Record<string, unknown>;
   const configHash =
@@ -828,6 +883,7 @@ const buildSlimPayload = (result: NormalizedOcrDocument): Record<string, unknown
     pdfUrl: raw.pdfUrl,
     pages: raw.pages,
     header: result.header,
+    extractedData: buildExtractedData(result),
     extractionMethod: raw.extractionMethod,
     detectedDocumentType: raw.detectedDocumentType,
     documentTypeLabel: raw.documentTypeLabel,
@@ -1434,6 +1490,13 @@ class ApInvoiceDocumentService {
       });
     }
 
+    const extractedData = buildExtractedData(result);
+    rows.push({
+      DocumentId: documentId,
+      FieldName: EXTRACTED_DATA_FIELD,
+      FieldValue: JSON.stringify(extractedData),
+    });
+
     rows.push({
       DocumentId: documentId,
       FieldName: PAYLOAD_FIELD,
@@ -1739,7 +1802,7 @@ class ApInvoiceDocumentService {
         FieldValue: JSON.stringify(snapshot),
       });
       const primaryDocument = await ApDocument.findByPk(primaryDocumentId);
-      if (primaryDocument) {
+      if (primaryDocument && !options.skipEssaInvoiceUpsert) {
         await this.upsertEssaInvoiceFromSnapshot(
           primaryDocumentId,
           snapshot,
@@ -2455,7 +2518,7 @@ class ApInvoiceDocumentService {
     documentId: number,
     failedChecks: number,
     overallStatus: string,
-    options: { workflowStage?: string | null } = {},
+    options: { workflowStage?: string | null; openExceptions?: number | null } = {},
   ): Promise<void> {
     const row = await EssaInvoice.findOne({ where: { DocumentId: documentId } });
     if (!row) return;
@@ -2472,6 +2535,7 @@ class ApInvoiceDocumentService {
           : "review";
     await row.update({
       FailedChecks: failedChecks,
+      ...(options.openExceptions != null ? { OpenExceptions: options.openExceptions } : {}),
       WorkflowStage: nextStage,
       SlaBreached: !!(slaDue && slaDue.getTime() < Date.now()),
       ModifiedDt: new Date(),
@@ -2752,6 +2816,23 @@ class ApInvoiceDocumentService {
       }),
     ]);
 
+    const documentIds = rows.map((row) => Number(row.DocumentId)).filter((id) => id > 0);
+    const detailRows = documentIds.length
+      ? await ApDocumentExtraction.findAll({
+          where: {
+            DocumentId: { [Op.in]: documentIds },
+            FieldName: ASYNC_STATUS_DETAIL_FIELD,
+          },
+          attributes: ["DocumentId", "FieldValue"],
+        })
+      : [];
+    const statusDetailByDocument = new Map<number, string>();
+    for (const detail of detailRows) {
+      if (detail.FieldValue) {
+        statusDetailByDocument.set(Number(detail.DocumentId), detail.FieldValue);
+      }
+    }
+
     const objectIds = rows.map((row) => String(row.DocumentId));
     const instances = await slaService.openInstancesForObjects("INVOICE", objectIds);
     const instanceByObject = new Map<string, (typeof instances)[number]>();
@@ -2791,6 +2872,7 @@ class ApInvoiceDocumentService {
           invoice_workflow: derived.invoice_workflow,
           status: row.WorkflowStage,
           workflow_stage: row.WorkflowStage,
+          status_detail: statusDetailByDocument.get(Number(row.DocumentId)) || null,
           failed_checks: Number(row.FailedChecks) || 0,
           failed_rules: failedRulesByDocument.get(Number(row.DocumentId)) || [],
           openExceptions: Number(row.OpenExceptions) || 0,

@@ -1,7 +1,9 @@
 /** SAP lifecycle labels shown in invoice list / dashboard tables. */
 export const WORKFLOW_STAGE = {
   draft: { label: 'Draft', shortLabel: 'Draft', tone: 'draft' },
-  validated: { label: 'Resubmit invoice', shortLabel: 'Resubmit invoice', tone: 'validated' },
+  processing: { label: 'Processing', shortLabel: 'Processing', tone: 'processing' },
+  failed: { label: 'Failed', shortLabel: 'Failed', tone: 'failed' },
+  validated: { label: 'Validated', shortLabel: 'Validated', tone: 'validated' },
   parked: { label: 'Invoice parked to SAP', shortLabel: 'Parked', tone: 'parked' },
   posted: { label: 'Invoice posted to SAP', shortLabel: 'Posted to SAP', tone: 'posted' },
   paid: { label: 'Invoice paid', shortLabel: 'Paid', tone: 'paid' },
@@ -12,6 +14,8 @@ export const WORKFLOW_STAGE = {
 /** Invoice list filter tabs — aligned with workflow status column. */
 export const INVOICE_STATUS_PILLS = [
   { key: 'all', label: 'All', params: {} },
+  { key: 'processing', label: 'Processing', params: { workflow_stage: 'processing' } },
+  { key: 'failed', label: 'Failed', params: { workflow_stage: 'failed' } },
   { key: 'draft', label: 'Draft', params: { workflow_stage: 'draft' } },
   { key: 'validated', label: 'Validated', params: { workflow_stage: 'validated' } },
   { key: 'parked', label: 'Parked', params: { workflow_stage: 'parked' } },
@@ -66,6 +70,8 @@ export function resolveWorkflowStage(inv = {}) {
 
   if (status === 'paid') return stage('paid')
   if (status === 'rejected') return stage('rejected')
+  if (status === 'failed') return stage('failed')
+  if (status === 'processing') return stage('processing')
   if (status === 'draft') return stage('draft')
 
   if (status === 'posted' || status === 'approved') {
@@ -111,6 +117,8 @@ export function resolveLegacyFilterStage(params = {}) {
   if (overall === 'review') return 'review'
   if (status === 'paid') return 'paid'
   if (status === 'posted') return 'posted'
+  if (status === 'failed') return 'failed'
+  if (status === 'processing') return 'processing'
   if (status === 'parked' || status === 'pending_approval') return 'parked'
   if (status === 'draft') return 'draft'
   if (status === 'extracted' || status === 'validated') return 'validated'
@@ -144,6 +152,20 @@ export function resolveNextAction(inv = {}) {
     return {
       label: 'Awaiting Docs',
       tone: 'review'
+    }
+  }
+
+  if (stageKey === 'processing' || status === 'processing') {
+    return {
+      label: 'Processing',
+      tone: 'review'
+    }
+  }
+
+  if (stageKey === 'failed' || status === 'failed') {
+    return {
+      label: 'Processing failed',
+      tone: 'danger'
     }
   }
 

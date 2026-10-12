@@ -79,7 +79,6 @@ class InvoiceConfigController extends BaseController {
       next(error);
     }
   }
-  /* ── N-way match rules (check A against B) ───────────────────────── */
 
   async listMatchRules(req: any, res: any, next: NextFunction) {
     try {

@@ -30,6 +30,7 @@ import logger, { errorMeta } from "./utils/logger";
 import cron from "node-cron";
 import { isSchedulerEnabled } from "./config/scheduler";
 import { startScheduler } from "./queues";
+import apInvoiceAsyncUploadService from "./helpers/apInvoiceAsyncUpload.service";
 import apEmailIntakeService from "./helpers/apEmailIntake.service";
 import {
   isEmailIntakeEnabled,
@@ -235,6 +236,12 @@ verifyDBConnection()
       await startScheduler();
     } catch (err) {
       logger.error("Scheduler failed to start:", err);
+    }
+
+    try {
+      await apInvoiceAsyncUploadService.recoverStuckProcessing();
+    } catch (err) {
+      logger.error("Processing-invoice recovery failed:", err);
     }
 
     // Email invoice intake — M365 shared mailbox poll (disabled unless EMAIL_INTAKE_ENABLED=true)

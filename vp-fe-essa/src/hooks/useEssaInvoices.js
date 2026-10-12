@@ -54,5 +54,27 @@ export function useEssaInvoices(params = {}) {
     return () => window.removeEventListener(DEMO_INVOICES_CHANGED, onDemoInvoicesChanged)
   }, [refetch])
 
+  const hasProcessing = data.some((row) => {
+    const stage = String(row?.workflow_stage || row?.status || '').toLowerCase()
+    return stage === 'processing'
+  })
+
+  useEffect(() => {
+    if (!hasProcessing) return undefined
+    const timer = setInterval(() => {
+      getEssaInvoices(params)
+        .then((result) => {
+          const rows = Array.isArray(result) ? result : result?.data || []
+          setData(rows)
+          setTotal(Array.isArray(result) ? result.length : result?.total ?? rows.length)
+          setCounts(Array.isArray(result) ? null : result?.counts || null)
+        })
+        .catch(() => {
+          // Keep the current rows. The next tick retries.
+        })
+    }, 8000)
+    return () => clearInterval(timer)
+  }, [hasProcessing, paramsKey])
+
   return { data, total, counts, isLoading, error, refetch }
 }

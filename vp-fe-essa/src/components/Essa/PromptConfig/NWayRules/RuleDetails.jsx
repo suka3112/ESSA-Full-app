@@ -1,7 +1,7 @@
 import { Pencil, Trash2 } from 'lucide-react'
 import { Drawer } from '../../ui/Drawer'
 import { Button } from '../../ui/Button'
-import { sourceChannel, sourceLabel } from '../../lib/nWay/catalog'
+import { isRuleDisabledFor, sourceChannel, sourceLabel } from '../../lib/nWay/catalog'
 import { Marker, TypeChip } from '../../lib/nWay/NWayChips'
 import { describeRule, requirementLabel, scopeLabel, typeLabel } from '../../lib/nWay/ruleText'
 
@@ -20,7 +20,7 @@ function Fact({ label, children }) {
  */
 export default function RuleDetails({ rule, categoryCode, readOnly, saving, onClose, onEdit, onToggleOff, onDelete }) {
   const open = Boolean(rule)
-  const offHere = rule && categoryCode && (rule.disabledCategories || []).includes(categoryCode)
+  const offHere = rule && categoryCode && isRuleDisabledFor(rule, categoryCode)
   const compares = (rule?.targets || []).filter((t) => t.requirement !== 'EXTRACT')
   const extracts = (rule?.targets || []).filter((t) => t.requirement === 'EXTRACT')
 

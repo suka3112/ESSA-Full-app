@@ -24,13 +24,15 @@
  *     comparisons: [Comparison], evaluatedBy, linkedCheck }
  */
 import {
-  CATEGORY_BY_CODE,
   COMMON,
   DATA_POINTS,
-  SOURCE_BY_CODE,
   categoryForInvoiceType,
+  categoryLabel,
+  isRuleDisabledFor,
+  ruleListsCategory,
   sourceLabel
 } from './catalog'
+import { sourceMeta } from './captureFields'
 
 /* ── Normalisation ────────────────────────────────────────────────────── */
 
@@ -171,9 +173,9 @@ const firstDigits = (s) => {
  * connected – false when the source is not integrated yet (Coretax, history, …)
  */
 export const resolveSourceValue = (sourceCode, dataKey, ctx) => {
-  const src = SOURCE_BY_CODE[sourceCode]
+  const src = sourceMeta(sourceCode)
   const { inv = {}, sections = [], checklist = [] } = ctx
-  if (!src) return { present: false, connected: false, value: null }
+  if (!sourceCode || !src) return { present: false, connected: false, value: null }
 
   // 1. Extracted document section
   const section = sections.find(
@@ -326,9 +328,9 @@ export const compareValues = (a, b, { ruleType, kind, criteria = {}, requirement
 
 export const ruleAppliesToCategory = (rule, categoryCode) => {
   if (!rule || rule.status === 'INACTIVE') return false
-  if (categoryCode && (rule.disabledCategories || []).includes(categoryCode)) return false
+  if (categoryCode && isRuleDisabledFor(rule, categoryCode)) return false
   if (rule.scope === 'COMMON' || !rule.scope) return true
-  return Boolean(categoryCode) && (rule.categories || []).includes(categoryCode)
+  return Boolean(categoryCode) && ruleListsCategory(rule, categoryCode)
 }
 
 export const rulesForCategory = (rules = [], categoryCode) =>
@@ -392,7 +394,7 @@ export const evaluateRule = (rule, ctx) => {
   })
 
   const src = valueOf(rule.source)
-  const srcMeta = SOURCE_BY_CODE[rule.source]
+  const srcMeta = sourceMeta(rule.source)
 
   // Availability-only rule: the source document just has to be in the package
   if (rule.ruleType === 'AVAILABILITY') {
@@ -436,7 +438,7 @@ export const evaluateRule = (rule, ctx) => {
           status = 'skipped'
           detail = 'Not in this invoice — optional'
         } else {
-          const vendorDoc = SOURCE_BY_CODE[to]?.channel === 'VENDOR_PDF'
+          const vendorDoc = sourceMeta(to)?.channel === 'VENDOR_PDF'
           status = vendorDoc ? 'missing' : 'unavailable'
           detail = vendorDoc ? `${sourceLabel(to)} missing from the bundle` : `${sourceLabel(to)} has no data for this invoice`
         }
@@ -530,7 +532,7 @@ export const evaluateInvoice = ({ rules = [], inv = {}, sections = [], checklist
   const ctx = { inv, sections, checklist }
   const applicable = rules
     .filter((r) => r.status !== 'DRAFT')
-    .filter((r) => ruleAppliesToCategory(r, categoryCode))
+    .filter((r) => ruleAppliesToCategory(r, invoiceTypeCode || categoryCode))
     .slice()
     .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
   const results = applicable.map((rule) => evaluateRule(rule, ctx))
@@ -538,7 +540,7 @@ export const evaluateInvoice = ({ rules = [], inv = {}, sections = [], checklist
   results.sort((a, b) => order[a.status] - order[b.status] || (a.rule.displayOrder || 0) - (b.rule.displayOrder || 0))
   return {
     categoryCode,
-    categoryLabel: categoryCode ? CATEGORY_BY_CODE[categoryCode]?.label : 'Common rules only',
+    categoryLabel: invoiceTypeCode ? categoryLabel(invoiceTypeCode) : 'Common rules only',
     results,
     summary: summarize(results)
   }

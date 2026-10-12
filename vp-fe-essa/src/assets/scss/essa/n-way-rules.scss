@@ -1836,3 +1836,48 @@ body.nw-fullview-open { overflow: hidden; }
   }
   &__opt.is-on &__box { background: #2e7d32; border-color: #2e7d32; }
 }
+
+/* Invoice detail — flat N-way table (source → check with) */
+.dx-ev-section--card > .nw-panel {
+  padding: 0 16px;
+  gap: 12px;
+}
+.nw-flat-wrap {
+  border: 1px solid $nw-line;
+  border-radius: 10px;
+  overflow: auto;
+  background: #fff;
+}
+.nw-flat {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  th {
+    position: sticky;
+    top: 0;
+    background: #f9fafb;
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: $nw-soft;
+    white-space: nowrap;
+    border-bottom: 1px solid $nw-line;
+  }
+  td { padding: 10px 12px; vertical-align: top; line-height: 1.45; border-top: 1px solid $nw-line-soft; }
+  tr.is-first td { border-top-color: $nw-line; }
+  tbody tr:first-child td { border-top: 0; }
+
+  &__dp { font-weight: 600; min-width: 120px; padding-left: 10px !important; border-left: 3px solid transparent; }
+  &__doc { min-width: 96px; }
+  &__docname { display: block; }
+  &__tag { display: block; margin-top: 2px; font-size: 11px; color: $nw-mute; white-space: nowrap; }
+  &__dpname { display: block; }
+  &__result { white-space: nowrap; padding-top: 8px !important; }
+  &__row--fail &__dp { border-left-color: #dc2626; }
+  &__row--incomplete &__dp { border-left-color: #f59e0b; }
+  &__row--pending &__dp { border-left-color: #93c5fd; }
+  &__id { display: block; color: $nw-mute; font-size: 11px; font-weight: 500; margin-bottom: 2px; }
+  &__val { display: block; margin-top: 2px; color: $nw-mute; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

@@ -1,20 +1,31 @@
 /**
  * N-way match rules ("check A against B") — admin CRUD.
  *
- * Table: AP_MATCH_RULE (db/migrations/032_AP_MATCH_RULE_PG.sql).
- * The table is seeded from src/json/matchRulesSeed.json on first read, so a fresh
- * environment always has the rule set agreed on the 25 Sep 2026 requirement call.
- * The seed file is generated from the frontend catalog
- * (vp-fe-essa/src/components/Essa/lib/nWay/seedRules.js) — keep them in sync.
+ * The screen reads and writes cfg."VALIDATION_RULE" (migrations 033 / 034)
+ * through matrixScreenRules.service.ts. AP_MATCH_RULE (migration 032) and the
+ * JSON seeds stay in this file, commented out of the request path, so they
+ * can be restored. ensureMatchRuleTable() still runs so the test sync can
+ * read which of those rules are ACTIVE.
  */
 import fs from "fs";
 import path from "path";
-import { Op } from "sequelize";
 import { sequelize } from "../config/sequelize";
 import { ApMatchRule } from "../models/apMatchRule";
 import { APIError } from "../utils/apiError.utils";
 import { StatusCodeEnum } from "../utils/enums/status.enum";
 import seedRules from "../json/matchRulesSeed.json";
+import matrixDrafts from "../json/matchRulesMatrixDraft.json";
+import {
+  createCfgMatchRule,
+  deleteCfgMatchRule,
+  listCfgMatchRules,
+  restoreCfgMatchRules,
+  updateCfgMatchRule,
+} from "./matrixScreenRules.service";
+
+// Retained with the archived AP_MATCH_RULE path below. Not used by the screen.
+void seedRules;
+void matrixDrafts;
 
 const RULE_TYPES = ["EXACT", "LOGICAL", "CALCULATION", "TOLERANCE", "UNIQUENESS", "AUTHENTICITY", "AVAILABILITY", "CALCULATION_TOLERANCE", "EXACT_UNIQUENESS", "AUTHENTICATE"];
 const MATCH_LEVELS = ["HEADER", "LINE", "WORKER"];
@@ -212,6 +223,10 @@ export function ensureMatchRuleTable(): Promise<void> {
   return tableReady;
 }
 
+/*
+ * Archived AP_MATCH_RULE screen path. Not called.
+ * The N-way screen uses cfg."VALIDATION_RULE" instead.
+ *
 async function seedIfEmpty(userId?: number | null) {
   await ensureMatchRuleTable();
   const count = await ApMatchRule.count({ where: { IsDeleted: false } });
@@ -226,8 +241,31 @@ async function seedIfEmpty(userId?: number | null) {
   return true;
 }
 
+// Insert rule-logic rows that are not already stored. Always DRAFT, so the
+// invoice screen (which skips DRAFT) does not start failing on them.
+// Existing keys — including the active seed — are not updated.
+async function importMatrixDraftsIfMissing(userId?: number | null) {
+  const existing = await ApMatchRule.findAll({
+    attributes: ["RuleKey"],
+    where: { IsDeleted: false },
+  });
+  const have = new Set(existing.map((row) => row.RuleKey));
+  const fresh = (matrixDrafts as Json[]).filter((rule) => !have.has(String(rule.ruleKey)));
+  if (!fresh.length) return 0;
+  await ApMatchRule.bulkCreate(
+    fresh.map((rule) => ({
+      ...toAttributes({ ...rule, status: "DRAFT" }),
+      DisplayOrder: rule.displayOrder ?? 0,
+      IsDeleted: false,
+      CreatedBy: userId ?? null,
+    })) as any[],
+  );
+  return fresh.length;
+}
+
 export async function listMatchRules(userId?: number | null) {
   const seeded = await seedIfEmpty(userId);
+  const matrixDraftsAdded = await importMatrixDraftsIfMissing(userId);
   const rows = await ApMatchRule.findAll({
     where: { IsDeleted: false },
     order: [
@@ -235,7 +273,7 @@ export async function listMatchRules(userId?: number | null) {
       ["RuleId", "ASC"],
     ],
   });
-  return { seeded, rules: rows.map(serializeMatchRule) };
+  return { seeded, matrixDraftsAdded, rules: rows.map(serializeMatchRule) };
 }
 
 async function assertKeyFree(ruleKey: string, exceptId?: number) {
@@ -292,7 +330,7 @@ export async function deleteMatchRule(ruleIdRaw: unknown, userId?: number | null
   return { ruleId: Number(row.RuleId), deleted: true };
 }
 
-/** Soft-delete every rule and reseed the agreed defaults. */
+// Soft-delete every rule and reseed the agreed defaults.
 export async function restoreDefaultMatchRules(userId?: number | null) {
   await ensureMatchRuleTable();
   await ApMatchRule.update(
@@ -300,4 +338,25 @@ export async function restoreDefaultMatchRules(userId?: number | null) {
     { where: { IsDeleted: false } },
   );
   return listMatchRules(userId);
+}
+*/
+
+export async function listMatchRules(userId?: number | null) {
+  return listCfgMatchRules(userId);
+}
+
+export async function createMatchRule(body: Json, userId?: number | null) {
+  return createCfgMatchRule(body, userId);
+}
+
+export async function updateMatchRule(ruleIdRaw: unknown, body: Json, userId?: number | null) {
+  return updateCfgMatchRule(ruleIdRaw, body, userId);
+}
+
+export async function deleteMatchRule(ruleIdRaw: unknown, userId?: number | null) {
+  return deleteCfgMatchRule(ruleIdRaw, userId);
+}
+
+export async function restoreDefaultMatchRules(userId?: number | null) {
+  return restoreCfgMatchRules(userId);
 }

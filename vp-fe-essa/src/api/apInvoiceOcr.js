@@ -31,6 +31,43 @@ export const AP_INVOICE_OCR_SHAREPOINT_INTAKE_INBOUND =
   '/ap-invoice-ocr/sharepoint-intake/inbound'
 export const AP_INVOICE_OCR_SHAREPOINT_INTAKE_POLL = '/ap-invoice-ocr/sharepoint-intake/poll'
 
+/** Store the file and queue OCR. Returns as soon as the processing row exists. */
+export const acceptApInvoiceUpload = async (
+  file,
+  documentType = 'invoice',
+  { invoiceWorkflow } = {}
+) => {
+  const formData = new FormData()
+  formData.append('document', file)
+  formData.append('documentType', documentType || 'invoice')
+  formData.append('invoiceWorkflow', String(invoiceWorkflow || 'AUTO').toUpperCase())
+
+  const response = await axiosInstance.post(AP_INVOICE_OCR_UPLOADS, formData, {
+    timeout: 120000,
+    transformRequest: [
+      (data, headers) => {
+        if (typeof FormData !== 'undefined' && data instanceof FormData) {
+          if (headers && typeof headers.delete === 'function') {
+            headers.delete('Content-Type')
+          } else if (headers) {
+            delete headers['Content-Type']
+          }
+        }
+        return data
+      }
+    ]
+  })
+  return response?.data?.data || response?.data
+}
+
+/** Queue OCR again for an invoice whose background processing failed. */
+export const reprocessApInvoiceUpload = async (documentId) => {
+  const response = await axiosInstance.post(
+    `${AP_INVOICE_OCR_UPLOADS}/${encodeURIComponent(documentId)}/reprocess`
+  )
+  return response?.data?.data || response?.data
+}
+
 const normalizeSourceChannel = (value) => {
   const channel = String(value || 'UPLOAD').toUpperCase()
   if (channel === 'EMAIL') return 'EMAIL'
@@ -8321,7 +8358,8 @@ export const fetchPersistedUploadDetail = async (id) => {
       email_from: snapshot.emailFrom || snapshot.email_from || null,
       email_subject: snapshot.emailSubject || snapshot.email_subject || null,
       email_received_at: snapshot.emailReceivedAt || snapshot.email_received_at || null,
-      email_message_id: snapshot.emailMessageId || snapshot.email_message_id || null
+      email_message_id: snapshot.emailMessageId || snapshot.email_message_id || null,
+      matrixUnread: Array.isArray(snapshot.matrixUnread) ? snapshot.matrixUnread : []
     }
   } catch {
     return null

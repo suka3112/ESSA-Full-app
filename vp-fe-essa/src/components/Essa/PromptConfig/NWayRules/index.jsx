@@ -12,7 +12,8 @@ import {
   restoreDefaultMatchRules,
   updateMatchRule
 } from '../../../../api/matchRules'
-import { CATEGORIES, CATEGORY_BY_CODE, COMMON, RULE_TYPE_LIST, sourceLabel } from '../../lib/nWay/catalog'
+import { COMMON, RULE_TYPE_LIST, categoryAliases, categoryLabel, isRuleDisabledFor, ruleListsCategory, sourceLabel } from '../../lib/nWay/catalog'
+import { invoiceCategoryOptions, useCaptureTypes } from '../../lib/nWay/captureFields'
 import { rulesToCsv } from '../../lib/nWay/ruleText'
 import { RuleChain, TypeChip } from '../../lib/nWay/NWayChips'
 import RuleEditor, { emptyMatchRule } from './RuleEditor'
@@ -104,6 +105,8 @@ export default function MatchRules() {
   }, [fullView, editing, detailId])
   const [pendingDelete, setPendingDelete] = useState(null)
   const [confirmRestore, setConfirmRestore] = useState(false)
+  const { types: captureTypes, loading: categoriesLoading } = useCaptureTypes()
+  const categoryOptions = useMemo(() => invoiceCategoryOptions(captureTypes), [captureTypes])
 
   const readOnly = origin !== 'server'
 
@@ -123,7 +126,7 @@ export default function MatchRules() {
   /* ── Derived ───────────────────────────────────────────────────────── */
   const categoryRules = useMemo(() => {
     if (cat === COMMON) return rules.filter((r) => r.scope !== 'CATEGORY')
-    return rules.filter((r) => r.scope !== 'CATEGORY' || (r.categories || []).includes(cat))
+    return rules.filter((r) => r.scope !== 'CATEGORY' || ruleListsCategory(r, cat))
   }, [rules, cat])
 
   const filtered = useMemo(() => {
@@ -145,10 +148,10 @@ export default function MatchRules() {
     const specific = filtered.filter((r) => r.scope === 'CATEGORY')
     const inherited = filtered.filter((r) => r.scope !== 'CATEGORY')
     return [
-      { key: 'specific', title: `${CATEGORY_BY_CODE[cat]?.label} only`, hint: 'Specific to this category', rules: specific, emptyText: categoryRules.some((r) => r.scope === 'CATEGORY') ? 'No category rules match the filters.' : 'No category-specific rules yet. Common rules already apply.' },
+      { key: 'specific', title: `${categoryLabel(cat)} only`, hint: 'Specific to this category', rules: specific, emptyText: categoryRules.some((r) => r.scope === 'CATEGORY') ? 'No category rules match the filters.' : 'No category-specific rules yet. Common rules already apply.' },
       { key: 'inherited', title: 'Inherited from Common', hint: 'Edit in Common rules · switch off per category', rules: inherited }
     ]
-  }, [filtered, cat, categoryRules])
+  }, [filtered, cat, categoryRules, categoryOptions])
 
   const detailRule = useMemo(() => rules.find((r) => r.id === detailId) || null, [rules, detailId])
 
@@ -157,7 +160,7 @@ export default function MatchRules() {
   /* ── Actions ───────────────────────────────────────────────────────── */
   const guard = () => {
     if (!readOnly) return true
-    showEssaErrorToast('Rules service not reachable', 'Run migration 030 and restart the API to save changes.')
+    showEssaErrorToast('Rules service not reachable', 'Run migration 033 and restart the API to save changes.')
     return false
   }
 
@@ -191,16 +194,17 @@ export default function MatchRules() {
 
   const toggleOffHere = async (rule) => {
     if (!guard() || cat === COMMON) return
-    const off = (rule.disabledCategories || []).includes(cat)
+    const aliases = categoryAliases(cat)
+    const off = isRuleDisabledFor(rule, cat)
     const disabledCategories = off
-      ? rule.disabledCategories.filter((c) => c !== cat)
+      ? (rule.disabledCategories || []).filter((c) => !aliases.includes(String(c).toUpperCase()))
       : [...(rule.disabledCategories || []), cat]
     setSaving(true)
     try {
       const saved = await updateMatchRule(rule.id, { disabledCategories })
       if (saved) replaceRule({ ...saved, id: saved.id ?? saved.ruleId })
       invalidateMatchRulesCache()
-      showEssaSuccessToast(off ? 'Rule switched on' : 'Rule switched off', `${rule.ruleKey} for ${CATEGORY_BY_CODE[cat]?.label}`)
+      showEssaSuccessToast(off ? 'Rule switched on' : 'Rule switched off', `${rule.ruleKey} for ${categoryLabel(cat)}`)
     } catch (err) {
       showEssaErrorToast('Could not update rule', apiError(err))
     } finally {
@@ -277,9 +281,9 @@ export default function MatchRules() {
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
-  const catName = cat === COMMON ? 'Common rules' : CATEGORY_BY_CODE[cat]?.label
+  const catName = cat === COMMON ? 'Common rules' : categoryLabel(cat)
 
-  const visibleCats = CATEGORIES.filter((c) => !catQuery.trim() || c.label.toLowerCase().includes(catQuery.trim().toLowerCase()))
+  const visibleCats = categoryOptions.filter((c) => !catQuery.trim() || c.label.toLowerCase().includes(catQuery.trim().toLowerCase()))
 
   const openDetails = (id) => {
     setSelectedId(id)
@@ -339,18 +343,22 @@ export default function MatchRules() {
                 <small>Apply to every category</small>
               </span>
             </button>
-            {['PO', 'NON_PO'].map((group) => (
-              <div key={group}>
-                <div className="nw-rail__group">{group === 'PO' ? 'PO invoices' : 'Non-PO invoices'}</div>
-                {visibleCats
-                  .filter((c) => c.group === group)
-                  .map((c) => (
+            {categoriesLoading ? <div className="nw-rail__group">Loading invoice categories…</div> : null}
+            {!categoriesLoading && !categoryOptions.length ? <div className="nw-rail__group">No invoice categories yet</div> : null}
+            {['PO', 'NON_PO'].map((group) => {
+              const items = visibleCats.filter((c) => c.group === group)
+              if (!items.length) return null
+              return (
+                <div key={group}>
+                  <div className="nw-rail__group">{group === 'PO' ? 'PO invoices' : 'Non-PO invoices'}</div>
+                  {items.map((c) => (
                     <button key={c.code} type="button" className={`nw-rail__item${cat === c.code ? ' is-active' : ''}`} onClick={() => setCat(c.code)}>
                       <span>{c.label}</span>
                     </button>
                   ))}
-              </div>
-            ))}
+                </div>
+              )
+            })}
           </div>
         </aside>
 
@@ -427,7 +435,7 @@ export default function MatchRules() {
                   </div>
                   {!g.rules.length ? <div className="nw-group__empty">{g.emptyText || 'No rules match the filters.'}</div> : null}
                   {g.rules.map((r) => {
-                    const off = cat !== COMMON && (r.disabledCategories || []).includes(cat)
+                    const off = cat !== COMMON && isRuleDisabledFor(r, cat)
                     const isSel = selectedId === r.id
                     return (
                       <button key={r.id} type="button" className={`nw-row${isSel ? ' is-selected' : ''}${off ? ' is-off' : ''}`} onClick={() => openDetails(r.id)}>

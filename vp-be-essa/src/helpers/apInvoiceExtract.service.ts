@@ -88,6 +88,18 @@ export type ExtractAndPersistInput = {
   /** Why this extract started (new inbound vs retry). Logged only. */
   extractReason?: string | null;
   inboundRef?: string | null;
+  /**
+   * Background portal upload already created the ESSA_INVOICE row.
+   * Persist the package without inserting a second invoice.
+   */
+  skipEssaInvoiceUpsert?: boolean;
+  /** Where the original upload bytes were stored, copied onto AP_DOCUMENT. */
+  storedFilePath?: string | null;
+  /**
+   * Portal background job: missing mandatory documents and an unresolved
+   * invoice type still persist so the list row can move to review.
+   */
+  reviewOnIncomplete?: boolean;
 };
 
 export type ExtractAndPersistResult = {
@@ -187,8 +199,11 @@ class ApInvoiceExtractService {
     // DOCREQ merge and mailbox/SharePoint intake: vendor replies often only
     // contain the requested supporting docs (Tax Invoice, Berita Acara), not a
     // full Invoice + PO bundle. Skip the catalog hard-stop so OCR still extracts.
+    const reviewOnIncomplete = input.reviewOnIncomplete === true;
     const skipMandatoryDocuments =
-      !createsNewInvoice || isReviewPersistChannel(sourceChannel);
+      !createsNewInvoice ||
+      isReviewPersistChannel(sourceChannel) ||
+      reviewOnIncomplete;
 
     if (
       !createsNewInvoice &&
@@ -527,25 +542,28 @@ class ApInvoiceExtractService {
     };
 
     if (response.data?.data?.status === "needs_invoice_type_review") {
-      const reviewMessage =
-        String(response.data?.message || "").trim() ||
-        "Invoice type needs manual review before extraction.";
-      // Upload and SharePoint share this gate. Email already has a subject category.
-      if (sourceChannel !== "EMAIL") {
-        return {
-          httpStatus: 422,
-          body: {
-            ...response.data,
-            message: reviewMessage,
-            extractionTrace: {
-              ...extractionTrace,
-              needsInvoiceTypeReview: true,
+      // Email/SharePoint already set workflow; still allow persist so finance can review
+      if (!isReviewPersistChannel(sourceChannel) && !reviewOnIncomplete) {
+        const reviewMessage =
+          String(response.data?.message || "").trim() ||
+          "Invoice type needs manual review before extraction.";
+        // Upload and SharePoint share this gate. Email already has a subject category.
+        if (sourceChannel !== "EMAIL") {
+          return {
+            httpStatus: 422,
+            body: {
+              ...response.data,
+              message: reviewMessage,
+              extractionTrace: {
+                ...extractionTrace,
+                needsInvoiceTypeReview: true,
+              },
             },
-          },
-          primaryDocumentId: null,
-          success: false,
-          status: "needs_invoice_type_review",
-        };
+            primaryDocumentId: null,
+            success: false,
+            status: "needs_invoice_type_review",
+          };
+        }
       }
       logger.warn(
         `[OCR][${traceId}] ${sourceChannel} intake: needs_invoice_type_review — continuing to persist for review`,
@@ -690,7 +708,8 @@ class ApInvoiceExtractService {
         configHashesByOcrType,
         sourceChannel,
         emailMeta: input.emailMeta,
-        storedFilePath: null as string | null,
+        storedFilePath: input.storedFilePath ?? null,
+        skipEssaInvoiceUpsert: input.skipEssaInvoiceUpsert === true,
       };
 
       const mergePrimaryId = Number(input.mergeIntoPrimaryDocumentId);

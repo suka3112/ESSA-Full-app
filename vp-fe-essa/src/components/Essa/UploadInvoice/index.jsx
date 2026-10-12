@@ -13,7 +13,7 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import { connect } from 'react-redux'
-import { showEssaErrorToast, showExtractionSuccessToast } from '../lib/essaToast'
+import { showEssaErrorToast, showEssaSuccessToast } from '../lib/essaToast'
 import {
   buildInvoiceDetailPath,
   prepareUploadInvoiceDetail
@@ -31,8 +31,6 @@ import {
   enrichInvoiceWithBackendSes,
   isOcrPreviewDocumentType,
   detectInvoiceWorkflow,
-  parseDuplicateInvoiceExtractError,
-  parseMissingMandatoryExtractError,
   OCR_DOCUMENT_TYPES,
 } from 'api/apInvoiceOcr'
 import { formatExtractElapsed } from 'api/extractionTrace'
@@ -467,133 +465,50 @@ function EssaUploadInvoice({ userInfo: { userType: userTypeFromStore } }) {
 
     setIsProcessing(true)
     let workingDocs = documents
-    let blockedByDuplicate = false
+    let accepted = 0
 
     for (const { doc, index } of pending) {
-      const patchProgress = (patch) => {
-        setDocuments((prev) => updateAt(prev, index, patch))
-      }
-
-      patchProgress({ status: 'extracting', extractProgress: 0 })
-
+      workingDocs = updateAt(workingDocs, index, { status: 'extracting', extractProgress: 40 })
+      setDocuments(workingDocs)
       try {
         const res = await upload.mutateAsync({
           file: doc.file,
           documentType: doc.documentType,
-          invoiceWorkflow,
-          onProgress: (progressInfo) => {
-            const progress =
-              typeof progressInfo === 'number' ? progressInfo : progressInfo?.progress
-            const extractPhase =
-              typeof progressInfo === 'object' ? progressInfo?.phase : null
-            const extractTraceId =
-              typeof progressInfo === 'object' ? progressInfo?.traceId : null
-            patchProgress({
-              status: 'extracting',
-              extractProgress: progress,
-              extractPhase,
-              extractTraceId
-            })
-          }
+          invoiceWorkflow
         })
-
-        if (res.isClassifiedBatch && res.batchDocuments?.length) {
-          const classifiedDocs = res.batchDocuments.map((batchDoc, batchIndex) => ({
-            ...batchDoc,
-            file: doc.file,
-            topLevelValidation: res.topLevelValidation ?? batchDoc.topLevelValidation ?? null,
-            classification: res.classification ?? batchDoc.classification ?? null,
-            po_extract_fields: res.merged?.po_extract_fields ?? batchDoc.po_extract_fields ?? null,
-            extract_field_schemas:
-              res.merged?.extract_field_schemas ?? batchDoc.extract_field_schemas ?? null,
-            ...(batchIndex === 0
-              ? {
-                  extract_doc_pdfs: res.merged?.extract_doc_pdfs || null,
-                  splitSections: res.splitSections || []
-                }
-              : {})
-          }))
-          workingDocs = [
-            ...workingDocs.slice(0, index),
-            ...classifiedDocs,
-            ...workingDocs.slice(index + 1)
-          ]
-        } else {
-          workingDocs = updateAt(workingDocs, index, {
-            status: 'done',
-            extractProgress: 100,
-            id: res.id,
-            documentId: res.documentId,
-            documentType: res.documentType,
-            invoice_no: res.extracted?.invoice_no,
-            vendor_name: res.extracted?.vendor_name,
-            po_number: res.extracted?.po_number,
-            total_amount: res.extracted?.total_amount,
-            currency: res.extracted?.currency,
-            overall: res.validation?.overall,
-            confidence: res.validation?.confidence,
-            validation: res.validation,
-            ocr: res.ocr,
-            validation_extraction: res.validation_extraction,
-          })
-        }
+        accepted += 1
+        workingDocs = updateAt(workingDocs, index, {
+          status: 'done',
+          extractProgress: 100,
+          id: res?.id,
+          documentId: res?.documentId,
+          invoice_no: res?.invoice_no
+        })
         setDocuments(workingDocs)
       } catch (e) {
-        const duplicate = parseDuplicateInvoiceExtractError(e)
-        if (duplicate) {
-          blockedByDuplicate = true
-          setDuplicateDialog({
-            open: true,
-            invoiceNumber: duplicate.invoiceNumber,
-            fileName: doc.file.name
-          })
-          setLastError(`${doc.file.name}: ${duplicate.message}`)
-          workingDocs = updateAt(workingDocs, index, {
-            status: 'failed',
-            error: duplicate.message,
-            extractProgress: 0
-          })
-          setDocuments(workingDocs)
-          continue
-        }
-
-        const missingRequired = parseMissingMandatoryExtractError(e)
-        if (missingRequired) {
-          setMissingDocsDialog({
-            open: true,
-            missing: missingRequired.missing,
-            fileName: doc.file.name,
-            message: missingRequired.message
-          })
-          showEssaErrorToast('Required documents missing', missingRequired.message)
-          setLastError(`${doc.file.name}: ${missingRequired.message}`)
-          workingDocs = updateAt(workingDocs, index, {
-            status: 'failed',
-            error: missingRequired.message,
-            extractProgress: 0
-          })
-          setDocuments(workingDocs)
-          continue
-        }
-
         const rawMessage = e?.response?.data?.message || e.message
-        const isTimeout =
-          e?.code === 'ECONNABORTED' || /timeout/i.test(String(rawMessage || ''))
-        const message = isTimeout
-          ? 'Extraction timed out. Ensure vp-be-essa is running and retry — large PO bundles can take several minutes.'
-          : rawMessage
+        const message = rawMessage || 'The invoice could not be stored.'
         setLastError(`${doc.file.name}: ${message}`)
-        workingDocs = updateAt(workingDocs, index, { status: 'failed', error: message, extractProgress: 0 })
+        showEssaErrorToast('Upload failed', `${doc.file.name}: ${message}`)
+        workingDocs = updateAt(workingDocs, index, {
+          status: 'failed',
+          error: message,
+          extractProgress: 0
+        })
         setDocuments(workingDocs)
       }
     }
 
     setIsProcessing(false)
 
-    const succeeded = workingDocs.filter((d) => d.status === 'done')
-    if (succeeded.length > 0 && !blockedByDuplicate) {
-      showExtractionSuccessToast(succeeded.length)
-      await goToCombinedInvoiceDetail(workingDocs)
+    if (accepted > 0) {
+      showEssaSuccessToast(
+        'Invoice queued',
+        accepted === 1
+          ? 'The invoice is processing in the background. Status on the invoices list will change when validation finishes.'
+          : `${accepted} invoices are processing in the background. The invoices list will update when validation finishes.`
+      )
+      navigate(invoicesPath)
     }
   }
 
@@ -953,8 +868,7 @@ function EssaUploadInvoice({ userInfo: { userType: userTypeFromStore } }) {
                   <div className="essa-upload-footer-hint">
                     {isStagingPhase ? (
                       <>
-                        {stagedCount} document{stagedCount !== 1 ? 's' : ''} ready · add more unique types
-                        or click Next to run OCR
+                        {stagedCount} document{stagedCount !== 1 ? 's' : ''} ready · upload to process in the background
                       </>
                     ) : isProcessing || upload.isPending ? (
                       batchExtractionProgress.label || 'Processing documents…'
@@ -971,7 +885,7 @@ function EssaUploadInvoice({ userInfo: { userType: userTypeFromStore } }) {
                         onClick={handleProcessAll}
                         disabled={stagedCount === 0}
                       >
-                        Next — Run OCR <Play size={14} />
+                        Upload <Play size={14} />
                       </Button>
                     ) : (
                       <>
