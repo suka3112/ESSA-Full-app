@@ -1332,6 +1332,11 @@ function buildScalarFields(schemaId, schema, extraction) {
         getHeaderValue(extraction.header, ["Kode dan Nomor Seri Faktur Pajak"]) || null;
     }
     fields.date = findFakturPajakDate(extraction, fields, pairs, schema);
+    fields.invoiceDate =
+      fields.invoiceDate || fields.taxInvoiceDate || fields.date || null;
+    fields.taxInvoiceDate = fields.taxInvoiceDate || fields.invoiceDate || null;
+    fields.fakturPajakNumber = fields.fakturPajakNumber || fields.taxInvoiceNumber || null;
+    fields.fakturPajakDate = fields.fakturPajakDate || fields.invoiceDate || null;
     if (!fields.vatAmount) {
       fields.vatAmount =
         getFieldValueByName(extraction.fields, [
@@ -1342,6 +1347,8 @@ function buildScalarFields(schemaId, schema, extraction) {
         getHeaderValue(extraction.header, ["vatAmount", "Jumlah PPN"]) ||
         fields.vatAmount;
     }
+    fields.taxAmount = fields.taxAmount || fields.vatAmount || null;
+    fields.fakturPajakValue = fields.fakturPajakValue || fields.vatAmount || null;
   }
 
   if (schemaId === "notice") {

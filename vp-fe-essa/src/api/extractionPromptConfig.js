@@ -1,8 +1,17 @@
 import axiosInstance from '../services/axiosSetup'
 import { resolveDocumentTypeDefaults } from '../components/Essa/PromptConfig/documentTypeDefaults'
 import { resolveFieldKind } from '../components/Essa/PromptConfig/extractionPromptText'
+import { cfgCodesForInvoiceType } from '../components/Essa/lib/nWay/catalog'
 
 export const EXTRACTION_PROMPT_CONFIG = '/extraction-prompt-config/prompt-config'
+/** Invoice Category, Document Types, and Fields to Capture. Backed by schema cfg. */
+export const CFG_INVOICE_CONFIG = '/invoice-config/cfg'
+export const CFG_INVOICE_CATEGORY = (invoiceCategoryId) =>
+  `${CFG_INVOICE_CONFIG}/invoice-categories/${invoiceCategoryId}`
+export const CFG_INVOICE_CATEGORY_DOCUMENTS = (invoiceCategoryId) =>
+  `${CFG_INVOICE_CATEGORY(invoiceCategoryId)}/documents`
+export const CFG_INVOICE_CATEGORY_DOCUMENT = (invoiceCategoryId, linkId) =>
+  `${CFG_INVOICE_CATEGORY_DOCUMENTS(invoiceCategoryId)}/${linkId}`
 export const EXTRACTION_PROMPT_CATEGORIES = '/extraction-prompt-config/prompt-config/categories'
 export const EXTRACTION_PROMPT_CATEGORY = (categoryId) =>
   `/extraction-prompt-config/prompt-config/categories/${categoryId}`
@@ -52,6 +61,44 @@ export async function fetchPromptConfig() {
   return response?.data?.data || null
 }
 
+/** Matrix invoice categories, documents, and fields (cfg schema). */
+export async function fetchCfgInvoiceConfig() {
+  const response = await axiosInstance.get(CFG_INVOICE_CONFIG)
+  return response?.data?.data || null
+}
+
+export async function fetchCfgInvoiceCategory(invoiceCategoryId) {
+  const response = await axiosInstance.get(CFG_INVOICE_CATEGORY(invoiceCategoryId))
+  return response?.data?.data || null
+}
+
+export async function saveCfgInvoiceDocuments(invoiceCategoryId, documents) {
+  const response = await axiosInstance.put(CFG_INVOICE_CATEGORY_DOCUMENTS(invoiceCategoryId), {
+    documents
+  })
+  return response?.data?.data || null
+}
+
+export async function createCfgInvoiceDocument(invoiceCategoryId, { name, isMandatory = false }) {
+  const response = await axiosInstance.post(CFG_INVOICE_CATEGORY_DOCUMENTS(invoiceCategoryId), {
+    name,
+    isMandatory
+  })
+  return response?.data?.data || null
+}
+
+export async function deleteCfgInvoiceDocument(invoiceCategoryId, linkId) {
+  const response = await axiosInstance.delete(CFG_INVOICE_CATEGORY_DOCUMENT(invoiceCategoryId, linkId))
+  return response?.data?.data || null
+}
+
+export async function renameCfgInvoiceDocument(invoiceCategoryId, linkId, { name }) {
+  const response = await axiosInstance.patch(CFG_INVOICE_CATEGORY_DOCUMENT(invoiceCategoryId, linkId), {
+    name
+  })
+  return response?.data?.data || null
+}
+
 /** Resolve saved Prompt Builder text for a category/type code (e.g. NON_PO). */
 export async function fetchPromptTextByInvoiceTypeCode(code) {
   const tree = await fetchPromptConfig()
@@ -66,6 +113,22 @@ export async function fetchPromptTextByInvoiceTypeCode(code) {
     }
   }
   return null
+}
+
+/**
+ * Invoice-category documents and fields from cfg, matched by the app invoice-type
+ * code or its matrix alias (MANPOWER_SERVICES → MANPOWER_OUTSOURCING).
+ */
+export async function fetchCfgInvoiceTypeByCode(code) {
+  const tree = await fetchCfgInvoiceConfig()
+  const wanted = String(code || '').trim().toUpperCase()
+  const aliases = new Set(cfgCodesForInvoiceType(wanted))
+  const types = (tree?.categories || []).flatMap((category) => category.invoiceTypes || [])
+  return (
+    types.find((type) => String(type.code || '').trim().toUpperCase() === wanted) ||
+    types.find((type) => aliases.has(String(type.code || '').trim().toUpperCase())) ||
+    null
+  )
 }
 
 /** Resolve invoice-type detail (enabled docs, fields, configHash) by type code. */

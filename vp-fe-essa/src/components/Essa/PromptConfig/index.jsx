@@ -8,14 +8,13 @@ import { Dialog } from '../ui/Dialog'
 import {
   applyInvoiceTypeDetail,
   buildDocumentsPayload,
-  createInvoiceTypeDocument,
-  deleteInvoiceTypeDocument,
-  fetchPromptConfig,
+  createCfgInvoiceDocument,
+  deleteCfgInvoiceDocument,
+  fetchCfgInvoiceCategory,
+  fetchCfgInvoiceConfig,
   mapPromptConfigToUiState,
-  regenerateInvoiceTypePrompt,
-  renameInvoiceTypeDocument,
-  saveInvoiceTypeDocuments,
-  saveInvoiceTypePrompt
+  renameCfgInvoiceDocument,
+  saveCfgInvoiceDocuments
 } from '../../../api/extractionPromptConfig'
 import { showEssaErrorToast, showEssaSuccessToast } from '../lib/essaToast'
 import {
@@ -26,7 +25,7 @@ import {
   TAB_NWAY_MATCHING,
   INVOICE_CONFIG_TAB_IDS
 } from './invoiceConfigTabs'
-import DocumentTypes, { MandatoryHelp, MandatoryToggleRow } from './DocumentTypes'
+import DocumentTypes from './DocumentTypes'
 import InvoiceCategory from './InvoiceCategory'
 import { defaultCategoryId } from './documentTypeDefaults'
 import { buildPrompt, fieldSnippet, resolveFieldKind } from './extractionPromptText'
@@ -171,7 +170,7 @@ const PromptConfig = () => {
   const loadConfig = useCallback(async () => {
     setLoading(true)
     try {
-      const tree = await fetchPromptConfig()
+      const tree = await fetchCfgInvoiceConfig()
       const mapped = mapPromptConfigToUiState(tree)
       setInvoiceTypes(mapped.invoiceTypes)
       setConfigs(mapped.configs)
@@ -354,7 +353,7 @@ const PromptConfig = () => {
     setRenamingDocId(typeDocumentId)
     try {
       const persisted = await persistDocuments(activeType, sourceConfigs)
-      const detail = await renameInvoiceTypeDocument(persisted.type.invoiceTypeId, typeDocumentId, {
+      const detail = await renameCfgInvoiceDocument(persisted.type.invoiceTypeId, typeDocumentId, {
         name: nextName
       })
       const { merged, nextType } = applyInvoiceTypeDetailToUi(
@@ -431,7 +430,7 @@ const PromptConfig = () => {
 
   const persistDocuments = async (type, typeConfigs) => {
     const payload = buildDocumentsPayload(type, typeConfigs[type.id])
-    const detail = await saveInvoiceTypeDocuments(type.invoiceTypeId, payload)
+    const detail = await saveCfgInvoiceDocuments(type.invoiceTypeId, payload)
     const merged = applyInvoiceTypeDetail(typeConfigs, promptMeta, detail)
     setConfigs(merged.configs)
     setPromptMeta(merged.promptMeta)
@@ -549,7 +548,7 @@ const PromptConfig = () => {
     setAddingDoc(true)
     try {
       const persisted = await persistDocuments(type, configs)
-      const detail = await createInvoiceTypeDocument(persisted.type.invoiceTypeId, {
+      const detail = await createCfgInvoiceDocument(persisted.type.invoiceTypeId, {
         name,
         isEnabled: true,
         isMandatory: Boolean(extras.mandatory)
@@ -631,7 +630,7 @@ const PromptConfig = () => {
         showEssaErrorToast('Cannot remove document', 'Missing document id. Save and try again.')
         return
       }
-      const detail = await deleteInvoiceTypeDocument(persisted.type.invoiceTypeId, typeDocumentId)
+      const detail = await deleteCfgInvoiceDocument(persisted.type.invoiceTypeId, typeDocumentId)
       const { merged, nextType } = applyInvoiceTypeDetailToUi(
         detail,
         persisted.configs,
@@ -672,9 +671,7 @@ const PromptConfig = () => {
     setGenerating(true)
     try {
       const persisted = await persistDocuments(activeType, configs)
-      const detail = await regenerateInvoiceTypePrompt(activeType.invoiceTypeId, {
-        force: isManual
-      })
+      const detail = await fetchCfgInvoiceCategory(activeType.invoiceTypeId)
       const merged = applyInvoiceTypeDetail(persisted.configs, persisted.promptMeta, detail)
       setConfigs(merged.configs)
       setPromptMeta(merged.promptMeta)
@@ -709,10 +706,7 @@ const PromptConfig = () => {
         activeType,
         configs
       )
-      const detail = await saveInvoiceTypePrompt(activeType.invoiceTypeId, {
-        promptText,
-        isManuallyEdited: edited
-      })
+      const detail = await fetchCfgInvoiceCategory(activeType.invoiceTypeId)
       const merged = applyInvoiceTypeDetail(nextConfigs, nextMeta, detail)
       setConfigs(merged.configs)
       setPromptMeta(merged.promptMeta)
@@ -969,30 +963,10 @@ const PromptConfig = () => {
                       <p>
                         {activeType.subtype} · {activeType.category}
                         {activeDocCfg.enabled ? '' : ' · document not included in extraction'}
-                        {activeDocCfg.mandatory ? ' · required for extraction' : ''}
                         {renamingDocId === activeDocCfg.typeDocumentId ? ' · Saving…' : ''}
                       </p>
                     </div>
                     <div className="prompt-config__toolbar-actions">
-                      <span className="prompt-config__toolbar-mandatory">
-                        <span className="prompt-config__th-with-help">
-                          Required for extraction
-                          <MandatoryHelp />
-                        </span>
-                        <label className="prompt-config-switch">
-                          <input
-                            type="checkbox"
-                            checked={Boolean(activeDocCfg.mandatory)}
-                            disabled={busy}
-                            onChange={(e) =>
-                              toggleMandatory(activeType, activeDoc, e.target.checked)
-                            }
-                          />
-                          <span className="prompt-config-switch__track">
-                            <span className="prompt-config-switch__thumb" />
-                          </span>
-                        </label>
-                      </span>
                       <button
                         type="button"
                         className="prompt-config__btn-ghost"
@@ -1092,14 +1066,6 @@ const PromptConfig = () => {
                       <p>{activeType?.subtype}</p>
                     </div>
                     <div className="prompt-config__inspect-body">
-                      <MandatoryToggleRow
-                        id="pc-fields-doc-mandatory"
-                        checked={Boolean(activeDocCfg.mandatory)}
-                        disabled={busy}
-                        onChange={(mandatory) =>
-                          toggleMandatory(activeType, activeDoc, mandatory)
-                        }
-                      />
                       <p className="prompt-config__field-help" style={{ fontSize: 12.5, marginTop: 0 }}>
                         {activeDocCfg.fields.length} field
                         {activeDocCfg.fields.length === 1 ? '' : 's'} configured for this

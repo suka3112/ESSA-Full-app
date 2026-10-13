@@ -93,17 +93,21 @@ invoice is on another page of the bundle).
 `.trim();
 
 const FAKTUR_PAJAK_HINTS = `
-Faktur Pajak / Indonesian tax invoice:
-- taxInvoiceNumber — "Kode dan Nomor Seri Faktur Pajak" exactly as printed (15–17 digit
-  e-Faktur serial). Do not confuse with commercial invoice number.
-- date — REQUIRED tax invoice date. Use the signing / issuance date on this Faktur Pajak page.
-  Primary source: "Tempat dan Tanggal Ditandatangani" (place + date, e.g. "JAKARTA, 18 Desember 2025").
-  If that block is unclear, use the date printed beside the QR code at the bottom of the page
-  ("Tanggal Faktur" / e-Faktur stamp date) — this is the same tax invoice date for VAT purposes.
-  Put the date portion only in header.date (e.g. "18 December 2025"), not the place name.
-  Also add fields[] row: { "fieldName": "Tempat dan Tanggal Ditandatangani", "fieldValue": "<full line>" }.
-- vatAmount — "Jumlah PPN (Pajak Pertambahan Nilai)" / PPN amount exactly as printed.
-- Read seller and buyer blocks, DPP, and tax base if visible; keep header scalars only.
+Faktur Pajak / e-Faktur. Read this page only. Do not copy values from the commercial invoice.
+Write these header keys. Preserve printed separators (2.320.421,00). Leave a key null when the label is absent.
+
+- taxInvoiceNumber — "Kode dan Nomor Seri Faktur Pajak", the 15–17 digit e-Faktur serial
+  (example 04002600351668820). Never put 651/PT.ALE-PAU/09/2026 here.
+- invoiceDate — date only from "Tempat dan Tanggal Ditandatangani", or the date beside the QR
+  ("Tanggal Faktur"). Drop the city. Also set taxInvoiceDate to the same value.
+- vatAmount — "Jumlah PPN (Pajak Pertambahan Nilai)" exactly as printed. Also set taxAmount to the same value.
+- invoiceAmount — "Dasar Pengenaan Pajak" (DPP / Harga Jual / Penggantian). Not Jumlah PPN.
+- vendorName — seller name under Pengusaha Kena Pajak (Nama). Example PT. AMANAH LESTARI ENERGY.
+- vendorNpwp — NPWP printed under the seller block. Keep the dotted NPWP format.
+- essaCompanyName — buyer name under Pembeli Barang Kena Pajak / Penerima Jasa (Nama).
+- invoiceNumber — "Referensi" only when it prints the commercial invoice number. Otherwise null.
+- itemDescription — "Nama Barang Kena Pajak / Jasa Kena Pajak".
+- fakturPajakNumber, fakturPajakDate, and fakturPajakValue — copy taxInvoiceNumber, invoiceDate, and vatAmount.
 `.trim();
 
 const NOTICE_HINTS = `
@@ -125,26 +129,27 @@ const BERITA_ACARA_HINTS = `
 Berita Acara / Work Progress Certificate (English and/or Bahasa Indonesia).
 Common titles: "Berita Acara", "Berita Acara Serah Terima Pekerjaan", "Work Progress Certificate".
 
-HEADER fields:
-- poNumber — PO / Contract Order number (e.g. "4203000546").
-  Labels: "PO No", "Nomor PO", "Contract Order No", "Purchase Order".
-  Must be a 10-digit number starting with 420x. NEVER use an invoice number as poNumber.
-  Only extract from THIS Berita Acara page — never from other documents in the bundle.
-- periodStart — start of the work / claim period.
-  Labels: "Period From", "Periode Mulai", "From", "Start Date".
-- periodEnd — end of the work / claim period.
-  Labels: "Period To", "Periode Akhir", "To", "End Date".
-- serviceName — service / activity / project title for the work covered.
-  Labels: "Service Name", "Activity", "Nama Pekerjaan", "Scope of Work".
+HEADER fields — write these exact header keys:
+- vendorName — the contractor who did the work. On these ALE certificates that is PT. AMANAH LESTARI ENERGY
+  (letterhead, Penyedia, Kontraktor, or Pihak Kedua). Not a signatory's personal name and not PT. PANCA AMARA UTAMA.
+- essaCompanyName — the ESSA / owner company the work is certified to. Example PT. PANCA AMARA UTAMA
+  (Pemberi Kerja, Pemilik, Pihak Pertama, or the company receiving the work). Not the contractor.
+- poNumber — "Nomor Kontrak / Contract Number". Drop a leading "PO". 10 digits starting 4203,
+  for example 4203000794. Never use an invoice number. Only from this certificate.
+- percentageCompletion — the "This Period" / "Periode Ini" percentage only.
+  Example: Previous Period | This Period 7,44% | Cumulative 64,35% → return "7,44%".
+  Never use Cumulative or Previous Period. Also set pctThisPeriod to the same value.
+- manhourQuantity — "This Manhours" / "This Man Hours" for this period only, for example 408,00.
+  Do not use Previous manhours or Cumulative manhours. Also set manhoursThisPeriod to the same value.
+- overtimeQuantity — overtime / lembur hours for this period only, when a separate OT figure is printed.
+  Leave null when the certificate only shows This Manhours. Do not copy This Manhours into overtime.
+- periodStart / periodEnd — the claim period next to this progress, for example 20 July - 19 August 2026.
+  If the page also prints a contract window such as 20 January 2026 - 19 January 2027, do not use that longer range.
+- serviceName — "Paket Pekerjaan / Work Package", for example Manpower Supply for FRP (Pipe Fitter & Craftsman).
 
 WORK PROGRESS SUMMARY — read this block carefully and completely:
-- manhourPercentageCompletion — completion percentage for THIS PERIOD ONLY.
-  Find the row labelled "This Period" / "Periode Ini" in the progress block.
-  Example: Previous Period 67,201% | This Period 6,920% | Cumulative 74,121%
-  → return "6,920%" or "6.920". NEVER use the Cumulative or Previous Period value.
-- thisManhours — man-hours for THIS PERIOD ONLY.
-  Find "This man hours", "This Man Hours", or the "This Period" column of the manhour row.
-  Example: "758,50 Hours" → "758.50". Do NOT use Previous man hours or Cumulative MH.
+- percentageCompletion — same as the This Period cell above. Also mirror it to manhourPercentageCompletion.
+- manhourQuantity — same as This Manhours above. Also mirror it to thisManhours.
 - tables — include the full progress summary table when present:
   tables[].headers = column headers as printed (e.g. ["Description", "Previous Period", "This Period", "Cumulative"])
   tables[].rows = one row per metric in table order (completion %, manhours, etc.)
@@ -250,10 +255,18 @@ CRITICAL — one timesheet object per worker. Never mix daily rows from differen
 Output a "timesheets" array (one element per worker), NOT a flat lineItems list.
 Leave "lineItems" as an empty array [].
 
-DOCUMENT HEADER (shared when shown once at file level):
-- poNumber — PO / Contract Order number.
+DOCUMENT HEADER (one value for the whole timesheet bundle, under header):
+- vendorName — the contractor company on the letterhead, for example PT. AMANAH LESTARI ENERGY.
+  Not the worker after "Name :", not Badge No / No. ID, and not the buyer PT. PANCA AMARA UTAMA.
+- poNumber — PO / Contract Order number printed on the sheet.
+- manhourQuantity — ONE total. Add regular hours for every worker and every date.
+  Use the Basic Time column, or add each page's Basic Time footer. Skip blanks, dashes, and day-off rows with no hours.
+  Do not return a single day or a single worker.
+- overtimeQuantity — ONE total. Add overtime hours for every worker and every date from OT Actual
+  (hours worked). Do not use OT Paid when that column is a weighted figure.
+  Use each page's OT Actual footer when it is printed, otherwise add the daily OT Actual cells.
+  Skip blanks and dashes. Do not return a single day or a single worker.
 - periodStart / periodEnd — overall period covered by the file.
-- vendorName — contractor name.
 - projectName — project / site name.
 
 TOP-LEFT METADATA BLOCK (read for EACH individual timesheet form):

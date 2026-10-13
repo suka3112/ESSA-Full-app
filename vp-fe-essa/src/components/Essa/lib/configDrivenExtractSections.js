@@ -32,6 +32,9 @@ export const OCR_TYPE_TO_SECTION_KEY = {
   daily_timesheet: 'F_timesheet',
   attendance: 'G_attendance',
   daily_attendance: 'G_attendance',
+  face_id: 'G_attendance',
+  work_progress_certificate_bast: 'D_beritaAcara',
+  manpower_summary: 'E_manhourSummary',
   po: 'H_po',
   purchase_order: 'H_po',
   po_appendix: 'I_poAppendix',
@@ -43,11 +46,20 @@ export const OCR_TYPE_TO_SECTION_KEY = {
 /** Prompt Config fieldName → OCR header keys after enrich/canonicalize. */
 const FIELD_LOOKUP_ALIASES = {
   invNo: ['invoiceNumber', 'invoiceNo', 'invNo'],
-  date: ['invoiceDate', 'date'],
-  vatAmount: ['taxAmount', 'vatAmount'],
+  date: ['invoiceDate', 'date', 'taxInvoiceDate'],
+  invoiceDate: ['taxInvoiceDate', 'date', 'fakturPajakDate'],
+  fakturPajakDate: ['taxInvoiceDate', 'invoiceDate', 'date'],
+  fakturPajakNumber: ['taxInvoiceNumber'],
+  fakturPajakValue: ['vatAmount', 'taxAmount'],
+  vatAmount: ['taxAmount', 'vatAmount', 'fakturPajakValue'],
   thisManhours: ['thisManHours', 'thisManhours', 'thisManhour'],
   rolesOfManpower: ['manpowerRoles', 'rolesOfManpower'],
-  bankAccountNumber: ['bankAccount', 'bankAccountNumber']
+  bankAccountNumber: ['bankAccount', 'bankAccountNumber'],
+  vendorName: ['contractorName', 'companyName', 'vendor'],
+  manhourQuantity: ['manhoursThisPeriod', 'thisManhours', 'totalRegularManhour', 'totalRegularHours', 'regularManhour'],
+  overtimeQuantity: ['totalOvertimeManhour', 'totalOvertimeHours', 'overtimeManhour'],
+  percentageCompletion: ['pctThisPeriod', 'manhourCompletionPct', 'thisPeriodProgress', 'manhourPercentageCompletion'],
+  essaCompanyName: ['buyerName', 'clientName', 'messrs']
 }
 
 const readRowArray = (ocr, fieldName) => {

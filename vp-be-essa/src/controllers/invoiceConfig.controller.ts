@@ -5,6 +5,7 @@ import { StatusCodeEnum } from "../utils/enums/status.enum";
 import logger from "../utils/logger";
 import * as invoiceConfigAdmin from "../helpers/invoiceConfigAdmin.service";
 import * as matchRules from "../helpers/matchRules.service";
+import * as cfgInvoiceConfig from "../helpers/cfgInvoiceConfig.service";
 
 class InvoiceConfigController extends BaseController {
   private userId(req: any): number | null {
@@ -116,6 +117,79 @@ class InvoiceConfigController extends BaseController {
       return this.success(req, res, this.status.HTTP_OK, data, "Match rule deleted");
     } catch (error) {
       logger.error("Error deleteMatchRule:", error);
+      next(error);
+    }
+  }
+
+  async getCfgPromptConfig(req: any, res: any, next: NextFunction) {
+    try {
+      const data = await cfgInvoiceConfig.getCfgPromptConfigTree();
+      return this.success(req, res, this.status.HTTP_OK, data, "Invoice configuration retrieved");
+    } catch (error) {
+      logger.error("Error getCfgPromptConfig:", error);
+      next(error);
+    }
+  }
+
+  async getCfgInvoiceCategory(req: any, res: any, next: NextFunction) {
+    try {
+      const data = await cfgInvoiceConfig.getCfgInvoiceCategory(Number(req?.params?.invoiceCategoryId));
+      return this.success(req, res, this.status.HTTP_OK, data, "Invoice category retrieved");
+    } catch (error) {
+      logger.error("Error getCfgInvoiceCategory:", error);
+      next(error);
+    }
+  }
+
+  async upsertCfgDocuments(req: any, res: any, next: NextFunction) {
+    try {
+      const data = await cfgInvoiceConfig.upsertCfgDocuments(
+        Number(req?.params?.invoiceCategoryId),
+        req?.body?.documents || [],
+      );
+      return this.success(req, res, this.status.HTTP_OK, data, "Documents saved");
+    } catch (error) {
+      logger.error("Error upsertCfgDocuments:", error);
+      next(error);
+    }
+  }
+
+  async createCfgDocument(req: any, res: any, next: NextFunction) {
+    try {
+      const data = await cfgInvoiceConfig.createCfgDocument(
+        Number(req?.params?.invoiceCategoryId),
+        req?.body || {},
+      );
+      return this.success(req, res, this.status.HTTP_CREATED, data, "Document added");
+    } catch (error) {
+      logger.error("Error createCfgDocument:", error);
+      next(error);
+    }
+  }
+
+  async renameCfgDocument(req: any, res: any, next: NextFunction) {
+    try {
+      const data = await cfgInvoiceConfig.renameCfgDocument(
+        Number(req?.params?.invoiceCategoryId),
+        Number(req?.params?.linkId),
+        req?.body?.name,
+      );
+      return this.success(req, res, this.status.HTTP_OK, data, "Document renamed");
+    } catch (error) {
+      logger.error("Error renameCfgDocument:", error);
+      next(error);
+    }
+  }
+
+  async deleteCfgDocument(req: any, res: any, next: NextFunction) {
+    try {
+      const data = await cfgInvoiceConfig.deleteCfgDocument(
+        Number(req?.params?.invoiceCategoryId),
+        Number(req?.params?.linkId),
+      );
+      return this.success(req, res, this.status.HTTP_OK, data, "Document removed");
+    } catch (error) {
+      logger.error("Error deleteCfgDocument:", error);
       next(error);
     }
   }

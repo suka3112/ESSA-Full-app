@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
-  ShieldCheck,
   FileSpreadsheet,
   Pencil,
   Save,
@@ -16,8 +15,7 @@ import {
   ChevronDown,
   ChevronRight,
   Trash2,
-  RefreshCw,
-  GitCompareArrows
+  RefreshCw
 } from 'lucide-react'
 import { connect } from 'react-redux'
 
@@ -56,7 +54,7 @@ import {
   showInvoiceReturnedToast
 } from '../lib/essaToast'
 import SlaInvoiceClocks from '../Sla/SlaInvoiceClocks'
-import { INVOICES, UPLOAD_INVOICE, PROMPT_CONFIG } from 'constants/url'
+import { INVOICES, UPLOAD_INVOICE } from 'constants/url'
 import { ADMIN_USER_TYPE } from 'constants/userType'
 import {
   resolvePoApprovals,
@@ -82,12 +80,17 @@ import {
   buildConfigDrivenExtractSections,
   resolvePromptConfigTypeCode
 } from '../lib/configDrivenExtractSections'
-import { fetchInvoiceTypePromptConfigByCode } from 'api/extractionPromptConfig'
+import { fetchCfgInvoiceTypeByCode } from 'api/extractionPromptConfig'
 import { TimesheetManpowerPanels, hydrateTimesheetRow } from '../lib/TimesheetManpowerPanels'
 import { formatDynamicExtractCell } from '../lib/extractTables'
-import { PoValidationPanel } from '../lib/poValidationPanel'
+<<<<<<< Updated upstream
+import { PoValidationPanel, VendorReportButton } from '../lib/poValidationPanel'
 import NWayValidationPanel from './NWayValidationPanel'
 import { formatChecklistPassBadgeText, getChecklistPassSummary } from '../lib/validationRuleCatalog'
+=======
+import { useValidationChecklist, VendorReportButton } from '../lib/poValidationPanel'
+import NWayValidationPanel, { sourceCodeForSection } from './NWayValidationPanel'
+>>>>>>> Stashed changes
 import {
   isNonPoInvoice,
   buildNonPoValidationState
@@ -1198,6 +1201,9 @@ function ExtractValidateSectionHeader({
   return <div className="dx-ev-section-header">{content}</div>
 }
 
+/** 12-point / 4-point checklist card. Hidden while N-Way validation is the checklist on this tab. */
+const SHOW_VALIDATION_CARD = false
+
 function ExtractValidateTab({
   inv,
   isNonPo = false,
@@ -1217,7 +1223,7 @@ function ExtractValidateTab({
   useEffect(() => {
     let cancelled = false
     const code = resolvePromptConfigTypeCode(inv)
-    fetchInvoiceTypePromptConfigByCode(code)
+    fetchCfgInvoiceTypeByCode(code)
       .then((detail) => {
         if (!cancelled) setPromptTypeDetail(detail)
       })
@@ -1249,13 +1255,16 @@ function ExtractValidateTab({
   const invoiceKey = inv?.id ?? ''
   const firstSectionKey = sections[0]?.key ?? ''
   const [docTab, setDocTab] = useState('')
+<<<<<<< Updated upstream
   const [extractionOpen, setExtractionOpen] = useState(true)
+=======
   const [nWaySummary, setNWaySummary] = useState(null)
   const nWayOpen = nWaySummary ? (nWaySummary.fail || 0) + (nWaySummary.incomplete || 0) + (nWaySummary.pending || 0) : 0
   const nWayConfigHref =
     typeof window !== 'undefined' && window.location.pathname.startsWith(`/${ADMIN_USER_TYPE}`)
       ? `/${ADMIN_USER_TYPE}${PROMPT_CONFIG}?tab=n-way-matching`
       : null
+>>>>>>> Stashed changes
   const prevInvoiceKeyRef = useRef(invoiceKey)
   const prevFirstSectionKeyRef = useRef('')
 
@@ -1290,7 +1299,9 @@ function ExtractValidateTab({
     const { missing } = countSectionFields(section.fields)
     return {
       value: section.key,
-      label: EXTRACT_DOC_TAB_LABELS[section.key] || section.label,
+      label: section.documentCode
+        ? section.label
+        : EXTRACT_DOC_TAB_LABELS[section.key] || section.label,
       badge: section.configStale ? 'stale' : missing > 0 ? missing : null,
       title: section.configStale
         ? 'Config changed — re-extract recommended'
@@ -1308,22 +1319,9 @@ function ExtractValidateTab({
     }),
     [validation, inv]
   )
-  const { passed: validationPassed, total: validationTotal } = getChecklistPassSummary(checks, {
-    variant: isNonPo ? 'nonPo' : 'po',
-    validation: validationContext
-  })
-  const validationAllPassed =
-    validationTotal > 0 && validationPassed === validationTotal
-  const validationPending = revalidating && checks.length === 0
-  const validationBadgeTone = isNonPo
-    ? validationPending
-      ? 'neutral'
-      : 'pass'
-    : validationPending
-      ? 'neutral'
-      : validationAllPassed
-        ? 'pass'
-        : 'fail'
+  const reportChecklist = useValidationChecklist({ checks, validation, invoice: inv, variant: isNonPo ? 'nonPo' : 'po' })
+  const activeDocCode = sourceCodeForSection(activeSection)
+  const activeDocLabel = activeSection ? EXTRACT_DOC_TAB_LABELS[activeSection.key] || activeSection.label : ''
 
   const navigate = useNavigate()
 
@@ -1340,6 +1338,7 @@ function ExtractValidateTab({
 
   return (
     <div className="dx-extract-validate">
+<<<<<<< Updated upstream
       <div className="dx-extract-validate-head">
         <div className="dx-extract-validate-head-left">
           <h3 className="dx-extract-validate-title">Extract &amp; validate</h3>
@@ -1349,64 +1348,115 @@ function ExtractValidateTab({
               : 'Review OCR-extracted fields and validation results for this invoice'}
           </span>
         </div>
+        <div className="dx-extract-validate-actions">
+          <VendorReportButton
+            invoice={inv}
+            checks={checks}
+            validation={validation}
+            variant={isNonPo ? 'nonPo' : 'po'}
+          />
+          {onRevalidate ? (
+            <Button size="sm" variant="secondary" onClick={onRevalidate} disabled={revalidating}>
+              <RefreshCw size={13} className={revalidating ? 'dx-spin' : undefined} />
+              {revalidating ? 'Re-validating…' : 'Re-validate'}
+            </Button>
+          ) : null}
+        </div>
       </div>
 
+=======
+>>>>>>> Stashed changes
       <MatrixUnreadFields items={inv?.matrixUnread} />
 
-      {Array.isArray(inv?.matrixUnread) && inv.matrixUnread.length > 0 ? (
-        <div className="dx-ev-section-divider" role="separator" aria-hidden="true" />
-      ) : null}
-
-      {sections.length > 0 ? (
-        <div className="dx-ev-section dx-ev-section--card">
-          <ExtractValidateSectionHeader
-            icon={FileText}
-            title="Extraction"
-            subtitle={
-              isNonPo
-                ? 'Fields captured from the invoice document'
-                : 'Fields captured from each document · one tab per source document'
-            }
-            collapsible
-            open={extractionOpen}
-            onToggle={() => setExtractionOpen((prev) => !prev)}
-          />
-          {extractionOpen && (
-            <div className="dx-extract-doc-tabs-wrap">
-              {docTabs.length > 1 ? (
-                <Tabs
-                  className="dx-extract-doc-tabs"
-                  tabs={docTabs}
-                  value={docTab}
-                  onChange={setDocTab}
-                />
+      <div className="dx-ev-section dx-ev-section--card">
+        <ExtractValidateSectionHeader
+          icon={FileText}
+          title="Extraction & validation"
+          subtitle={
+            isNonPo
+              ? 'Fields captured from the invoice, then the N-Way checks configured for it'
+              : 'Pick a document to see its extracted fields and the N-Way checks configured for it'
+          }
+          actions={
+            <>
+              {onRevalidate ? (
+                <Button size="sm" variant="secondary" onClick={onRevalidate} disabled={revalidating}>
+                  <RefreshCw size={13} className={revalidating ? 'dx-spin' : undefined} />
+                  {revalidating ? 'Re-validating…' : 'Re-validate'}
+                </Button>
               ) : null}
+<<<<<<< Updated upstream
               {activeSection && (
-                <DocumentExtractSection
-                  section={activeSection}
-                  currency={currency}
-                  canEdit={canEditExtract}
-                  saving={savingCorrections}
-                  onSaveCorrections={onSaveExtractCorrections}
-                  onReExtract={handleReExtract}
-                />
+                <>
+                  <DocumentExtractSection
+                    section={activeSection}
+                    currency={currency}
+                    canEdit={canEditExtract}
+                    saving={savingCorrections}
+                    onSaveCorrections={onSaveExtractCorrections}
+                    onReExtract={handleReExtract}
+                  />
+                  <NWayValidationPanel
+                    key={activeSection.key}
+                    inv={inv}
+                    sections={sections}
+                    checks={checks}
+                    validation={validationContext}
+                    isNonPo={isNonPo}
+                    invoiceTypeCode={resolvePromptConfigTypeCode(inv)}
+                    section={activeSection}
+                  />
+                </>
               )}
+=======
+              <VendorReportButton checklist={reportChecklist} invoice={inv} validation={validation} />
+            </>
+          }
+        />
+        <div className="dx-extract-doc-tabs-wrap">
+          {docTabs.length > 1 ? (
+            <Tabs className="dx-extract-doc-tabs" tabs={docTabs} value={docTab} onChange={setDocTab} />
+          ) : null}
+          {activeSection ? (
+            <DocumentExtractSection
+              section={activeSection}
+              currency={currency}
+              canEdit={canEditExtract}
+              saving={savingCorrections}
+              onSaveCorrections={onSaveExtractCorrections}
+              onReExtract={handleReExtract}
+            />
+          ) : (
+            <div className="dx-extract-empty-state" role="status">
+              <FileText size={28} strokeWidth={1.5} aria-hidden />
+              <h5>No extraction documents enabled</h5>
+              <p>
+                Enable documents for this invoice type in Prompt Config to show extraction tabs here.
+                Previously extracted values are kept when a document is toggled off.
+              </p>
+>>>>>>> Stashed changes
             </div>
           )}
         </div>
-      ) : (
-        <div className="dx-ev-section">
-          <div className="dx-extract-empty-state" role="status">
-            <FileText size={28} strokeWidth={1.5} aria-hidden />
-            <h5>No extraction documents enabled</h5>
-            <p>
-              Enable documents for this invoice type in Prompt Config to show extraction tabs here.
-              Previously extracted values are kept when a document is toggled off.
-            </p>
-          </div>
+
+        <div className="dx-ev-subhead">
+          <GitCompareArrows size={14} className="dx-ev-section-icon" aria-hidden />
+          <h5 className="dx-ev-subhead__title">
+            N-Way validation{activeDocCode ? ` · ${activeDocLabel}` : ''}
+          </h5>
+          {nWaySummary ? (
+            <span
+              className={`dx-ev-section-badge dx-ev-section-badge--${nWaySummary.fail ? 'fail' : nWayOpen ? 'neutral' : 'pass'}`}
+              aria-label={`${nWaySummary.fail || 0} mismatched, ${nWaySummary.incomplete || 0} not captured, ${nWaySummary.pending || 0} awaiting source`}
+            >
+              {nWayOpen ? `${nWayOpen} TO REVIEW` : 'ALL CLEAR'}
+            </span>
+          ) : null}
         </div>
+<<<<<<< Updated upstream
       )}
 
+      {SHOW_VALIDATION_CARD ? (
       <div className="dx-ev-section dx-ev-section--card">
         <ExtractValidateSectionHeader
           icon={ShieldCheck}
@@ -1446,22 +1496,8 @@ function ExtractValidateTab({
           uploadHref={uploadHref}
         />
       </div>
-
-      <div className="dx-ev-section dx-ev-section--card">
-        <ExtractValidateSectionHeader
-          icon={GitCompareArrows}
-          title="N-Way validation"
-          subtitle="Each data point checked across the invoice package and SAP — anchor (A) against every compare document"
-          badge={
-            nWaySummary
-              ? {
-                  text: nWayOpen ? `${nWayOpen} TO REVIEW` : 'ALL CLEAR',
-                  label: `${nWaySummary.fail || 0} mismatched, ${nWaySummary.incomplete || 0} not captured, ${nWaySummary.pending || 0} awaiting source`,
-                  tone: nWaySummary.fail ? 'fail' : nWayOpen ? 'neutral' : 'pass'
-                }
-              : undefined
-          }
-        />
+      ) : null}
+=======
         <NWayValidationPanel
           inv={inv}
           sections={sections}
@@ -1469,10 +1505,12 @@ function ExtractValidateTab({
           validation={validationContext}
           isNonPo={isNonPo}
           invoiceTypeCode={resolvePromptConfigTypeCode(inv)}
+          docCode={activeDocCode}
           configHref={nWayConfigHref}
           onSummary={setNWaySummary}
         />
       </div>
+>>>>>>> Stashed changes
     </div>
   )
 }

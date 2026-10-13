@@ -112,7 +112,7 @@ export const sourceChannel = (code) => CHANNELS[SOURCE_BY_CODE[code]?.channel] |
  */
 export const CATEGORIES = [
   { code: 'MATERIAL', label: 'Material', group: 'PO', services: false, receipt: 'GRN', poSeries: '4201, 4202', invoiceTypeCodes: ['MATERIAL_IMPORT', 'MATERIAL_LOCAL'] },
-  { code: 'MANPOWER', label: 'Manpower outsourcing', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['MANPOWER_SERVICES'] },
+  { code: 'MANPOWER', label: 'Manpower', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['MANPOWER_SERVICES'] },
   { code: 'CATERING', label: 'Catering', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['CAMP_SERVICE_AND_CATERING'] },
   { code: 'CIVIL', label: 'Civil works', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['CIVIL_CONTRACTOR'] },
   { code: 'HOUSEKEEPING', label: 'Housekeeping', group: 'PO', services: true, receipt: 'SES', poSeries: '4203', invoiceTypeCodes: ['HOUSEKEEPING'] },
@@ -165,6 +165,37 @@ export const categoryLabel = (code) => {
   return code
 }
 
+/** cfg.VAL_INVOICE_CATEGORY codes that share a catalog bucket with the N-Way screen. */
+const MATRIX_CATEGORY_ALIASES = {
+  MANPOWER_OUTSOURCING: 'MANPOWER',
+  CIVIL_WORKS_CONSTRUCTION: 'CIVIL',
+  TRAVEL_NON_PO: 'TRAVEL',
+  HOTEL_NON_PO: 'HOTEL',
+  DOMESTIC_LOGISTIC: 'DOMESTIC_LOGISTICS',
+  CONSULTANTS_TIME_BASED: 'CONSULTANT_TIME',
+  CONSULTANTS_MILESTONE: 'CONSULTANT_MILESTONE',
+  MEDICAL_SERVICES: 'MEDICAL',
+  SURVEILLANCE_AND_INSPECTION: 'SURVEILLANCE',
+  TELECOM_AND_INTERNET_SERVICES: 'TELECOM',
+  CSR_EXTERNAL_RELATION: 'CSR',
+  CORPORATE_CREDIT_CARD: 'CORPORATE_CARD',
+  MISC_BUSINESS_EXPENSES: 'MISC_EXPENSES',
+  EVENTS_AND_CELEBRATIONS: 'EVENTS',
+  EMPLOYEE_SETTLEMENTS: 'EMPLOYEE_SETTLEMENT'
+}
+
+/**
+ * App invoice-type codes and catalog buckets that mean the same cfg category.
+ * MANPOWER_SERVICES and MANPOWER both resolve to MANPOWER_OUTSOURCING.
+ */
+export const cfgCodesForInvoiceType = (invoiceTypeCode) => {
+  const aliases = new Set(categoryAliases(invoiceTypeCode))
+  for (const [matrixCode, catalogCode] of Object.entries(MATRIX_CATEGORY_ALIASES)) {
+    if (aliases.has(catalogCode) || aliases.has(matrixCode)) aliases.add(matrixCode)
+  }
+  return [...aliases]
+}
+
 /** The code itself plus the catalog bucket it belongs to (MANPOWER_SERVICES and MANPOWER). */
 export const categoryAliases = (code) => {
   const upper = String(code || '').toUpperCase()
@@ -172,6 +203,8 @@ export const categoryAliases = (code) => {
   const aliases = new Set([upper])
   const catalog = CATEGORY_BY_CODE[upper] ? upper : categoryForInvoiceType(upper)
   if (catalog) aliases.add(catalog)
+  const matrix = MATRIX_CATEGORY_ALIASES[upper]
+  if (matrix) aliases.add(matrix)
   return [...aliases]
 }
 

@@ -35,6 +35,34 @@ invoiceConfigRoutes.patch("/validation-rules/:ruleId", auth, (req, res, next) =>
   invoiceConfigController.updateValidationRule(req, res, next),
 );
 
+invoiceConfigRoutes.get("/cfg", auth, (req, res, next) =>
+  invoiceConfigController.getCfgPromptConfig(req, res, next),
+);
+
+invoiceConfigRoutes.get("/cfg/invoice-categories/:invoiceCategoryId", auth, (req, res, next) =>
+  invoiceConfigController.getCfgInvoiceCategory(req, res, next),
+);
+
+invoiceConfigRoutes.put("/cfg/invoice-categories/:invoiceCategoryId/documents", auth, (req, res, next) =>
+  invoiceConfigController.upsertCfgDocuments(req, res, next),
+);
+
+invoiceConfigRoutes.post("/cfg/invoice-categories/:invoiceCategoryId/documents", auth, (req, res, next) =>
+  invoiceConfigController.createCfgDocument(req, res, next),
+);
+
+invoiceConfigRoutes.patch(
+  "/cfg/invoice-categories/:invoiceCategoryId/documents/:linkId",
+  auth,
+  (req, res, next) => invoiceConfigController.renameCfgDocument(req, res, next),
+);
+
+invoiceConfigRoutes.delete(
+  "/cfg/invoice-categories/:invoiceCategoryId/documents/:linkId",
+  auth,
+  (req, res, next) => invoiceConfigController.deleteCfgDocument(req, res, next),
+);
+
 invoiceConfigRoutes.get("/match-rules", auth, (req, res, next) =>
   invoiceConfigController.listMatchRules(req, res, next),
 );

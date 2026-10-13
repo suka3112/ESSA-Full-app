@@ -1644,7 +1644,24 @@ const extractSesValueUsd = (text) => {
   return null
 }
 
-const TAX_INVOICE_HEADER_KEYS = ['taxInvoiceNumber', 'invoiceDate', 'taxAmount', 'vatAmount']
+const TAX_INVOICE_HEADER_KEYS = [
+  'taxInvoiceNumber',
+  'fakturPajakNumber',
+  'invoiceDate',
+  'taxInvoiceDate',
+  'fakturPajakDate',
+  'taxAmount',
+  'vatAmount',
+  'fakturPajakValue',
+  'vendorName',
+  'fakturPajakVendorName',
+  'vendorNpwp',
+  'buyerName',
+  'essaCompanyName',
+  'invoiceAmount',
+  'invoiceNumber',
+  'itemDescription'
+]
 
 const BERITA_ACARA_HEADER_KEYS = [
   'poNumber',
@@ -2539,6 +2556,12 @@ const promoteDynamicTaxInvoiceHeaderKeys = (header = {}) => {
       next.buyerName = val
     }
   }
+  if (!next.invoiceDate) next.invoiceDate = next.taxInvoiceDate || next.date || null
+  if (!next.fakturPajakDate) next.fakturPajakDate = next.invoiceDate || next.taxInvoiceDate || null
+  if (!next.fakturPajakNumber) next.fakturPajakNumber = next.taxInvoiceNumber || null
+  if (!next.fakturPajakValue) next.fakturPajakValue = next.vatAmount || next.taxAmount || null
+  if (!next.fakturPajakVendorName) next.fakturPajakVendorName = next.vendorName || null
+  if (!next.essaCompanyName) next.essaCompanyName = next.buyerName || null
   return next
 }
 

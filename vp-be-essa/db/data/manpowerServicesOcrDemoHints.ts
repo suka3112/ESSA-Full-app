@@ -57,10 +57,15 @@ LINE ITEMS (invoiceLineItems + mirror lineItems):
 `.trim();
 
 const TAX_INVOICE_RULES = `
-Faktur Pajak / Tax Invoice (VAT) in manpower bundles:
-- taxInvoiceNumber — "Kode dan Nomor Seri Faktur Pajak" (15–17 digit e-Faktur). Not the commercial invNo.
-- date — Tempat dan Tanggal Ditandatangani (date portion only), or Tanggal Faktur near QR.
-- vatAmount — "Jumlah PPN (Pajak Pertambahan Nilai)" exactly as printed.
+Faktur Pajak / e-Faktur. Read this page only.
+- taxInvoiceNumber — Kode dan Nomor Seri Faktur Pajak (15–17 digits). Not the commercial invNo.
+- invoiceDate — date only from Tempat dan Tanggal Ditandatangani, or the date beside the QR. Also set taxInvoiceDate.
+- vatAmount — Jumlah PPN exactly as printed.
+- invoiceAmount — Dasar Pengenaan Pajak (DPP), not Jumlah PPN.
+- vendorName / vendorNpwp — Pengusaha Kena Pajak name and NPWP.
+- essaCompanyName — Pembeli / Penerima Jasa name.
+- invoiceNumber — Referensi only when it is the commercial invoice number.
+- itemDescription — Nama Barang Kena Pajak / Jasa Kena Pajak.
 `.trim();
 
 const BERITA_ACARA_RULES = `
@@ -90,12 +95,15 @@ Skip printed Total/footer rows from manhourSummary (capture in header totals).
 
 const TIMESHEET_RULES = `
 Daily Time Sheet (Amanah / ALE landscape — usually one worker per page):
-- Output timesheets[] (one object per worker). Leave lineItems as [].
-- Per timesheet: manpowerName (Name :), username (No. ID :), role (Position :),
-  periodStart/periodEnd, sheetPages, totalRegularManhour, totalOvertimeManhour,
-  entries[] with date, basicTime, otActual, regularManhour, overtimeManhour.
-- Never use Prepared/Approved footer names as manpowerName.
-- Preserve comma decimals (9,00). Read OT Actual column — do not compute OT.
+- vendorName — contractor on the letterhead, for example PT. AMANAH LESTARI ENERGY.
+  Not the worker Name, not Badge No, and not the buyer PT. PANCA AMARA UTAMA.
+- manhourQuantity — one total for the whole bundle. Add Basic Time (regular hours) for every worker and every date.
+  Use each page footer under Basic Time when it is printed. Skip blanks and dashes.
+- overtimeQuantity — one total for the whole bundle. Add OT Actual hours for every worker and every date.
+  Do not use OT Paid when that column is weighted. Skip blanks and dashes.
+- Also output timesheets[] (one object per worker) with manpowerName, username, role, and daily rows.
+- Never use Prepared/Approved footer names as the worker name.
+- Preserve comma decimals (9,00).
 `.trim();
 
 const ATTENDANCE_RULES = `
@@ -122,12 +130,13 @@ function field(
   fieldName: string,
   label: string,
   aliases: string[] = [],
+  hint?: string,
 ): ManpowerFieldSeed {
   const aliasNote = aliases.length ? `Aliases: ${aliases.join(", ")}` : "";
   return {
     fieldName,
     displayName: label,
-    hint: aliasNote,
+    hint: hint || aliasNote,
   };
 }
 
@@ -198,11 +207,17 @@ export const MANPOWER_SERVICES_OCR_DEMO_DOCUMENTS: ManpowerDocumentSeed[] = [
       field("taxInvoiceNumber", "Tax Invoice Number", [
         "kode dan nomor seri faktur pajak",
       ]),
-      field("date", "Tax Invoice Date", [
+      field("invoiceDate", "Tax Invoice Date", [
         "tempat dan tanggal ditandatangani",
         "tanggal faktur",
       ]),
       field("vatAmount", "VAT Amount", ["jumlah ppn", "ppn"]),
+      field("invoiceAmount", "DPP", ["dasar pengenaan pajak"]),
+      field("vendorName", "Seller name", ["pengusaha kena pajak", "nama"]),
+      field("vendorNpwp", "Seller NPWP", ["npwp"]),
+      field("essaCompanyName", "Buyer name", ["pembeli", "penerima jasa"]),
+      field("invoiceNumber", "Referenced invoice number", ["referensi"]),
+      field("itemDescription", "Taxable goods or services", ["nama barang kena pajak", "jasa kena pajak"]),
     ],
   },
   {
@@ -262,7 +277,24 @@ export const MANPOWER_SERVICES_OCR_DEMO_DOCUMENTS: ManpowerDocumentSeed[] = [
       field("poNumber", "PO Number"),
       field("periodStart", "Period Start"),
       field("periodEnd", "Period End"),
-      field("vendorName", "Vendor Name"),
+      field(
+        "vendorName",
+        "Vendor Name",
+        [],
+        "Contractor on the timesheet letterhead, for example PT. AMANAH LESTARI ENERGY. Not the worker Name, not Badge No, and not the buyer PT. PANCA AMARA UTAMA.",
+      ),
+      field(
+        "manhourQuantity",
+        "Man-hours Qty.",
+        [],
+        "One total for every timesheet page. Add Basic Time (regular hours) for every worker and every date, or add each page's Basic Time footer. Skip blanks and dashes.",
+      ),
+      field(
+        "overtimeQuantity",
+        "Overtime Qty.",
+        [],
+        "One total for every timesheet page. Add OT Actual hours for every worker and every date. Do not use OT Paid when that column is a weighted figure. Skip blanks and dashes.",
+      ),
       field("projectName", "Project Name"),
       field(
         "timesheets",

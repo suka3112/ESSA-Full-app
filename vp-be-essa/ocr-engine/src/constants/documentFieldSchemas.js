@@ -203,9 +203,15 @@ export const DOCUMENT_SCHEMAS = {
     typeCode: "B",
     typeLabel: "B. Tax Invoice (VAT)",
     fields: [
-      { key: "taxInvoiceNumber", label: "Tax Invoice Number", aliases: ["kode dan nomor seri faktur pajak", "nomor faktur pajak", "faktur pajak no", "tax invoice no"] },
-      { key: "date", label: "Tax Invoice Date", aliases: ["tanggal", "tanggal faktur", "tanggal faktur pajak", "tempat dan tanggal ditandatangani", "signing date", "tax invoice date", "date"] },
-      { key: "vatAmount", label: "VAT Amount", aliases: ["ppn", "vat", "pajak pertambahan nilai", "jumlah ppn"] },
+      { key: "taxInvoiceNumber", label: "Tax Invoice Number", aliases: ["kode dan nomor seri faktur pajak", "nomor seri faktur pajak", "nomor faktur pajak", "faktur pajak no", "tax invoice no"] },
+      { key: "invoiceDate", label: "Tax Invoice Date", aliases: ["tanggal faktur", "tanggal faktur pajak", "tempat dan tanggal ditandatangani", "signing date", "tax invoice date", "date"] },
+      { key: "vatAmount", label: "VAT Amount", aliases: ["jumlah ppn", "ppn", "pajak pertambahan nilai", "vat"] },
+      { key: "invoiceAmount", label: "DPP", aliases: ["dasar pengenaan pajak", "dpp", "harga jual", "penggantian"] },
+      { key: "vendorName", label: "Seller name", aliases: ["pengusaha kena pajak", "nama penjual", "nama pkp"] },
+      { key: "vendorNpwp", label: "Seller NPWP", aliases: ["npwp penjual", "npwp pkp", "npwp"] },
+      { key: "essaCompanyName", label: "Buyer name", aliases: ["pembeli barang kena pajak", "penerima jasa", "nama pembeli"] },
+      { key: "invoiceNumber", label: "Referenced invoice number", aliases: ["referensi", "nomor invoice", "invoice no"] },
+      { key: "itemDescription", label: "Taxable goods or services", aliases: ["nama barang kena pajak", "jasa kena pajak", "nama bkp", "nama jkp"] },
     ],
   },
   notice: {
@@ -273,7 +279,12 @@ export const DOCUMENT_SCHEMAS = {
   daily_timesheet: {
     typeCode: "F",
     typeLabel: "F. Daily Time Sheet",
-    fields: [],
+    fields: [
+      { key: "vendorName", label: "Vendor name", aliases: ["contractor", "company", "letterhead", "vendor", "pt"] },
+      { key: "poNumber", label: "PO Number", aliases: ["po no", "po number", "contract order", "purchase order"] },
+      { key: "manhourQuantity", label: "Man-hours Qty.", aliases: ["total regular manhour", "total regular hours", "basic time total", "totalRegularManhour"] },
+      { key: "overtimeQuantity", label: "Overtime Qty.", aliases: ["total overtime manhour", "total overtime hours", "ot actual total", "totalOvertimeManhour"] },
+    ],
     entries: {
       key: "timesheetEntries",
       label: "Daily Time Sheet Entries",

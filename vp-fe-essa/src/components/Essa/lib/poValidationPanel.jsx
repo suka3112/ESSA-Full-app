@@ -1035,6 +1035,38 @@ function VendorReportDialog({
   )
 }
 
+<<<<<<< Updated upstream
+export function VendorReportButton({
+  invoice = null,
+  checks = [],
+  validation = {},
+  variant = 'po',
+  className = 'dx-id-btn'
+}) {
+  const mergeChecklist =
+    variant === 'nonPo' ? mergeNonPoValidationChecklist : mergeValidationChecklist
+  const validationContext = useMemo(
+    () => ({
+      ...validation,
+      demoScenario: resolveDemoScenario(invoice || {}),
+      batch_document_types: invoice?.batch_document_types,
+      ocr_by_type: invoice?.ocr_by_type
+    }),
+    [validation, invoice]
+  )
+  const augmentedChecks = useMemo(() => {
+    if (variant === 'nonPo') return checks
+    return augmentBankValidationCheck(
+      augmentPoValueValidationCheck(augmentRateValidationCheck(checks, invoice), invoice),
+      invoice
+    )
+  }, [checks, invoice, variant])
+  const checklist = mergeChecklist(augmentedChecks, validationContext)
+  const { passed: checklistPassed, total: checklistTotal } =
+    getChecklistPassSummaryFromMerged(checklist)
+  const failedCount = checklistTotal - checklistPassed
+
+=======
 function CommercialFooter({ validation, invoice }) {
   const ld = validation?.ld_amount ?? 0
   const advance = validation?.advance_recovery ?? 0
@@ -1066,53 +1098,12 @@ function ValidationTabIcon({ status }) {
   return <CheckCircle2 size={12} className="dx-check-icon-pass" />
 }
 
-export function PoValidationPanel({
-  checks = [],
-  validation = {},
-  invoice = null,
-  onRevalidate,
-  revalidating = false,
-  uploadHref = null,
-  variant = 'po'
-}) {
-  const mergeChecklist =
-    variant === 'nonPo' ? mergeNonPoValidationChecklist : mergeValidationChecklist
-  const validationContext = useMemo(
-    () => ({
-      ...validation,
-      demoScenario: resolveDemoScenario(invoice || {}),
-      batch_document_types: invoice?.batch_document_types,
-      ocr_by_type: invoice?.ocr_by_type
-    }),
-    [validation, invoice]
-  )
-  const augmentedChecks = useMemo(() => {
-    if (variant === 'nonPo') return checks
-    return augmentBankValidationCheck(
-      augmentPoValueValidationCheck(augmentRateValidationCheck(checks, invoice), invoice),
-      invoice
-    )
-  }, [checks, invoice, variant])
-  const checklist = mergeChecklist(augmentedChecks, validationContext)
-  const hasResults = variant === 'nonPo' || checks.length > 0
-  const { passed: checklistPassed, total: checklistTotal } =
-    getChecklistPassSummaryFromMerged(checklist)
-  const failedCount = checklistTotal - checklistPassed
-  const overallStatus = getChecklistOverallStatusFromMerged(checklist)
-  const overallBadgeLabel =
-    formatChecklistPassBadgeText(checklistPassed, checklistTotal) || overallStatus
-  const warnCount = checklist.filter((rule) => rule.status === 'warn').length
-  const overall = !hasResults
-    ? { label: 'Not validated yet', tone: 'warn' }
-    : failedCount > 0
-      ? { label: `Failed · ${failedCount} check${failedCount === 1 ? '' : 's'}`, tone: 'fail' }
-      : warnCount > 0
-        ? { label: 'Passed with exceptions', tone: 'warn' }
-        : { label: 'Passed', tone: 'pass' }
-  const poNumber = validation?.po_number
-  const sesNo = validation?.ses_no
-
-  const [activeTab, setActiveTab] = useState(() => getDefaultChecklistTab(checklist))
+/**
+ * “Report to vendor” button + draft dialog. Creates the [DOCREQ] document request
+ * from the checklist, then lets the user edit and send the e-mail.
+ */
+export function VendorReportButton({ checklist = [], invoice = null, validation = {}, className = 'dx-id-btn' }) {
+>>>>>>> Stashed changes
   const [reportOpen, setReportOpen] = useState(false)
   const [reportLoading, setReportLoading] = useState(false)
   const [reportSending, setReportSending] = useState(false)
@@ -1123,12 +1114,6 @@ export function PoValidationPanel({
     () => buildVendorReportEmail(invoice || {}, checklist, validation),
     [invoice, checklist, validation]
   )
-
-  useEffect(() => {
-    if (!checklist.some((rule) => rule.ruleCode === activeTab)) {
-      setActiveTab(getDefaultChecklistTab(checklist))
-    }
-  }, [checklist, activeTab])
 
   const openVendorReport = async () => {
     const fallback = defaultReportDraft
@@ -1223,6 +1208,144 @@ export function PoValidationPanel({
     }
   }
 
+<<<<<<< Updated upstream
+=======
+  const failedCount = checklist.filter((rule) => rule.status === 'fail').length
+
+>>>>>>> Stashed changes
+  return (
+    <>
+      <Button size="sm" variant="secondary" className={className} onClick={openVendorReport}>
+        <Mail size={13} /> Report to vendor
+      </Button>
+      {openRequestInfo?.requestCode ? (
+        <span className="dx-po-meta-chip">
+          Open doc request {openRequestInfo.requestCode}
+          {openRequestInfo.status ? ` · ${openRequestInfo.status}` : ''}
+        </span>
+      ) : null}
+      <VendorReportDialog
+        open={reportOpen}
+        onClose={() => !reportSending && setReportOpen(false)}
+        draft={reportDraft}
+        onDraftChange={setReportDraft}
+        loading={reportLoading}
+        sending={reportSending}
+        canSend={Boolean(openRequestInfo?.requestId)}
+        hasFailures={failedCount > 0}
+        onSend={sendVendorReport}
+      />
+    </>
+  )
+}
+
+<<<<<<< Updated upstream
+function CommercialFooter({ validation, invoice }) {
+  const ld = validation?.ld_amount ?? 0
+  const advance = validation?.advance_recovery ?? 0
+  const retention = validation?.retention_held ?? 0
+  const net =
+    validation?.net_payable ?? invoice?.net_payable ?? invoice?.total_amount ?? null
+
+  return (
+    <div className="dx-checklist-commercial">
+      <div className="dx-checklist-commercial-title">Commercial impact</div>
+      <p className="dx-checklist-net">
+        Net payable: {net != null ? formatIdrPrefix(net) : '—'}
+      </p>
+      {(validation?.ld_pct > 0 || ld > 0 || advance > 0 || retention > 0) && (
+        <div className="dx-checklist-commercial-grid">
+          {validation?.ld_pct > 0 && <span>LD: {validation.ld_pct}%</span>}
+          {ld > 0 && <span>Late delivery deduction: applied</span>}
+          {advance > 0 && <span>Advance recovery: deducted</span>}
+          {retention > 0 && <span>Retention held: applied</span>}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ValidationTabIcon({ status }) {
+  if (status === 'fail') return <XCircle size={12} />
+  if (status === 'warn') return <AlertTriangle size={12} />
+  return <CheckCircle2 size={12} className="dx-check-icon-pass" />
+=======
+/** Checklist merged and augmented the same way the validation panel shows it. */
+export function useValidationChecklist({ checks = [], validation = {}, invoice = null, variant = 'po' }) {
+  const validationContext = useMemo(
+    () => ({
+      ...validation,
+      demoScenario: resolveDemoScenario(invoice || {}),
+      batch_document_types: invoice?.batch_document_types,
+      ocr_by_type: invoice?.ocr_by_type
+    }),
+    [validation, invoice]
+  )
+  return useMemo(() => {
+    if (variant === 'nonPo') return mergeNonPoValidationChecklist(checks, validationContext)
+    const augmented = augmentBankValidationCheck(
+      augmentPoValueValidationCheck(augmentRateValidationCheck(checks, invoice), invoice),
+      invoice
+    )
+    return mergeValidationChecklist(augmented, validationContext)
+  }, [checks, invoice, variant, validationContext])
+>>>>>>> Stashed changes
+}
+
+export function PoValidationPanel({
+  checks = [],
+  validation = {},
+  invoice = null,
+  onRevalidate,
+  revalidating = false,
+  uploadHref = null,
+  variant = 'po'
+}) {
+  const mergeChecklist =
+    variant === 'nonPo' ? mergeNonPoValidationChecklist : mergeValidationChecklist
+  const validationContext = useMemo(
+    () => ({
+      ...validation,
+      demoScenario: resolveDemoScenario(invoice || {}),
+      batch_document_types: invoice?.batch_document_types,
+      ocr_by_type: invoice?.ocr_by_type
+    }),
+    [validation, invoice]
+  )
+  const augmentedChecks = useMemo(() => {
+    if (variant === 'nonPo') return checks
+    return augmentBankValidationCheck(
+      augmentPoValueValidationCheck(augmentRateValidationCheck(checks, invoice), invoice),
+      invoice
+    )
+  }, [checks, invoice, variant])
+  const checklist = mergeChecklist(augmentedChecks, validationContext)
+  const hasResults = variant === 'nonPo' || checks.length > 0
+  const { passed: checklistPassed, total: checklistTotal } =
+    getChecklistPassSummaryFromMerged(checklist)
+  const failedCount = checklistTotal - checklistPassed
+  const overallStatus = getChecklistOverallStatusFromMerged(checklist)
+  const overallBadgeLabel =
+    formatChecklistPassBadgeText(checklistPassed, checklistTotal) || overallStatus
+  const warnCount = checklist.filter((rule) => rule.status === 'warn').length
+  const overall = !hasResults
+    ? { label: 'Not validated yet', tone: 'warn' }
+    : failedCount > 0
+      ? { label: `Failed · ${failedCount} check${failedCount === 1 ? '' : 's'}`, tone: 'fail' }
+      : warnCount > 0
+        ? { label: 'Passed with exceptions', tone: 'warn' }
+        : { label: 'Passed', tone: 'pass' }
+  const poNumber = validation?.po_number
+  const sesNo = validation?.ses_no
+
+  const [activeTab, setActiveTab] = useState(() => getDefaultChecklistTab(checklist))
+
+  useEffect(() => {
+    if (!checklist.some((rule) => rule.ruleCode === activeTab)) {
+      setActiveTab(getDefaultChecklistTab(checklist))
+    }
+  }, [checklist, activeTab])
+
   const validationTabs = checklist.map((rule) => {
     const tabStatus =
       rule.ruleCode === 'RATE_VALIDATION'
@@ -1269,30 +1392,18 @@ export function PoValidationPanel({
         </div>
 
         <div className="dx-po-validation-actions">
-          <Button size="sm" variant="secondary" className="dx-id-btn" onClick={openVendorReport}>
-            <Mail size={13} /> Report to vendor
-          </Button>
+<<<<<<< Updated upstream
+          <VendorReportButton
+            invoice={invoice}
+            checks={checks}
+            validation={validation}
+            variant={variant}
+          />
+=======
+          <VendorReportButton checklist={checklist} invoice={invoice} validation={validation} />
+>>>>>>> Stashed changes
         </div>
       </div>
-
-      {openRequestInfo?.requestCode && (
-        <div className="dx-po-meta-chip" style={{ marginBottom: 8 }}>
-          Open doc request {openRequestInfo.requestCode}
-          {openRequestInfo.status ? ` · ${openRequestInfo.status}` : ''}
-        </div>
-      )}
-
-      <VendorReportDialog
-        open={reportOpen}
-        onClose={() => !reportSending && setReportOpen(false)}
-        draft={reportDraft}
-        onDraftChange={setReportDraft}
-        loading={reportLoading}
-        sending={reportSending}
-        canSend={Boolean(openRequestInfo?.requestId)}
-        hasFailures={failedCount > 0}
-        onSend={sendVendorReport}
-      />
 
       {!hasResults ? (
         <div className="dx-po-validation-empty">

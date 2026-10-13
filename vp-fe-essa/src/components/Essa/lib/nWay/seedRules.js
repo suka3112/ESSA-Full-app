@@ -332,7 +332,7 @@ export const SEED_MATCH_RULES = [
     by: NITISH
   }),
 
-  /* ── Manpower outsourcing (N-Way design · Sabrina) ──────────────────── */
+  /* ── Manpower (N-Way design · Sabrina) ──────────────────── */
   rule('3.06', 'SES ↔ BAST reference', 'ses_reference', 'EXACT', 'GRN_SES', [t('BAST', 'REQUIRED', '#178 SES reference')], {
     categories: ['MANPOWER'],
     sourceField: '#209 SES number (FMXDOCNR)',

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchPromptConfig } from 'api/extractionPromptConfig'
+import { fetchCfgInvoiceConfig } from 'api/extractionPromptConfig'
 import { CATEGORY_BY_CODE, DATA_POINTS, SOURCES, SOURCE_BY_CODE, registerInvoiceCategoryLabels, registerSourceLabels, sourceLabel } from './catalog'
 
 /**
@@ -16,10 +16,17 @@ const DOC_TO_SOURCES = {
   PROFORMA_INVOICE: ['INVOICE'],
   TAX_INVOICE: ['FAKTUR_PAJAK'],
   TAX_INVOICE_VAT: ['FAKTUR_PAJAK'],
+  FAKTUR_PAJAK: ['FAKTUR_PAJAK'],
   BERITA_ACARA: ['BAST'],
+  WORK_PROGRESS_CERTIFICATE_BAST: ['BAST'],
   DAILY_TIME_SHEET: ['TIMESHEET'],
+  TIMESHEET: ['TIMESHEET'],
   SUMMARY_CALCULATION_MANHOUR: ['MANPOWER_SUMMARY'],
+  MANPOWER_SUMMARY: ['MANPOWER_SUMMARY'],
   DAILY_ATTENDANCE: ['FACE_ID'],
+  FACE_ID: ['FACE_ID'],
+  CONTRACT_ENGAGEMENT_LETTER: ['CONTRACT'],
+  OVERTIME_APPROVAL: ['OVERTIME_APPROVAL'],
   PO: ['PO'],
   PO_APPENDIX: ['PO'],
   PACKING_LIST: ['PACKING_LIST'],
@@ -32,6 +39,40 @@ const DOC_TO_SOURCES = {
 
 const sourcesForDoc = (code) => DOC_TO_SOURCES[String(code || '').toUpperCase()] || []
 
+/**
+ * N-Way source codes that mean this extract tab (section key, OCR type, and document code).
+ * A live document code and its catalog source both count, so Invoice matches INVOICE
+ * and Daily Timesheet matches TIMESHEET.
+ */
+export const sourceCodesForSection = (section) => {
+  if (!section) return []
+  const codes = new Set()
+  const key = section.key
+  const ocr = normKey(section.ocrDocumentType)
+  const docCode = String(section.documentCode || '').toUpperCase()
+  SOURCES.forEach((source) => {
+    if (key && (source.sectionKeys || []).includes(key)) codes.add(source.code)
+    if (ocr && (source.ocrTypes || []).some((type) => normKey(type) === ocr)) codes.add(source.code)
+  })
+  if (docCode) {
+    codes.add(docCode)
+    sourcesForDoc(docCode).forEach((code) => codes.add(code))
+    const docNorm = normKey(docCode)
+    SOURCES.forEach((source) => {
+      if ((source.ocrTypes || []).some((type) => normKey(type) === docNorm)) codes.add(source.code)
+    })
+  }
+  return [...codes]
+}
+
+/** A rule belongs on a document tab when that document is the source or a check-against target. */
+export const ruleUsesDocument = (rule, codes = []) => {
+  if (!codes.length) return false
+  const wanted = new Set(codes.map((code) => String(code || '').toUpperCase()))
+  const used = [rule?.source, ...(rule?.targets || []).map((target) => target.doc)]
+  return used.some((code) => wanted.has(String(code || '').toUpperCase()))
+}
+
 const normKey = (v) => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '')
 
 let cache = null
@@ -40,7 +81,7 @@ let inflight = null
 const loadTypes = async () => {
   if (cache) return cache
   if (!inflight) {
-    inflight = fetchPromptConfig()
+    inflight = fetchCfgInvoiceConfig()
       .then((tree) => {
         cache = (tree?.categories || []).flatMap((c) =>
           (c.invoiceTypes || []).map((t) => ({

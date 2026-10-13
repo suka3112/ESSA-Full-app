@@ -29,7 +29,7 @@ INSERT INTO "VAL_INVOICE_CATEGORY" (category_code, category_name, matrix_ref, is
 SELECT 'MATERIAL', 'Material', '2', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM "VAL_INVOICE_CATEGORY" WHERE category_code = 'MATERIAL');
 INSERT INTO "VAL_INVOICE_CATEGORY" (category_code, category_name, matrix_ref, is_po_based)
-SELECT 'MANPOWER_OUTSOURCING', 'Manpower Outsourcing', '3', TRUE
+SELECT 'MANPOWER_OUTSOURCING', 'Manpower', '3', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM "VAL_INVOICE_CATEGORY" WHERE category_code = 'MANPOWER_OUTSOURCING');
 INSERT INTO "VAL_INVOICE_CATEGORY" (category_code, category_name, matrix_ref, is_po_based)
 SELECT 'CATERING', 'Catering', '4', TRUE
@@ -254,103 +254,103 @@ WHERE NOT EXISTS (SELECT 1 FROM "REFERENCE_TABLE" WHERE physical_name = 'matrix_
 
 -- Data points, one per matrix row.
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_01', 'Vendor name', 'TEXT', NULL, 'Common 1.01'
+SELECT 'DP_1_01', 'Vendor name', 'TEXT', NULL, 'Letterhead under the ALE logo, for example PT. AMANAH LESTARI ENERGY. Also Account Name in Please remit to the following bank, and the payee under Mohon Dikirimkan Di on the Kwitansi.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_01');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_02', 'Vendor bank account number', 'NUMBER', NULL, 'Common 1.02'
+SELECT 'DP_1_02', 'Vendor bank account number', 'NUMBER', NULL, 'Bank Account in Please remit to the following bank, for example 151-00-1017369-5. On the Kwitansi the same account sits under Mohon Dikirimkan Di, Bank MANDIRI Cabang Luwuk.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_02');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_03', 'Invoice date', 'DATE', 'DATE_ISO', 'Common 1.03'
+SELECT 'DP_1_03', 'Invoice date', 'DATE', 'DATE_ISO', 'Label DATE next to INVOICE NO, written DD/MM/YYYY, for example 03/09/2026 or 10/09/2026. The Kwitansi repeats it as Desa Padang, 03 September 2026.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_03');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_04', 'PO number', 'CODE', NULL, 'Common 1.04'
+SELECT 'DP_1_04', 'PO number', 'CODE', NULL, 'Contract Order No. under the claim lines, for example PO 4203000794 or PO4203000560. The Kwitansi Untuk Pembayaran line also contains the PO number.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_04');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_05', 'Invoice number', 'CODE', NULL, 'Common 1.05'
+SELECT 'DP_1_05', 'Invoice number', 'CODE', NULL, 'Label INVOICE NO, for example 651/PT.ALE-PAU/09/2026 or 652/PT.ALE-PAU/09/2026. The Kwitansi shows the same value as No.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_05');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_06', 'Unit rate', 'AMOUNT', NULL, 'Common 1.06'
+SELECT 'DP_1_06', 'Unit rate', 'AMOUNT', NULL, 'These manpower invoices print claim line amounts, not a unit rate. Leave empty unless a rate is printed. The man-hour rate is on the timesheet or manpower summary.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_06');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_07', 'Payment terms', 'TEXT', NULL, 'Common 1.07'
+SELECT 'DP_1_07', 'Payment terms', 'TEXT', NULL, 'Label PAYMENT TERM, for example 30 Days From Invoice Date.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_07');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_08', 'Invoice Amount', 'AMOUNT', NULL, 'Common 1.08'
+SELECT 'DP_1_08', 'Invoice Amount', 'AMOUNT', NULL, 'The Total row before VAT, for example Rp 21.094.733 or Rp 25.197.533. Do not use Grand Total. Grand Total is Total plus VAT 11%.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_08');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_09', 'Item description', 'TEXT', NULL, 'Common 1.09'
+SELECT 'DP_1_09', 'Item description', 'TEXT', NULL, 'Service title under DESCRIPTION, for example Manpower Supply for FRP (Pipe Fitter & Craftsman) or Manpower Supply for Machinist workshop, plus each claim line and its amount. The period is inside the line, such as 20 July - 19 August 2026 or 01 - 31 August 2026.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_09');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_10', 'Quantity', 'NUMBER', NULL, 'Common 1.10'
+SELECT 'DP_1_10', 'Quantity', 'NUMBER', NULL, 'These invoices have no quantity column. Each claim line is a description and an amount only.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_10');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_11', 'ESSA Company Name', 'TEXT', 'COMPANY_NAME', 'Common 1.11'
+SELECT 'DP_1_11', 'ESSA Company Name', 'TEXT', 'COMPANY_NAME', 'MESSRS bill-to, for example PT. PANCA AMARA UTAMA. On the Kwitansi this is Sudah Terima Dari.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_11');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_12', 'Vendor NPWP number', 'CODE', 'NPWP_DIGITS', 'Common 1.12'
+SELECT 'DP_1_12', 'Vendor NPWP number', 'CODE', 'NPWP_DIGITS', 'Letterhead NPWP, for example 82.212.670.2.832.000.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_12');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_13', 'Faktur Pajak value', 'AMOUNT', NULL, 'Common 1.13'
+SELECT 'DP_1_13', 'Faktur Pajak value', 'AMOUNT', NULL, 'VAT amount. On the ALE invoices this is the VAT 11% row: Rp 2.320.421 on invoice 651 and Rp 2.771.729 on invoice 652. Match it to the Faktur Pajak value.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_13');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_14', 'Faktur Pajak date', 'DATE', 'DATE_ISO', 'Common 1.14'
+SELECT 'DP_1_14', 'Faktur Pajak date', 'DATE', 'DATE_ISO', 'Tax invoice date. It is not the commercial DATE (03/09/2026 or 10/09/2026). Read it from the Faktur Pajak.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_14');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_15', 'Faktur Pajak vendor name', 'TEXT', NULL, 'Common 1.15'
+SELECT 'DP_1_15', 'Faktur Pajak vendor name', 'TEXT', NULL, 'Seller name on the Faktur Pajak. The commercial letterhead is PT. AMANAH LESTARI ENERGY.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_15');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_16', 'Faktur Pajak number', 'CODE', NULL, 'Common 1.16'
+SELECT 'DP_1_16', 'Faktur Pajak number', 'CODE', NULL, 'Faktur Pajak number. It is not the commercial INVOICE NO 651/PT.ALE-PAU/09/2026 or 652/PT.ALE-PAU/09/2026.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_16');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_17', 'Faktur Pajak Bar Code', 'CODE', NULL, 'Common 1.17'
+SELECT 'DP_1_17', 'Faktur Pajak Bar Code', 'CODE', NULL, 'Barcode or QR on the Faktur Pajak. The commercial invoice and Kwitansi do not print one.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_17');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_18', 'Negative Vendor List', 'TEXT', NULL, 'Common 1.18'
+SELECT 'DP_1_18', 'Negative Vendor List', 'TEXT', NULL, 'SAP vendor-master block flag. Not printed on the ALE manpower invoice.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_18');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
 SELECT 'DP_1_19', 'Vendor debit balance', 'AMOUNT', NULL, 'Common 1.19'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_19');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_20', 'Liquidated Clause', 'DATE', 'DATE_ISO', 'Common 1.20'
+SELECT 'DP_1_20', 'Liquidated Clause', 'DATE', 'DATE_ISO', 'Liquidated damages clause on the PO or contract. Not printed on invoices 651 or 652.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_20');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_21', 'Retention Clause', 'TEXT', NULL, 'Common 1.21'
+SELECT 'DP_1_21', 'Retention Clause', 'TEXT', NULL, 'Retention clause on the PO or contract. These invoices have no retention line.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_21');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_22', 'Advance recovery Clause', 'TEXT', NULL, 'Common 1.22'
+SELECT 'DP_1_22', 'Advance recovery Clause', 'TEXT', NULL, 'Advance recovery clause on the PO or contract. These invoices have no advance recovery line.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_22');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_23', 'Percentage Completion (BAST & SES)', 'PERCENT', NULL, 'Common 1.23'
+SELECT 'DP_1_23', 'Percentage Completion (BAST & SES)', 'PERCENT', NULL, 'Completion percent on the BAST. These invoices show a claim number in the line, such as 7th Claim or 9th Claim, not a percent.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_23');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_24', 'Duplicate invoice check (vendor + invoice no. + amount + date)', 'DATE', 'DATE_ISO', 'Common 1.24'
+SELECT 'DP_1_24', 'Duplicate invoice check (vendor + invoice no. + amount + date)', 'DATE', 'DATE_ISO', 'Duplicate check on vendor, invoice number, amount, and date. Example keys: PT. AMANAH LESTARI ENERGY, 651/PT.ALE-PAU/09/2026, Rp 21.094.733, 03/09/2026.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_24');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_25', 'Duplicate Faktur Pajak check (FP number)', 'CODE', NULL, 'Common 1.25'
+SELECT 'DP_1_25', 'Duplicate Faktur Pajak check (FP number)', 'CODE', NULL, 'Duplicate check on the Faktur Pajak number against the tax invoice register.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_25');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_26', 'Currency', 'TEXT', NULL, 'Common 1.26'
+SELECT 'DP_1_26', 'Currency', 'TEXT', NULL, 'Amount column is AMOUNT (IDR) and values are prefixed Rp. Currency is IDR.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_26');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_27', 'Exchange rate applied', 'NUMBER', NULL, 'Common 1.27'
+SELECT 'DP_1_27', 'Exchange rate applied', 'NUMBER', NULL, 'These invoices are IDR only (AMOUNT (IDR), values prefixed Rp). Leave empty unless an exchange rate is printed.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_27');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_28', 'PPN rate and DPP (taxable base)', 'PERCENT', NULL, 'Common 1.28'
+SELECT 'DP_1_28', 'PPN rate and DPP (taxable base)', 'PERCENT', NULL, 'DPP is the Total row before tax. PPN is the VAT 11% row, for example Rp 2.320.421 on DPP Rp 21.094.733. Grand Total is Total plus VAT.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_28');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_29', 'WHT type and rate (PPh 21 / 23 / 4(2))', 'PERCENT', NULL, 'Common 1.29'
+SELECT 'DP_1_29', 'WHT type and rate (PPh 21 / 23 / 4(2))', 'PERCENT', NULL, 'Withholding tax is not printed. The only tax row is VAT 11%.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_29');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_30', 'Payment baseline date and due date', 'DATE', 'DATE_ISO', 'Common 1.30'
+SELECT 'DP_1_30', 'Payment baseline date and due date', 'DATE', 'DATE_ISO', 'PAYMENT TERM is 30 Days From Invoice Date. Due date is the invoice date plus 30 days, from 03/09/2026 or 10/09/2026.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_30');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_31', 'Date sequence (service period - GRN - invoice - FP)', 'DATE', 'DATE_ISO', 'Common 1.31'
+SELECT 'DP_1_31', 'Date sequence (service period - GRN - invoice - FP)', 'DATE', 'DATE_ISO', 'Service period is inside the claim line (20 July - 19 August 2026 or 01 - 31 August 2026), then the invoice DATE, then the Faktur Pajak date.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_31');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_32', 'PO remaining balance (quantity and value)', 'AMOUNT', NULL, 'Common 1.32'
+SELECT 'DP_1_32', 'PO remaining balance (quantity and value)', 'AMOUNT', NULL, 'Remaining PO balance for Contract Order No. PO 4203000794 or PO4203000560. Read it from the PO, not the invoice.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_32');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_1_33', 'Vendor bank account changed since last payment', 'NUMBER', NULL, 'Common 1.33'
+SELECT 'DP_1_33', 'Vendor bank account changed since last payment', 'NUMBER', NULL, 'Compare the remit Bank Account, for example 151-00-1017369-5, with the account on the last payment.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_1_33');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
 SELECT 'DP_2_01', 'Item description', 'TEXT', NULL, 'Material 2.01'
@@ -368,16 +368,16 @@ INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalize
 SELECT 'DP_2_05', 'Bank Guarantee / Performance Bond Amt.', 'AMOUNT', NULL, 'Material 2.05'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_2_05');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_3_01', 'Man-hours Qty.', 'NUMBER', NULL, 'Manpower Outsourcing 3.01'
+SELECT 'DP_3_01', 'Man-hours Qty.', 'NUMBER', NULL, 'Not printed as a quantity on the ALE manpower invoice. Claim lines are amounts only (for example Direct Cost or Monday to Friday). Take the man-hour count from the timesheet or manpower summary.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_3_01');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_3_02', 'Man-hours Unit Rate', 'AMOUNT', NULL, 'Manpower Outsourcing 3.02'
+SELECT 'DP_3_02', 'Man-hours Unit Rate', 'AMOUNT', NULL, 'Not printed on the ALE manpower invoice. The invoice shows claim line amounts, not a rate. Take the man-hour unit rate from the timesheet or manpower summary.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_3_02');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_3_03', 'Overtime Qty.', 'NUMBER', NULL, 'Manpower Outsourcing 3.03'
+SELECT 'DP_3_03', 'Overtime Qty.', 'NUMBER', NULL, 'The invoice has an Overtime claim line with an amount only, for example "7th Claim for 20 July - 19 August 2026 Overtime". Hours are not on the invoice. Take overtime hours from the timesheet or overtime approval.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_3_03');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
-SELECT 'DP_3_04', 'Overtime unit rate', 'AMOUNT', NULL, 'Manpower Outsourcing 3.04'
+SELECT 'DP_3_04', 'Overtime unit rate', 'AMOUNT', NULL, 'Not printed on the ALE manpower invoice. The Overtime row is a lump amount (Rp 2.869.000 or Rp 3.752.000). Take the overtime unit rate from the timesheet or overtime approval.'
 WHERE NOT EXISTS (SELECT 1 FROM "DATA_POINT" WHERE data_point_code = 'DP_3_04');
 INSERT INTO "DATA_POINT" (data_point_code, data_point_name, data_type, normalizer_key, description)
 SELECT 'DP_4_01', 'Daily POB count', 'NUMBER', NULL, 'Catering 4.01'
