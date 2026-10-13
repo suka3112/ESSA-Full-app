@@ -26,6 +26,7 @@ export const EMAIL_TEMPLATES = `/email-templates`
 export const SLA_MANAGEMENT = `/sla`
 export const INVOICE_CONFIGURATION = `/invoice-configuration`
 export const EXCEPTION_CODES = `/exception-codes`
+export const WHT_CONFIGURATION = `/wht-configuration`
 export const SLA_CREATE = `/sla/create`
 export const SLA_EDIT = `/sla/edit/:id`
 export const slaEditPath = (id) => `/sla/edit/${encodeURIComponent(id)}`

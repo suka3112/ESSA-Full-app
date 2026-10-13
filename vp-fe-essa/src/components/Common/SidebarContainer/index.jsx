@@ -29,6 +29,7 @@ import {
   EMAIL_TEMPLATES,
   SLA_MANAGEMENT,
   EXCEPTION_CODES,
+  WHT_CONFIGURATION,
   PROMPT_CONFIG
 } from 'constants/url'
 import OutsideClickHandler from '../OutsideClickHandler'
@@ -80,6 +81,7 @@ export const getSidebarMenuItems = ({ t, isAdmin, isVendor }) => {
             EMAIL_TEMPLATES,
             SLA_MANAGEMENT,
             EXCEPTION_CODES,
+            WHT_CONFIGURATION,
             APPROVAL_MATRIX,
             USER_MANAGEMENT,
             PROMPT_CONFIG
@@ -88,6 +90,7 @@ export const getSidebarMenuItems = ({ t, isAdmin, isVendor }) => {
             { name: t('invoiceConfiguration'), path: PROMPT_CONFIG },
             { name: t('slaManagement'), path: SLA_MANAGEMENT },
             { name: t('exceptionCodes'), path: EXCEPTION_CODES },
+            { name: t('whtConfiguration'), path: WHT_CONFIGURATION },
             { name: t('workflowsAndApproval'), path: APPROVAL_MATRIX },
             { name: t('emailTemplates'), path: EMAIL_TEMPLATES },
             { name: t('usersAndRoles'), path: USER_MANAGEMENT }

@@ -39,5 +39,6 @@
   "vendors": "Vendors",
   "home": "Home",
   "logistics": "Logistics",
-  "PONumber": "PO Number"
+  "PONumber": "PO Number",
+  "whtConfiguration": "WHT Configuration"
 }

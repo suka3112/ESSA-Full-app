@@ -18,6 +18,7 @@ import uploadFile from "./v1/uploadRoutes";
 import apInvoiceOcrRoutes from "./v1/apInvoiceOcr.route";
 import extractionPromptConfigRoutes from "./v1/extractionPromptConfig.route";
 import invoiceConfigRoutes from "./v1/invoiceConfig.route";
+import whtConfigRoutes from "./v1/whtConfig.route";
 import sapSsoRoutes from "./v1/sapSso.route";
 import entraSsoRoutes from "./v1/entraSso.route";
 import emailTemplateRoutes from "./v1/emailTemplate.route";
@@ -52,6 +53,7 @@ const initializeRoutes = (app: Express) => {
   app.use("/vendor-portal/ap-invoice-ocr", apInvoiceOcrRoutes);
   app.use("/vendor-portal/extraction-prompt-config", extractionPromptConfigRoutes);
   app.use("/vendor-portal/invoice-config", invoiceConfigRoutes);
+  app.use("/vendor-portal/wht-config", whtConfigRoutes);
   app.use("/vendor-portal/essa/email-templates", emailTemplateRoutes);
   app.use("/vendor-portal/essa/invoices", essaInvoiceRoutes);
   app.use("/vendor-portal/essa/audit-logs", essaAuditRoutes);

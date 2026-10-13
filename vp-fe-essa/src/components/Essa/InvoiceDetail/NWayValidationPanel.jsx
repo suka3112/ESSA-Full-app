@@ -70,17 +70,19 @@ export const sourceCodeForSection = (section) => {
 
 /**
  * Flatten one rule result into “source → check with” rows.
- * With `docCode`, only the checks that involve that document are kept.
+ * With `docCodes`, only the checks that involve that document are kept.
  */
-const rowsFor = (result, docCode) => {
+const rowsFor = (result, docCodes) => {
   const { rule } = result
+  const wanted = docCodes ? new Set(docCodes.map((c) => String(c || '').toUpperCase())) : null
+  const isDoc = (code) => !!code && wanted.has(String(code).toUpperCase())
   const fieldOf = (code) => {
     const src = result.sources.find((s) => s.code === code)
     return cleanField(src?.field) || src?.fieldLabel || rule.dataPoint
   }
   const rows = result.comparisons
     .filter((c) => !HIDDEN_COMPARISONS.includes(c.status))
-    .filter((c) => !docCode || c.from === docCode || c.to === docCode)
+    .filter((c) => !wanted || isDoc(c.from) || isDoc(c.to))
     .map((c) => ({
       from: c.from,
       to: c.to,
@@ -98,8 +100,8 @@ const rowsFor = (result, docCode) => {
   // No field-level comparison (server-side rule, or decided by the 12-point check): one row per target.
   const targets = result.sources
     .filter((s) => s.role !== 'SOURCE' && s.role !== 'EXTRACT')
-    .filter((s) => !docCode || docCode === rule.source || s.code === docCode)
-  if (docCode && docCode !== rule.source && !targets.length) return []
+    .filter((s) => !wanted || isDoc(rule.source) || isDoc(s.code))
+  if (wanted && !isDoc(rule.source) && !targets.length) return []
   return (targets.length ? targets : [null]).map((t) => ({
     from: rule.source,
     to: t?.code,
@@ -164,13 +166,9 @@ function ResultTable({ results }) {
  * N-way validation results for one invoice.
  * Uses `validation.nWay` from the API when present, otherwise evaluates the
  * configured match rules against the extracted documents in the browser.
- * With `docCode`, only the rules and checks that involve that document are listed.
+ * With `docCode` or `section`, only the rules and checks that involve that document are listed.
  */
-<<<<<<< Updated upstream
-export default function NWayValidationPanel({ inv, sections, checks = [], validation = {}, isNonPo = false, invoiceTypeCode, configHref, view, onSummary, section = null }) {
-=======
-export default function NWayValidationPanel({ inv, sections, checks = [], validation = {}, isNonPo = false, invoiceTypeCode, docCode = null, configHref, onSummary }) {
->>>>>>> Stashed changes
+export default function NWayValidationPanel({ inv, sections, checks = [], validation = {}, isNonPo = false, invoiceTypeCode, docCode = null, section = null, configHref, onSummary }) {
   const [rulesState, setRulesState] = useState({ rules: null, origin: null })
   const [filter, setFilter] = useState('ALL')
 
@@ -184,7 +182,15 @@ export default function NWayValidationPanel({ inv, sections, checks = [], valida
     }
   }, [])
 
-  useEffect(() => setFilter('ALL'), [docCode])
+  // Document tab → every n-way source code that document stands for (Manpower docs map to several).
+  const docKey = section ? `${section.key}|${section.documentCode || ''}|${section.ocrDocumentType || ''}` : docCode
+  const docCodes = useMemo(
+    () => (section ? sourceCodesForSection(section) : docCode ? [docCode] : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [docKey]
+  )
+
+  useEffect(() => setFilter('ALL'), [docKey])
 
   // Only checks the server actually returned — the 12-point merge pads missing rules
   // with “did not evaluate”, which must not override the n-way comparison.
@@ -204,9 +210,10 @@ export default function NWayValidationPanel({ inv, sections, checks = [], valida
     () =>
       (evaluation?.results || [])
         .filter((r) => OPEN_STATUSES.includes(r.status))
-        .map((r) => ({ result: r, rows: rowsFor(r, docCode) }))
+        .filter((r) => !docCodes || ruleUsesDocument(r.rule, docCodes))
+        .map((r) => ({ result: r, rows: rowsFor(r, docCodes) }))
         .filter((x) => x.rows.length),
-    [evaluation, docCode]
+    [evaluation, docCodes]
   )
   const counts = useMemo(() => {
     const c = { total: results.length, fail: 0, incomplete: 0, pending: 0 }
@@ -224,45 +231,15 @@ export default function NWayValidationPanel({ inv, sections, checks = [], valida
     return <div className="nw-empty">Loading validation rules…</div>
   }
 
-<<<<<<< Updated upstream
-  const { summary, results } = evaluation
-  const documentCodes = section ? sourceCodesForSection(section) : null
-  const forDocument = documentCodes ? results.filter((r) => ruleUsesDocument(r.rule, documentCodes)) : results
-  const documentSummary = documentCodes
-    ? forDocument.reduce((acc, r) => {
-        acc.total += 1
-        acc[r.status] = (acc[r.status] || 0) + 1
-        return acc
-      }, { total: 0, pass: 0, fail: 0, incomplete: 0, pending: 0, na: 0 })
-    : summary
-  const shown = filter === 'ALL' ? forDocument : forDocument.filter((r) => r.status === filter)
-  const activeSummary = documentCodes ? documentSummary : summary
-
-  if (section) {
-    const docLabel = section.label || 'this document'
-    return (
-      <div className="nw-doc-checks">
-        <h5 className="nw-doc-checks__title">N-Way checks · {docLabel}</h5>
-        <p className="nw-doc-checks__hint">Common rules and this invoice category, where {docLabel} is a source or a document to check against.</p>
-        {shown.length ? <ResultMatrix results={shown} /> : <div className="nw-empty">No N-Way rules use {docLabel} for this invoice category.</div>}
-      </div>
-    )
-  }
-=======
   const shown = filter === 'ALL' ? results : results.filter((x) => x.result.status === filter)
-  const docName = docCode ? sourceLabel(docCode) : null
->>>>>>> Stashed changes
+  const docName = section?.label || (docCode ? docLabel(docCode) : null)
 
   return (
     <div className="nw-panel">
       <div className="nw-panel__bar">
         <div className="nw-filters" role="group" aria-label="Filter results">
           {FILTERS.map((f) => {
-<<<<<<< Updated upstream
-            const count = f.key === 'ALL' ? activeSummary.total : activeSummary[f.key] || 0
-=======
             const count = f.key === 'ALL' ? counts.total : counts[f.key] || 0
->>>>>>> Stashed changes
             if (f.key !== 'ALL' && !count) return null
             return (
               <button key={f.key} type="button" aria-pressed={filter === f.key} className={`nw-filter nw-filter--${f.key}${filter === f.key ? ' is-on' : ''}`} onClick={() => setFilter(f.key)}>

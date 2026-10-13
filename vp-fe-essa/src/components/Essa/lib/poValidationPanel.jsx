@@ -1035,12 +1035,17 @@ function VendorReportDialog({
   )
 }
 
-<<<<<<< Updated upstream
+/**
+ * “Report to vendor” button + draft dialog. Creates the [DOCREQ] document request
+ * from the checklist, then lets the user edit and send the e-mail.
+ * Pass `checklist` when the caller already has the merged checklist.
+ */
 export function VendorReportButton({
   invoice = null,
   checks = [],
   validation = {},
   variant = 'po',
+  checklist: checklistOverride = null,
   className = 'dx-id-btn'
 }) {
   const mergeChecklist =
@@ -1061,49 +1066,12 @@ export function VendorReportButton({
       invoice
     )
   }, [checks, invoice, variant])
-  const checklist = mergeChecklist(augmentedChecks, validationContext)
+  const merged = useMemo(() => mergeChecklist(augmentedChecks, validationContext), [mergeChecklist, augmentedChecks, validationContext])
+  const checklist = checklistOverride || merged
   const { passed: checklistPassed, total: checklistTotal } =
     getChecklistPassSummaryFromMerged(checklist)
   const failedCount = checklistTotal - checklistPassed
 
-=======
-function CommercialFooter({ validation, invoice }) {
-  const ld = validation?.ld_amount ?? 0
-  const advance = validation?.advance_recovery ?? 0
-  const retention = validation?.retention_held ?? 0
-  const net =
-    validation?.net_payable ?? invoice?.net_payable ?? invoice?.total_amount ?? null
-
-  return (
-    <div className="dx-checklist-commercial">
-      <div className="dx-checklist-commercial-title">Commercial impact</div>
-      <p className="dx-checklist-net">
-        Net payable: {net != null ? formatIdrPrefix(net) : '—'}
-      </p>
-      {(validation?.ld_pct > 0 || ld > 0 || advance > 0 || retention > 0) && (
-        <div className="dx-checklist-commercial-grid">
-          {validation?.ld_pct > 0 && <span>LD: {validation.ld_pct}%</span>}
-          {ld > 0 && <span>Late delivery deduction: applied</span>}
-          {advance > 0 && <span>Advance recovery: deducted</span>}
-          {retention > 0 && <span>Retention held: applied</span>}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function ValidationTabIcon({ status }) {
-  if (status === 'fail') return <XCircle size={12} />
-  if (status === 'warn') return <AlertTriangle size={12} />
-  return <CheckCircle2 size={12} className="dx-check-icon-pass" />
-}
-
-/**
- * “Report to vendor” button + draft dialog. Creates the [DOCREQ] document request
- * from the checklist, then lets the user edit and send the e-mail.
- */
-export function VendorReportButton({ checklist = [], invoice = null, validation = {}, className = 'dx-id-btn' }) {
->>>>>>> Stashed changes
   const [reportOpen, setReportOpen] = useState(false)
   const [reportLoading, setReportLoading] = useState(false)
   const [reportSending, setReportSending] = useState(false)
@@ -1208,11 +1176,6 @@ export function VendorReportButton({ checklist = [], invoice = null, validation 
     }
   }
 
-<<<<<<< Updated upstream
-=======
-  const failedCount = checklist.filter((rule) => rule.status === 'fail').length
-
->>>>>>> Stashed changes
   return (
     <>
       <Button size="sm" variant="secondary" className={className} onClick={openVendorReport}>
@@ -1239,7 +1202,6 @@ export function VendorReportButton({ checklist = [], invoice = null, validation 
   )
 }
 
-<<<<<<< Updated upstream
 function CommercialFooter({ validation, invoice }) {
   const ld = validation?.ld_amount ?? 0
   const advance = validation?.advance_recovery ?? 0
@@ -1269,7 +1231,8 @@ function ValidationTabIcon({ status }) {
   if (status === 'fail') return <XCircle size={12} />
   if (status === 'warn') return <AlertTriangle size={12} />
   return <CheckCircle2 size={12} className="dx-check-icon-pass" />
-=======
+}
+
 /** Checklist merged and augmented the same way the validation panel shows it. */
 export function useValidationChecklist({ checks = [], validation = {}, invoice = null, variant = 'po' }) {
   const validationContext = useMemo(
@@ -1289,7 +1252,6 @@ export function useValidationChecklist({ checks = [], validation = {}, invoice =
     )
     return mergeValidationChecklist(augmented, validationContext)
   }, [checks, invoice, variant, validationContext])
->>>>>>> Stashed changes
 }
 
 export function PoValidationPanel({
@@ -1392,16 +1354,12 @@ export function PoValidationPanel({
         </div>
 
         <div className="dx-po-validation-actions">
-<<<<<<< Updated upstream
           <VendorReportButton
             invoice={invoice}
             checks={checks}
             validation={validation}
             variant={variant}
           />
-=======
-          <VendorReportButton checklist={checklist} invoice={invoice} validation={validation} />
->>>>>>> Stashed changes
         </div>
       </div>
 

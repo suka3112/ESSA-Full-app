@@ -25,6 +25,7 @@ export { ApprovalMatrixPage } from './shared/approval-matrix'
 export { AuditLogsPage } from './shared/audit-logs'
 export { EmailTemplatesPage } from './shared/email-templates'
 export { ExceptionCodesPage } from './shared/exception-codes'
+export { WhtConfigurationPage } from './shared/wht-configuration'
 export {
   SlaPoliciesPage,
   SlaPolicyEditorPage,

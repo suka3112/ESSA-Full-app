@@ -54,6 +54,7 @@ import {
   INVOICE_NON_PO_BASED_VIEW,
   EMAIL_TEMPLATES,
   EXCEPTION_CODES,
+  WHT_CONFIGURATION,
   SLA_MANAGEMENT,
   SLA_CREATE,
   SLA_EDIT,
@@ -206,6 +207,11 @@ export const adminRoutes = [
       {
         component: 'ExceptionCodesPage',
         path: EXCEPTION_CODES,
+        exact: true
+      },
+      {
+        component: 'WhtConfigurationPage',
+        path: WHT_CONFIGURATION,
         exact: true
       },
       {
