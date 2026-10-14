@@ -1,31 +1,14 @@
-/** Option lists and labels for the WHT Configuration screen. */
-
-export const STEP_LABELS = {
-  1: 'Offshore',
-  2: 'Individual Vendor',
-  3: 'Facility',
-  4: 'Rental',
-  5: 'Construction',
-  6: 'Service',
-  7: 'Default'
-}
-
-export const CATEGORIES = Object.values(STEP_LABELS)
-
-export const WHT_ARTICLES = ['Art. 4(2)', 'Art. 15', 'Art. 21', 'Art. 23', 'Art. 26']
-
-export const RATE_TYPES = [
-  { value: 'FIXED', label: 'Fixed percentage' },
-  { value: 'TREATY', label: 'Tax treaty rate' },
-  { value: 'PROGRESSIVE', label: 'Progressive (PPh 21)' }
-]
+/**
+ * Option lists and helpers for the WHT Configuration screen.
+ * The rule taxonomy (category → condition → sub-condition), SAP WH codes and rate types
+ * come from the server (GET /wht-config), so the form and the validation share one source.
+ */
 
 export const REFERENCE_MASTERS = [
-  { value: '', label: 'None' },
-  { value: 'TAX_TREATY', label: 'Tax Treaty Rates', tab: 'treaties' },
+  { value: 'TAX_TREATY', label: 'Tax Rate document', tab: 'taxRates' },
   { value: 'SKB', label: 'SKB', tab: 'facilities' },
   { value: 'PP23', label: 'PP23', tab: 'facilities' },
-  { value: 'SBUJK', label: 'SBUJK', tab: 'sbujk' },
+  { value: 'SBUJK', label: 'SBUJK' },
   { value: 'PPH21_TARIFF', label: 'Tarif PPh Orang Pribadi' }
 ]
 export const referenceLabel = (value) => REFERENCE_MASTERS.find((r) => r.value === value)?.label || ''
@@ -40,17 +23,7 @@ export const MASTER_STATUSES = [
   { value: 'INACTIVE', label: 'Inactive' }
 ]
 
-export const SERVICE_TREATMENTS = ['Technical services', 'FTS']
-
-export const BUSINESS_SCOPES = [
-  { value: 'EXECUTION', label: 'Execution' },
-  { value: 'PLANNING_CONSULTING', label: 'Planning / Consulting' }
-]
-export const QUALIFICATIONS = [
-  { value: 'SMALL', label: 'Small' },
-  { value: 'NON_SMALL', label: 'Non-small' }
-]
-export const optionLabel = (options, value) => options.find((o) => o.value === value)?.label || value || '—'
+export const rateTypeLabel = (rateTypes, value) => rateTypes.find((r) => r.value === value)?.label || value || '—'
 
 /** Inputs for "Test WHT Rule" */
 export const VENDOR_TYPES = [
@@ -68,6 +41,10 @@ export const RENTAL_TYPES = [
   { value: 'LAND_BUILDING', label: 'Land / Building' },
   { value: 'MOVABLE_ASSET', label: 'Movable asset' }
 ]
+export const BUSINESS_SCOPES = [
+  { value: 'EXECUTION', label: 'Execution' },
+  { value: 'PLANNING_CONSULTING', label: 'Planning / Consulting' }
+]
 export const SBUJK_OPTIONS = [
   { value: 'NONE', label: 'No SBUJK' },
   { value: 'SMALL', label: 'SBUJK - Small' },
@@ -84,21 +61,22 @@ export const SERVICE_TYPES = [
   { value: 'FOREIGN_SHIPPING', label: 'Foreign shipping' }
 ]
 
-/** "Execution", "SBUJK + Small" -> "EXECUTION", "SBUJK_SMALL" (engine key for new rules). */
-export const toCode = (text) =>
-  String(text || '')
-    .trim()
-    .toUpperCase()
-    .replace(/\+/g, ' ')
-    .replace(/[^A-Z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '')
-
-export const pct = (value) => (value == null || value === '' ? '—' : `${Number(value)}%`)
-
 export const todayIso = () => new Date().toISOString().slice(0, 10)
 
 export const fmtDate = (iso) => {
   if (!iso) return '—'
-  const d = new Date(`${iso}T00:00:00`)
+  const d = new Date(`${String(iso).slice(0, 10)}T00:00:00`)
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
 }
+
+export const fmtDateTime = (iso) => {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  return Number.isNaN(d.getTime()) ? iso : d.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
+export const fmtBytes = (n) => (n == null ? '—' : n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`)
+
+/** Do two [from, to] ranges overlap? (to = null means open-ended) */
+export const rangesOverlap = (aFrom, aTo, bFrom, bTo) =>
+  (aFrom || '0000') <= (bTo || '9999-12-31') && (bFrom || '0000') <= (aTo || '9999-12-31')

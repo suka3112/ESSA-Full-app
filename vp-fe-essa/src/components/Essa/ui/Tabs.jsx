@@ -11,8 +11,10 @@ export function Tabs({ tabs, value, onChange, className, actions = null }) {
             key={t.value}
             role="tab"
             aria-selected={active}
-            onClick={() => onChange(t.value)}
-            className={cn('dx-tab', active && 'active', t.tabClassName)}
+            aria-disabled={t.disabled || undefined}
+            disabled={t.disabled}
+            onClick={() => !t.disabled && onChange(t.value)}
+            className={cn('dx-tab', active && 'active', t.disabled && 'is-disabled', t.tabClassName)}
             type="button"
             title={t.title}
           >

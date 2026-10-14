@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CheckCircle2, CircleSlash, Loader2 } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, CircleSlash, Loader2 } from 'lucide-react'
 
 import { Drawer } from '../ui/Drawer'
 import { Button } from '../ui/Button'
@@ -13,7 +13,6 @@ import {
   SERVICE_TYPES,
   VENDOR_TYPES,
   BUSINESS_SCOPES,
-  referenceLabel,
   todayIso
 } from './options'
 
@@ -66,7 +65,7 @@ function Pick({ value, onChange, options, disabled }) {
 }
 
 /** "Test WHT Rule": answer the step questions and see which rule the engine picks. */
-export default function TestRuleDrawer({ open, onClose, vendors }) {
+export default function TestRuleDrawer({ open, onClose, vendors, hasTaxRateDocument }) {
   const [form, setForm] = useState(EMPTY)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
@@ -117,11 +116,9 @@ export default function TestRuleDrawer({ open, onClose, vendors }) {
   }
 
   const rule = result?.rule
-  const rate = rule
-    ? result.treatyRatePct != null
-      ? `${result.treatyRatePct}% (treaty, ${result.treaty.country})`
-      : rule.rateText
-    : null
+  const candidates = result?.candidates || []
+  const treaty = result?.treaty
+  const tone = !result ? '' : result.result === 'WHT_APPLICABLE' ? ' is-match' : result.result === 'NEEDS_REVIEW' ? ' is-review' : ' is-none'
 
   return (
     <Drawer
@@ -146,7 +143,7 @@ export default function TestRuleDrawer({ open, onClose, vendors }) {
           <section className="wht-form-section">
             <h3>Vendor</h3>
             <div className="wht-form-grid">
-              <Q label="Vendor (optional)" hint="A known vendor’s SKB / PP23 / SBUJK records are used automatically">
+              <Q label="Vendor (optional)" hint="A known vendor’s SKB / PP23 certificates are used automatically">
                 <Input value={form.vendorCode} onChange={(e) => set('vendorCode')(e.target.value)} list="wht-test-vendors" placeholder="Vendor code" />
                 <datalist id="wht-test-vendors">
                   {vendors.map((v) => (
@@ -202,7 +199,7 @@ export default function TestRuleDrawer({ open, onClose, vendors }) {
                     <Q label="Construction work">
                       <Pick value={form.constructionType} onChange={set('constructionType')} options={BUSINESS_SCOPES} disabled={!yes(form.isConstruction)} />
                     </Q>
-                    <Q label="SBUJK">
+                    <Q label="SBUJK (as stated)" hint="SBUJK master data is disabled; answer for this invoice">
                       <Pick value={form.sbujk} onChange={set('sbujk')} options={SBUJK_OPTIONS} disabled={!yes(form.isConstruction)} />
                     </Q>
                     <Q label="Service type">
@@ -216,30 +213,57 @@ export default function TestRuleDrawer({ open, onClose, vendors }) {
           )}
         </div>
 
-        <aside className={`wht-result${result ? (rule ? ' is-match' : ' is-none') : ''}`} aria-live="polite">
+        <aside className={`wht-result${tone}`} aria-live="polite">
           <h3>Matched WHT rule</h3>
           {!result ? (
             <p className="wht-note">Answer the questions and press Evaluate.</p>
-          ) : rule ? (
+          ) : !candidates.length ? (
+            <p className="wht-result__none">No active rule matches. Check that the step {result.step} rule is active and in date.</p>
+          ) : (
             <>
               <dl>
                 <dt>Step</dt><dd>{result.step}</dd>
-                <dt>Category</dt><dd>{rule.category}</dd>
-                <dt>Condition</dt><dd>{[rule.condition, rule.subCondition].filter(Boolean).join(' · ')}</dd>
-                <dt>WHT article</dt><dd>{rule.whtArticle}</dd>
-                <dt>Rate</dt><dd>{rate}</dd>
-                <dt>SAP WHT code</dt><dd className="wht-mono">{rule.sapWhtCode}</dd>
-                <dt>Reference</dt><dd>{referenceLabel(rule.referenceMaster) || '—'}</dd>
-                <dt>Result</dt><dd className="wht-result__ok">WHT applicable</dd>
+                <dt>Category</dt><dd>{candidates[0].category}</dd>
+                <dt>Condition</dt><dd>{[candidates[0].condition, candidates[0].subCondition].filter(Boolean).join(' · ')}</dd>
+                <dt>WHT article</dt><dd>{candidates[0].whtArticle}</dd>
+                {rule ? (
+                  <>
+                    <dt>Rate</dt><dd>{rule.rateText}</dd>
+                    <dt>SAP WH code</dt><dd className="wht-mono">{rule.sapWhtCode}</dd>
+                  </>
+                ) : (
+                  <>
+                    <dt>SAP WH code</dt>
+                    <dd>
+                      <span className="wht-candidates">
+                        {candidates.map((c) => <span key={c.id} className="wht-candidate"><b className="wht-mono">{c.sapWhtCode}</b> {c.rateText}</span>)}
+                      </span>
+                    </dd>
+                  </>
+                )}
+                {treaty ? (
+                  <>
+                    <dt>Treaty ({treaty.country})</dt>
+                    <dd>
+                      {Object.keys(treaty.values || {}).length
+                        ? Object.entries(treaty.values).map(([k, v]) => <span key={k} className="wht-treaty-line">{k}: <b>{v || '—'}</b></span>)
+                        : treaty.message}
+                      {treaty.versionNo ? <small className="wht-treaty-src">Tax Rate document v{treaty.versionNo}</small> : null}
+                    </dd>
+                  </>
+                ) : null}
+                <dt>Result</dt>
+                <dd className={result.result === 'WHT_APPLICABLE' ? 'wht-result__ok' : 'wht-result__warn'}>
+                  {result.result === 'WHT_APPLICABLE' ? 'WHT applicable' : 'Needs tax review'}
+                </dd>
               </dl>
-              {rule.rateType === 'TREATY' && result.treatyRatePct == null ? (
-                <p className="wht-note">
-                  {form.country ? `No active treaty rate for ${form.country} - the rule’s rate range applies.` : 'Enter the vendor’s country to use its treaty rate.'}
-                </p>
+              {result.reviewNote ? (
+                <p className="wht-review-note"><AlertTriangle size={13} aria-hidden /> {result.reviewNote}</p>
+              ) : null}
+              {form.vendorType === 'OFFSHORE' && yes(form.hasDgtForm) && !form.country ? (
+                <p className="wht-note">Enter the vendor’s country to read its treaty rate{hasTaxRateDocument ? '' : ' (no Tax Rate document is uploaded yet)'}.</p>
               ) : null}
             </>
-          ) : (
-            <p className="wht-result__none">No active rule matches. Check that the rule for step {result.step} is active and in date.</p>
           )}
           {result?.trace?.length ? (
             <ol className="wht-trace">
